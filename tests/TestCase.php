@@ -94,4 +94,3 @@ abstract class TestCase extends BaseTestCase
         $this->assertSame($expected, $actual);
     }
 }
-
