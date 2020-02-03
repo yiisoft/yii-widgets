@@ -60,8 +60,8 @@ class Menu extends Widget
 
     /**
      * @var array list of HTML attributes shared by all menu [[items]]. If any individual menu item specifies its
-     *            `options`, it will be merged with this property before being used to generate the HTML attributes for
-     *            the menu item tag. The following special options are recognized:
+     * `options`, it will be merged with this property before being used to generate the HTML attributes for
+     * the menu item tag. The following special options are recognized:
      *
      * - tag: string, defaults to "li", the tag name of the item container tags. Set to false to disable container tag.
      *   See also {@see \Yiisoft\Html\Html::tag()}
@@ -72,23 +72,23 @@ class Menu extends Widget
 
     /**
      * @var string the template used to render the body of a menu which is a link. In this template, the token `{url}`
-     *             will be replaced with the corresponding link URL; while `{label}` will be replaced with the link
-     *             text. This property will be overridden by the `template` option set in individual menu items via
-     *             {@see items}.
+     * will be replaced with the corresponding link URL; while `{label}` will be replaced with the link
+     * text. This property will be overridden by the `template` option set in individual menu items via
+     * {@see items}.
      */
     private string $linkTemplate = '<a href="{url}">{label}</a>';
 
     /**
      * @var string the template used to render the body of a menu which is NOT a link.
-     *             In this template, the token `{label}` will be replaced with the label of the menu item.
-     *             This property will be overridden by the `template` option set in individual menu items via
-     *             {@see items}.
+     * In this template, the token `{label}` will be replaced with the label of the menu item.
+     * This property will be overridden by the `template` option set in individual menu items via
+     * {@see items}.
      */
     private string $labelTemplate = '{label}';
 
     /**
      * @var string the template used to render a list of sub-menus.
-     *             In this template, the token `{items}` will be replaced with the rendered sub-menu items.
+     * In this template, the token `{items}` will be replaced with the rendered sub-menu items.
      */
     private string $submenuTemplate = "\n<ul>\n{items}\n</ul>\n";
 
@@ -112,7 +112,7 @@ class Menu extends Widget
 
     /**
      * @var bool whether to activate parent menu items when one of the corresponding child menu items is active. The
-     *           activated parent menu items will also have its CSS classes appended with {@see activeCssClass}.
+     * activated parent menu items will also have its CSS classes appended with {@see activeCssClass}.
      */
     private bool $activateParents = false;
 
@@ -123,7 +123,7 @@ class Menu extends Widget
 
     /**
      * @var bool whether to hide empty menu items. An empty menu item is one whose `url` option is not set and which has
-     *           no visible child menu items.
+     * no visible child menu items.
      */
     private bool $hideEmptyItems = true;
 
@@ -139,13 +139,13 @@ class Menu extends Widget
 
     /**
      * @var string|null the CSS class that will be assigned to the first item in the main menu or each submenu. Defaults to
-     *             null, meaning no such CSS class will be assigned.
+     * null, meaning no such CSS class will be assigned.
      */
     private ?string $firstItemCssClass = null;
 
     /**
      * @var string|null the CSS class that will be assigned to the last item in the main menu or each submenu. Defaults to
-     *             null, meaning no such CSS class will be assigned.
+     * null, meaning no such CSS class will be assigned.
      */
     private ?string $lastItemCssClass = null;
 
@@ -169,7 +169,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see activateItems}
+     * {@see $activateItems}
      *
      * @param bool $value
      *
@@ -183,7 +183,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see activateParents}
+     * {@see $activateParents}
      *
      * @param bool $value
      *
@@ -197,7 +197,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see activeCssClass}
+     * {@see $activeCssClass}
      *
      * @param string $value
      *
@@ -211,7 +211,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see currentPath}
+     * {@see $currentPath}
      *
      * @param string $value
      *
@@ -225,7 +225,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see encodeLabels}
+     * {@see $encodeLabels}
      *
      * @param bool $value
      *
@@ -239,7 +239,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see firstItemCssClass}
+     * {@see $firstItemCssClass}
      *
      * @param string $value
      *
@@ -253,7 +253,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see hideEmptyItems}
+     * {@see $hideEmptyItems}
      *
      * @param bool $value
      *
@@ -267,7 +267,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see items}
+     * {@see $items}
      *
      * @param array $value
      *
@@ -281,7 +281,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see itemOptions}
+     * {@see $itemOptions}
      *
      * @param array $value
      *
@@ -295,7 +295,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see labelTemplate}
+     * {@see $labelTemplate}
      *
      * @param string $value
      *
@@ -309,7 +309,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see lastItemCssClass}
+     * {@see $lastItemCssClass}
      *
      * @param string $value
      *
@@ -323,7 +323,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see linkTemplate}
+     * {@see $linkTemplate}
      *
      * @param string $value
      *
@@ -337,7 +337,7 @@ class Menu extends Widget
     }
 
     /**
-     * {@see options}
+     * {@see $options}
      *
      * @param array $value
      *
@@ -401,7 +401,7 @@ class Menu extends Widget
      * Note that the container and the sub-menus are not rendered here.
      *
      * @param array $item the menu item to be rendered. Please refer to {@see items} to see what data might be in the
-     *              item.
+     * item.
      *
      * @return string the rendering result
      */
