@@ -1,7 +1,7 @@
 {
     "name": "yiisoft/yii-widgets",
     "type": "library",
-    "description": "Colections widgets for Yii",
+    "description": "Yii widgets collection",
     "keywords": [
         "yii",
         "widgets"
