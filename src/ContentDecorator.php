@@ -22,7 +22,7 @@ use Yiisoft\Widget\Widget;
  *
  * some content here
  *
- * <?= echo ContentDecorator::end() ?>
+ * <?= ContentDecorator::end() ?>
  * ```
  */
 class ContentDecorator extends Widget
