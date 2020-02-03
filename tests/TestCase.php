@@ -17,25 +17,10 @@ use Yiisoft\Widget\WidgetFactory;
 
 abstract class TestCase extends BaseTestCase
 {
-    /**
-     * @var Aliases $aliases
-     */
     protected Aliases $aliases;
-
-    /**
-     * @var CacheInterface
-     */
     protected CacheInterface $cache;
-
-    /**
-     * @var ContainerInterface $container
-     */
-    private $container;
-
-    /**
-     * @var WebView $webView
-     */
-    protected $webView;
+    private ContainerInterface $container;
+    protected WebView $webView;
 
     protected function setUp(): void
     {
@@ -52,11 +37,6 @@ abstract class TestCase extends BaseTestCase
         WidgetFactory::initialize($this->container, []);
     }
 
-    /**
-     * tearDown
-     *
-     * @return void
-     */
     protected function tearDown(): void
     {
         unset($this->container, $this->webView);
