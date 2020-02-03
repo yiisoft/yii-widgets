@@ -75,7 +75,7 @@ class ContentDecorator extends Widget
     }
 
     /**
-     * {@see params}
+     * {@see $params}
      *
      * @param array $value
      *
@@ -89,7 +89,7 @@ class ContentDecorator extends Widget
     }
 
     /**
-     * {@see viewFilw}
+     * {@see $viewFile}
      *
      * @param string $value
      *
