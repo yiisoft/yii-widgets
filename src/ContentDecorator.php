@@ -27,11 +27,6 @@ use Yiisoft\Widget\Widget;
 class ContentDecorator extends Widget
 {
     /**
-     * @var Aliases
-     */
-    private Aliases $aliases;
-
-    /**
      * @var array the parameters (name => value) to be extracted and made available in the decorative view.
      */
     private array $params = [];
