@@ -104,7 +104,7 @@ class Block extends Widget
     /**
      * {@see renderInPlace}
      *
-     * @param boolean $value
+     * @param bool $value
      *
      * @return Block
      */

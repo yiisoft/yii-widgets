@@ -36,13 +36,13 @@ class Menu extends Widget
      *
      * - label: string, optional, specifies the menu item label. When {@see encodeLabels} is true, the label will be
      *   HTML-encoded. If the label is not specified, an empty string will be used.
-     * - encode: boolean, optional, whether this item`s label should be HTML-encoded. This param will override global
+     * - encode: bool, optional, whether this item`s label should be HTML-encoded. This param will override global
      *   {@see encodeLabels} param.
      * - url: string or array, optional, specifies the URL of the menu item. When this is set, the actual menu item
      *   content will be generated using {@see linkTemplate}; otherwise, {@see labelTemplate} will be used.
-     * - visible: boolean, optional, whether this menu item is visible. Defaults to true.
+     * - visible: bool, optional, whether this menu item is visible. Defaults to true.
      * - items: array, optional, specifies the sub-menu items. Its format is the same as the parent items.
-     * - active: boolean or Closure, optional, whether this menu item is in active state (currently selected). When
+     * - active: bool or Closure, optional, whether this menu item is in active state (currently selected). When
      *   using a closure, its signature should be `function ($item, $hasActiveChild, $isItemActive, $Widget)`. Closure
      *   must return `true` if item should be marked as `active`, otherwise - `false`. If a menu item is active, its CSS
      *   class will be appended with {@see activeCssClass}. If this option is not set, the menu item will be set active
@@ -171,7 +171,7 @@ class Menu extends Widget
     /**
      * {@see activateItems}
      *
-     * @param boolean $value
+     * @param bool $value
      *
      * @return Menu
      */
@@ -185,7 +185,7 @@ class Menu extends Widget
     /**
      * {@see activateParents}
      *
-     * @param boolean $value
+     * @param bool $value
      *
      * @return Menu
      */
@@ -227,7 +227,7 @@ class Menu extends Widget
     /**
      * {@see encodeLabels}
      *
-     * @param boolean $value
+     * @param bool $value
      *
      * @return Menu
      */
@@ -255,7 +255,7 @@ class Menu extends Widget
     /**
      * {@see hideEmptyItems}
      *
-     * @param boolean $value
+     * @param bool $value
      *
      * @return Menu
      */

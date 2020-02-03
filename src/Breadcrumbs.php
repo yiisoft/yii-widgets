@@ -220,7 +220,7 @@ class Breadcrumbs extends Widget
     /**
      * {@see encodeLabel}
      *
-     * @param boolean $value
+     * @param bool $value
      *
      * @return Breadcrumbs
      */
