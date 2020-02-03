@@ -69,7 +69,7 @@ class Breadcrumbs extends Widget
     /**
      * @var array $homeUrlLink
      */
-    private array $homeUrlLink;
+    private array $homeUrlLink = [];
 
     /**
      * @var array list of links to appear in the breadcrumbs. If this property is empty, the widget will not render

@@ -9,10 +9,6 @@ use Yiisoft\Widget\Widget;
 
 /**
  * Block records all output between {@see begin()} and {@see end()} calls and stores it in
- * {@see \Yiisoft\View\View::$blocks}.
- *
- * {@see \Yiisoft\View\View} component contains two methods {@see \Yiisoft\View\View::beginBlock()} and
- * {@see \Yiisoft\View\View::endBlock()}.
  *
  * The general idea is that you're defining block default in a view or layout:
  *
@@ -57,7 +53,7 @@ class Block extends Widget
     /**
      * Starts recording a block.
      */
-    public function init(): void
+    public function start(): void
     {
         ob_start();
         ob_implicit_flush(0);

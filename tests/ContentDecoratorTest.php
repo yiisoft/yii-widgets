@@ -22,7 +22,7 @@ final class ContentDecoratorTest extends TestCase
         ContentDecorator::begin()
             ->viewFile($this->aliases->get('@view/layout.php'))
             ->params([])
-            ->init();
+            ->start();
 
         echo "\t\t<div class='left-column'>\n";
         echo "\t\t\t<p>This is a left bar!</p>\n";

@@ -10,9 +10,9 @@ final class BlockTest extends TestCase
 {
     public function testBlock(): void
     {
-        Block::begin()
+        echo Block::begin()
             ->id('testme')
-            ->init();
+            ->start();
 
         echo '<block-testme>';
 
@@ -26,10 +26,10 @@ final class BlockTest extends TestCase
         ob_start();
         ob_implicit_flush(0);
 
-        Block::begin()
+        echo Block::begin()
             ->id('testme')
             ->renderInPlace(true)
-            ->init();
+            ->start();
 
         echo '<block-testme>';
 

@@ -13,15 +13,16 @@ use Yiisoft\Widget\Widget;
  * as `$content` and then echoes rendering result.
  *
  * ```php
- * <?php ContentDecorator::begin()
- *     ->viewFile('@app/views/layouts/base.php'),
- *     ->params([]),
- *     ->view($this),
- * ]) ?>
+ * <?= ContentDecorator::begin()
+ *     ->viewFile('@app/views/layouts/base.php')
+ *     ->params([])
+ *     ->view($this)
+ *     ->start(); ?>
+ * 
  *
  * some content here
  *
- * <?php ContentDecorator::end() ?>
+ * <?= echo ContentDecorator::end() ?>
  * ```
  */
 class ContentDecorator extends Widget
@@ -48,7 +49,7 @@ class ContentDecorator extends Widget
     }
 
 
-    public function init(): void
+    public function start(): void
     {
         // Starts recording a clip.
         ob_start();

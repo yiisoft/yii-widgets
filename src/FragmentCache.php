@@ -79,7 +79,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      *
      * @throws InvalidArgumentException
      */
-    public function init(): void
+    public function start(): void
     {
         if ($this->getCachedContent() === false) {
             $this->webView->pushDynamicContent($this);
