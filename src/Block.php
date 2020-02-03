@@ -39,9 +39,6 @@ use Yiisoft\Widget\Widget;
  */
 class Block extends Widget
 {
-    /**
-     * @var string $id
-     */
     private string $id;
 
     /**
