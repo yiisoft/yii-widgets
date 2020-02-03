@@ -9,7 +9,7 @@ use Yiisoft\Yii\Widgets\ContentDecorator;
 /**
  * ContentDecoratorTest.
  */
-class ContentDecoratorTest extends TestCase
+final class ContentDecoratorTest extends TestCase
 {
     /**
      * {@see https://github.com/yiisoft/yii2/issues/15536}

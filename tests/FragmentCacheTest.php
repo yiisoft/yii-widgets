@@ -4,11 +4,11 @@ namespace Yiisoft\Yii\Widgets\Tests;
 
 use Yiisoft\Yii\Widgets\FragmentCache;
 
-class FragmentCacheTest extends TestCase
+final class FragmentCacheTest extends TestCase
 {
     public function testCacheEnabled(): void
     {
-      
+
         ob_start();
         ob_implicit_flush(false);
 
@@ -64,7 +64,7 @@ class FragmentCacheTest extends TestCase
 
             echo 'cached fragment';
 
-        echo FragmentCache::end();        
+        echo FragmentCache::end();
 
         $this->assertTrue($this->cache->has($key));
         $this->assertEquals('cached fragment', ob_get_clean());
@@ -100,9 +100,9 @@ class FragmentCacheTest extends TestCase
 
                 echo 'single dynamic cached fragment: ';
                 echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
-            
+
             echo FragmentCache::end();
-            
+
 
             $expectedContent = vsprintf('single dynamic cached fragment: %d', [
                 $params,
@@ -248,7 +248,7 @@ class FragmentCacheTest extends TestCase
         echo FragmentCache::end();
 
         $this->assertEquals('cached fragment', ob_get_clean());
-        
+
         //with variations as a string
         ob_start();
         ob_implicit_flush(0);
@@ -265,7 +265,7 @@ class FragmentCacheTest extends TestCase
             $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
 
         echo FragmentCache::end();
-        
+
         $cached = ob_get_clean();
         $this->assertEquals('cached fragment', $cached);
 

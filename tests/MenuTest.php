@@ -9,7 +9,7 @@ use Yiisoft\Yii\Widgets\Menu;
 /**
  * MenuTest.
  */
-class MenuTest extends TestCase
+final class MenuTest extends TestCase
 {
     public function testEncodeLabelTrue(): void
     {

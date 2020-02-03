@@ -9,7 +9,7 @@ use Yiisoft\Yii\Widgets\Breadcrumbs;
 /**
  * BreadcrumbsTest.
  */
-class BreadcrumbsTest extends TestCase
+final class BreadcrumbsTest extends TestCase
 {
     public function testHomeLinkTrue(): void
     {
