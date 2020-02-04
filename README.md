@@ -1,18 +1,36 @@
 <p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
+    <a href="https://github.com/yiisoft/yii-widgets" target="_blank">
         <img src="https://github.com/yiisoft.png" height="100px">
     </a>
-    <h1 align="center">Yii _____</h1>
+    <h1 align="center">Yii Widgets</h1>
     <br>
 </p>
 
-The package ...
+Collection of useful widgets for Yii Framework.
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/_____/v/stable.png)](https://packagist.org/packages/yiisoft/_____)
-[![Total Downloads](https://poser.pugx.org/yiisoft/_____/downloads.png)](https://packagist.org/packages/yiisoft/_____)
-[![Build Status](https://travis-ci.com/yiisoft/_____.svg?branch=master)](https://travis-ci.com/yiisoft/_____)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yiisoft/_____/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/_____/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/yiisoft/_____/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/_____/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/yiisoft/yii-widgets/v/stable.png)](https://packagist.org/packages/yiisoft/yii-widgets)
+[![Total Downloads](https://poser.pugx.org/yiisoft/yii-widgets/downloads.png)](https://packagist.org/packages/yiisoft/yii-widgets)
+[![Build Status](https://travis-ci.com/yiisoft/yii-widgets.svg?branch=master)](https://travis-ci.com/yiisoft/yii-widgets)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yiisoft/yii-widgets/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/yii-widgets/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/yiisoft/yii-widgets/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/yii-widgets/?branch=master)
 
-## General usage
+## Intallation
+
+The package could be installed via composer:
+
+```
+composer require yiisoft/yii-widgets
+```
+
+## Usage
+
+There are three main steps using the package:
+
+## Tests
+
+The package is tested with PHPUnit. Tests could be run with
+
+```
+./vendor/bin/phpunit
+```
 
