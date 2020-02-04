@@ -51,7 +51,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
     /**
      * @var string[]|string list of factors that would cause the variation of the content being cached.
-     * 
+     *
      * Each factor is a string representing a variation (e.g. the language, a GET parameter). The following variation
      * setting will cause the content to be cached in different versions according to the current application language:
      */

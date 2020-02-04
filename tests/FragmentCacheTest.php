@@ -8,7 +8,6 @@ final class FragmentCacheTest extends TestCase
 {
     public function testCacheEnabled(): void
     {
-
         ob_start();
         ob_implicit_flush(false);
 
@@ -16,7 +15,7 @@ final class FragmentCacheTest extends TestCase
             ->id('test')
             ->start();
 
-            echo 'cached fragment';
+        echo 'cached fragment';
 
         echo FragmentCache::end();
 
@@ -37,7 +36,7 @@ final class FragmentCacheTest extends TestCase
             ->cache(null)
             ->start();
 
-            echo 'cached fragment';
+        echo 'cached fragment';
 
         echo FragmentCache::end();
 
@@ -62,7 +61,7 @@ final class FragmentCacheTest extends TestCase
             ->id('test')
             ->start();
 
-            echo 'cached fragment';
+        echo 'cached fragment';
 
         echo FragmentCache::end();
 
@@ -77,7 +76,7 @@ final class FragmentCacheTest extends TestCase
             ->cache(null)
             ->start();
 
-            echo 'cached fragment other';
+        echo 'cached fragment other';
 
         echo FragmentCache::end();
 
@@ -98,8 +97,8 @@ final class FragmentCacheTest extends TestCase
 
             FragmentCache::begin()->id('test')->start();
 
-                echo 'single dynamic cached fragment: ';
-                echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
+            echo 'single dynamic cached fragment: ';
+            echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
 
             echo FragmentCache::end();
 
@@ -122,9 +121,9 @@ final class FragmentCacheTest extends TestCase
 
             FragmentCache::begin()->id('test')->start();
 
-                echo 'multiple dynamic cached fragments: ';
-                echo $this->webView->renderDynamic('return md5($counter);', ['counter' => $params]);
-                echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
+            echo 'multiple dynamic cached fragments: ';
+            echo $this->webView->renderDynamic('return md5($counter);', ['counter' => $params]);
+            echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
 
             echo FragmentCache::end();
 
@@ -147,14 +146,14 @@ final class FragmentCacheTest extends TestCase
 
             FragmentCache::begin()->id('test')->start();
 
-                echo 'nested dynamic cached fragments: ';
-                echo $this->webView->renderDynamic('return md5($counter);', ['counter' => $params]);
+            echo 'nested dynamic cached fragments: ';
+            echo $this->webView->renderDynamic('return md5($counter);', ['counter' => $params]);
 
-                FragmentCache::begin()->id('test-nested')->start();
-                    echo $this->webView->renderDynamic('return sha1($counter);', ['counter' => $params]);
-                echo FragmentCache::end();
+            FragmentCache::begin()->id('test-nested')->start();
+            echo $this->webView->renderDynamic('return sha1($counter);', ['counter' => $params]);
+            echo FragmentCache::end();
 
-                echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
+            echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
 
             echo FragmentCache::end();
 
@@ -184,9 +183,9 @@ final class FragmentCacheTest extends TestCase
             ->variations(['variations' => ['ru']])
             ->start();
 
-            echo 'cached fragment';
+        echo 'cached fragment';
 
-            $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
 
         echo FragmentCache::end();
 
@@ -202,7 +201,7 @@ final class FragmentCacheTest extends TestCase
             ->content(null)
             ->start();
 
-            $this->assertTrue($this->cache->has($key), 'Cached fragment should be exist');
+        $this->assertTrue($this->cache->has($key), 'Cached fragment should be exist');
 
         echo FragmentCache::end();
 
@@ -215,9 +214,9 @@ final class FragmentCacheTest extends TestCase
             ->variations(['variations' => ['en']])
             ->start();
 
-            echo 'cached fragment';
+        echo 'cached fragment';
 
-            $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
 
         echo FragmentCache::end();
 
@@ -241,9 +240,9 @@ final class FragmentCacheTest extends TestCase
             ->id('test')
             ->start();
 
-            echo 'cached fragment';
+        echo 'cached fragment';
 
-            $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
 
         echo FragmentCache::end();
 
@@ -260,9 +259,9 @@ final class FragmentCacheTest extends TestCase
             ->variations(['variations' => 'uz'])
             ->start();
 
-            echo 'cached fragment';
+        echo 'cached fragment';
 
-            $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
 
         echo FragmentCache::end();
 

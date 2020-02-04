@@ -73,16 +73,16 @@ class Menu extends Widget
     /**
      * @var string the template used to render the body of a menu which is a link. In this template, the token `{url}`
      * will be replaced with the corresponding link URL; while `{label}` will be replaced with the link text.
-     * 
+     *
      * This property will be overridden by the `template` option set in individual menu items via {@see items}.
      */
     private string $linkTemplate = '<a href="{url}">{label}</a>';
 
     /**
      * @var string the template used to render the body of a menu which is NOT a link.
-     * 
+     *
      * In this template, the token `{label}` will be replaced with the label of the menu item.
-     * 
+     *
      * This property will be overridden by the `template` option set in individual menu items via {@see items}.
      */
     private string $labelTemplate = '{label}';

@@ -18,7 +18,7 @@ use Yiisoft\Widget\Widget;
  *     ->params([])
  *     ->view($this)
  *     ->start(); ?>
- * 
+ *
  * some content here
  *
  * <?= ContentDecorator::end() ?>
