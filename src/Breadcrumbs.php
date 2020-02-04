@@ -129,7 +129,7 @@ class Breadcrumbs extends Widget
      */
     public function run(): string
     {
-        if (!$this->links) {
+        if (empty($this->links)) {
             return '';
         }
 

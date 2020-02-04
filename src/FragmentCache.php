@@ -177,7 +177,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     /**
      * {@see $content}
      *
-     * @param string $value
+     * @param string|bool $value
      *
      * @return FragmentCache
      */
