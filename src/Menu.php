@@ -59,9 +59,9 @@ class Menu extends Widget
     private array $items = [];
 
     /**
-     * @var array list of HTML attributes shared by all menu [[items]]. If any individual menu item specifies its
-     * `options`, it will be merged with this property before being used to generate the HTML attributes for
-     * the menu item tag. The following special options are recognized:
+     * @var array list of HTML attributes shared by all menu {@see items}. If any individual menu item specifies its
+     * `options`, it will be merged with this property before being used to generate the HTML attributes for the menu
+     * item tag. The following special options are recognized:
      *
      * - tag: string, defaults to "li", the tag name of the item container tags. Set to false to disable container tag.
      *   See also {@see \Yiisoft\Html\Html::tag()}
@@ -72,22 +72,24 @@ class Menu extends Widget
 
     /**
      * @var string the template used to render the body of a menu which is a link. In this template, the token `{url}`
-     * will be replaced with the corresponding link URL; while `{label}` will be replaced with the link
-     * text. This property will be overridden by the `template` option set in individual menu items via
-     * {@see items}.
+     * will be replaced with the corresponding link URL; while `{label}` will be replaced with the link text.
+     * 
+     * This property will be overridden by the `template` option set in individual menu items via {@see items}.
      */
     private string $linkTemplate = '<a href="{url}">{label}</a>';
 
     /**
      * @var string the template used to render the body of a menu which is NOT a link.
+     * 
      * In this template, the token `{label}` will be replaced with the label of the menu item.
-     * This property will be overridden by the `template` option set in individual menu items via
-     * {@see items}.
+     * 
+     * This property will be overridden by the `template` option set in individual menu items via {@see items}.
      */
     private string $labelTemplate = '{label}';
 
     /**
      * @var string the template used to render a list of sub-menus.
+     *
      * In this template, the token `{items}` will be replaced with the rendered sub-menu items.
      */
     private string $submenuTemplate = "\n<ul>\n{items}\n</ul>\n";
@@ -363,7 +365,7 @@ class Menu extends Widget
         $lines = [];
 
         foreach ($items as $i => $item) {
-            $options = array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
+            $options = \array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
             $tag = ArrayHelper::remove($options, 'tag', 'li');
             $class = [];
 
@@ -398,6 +400,7 @@ class Menu extends Widget
 
     /**
      * Renders the content of a menu item.
+     *
      * Note that the container and the sub-menus are not rendered here.
      *
      * @param array $item the menu item to be rendered. Please refer to {@see items} to see what data might be in the
@@ -471,18 +474,19 @@ class Menu extends Widget
             }
         }
 
-        return array_values($items);
+        return \array_values($items);
     }
 
     /**
      * Checks whether a menu item is active.
      *
      * This is done by checking match that specified in the `url` option of the menu item.
+     *
      * Only when 'url' match $_SERVER['REQUEST_URI'] respectively, will a menu item be considered active.
      *
      * @param array $item the menu item to be checked
+     * @param bool $active returns the result when the item is active
      *
-     * @param bool $active
      * @return bool whether the menu item is active
      */
     protected function isItemActive(array $item, bool $active = false): bool
@@ -492,10 +496,5 @@ class Menu extends Widget
         }
 
         return $active;
-    }
-
-    public function __toString(): string
-    {
-        return $this->run();
     }
 }

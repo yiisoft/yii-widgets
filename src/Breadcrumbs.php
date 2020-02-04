@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Yii\Widgets;
 
 use Yiisoft\Arrays\ArrayHelper;
@@ -78,7 +80,7 @@ class Breadcrumbs extends Widget
      * ```php
      * [
      *     'label' => 'label of the link',  // required
-     *     'url' => 'url of the link',      // optional, will be processed by Url::to()
+     *     'url' => 'url of the link',      // optional
      *     'template' => 'own template of the item', // optional, if not set $this->itemTemplate will be used
      * ]
      * ```
@@ -110,13 +112,13 @@ class Breadcrumbs extends Widget
 
     /**
      * @var string the template used to render each inactive item in the breadcrumbs. The token `{link}` will be
-     *             replaced with the actual HTML link for each inactive item.
+     * replaced with the actual HTML link for each inactive item.
      */
     private string $itemTemplate = "<li>{link}</li>\n";
 
     /**
      * @var string the template used to render each active item in the breadcrumbs. The token `{link}` will be replaced
-     *             with the actual HTML link for each active item.
+     * with the actual HTML link for each active item.
      */
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
 
@@ -127,7 +129,7 @@ class Breadcrumbs extends Widget
      */
     public function run(): string
     {
-        if (empty($this->links)) {
+        if (!$this->links) {
             return '';
         }
 
@@ -143,7 +145,7 @@ class Breadcrumbs extends Widget
         }
 
         foreach ($this->links as $link) {
-            if (!is_array($link)) {
+            if (!\is_array($link)) {
                 $link = ['label' => $link];
             }
 
@@ -161,9 +163,9 @@ class Breadcrumbs extends Widget
     /**
      * Renders a single breadcrumb item.
      *
-     * @param array  $link the link to be rendered. It must contain the "label" element. The "url" element is optional.
+     * @param array $link the link to be rendered. It must contain the "label" element. The "url" element is optional.
      * @param string $template the template to be used to rendered the link. The token "{link}" will be replaced by the
-     *                         link.
+     * link.
      *
      * @throws \InvalidArgumentException if `$link` does not have "label" element.
      *
@@ -190,7 +192,7 @@ class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see tag}
+     * {@see $tag}
      *
      * @param string $value
      *
@@ -204,7 +206,7 @@ class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see options}
+     * {@see $options}
      *
      * @param array $value
      *
@@ -218,7 +220,7 @@ class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see encodeLabel}
+     * {@see $encodeLabel}
      *
      * @param bool $value
      *
@@ -232,7 +234,7 @@ class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see homeLink}
+     * {@see $homeLink}
      *
      * @param bool $value
      *
@@ -246,7 +248,7 @@ class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see links}
+     * {@see $homeUrlLink}
      *
      * @param array $value
      *
@@ -260,7 +262,7 @@ class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see links}
+     * {@see $links}
      *
      * @param array $value
      *
@@ -268,7 +270,7 @@ class Breadcrumbs extends Widget
      */
     public function links(array $value): Breadcrumbs
     {
-        if (!array_key_exists('label', $value)) {
+        if (!\array_key_exists('label', $value)) {
             throw new \InvalidArgumentException('The "label" element is required for each link.');
         }
 
@@ -278,7 +280,7 @@ class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see itemTemplate}
+     * {@see $itemTemplate}
      *
      * @param string $value
      *
@@ -292,7 +294,7 @@ class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see activeItemTemplate}
+     * {@see $activeItemTemplate}
      *
      * @param string $value
      *
@@ -303,10 +305,5 @@ class Breadcrumbs extends Widget
         $this->activeItemTemplate = $value;
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->run();
     }
 }

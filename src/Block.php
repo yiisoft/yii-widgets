@@ -81,8 +81,6 @@ class Block extends Widget
     }
 
     /**
-     * {@see renderInPlace}
-     *
      * @param string $value
      *
      * @return Block
@@ -95,7 +93,7 @@ class Block extends Widget
     }
 
     /**
-     * {@see renderInPlace}
+     * {@see $renderInPlace}
      *
      * @param bool $value
      *
@@ -106,10 +104,5 @@ class Block extends Widget
         $this->renderInPlace = $value;
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->run();
     }
 }

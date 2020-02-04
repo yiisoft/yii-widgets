@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use Psr\SimpleCache\InvalidArgumentException;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Cache\Dependency\Dependency;
 use Yiisoft\View\DynamicContentAwareInterface;
@@ -16,20 +15,18 @@ use Yiisoft\Widget\Widget;
 /**
  * FragmentCache is used by {@see \Yiisoft\View\View} to provide caching of page fragments.
  *
- * @property string|false $cachedContent The cached content. False is returned if valid content is not found
- * in the cache. This property is read-only.
+ * @property string|false $cachedContent The cached content. False is returned if valid content is not found in the
+ * cache. This property is read-only.
  */
 class FragmentCache extends Widget implements DynamicContentAwareInterface
 {
     use DynamicContentAwareTrait;
 
-    /**
-     * @var string $id
-     */
     private string $id;
 
     /**
      * @var CacheInterface the cache object or the application component ID of the cache object.
+     *
      * After the FragmentCache object is created, if you want to change this property, you should only assign it with
      * a cache object.
      */
@@ -37,24 +34,26 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
     /**
      * @var int number of seconds that the data can remain valid in cache.
+     *
      * Use 0 to indicate that the cached data will never expire.
      */
     private int $duration = 60;
 
     /**
      * @var Dependency the dependency that the cached content depends on.
+     *
      * This can be either a {@see Dependency} object or a configuration array for creating the dependency object.
      *
-     * would make the output cache depends on the last modified time of all posts.
-     * If any post has its modification time changed, the cached content would be invalidated.
+     * Would make the output cache depends on the last modified time of all posts. If any post has its modification time
+     * changed, the cached content would be invalidated.
      */
     private ?Dependency $dependency = null;
 
     /**
      * @var string[]|string list of factors that would cause the variation of the content being cached.
-     * Each factor is a string representing a variation (e.g. the language, a GET parameter).
-     * The following variation setting will cause the content to be cached in different versions according to the
-     * current application language:
+     * 
+     * Each factor is a string representing a variation (e.g. the language, a GET parameter). The following variation
+     * setting will cause the content to be cached in different versions according to the current application language:
      */
     private $variations;
 
@@ -63,9 +62,6 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     private $content = false;
 
-    /**
-     * @var WebView
-     */
     private WebView $webView;
 
     public function __construct(CacheInterface $cache, WebView $webview)
@@ -76,8 +72,6 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
     /**
      * Initializes the FragmentCache object.
-     *
-     * @throws InvalidArgumentException
      */
     public function start(): void
     {
@@ -90,13 +84,12 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
 
     /**
      * Marks the end of content to be cached.
-     * Content displayed before this method call and after {@see init()}
-     * will be captured and saved in cache.
+     *
+     * Content displayed before this method call and after {@see init()} will be captured and saved in cache.
+     *
      * This method does nothing if valid content is already found in cache.
      *
      * @return string the result of widget execution to be outputted.
-     *
-     * @throws InvalidArgumentException
      */
     public function run(): string
     {
@@ -126,8 +119,6 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      * Returns the cached content if available.
      *
      * @return string|false the cached content. False is returned if valid content is not found in the cache.
-     *
-     * @throws InvalidArgumentException
      */
     public function getCachedContent()
     {
@@ -170,23 +161,23 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     }
 
     /**
-     * {@see cache}
+     * {@see $cache}
      *
-     * @param CacheInterface|null $cache
+     * @param CacheInterface|null $value
      *
      * @return FragmentCache
      */
     public function cache(?CacheInterface $value): FragmentCache
     {
-        $this->cache = null;
+        $this->cache = $value;
 
         return $this;
     }
 
     /**
-     * {@see id}
+     * {@see $content}
      *
-     * @param string $id
+     * @param string $value
      *
      * @return FragmentCache
      */
@@ -198,68 +189,61 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     }
 
     /**
-     * {@see Dependency}
+     * {@see $dependency}
      *
-     * @param Dependency $dependency
+     * @param Dependency $value
      *
      * @return FragmentCache
      */
-    public function dependency(Dependency $dependency): FragmentCache
+    public function dependency(Dependency $value): FragmentCache
     {
-        $this->dependency = $dependency;
+        $this->dependency = $value;
 
         return $this;
     }
 
     /**
-     * {@see int}
+     * {@see $duration}
      *
-     * @param int $duration
+     * @param int $value
      *
      * @return FragmentCache
      */
-    public function duration(int $duration): FragmentCache
+    public function duration(int $value): FragmentCache
     {
-        $this->duration = $duration;
+        $this->duration = $value;
     }
 
     /**
-     * {@see id}
-     *
-     * @param string $id
+     * @param string $value
      *
      * @return FragmentCache
      */
-    public function id(string $id): FragmentCache
+    public function id(string $value): FragmentCache
     {
-        $this->id = $id;
+        $this->id = $value;
 
         return $this;
     }
 
     /**
-     * {@see variations}
+     * {@see $variations}
      *
-     * @param $variations
+     * @param string[]|string $value
      *
      * @return FragmentCache
      */
-    public function variations($variations): FragmentCache
+    public function variations($value): FragmentCache
     {
-        $this->variations = $variations;
+        $this->variations = $value;
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->run();
     }
 
     /**
      * @inheritDoc
      */
-    protected function getView(): View
+    protected function getView(): webView
     {
         return $this->webView;
     }

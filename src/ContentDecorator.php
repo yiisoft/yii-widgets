@@ -19,7 +19,6 @@ use Yiisoft\Widget\Widget;
  *     ->view($this)
  *     ->start(); ?>
  * 
- *
  * some content here
  *
  * <?= ContentDecorator::end() ?>
@@ -38,9 +37,6 @@ class ContentDecorator extends Widget
      */
     private ?string $viewFile = null;
 
-    /**
-     * @var WebView
-     */
     private WebView $webView;
 
     public function __construct(WebView $webview)
@@ -48,22 +44,19 @@ class ContentDecorator extends Widget
         $this->webView = $webview;
     }
 
-
     public function start(): void
     {
-        // Starts recording a clip.
+        /* Starts recording a clip. */
         ob_start();
         ob_implicit_flush(0);
     }
 
     /**
      * Ends recording a clip.
+     *
      * This method stops output buffering and saves the rendering result as a named clip in the controller.
      *
      * @return string the result of widget execution to be outputted.
-     *
-     * @throws \Throwable
-     * @throws ViewNotFoundException
      */
     public function run(): string
     {
@@ -71,7 +64,7 @@ class ContentDecorator extends Widget
 
         $params['content'] = ob_get_clean();
 
-        // render under the existing context
+        /* render under the existing context */
         return $this->webView->renderFile($this->viewFile, $params);
     }
 
