@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests;
 
-use hiqdev\composer\config\Builder;
+use Yiisoft\Composer\Config\Builder;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Psr\Container\ContainerInterface;
 use Yiisoft\Aliases\Aliases;
