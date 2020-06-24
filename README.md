@@ -14,7 +14,7 @@ Collection of useful widgets for Yii Framework.
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yiisoft/yii-widgets/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/yii-widgets/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/yiisoft/yii-widgets/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/yii-widgets/?branch=master)
 
-## Intallation
+## Installation
 
 The package could be installed via composer:
 
