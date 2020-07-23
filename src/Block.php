@@ -45,9 +45,9 @@ class Block extends Widget
 
     private WebView $webView;
 
-    public function __construct(WebView $webview)
+    public function __construct(WebView $webView)
     {
-        $this->webView = $webview;
+        $this->webView = $webView;
     }
 
     /**

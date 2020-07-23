@@ -15,7 +15,7 @@ use Yiisoft\Widget\Widget;
 /**
  * FragmentCache is used by {@see \Yiisoft\View\View} to provide caching of page fragments.
  *
- * @property string|false $cachedContent The cached content. False is returned if valid content is not found in the
+ * @property-read string|false $cachedContent The cached content. False is returned if valid content is not found in the
  * cache. This property is read-only.
  */
 class FragmentCache extends Widget implements DynamicContentAwareInterface
@@ -25,7 +25,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     private string $id;
 
     /**
-     * @var CacheInterface the cache object or the application component ID of the cache object.
+     * @var CacheInterface|null the cache object or the application component ID of the cache object.
      *
      * After the FragmentCache object is created, if you want to change this property, you should only assign it with
      * a cache object.
@@ -40,7 +40,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     private int $duration = 60;
 
     /**
-     * @var Dependency the dependency that the cached content depends on.
+     * @var Dependency|null the dependency that the cached content depends on.
      *
      * This can be either a {@see Dependency} object or a configuration array for creating the dependency object.
      *
@@ -212,9 +212,13 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     public function duration(int $value): FragmentCache
     {
         $this->duration = $value;
+
+        return $this;
     }
 
     /**
+     * @see $id
+     *
      * @param string $value
      *
      * @return FragmentCache
@@ -243,7 +247,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     /**
      * @inheritDoc
      */
-    protected function getView(): webView
+    protected function getView(): WebView
     {
         return $this->webView;
     }

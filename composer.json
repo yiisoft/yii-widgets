@@ -27,6 +27,7 @@
         "yiisoft/composer-config-plugin": "^1.0@dev",
         "phpunit/phpunit": "^8.4",
         "phan/phan": "^2.4",
+        "yiisoft/aliases": "^1.0",
         "yiisoft/di": "^3.0@dev",
         "yiisoft/event-dispatcher": "^3.0@dev",
         "yiisoft/log": "^3.0@dev"
