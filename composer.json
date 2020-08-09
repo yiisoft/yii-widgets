@@ -18,15 +18,15 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.4",
+        "php": "^7.4|^8.0",
         "yiisoft/cache": "^3.0@dev",
         "yiisoft/view": "^3.0@dev",
         "yiisoft/widget": "^3.0@dev"
     },
     "require-dev": {
         "yiisoft/composer-config-plugin": "^1.0@dev",
-        "phpunit/phpunit": "^8.4",
-        "phan/phan": "^2.4",
+        "phpunit/phpunit": "^9.3",
+        "phan/phan": "^3.0",
         "yiisoft/aliases": "^1.0",
         "yiisoft/di": "^3.0@dev",
         "yiisoft/event-dispatcher": "^3.0@dev",
