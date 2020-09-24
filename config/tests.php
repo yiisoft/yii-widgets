@@ -14,10 +14,6 @@ use Yiisoft\View\Theme;
 use Yiisoft\View\WebView;
 
 return [
-    ContainerInterface::class => static function (ContainerInterface $container) {
-        return $container;
-    },
-
     Aliases::class => [
         '@root' => dirname(__DIR__, 1),
         '@public' => '@root/tests/public',
