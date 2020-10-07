@@ -166,9 +166,9 @@ final class FragmentCacheTest extends TestCase
             ->variations(['variations' => ['ru']])
             ->start();
 
-            echo 'cached fragment';
+        echo 'cached fragment';
 
-            $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
 
         $html1 = FragmentCache::end();
 
