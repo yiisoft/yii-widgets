@@ -16,11 +16,8 @@ final class ContentDecoratorTest extends TestCase
      */
     public function testContentDecorator(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
         ContentDecorator::begin()
-            ->viewFile($this->aliases->get('@view/layout.php'))
+            ->viewFile($this->aliases->get('@public/view/layout.php'))
             ->params([])
             ->start();
 
@@ -31,7 +28,7 @@ final class ContentDecoratorTest extends TestCase
         echo "\t\t\t<p>This is a right bar!</p>\n";
         echo "\t\t</div>\n";
 
-        echo ContentDecorator::end();
+        $html = ContentDecorator::end();
 
         $expected = "\t\t<div class='left-column'>\n" .
                     "\t\t\t<p>This is a left bar!</p>\n" .
@@ -40,6 +37,6 @@ final class ContentDecoratorTest extends TestCase
                     "\t\t\t<p>This is a right bar!</p>\n" .
                     "\t\t</div>\n";
 
-        $this->assertStringContainsString($expected, ob_get_clean());
+        $this->assertStringContainsString($expected, $html);
     }
 }

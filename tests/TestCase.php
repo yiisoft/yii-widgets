@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests;
 
-use Yiisoft\Composer\Config\Builder;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\EventDispatcher\ListenerProviderInterface;
+use Psr\Log\LoggerInterface;
 use Yiisoft\Aliases\Aliases;
-use Yiisoft\Asset\AssetBundle;
-use Yiisoft\Asset\AssetManager;
+use Yiisoft\Cache\ArrayCache;
+use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Di\Container;
+use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
+use Yiisoft\EventDispatcher\Provider\Provider;
+use Yiisoft\Factory\Definitions\Reference;
+use Yiisoft\Log\Logger;
+use Yiisoft\View\Theme;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\WidgetFactory;
 
@@ -26,9 +33,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $config = require Builder::path('tests');
-
-        $this->container = new Container($config);
+        $this->container = new Container($this->config());
 
         $this->aliases = $this->container->get(Aliases::class);
         $this->cache = $this->container->get(CacheInterface::class);
@@ -72,5 +77,45 @@ abstract class TestCase extends BaseTestCase
         $expected = str_replace(['/', '\\'], '/', $expected);
         $actual = str_replace(['/', '\\'], '/', $actual);
         $this->assertSame($expected, $actual);
+    }
+
+    public function config(): array
+    {
+        return [
+            Aliases::class => [
+                '__class' => Aliases::class,
+                '__construct()' => [
+                    [
+                        '@root' => __DIR__,
+                        '@public' => '@root/public'
+                    ]
+                ]
+            ],
+
+            Cache::class => [
+                '__class' => Cache::class,
+                '__construct()' => [
+                    Reference::to(ArrayCache::class)
+                ]
+            ],
+
+            CacheInterface::class => Cache::class,
+
+            ListenerProviderInterface::class => Provider::class,
+
+            EventDispatcherInterface::class => Dispatcher::class,
+
+            LoggerInterface::class => Logger::class,
+
+            WebView::class => [
+                '__class' => WebView::class,
+                '__construct()' => [
+                    __DIR__ . '/public/view',
+                    Reference::to(Theme::class),
+                    Reference::to(EventDispatcherInterface::class),
+                    Reference::to(LoggerInterface::class)
+                ]
+            ]
+        ];
     }
 }

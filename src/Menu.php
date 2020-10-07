@@ -5,9 +5,17 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets;
 
 use Closure;
+use JsonException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
+
+use function array_merge;
+use function array_values;
+use function call_user_func;
+use function count;
+use function implode;
+use function strtr;
 
 /**
  * Menu displays a multi-level menu using nested HTML lists.
@@ -29,7 +37,7 @@ use Yiisoft\Widget\Widget;
  *     ]);
  * ```
  */
-class Menu extends Widget
+final class Menu extends Widget
 {
     /**
      * @var array list of menu items. Each menu item should be an array of the following structure:
@@ -154,6 +162,8 @@ class Menu extends Widget
     /**
      * Renders the menu.
      *
+     * @throws JsonException
+     *
      * @return string the result of Widget execution to be outputted.
      */
     public function run(): string
@@ -175,9 +185,9 @@ class Menu extends Widget
      *
      * @param bool $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function activateItems(bool $value): Menu
+    public function activateItems(bool $value): self
     {
         $this->activateItems = $value;
 
@@ -189,9 +199,9 @@ class Menu extends Widget
      *
      * @param bool $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function activateParents(bool $value): Menu
+    public function activateParents(bool $value): self
     {
         $this->activateParents = $value;
 
@@ -203,9 +213,9 @@ class Menu extends Widget
      *
      * @param string $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function activeCssClass(string $value): Menu
+    public function activeCssClass(string $value): self
     {
         $this->activeCssClass = $value;
 
@@ -217,9 +227,9 @@ class Menu extends Widget
      *
      * @param string $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function currentPath(string $value): Menu
+    public function currentPath(string $value): self
     {
         $this->currentPath = $value;
 
@@ -231,9 +241,9 @@ class Menu extends Widget
      *
      * @param bool $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function encodeLabels(bool $value): Menu
+    public function encodeLabels(bool $value): self
     {
         $this->encodeLabels = $value;
 
@@ -245,9 +255,9 @@ class Menu extends Widget
      *
      * @param string $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function firstItemCssClass(string $value): Menu
+    public function firstItemCssClass(string $value): self
     {
         $this->firstItemCssClass = $value;
 
@@ -259,9 +269,9 @@ class Menu extends Widget
      *
      * @param bool $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function hideEmptyItems(bool $value): Menu
+    public function hideEmptyItems(bool $value): self
     {
         $this->hideEmptyItems = $value;
 
@@ -273,9 +283,9 @@ class Menu extends Widget
      *
      * @param array $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function items(array $value): Menu
+    public function items(array $value): self
     {
         $this->items = $value;
 
@@ -287,9 +297,9 @@ class Menu extends Widget
      *
      * @param array $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function itemOptions(array $value): Menu
+    public function itemOptions(array $value): self
     {
         $this->itemOptions = $value;
 
@@ -301,9 +311,9 @@ class Menu extends Widget
      *
      * @param string $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function labelTemplate(string $value): Menu
+    public function labelTemplate(string $value): self
     {
         $this->labelTemplate = $value;
 
@@ -315,9 +325,9 @@ class Menu extends Widget
      *
      * @param string $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function lastItemCssClass(string $value): Menu
+    public function lastItemCssClass(string $value): self
     {
         $this->lastItemCssClass = $value;
 
@@ -329,9 +339,9 @@ class Menu extends Widget
      *
      * @param string $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function linkTemplate(string $value): Menu
+    public function linkTemplate(string $value): self
     {
         $this->linkTemplate = $value;
 
@@ -343,9 +353,9 @@ class Menu extends Widget
      *
      * @param array $value
      *
-     * @return Menu
+     * @return $this
      */
-    public function options(array $value): Menu
+    public function options(array $value): self
     {
         $this->options = $value;
 
@@ -357,6 +367,8 @@ class Menu extends Widget
      *
      * @param array $items the menu items to be rendered recursively
      *
+     * @throws JsonException
+     *
      * @return string the rendering result
      */
     protected function renderItems(array $items): string
@@ -365,7 +377,7 @@ class Menu extends Widget
         $lines = [];
 
         foreach ($items as $i => $item) {
-            $options = \array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
+            $options = array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
             $tag = ArrayHelper::remove($options, 'tag', 'li');
             $class = [];
 
@@ -462,19 +474,28 @@ class Menu extends Widget
             }
 
             if (!isset($item['active'])) {
-                if (($this->activateParents && $hasActiveChild) || ($this->activateItems && $this->isItemActive($item))) {
+                if (
+                    ($this->activateParents && $hasActiveChild)
+                    || ($this->activateItems && $this->isItemActive($item))
+                ) {
                     $active = $items[$i]['active'] = true;
                 } else {
                     $items[$i]['active'] = false;
                 }
             } elseif ($item['active'] instanceof Closure) {
-                $active = $items[$i]['active'] = call_user_func($item['active'], $item, $hasActiveChild, $this->isItemActive($item), $this);
+                $active = $items[$i]['active'] = call_user_func(
+                    $item['active'],
+                    $item,
+                    $hasActiveChild,
+                    $this->isItemActive($item),
+                    $this
+                );
             } elseif ($item['active']) {
                 $active = true;
             }
         }
 
-        return \array_values($items);
+        return array_values($items);
     }
 
     /**
@@ -491,7 +512,12 @@ class Menu extends Widget
      */
     protected function isItemActive(array $item, bool $active = false): bool
     {
-        if ($this->activateItems && $this->currentPath !== '/' && isset($item['url']) && $item['url'] === $this->currentPath) {
+        if (
+            $this->activateItems
+            && $this->currentPath !== '/'
+            && isset($item['url'])
+            && $item['url'] === $this->currentPath
+        ) {
             $active = true;
         }
 

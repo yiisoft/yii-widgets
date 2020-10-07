@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests;
 
+use InvalidArgumentException;
 use Yiisoft\Yii\Widgets\Block;
 
 final class BlockTest extends TestCase
 {
     public function testBlock(): void
     {
-        echo Block::begin()
+        Block::begin()
             ->id('testme')
             ->start();
 
@@ -23,24 +24,21 @@ final class BlockTest extends TestCase
 
     public function testBlockRenderInPlaceTrue(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Block::begin()
+        Block::begin()
             ->id('testme')
             ->renderInPlace(true)
             ->start();
 
         echo '<block-testme>';
 
-        echo Block::end();
+        $html = Block::end();
 
-        $this->assertStringContainsString('<block-testme>', ob_get_clean());
+        $this->assertStringContainsString('<block-testme>', $html);
     }
 
     public function testGetBlockException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->webView->getBlock('notfound');
     }
 }

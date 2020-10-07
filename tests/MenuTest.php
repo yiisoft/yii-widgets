@@ -6,6 +6,10 @@ namespace Yiisoft\Yii\Widgets\Tests;
 
 use Yiisoft\Yii\Widgets\Menu;
 
+use function ob_get_clean;
+use function ob_implicit_flush;
+use function ob_start;
+
 /**
  * MenuTest.
  */
@@ -13,10 +17,7 @@ final class MenuTest extends TestCase
 {
     public function testEncodeLabelTrue(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Menu::widget()
+        $html = Menu::widget()
             ->encodeLabels(true)
             ->items([
                 [
@@ -29,21 +30,19 @@ final class MenuTest extends TestCase
                     'label'  => 'Authors & Publications',
                     'url'    => '#',
                 ],
-            ]);
+            ])
+            ->render();
 
         $expected = <<<'HTML'
 <ul><li><a href="#"><span class="glyphicon glyphicon-user"></span> Users</a></li>
 <li><a href="#">Authors &amp; Publications</a></li></ul>
 HTML;
-        $this->assertEqualsWithoutLE($expected, ob_get_clean());
+        $this->assertEqualsWithoutLE($expected, $html);
     }
 
     public function testEncodeLabelFalse(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Menu::widget()
+        $html = Menu::widget()
             ->encodeLabels(false)
             ->items([
                 [
@@ -56,13 +55,14 @@ HTML;
                     'label'  => 'Authors & Publications',
                     'url'    => '#',
                 ],
-            ]);
+            ])
+            ->render();
 
         $expected = <<<'HTML'
 <ul><li><a href="#"><span class="glyphicon glyphicon-user"></span> Users</a></li>
 <li><a href="#">Authors &amp; Publications</a></li></ul>
 HTML;
-        $this->assertEqualsWithoutLE($expected, ob_get_clean());
+        $this->assertEqualsWithoutLE($expected, $html);
     }
 
     /**
@@ -70,10 +70,7 @@ HTML;
      */
     public function testTagOption(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Menu::widget()
+        $html = Menu::widget()
             ->encodeLabels(true)
             ->options([
                 'tag' => false,
@@ -89,19 +86,17 @@ HTML;
                     'url'     => '#',
                     'options' => ['tag' => false],
                 ],
-            ]);
+            ])
+            ->render();
 
         $expected = <<<'HTML'
 <div><a href="#">item1</a></div>
 <a href="#">item2</a>
 HTML;
 
-        $this->assertEqualsWithoutLE($expected, ob_get_clean());
+        $this->assertEqualsWithoutLE($expected, $html);
 
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Menu::widget()
+        $html = Menu::widget()
             ->encodeLabels(true)
             ->options([
                 'tag' => false,
@@ -116,21 +111,19 @@ HTML;
                     'url'   => '#',
                 ],
             ])
-            ->itemOptions(['tag' => false]);
+            ->itemOptions(['tag' => false])
+            ->render();
 
         $expected = <<<'HTML'
 <a href="#">item1</a>
 <a href="#">item2</a>
 HTML;
-        $this->assertEqualsWithoutLE($expected, ob_get_clean());
+        $this->assertEqualsWithoutLE($expected, $html);
     }
 
     public function testItemTemplate(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Menu::widget()
+        $html = Menu::widget()
             ->labelTemplate('')
             ->linkTemplate('')
             ->items([
@@ -146,22 +139,20 @@ HTML;
                 [
                     'label' => 'item3 (no template)',
                 ],
-            ]);
+            ])
+            ->render();
 
         $expected = <<<'HTML'
 <ul><li>label: item1; url: #</li>
 <li>label: item2</li>
 <li></li></ul>
 HTML;
-        $this->assertEqualsWithoutLE($expected, ob_get_clean());
+        $this->assertEqualsWithoutLE($expected, $html);
     }
 
     public function testActiveItemClosure(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Menu::widget()
+        $html = Menu::widget()
             ->linkTemplate('')
             ->labelTemplate('')
             ->items([
@@ -182,22 +173,20 @@ HTML;
                     'label'  => 'item3 (no template)',
                     'active' => 'somestring',
                 ],
-            ]);
+            ])
+            ->render();
 
         $expected = <<<'HTML'
 <ul><li class="active">label: item1; url: #</li>
 <li>label: item2</li>
 <li class="active"></li></ul>
 HTML;
-        $this->assertEqualsWithoutLE($expected, ob_get_clean());
+        $this->assertEqualsWithoutLE($expected, $html);
     }
 
     public function testItemClassAsArray(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Menu::widget()
+        $html = Menu::widget()
             ->encodeLabels(true)
             ->activeCssClass('item-active')
             ->items([
@@ -236,7 +225,8 @@ HTML;
                         ],
                     ],
                 ],
-            ]);
+            ])
+            ->render();
 
         $expected = <<<'HTML'
 <ul><li class="someclass item-active"><a href="#">item1</a></li>
@@ -244,15 +234,12 @@ HTML;
 <li><a href="#">item3</a></li>
 <li class="some-other-class foo_bar_baz_class"><a href="#">item4</a></li></ul>
 HTML;
-        $this->assertEqualsWithoutLE($expected, ob_get_clean());
+        $this->assertEqualsWithoutLE($expected, $html);
     }
 
     public function testItemClassAsString(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Menu::widget()
+        $html = Menu::widget()
             ->encodeLabels(true)
             ->activeCssClass('item-active')
             ->items([
@@ -282,7 +269,8 @@ HTML;
                         'class' => 'another-class other--class two classes',
                     ],
                 ],
-            ]);
+            ])
+            ->render();
 
         $expected = <<<'HTML'
 <ul><li class="someclass"><a href="#">item1</a></li>
@@ -290,6 +278,6 @@ HTML;
 <li class="some classes"><a href="#">item3</a></li>
 <li class="another-class other--class two classes item-active"><a href="#">item4</a></li></ul>
 HTML;
-        $this->assertEqualsWithoutLE($expected, ob_get_clean());
+        $this->assertEqualsWithoutLE($expected, $html);
     }
 }

@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Throwable;
 use Yiisoft\View\Exception\ViewNotFoundException;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
+
+use function ob_get_clean;
+use function ob_implicit_flush;
+use function ob_start;
 
 /**
  * ContentDecorator records all output between {@see begin()} and {@see end()]} calls, passes it to the given view file
@@ -24,7 +29,7 @@ use Yiisoft\Widget\Widget;
  * <?= ContentDecorator::end() ?>
  * ```
  */
-class ContentDecorator extends Widget
+final class ContentDecorator extends Widget
 {
     /**
      * @var array the parameters (name => value) to be extracted and made available in the decorative view.
@@ -32,7 +37,7 @@ class ContentDecorator extends Widget
     private array $params = [];
 
     /**
-     * @var string the view file that will be used to decorate the content enclosed by this widget. This can be
+     * @var string|null the view file that will be used to decorate the content enclosed by this widget. This can be
      * specified as either the view file path or alias path.
      */
     private ?string $viewFile = null;
@@ -46,15 +51,17 @@ class ContentDecorator extends Widget
 
     public function start(): void
     {
-        /* Starts recording a clip. */
+        /** Starts recording a clip. */
         ob_start();
-        ob_implicit_flush(0);
+        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
     }
 
     /**
      * Ends recording a clip.
      *
      * This method stops output buffering and saves the rendering result as a named clip in the controller.
+     *
+     * @throws Throwable|ViewNotFoundException
      *
      * @return string the result of widget execution to be outputted.
      */
@@ -64,7 +71,7 @@ class ContentDecorator extends Widget
 
         $params['content'] = ob_get_clean();
 
-        /* render under the existing context */
+        /** render under the existing context */
         return $this->webView->renderFile($this->viewFile, $params);
     }
 

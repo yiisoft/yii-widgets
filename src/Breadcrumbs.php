@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use InvalidArgumentException;
+use JsonException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
+
+use function array_key_exists;
+use function is_array;
 
 /**
  * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.
@@ -42,7 +47,7 @@ use Yiisoft\Widget\Widget;
  *     ->links() => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [];
  * ```
  */
-class Breadcrumbs extends Widget
+final class Breadcrumbs extends Widget
 {
     /**
      * @var string the name of the breadcrumb container tag.
@@ -125,6 +130,8 @@ class Breadcrumbs extends Widget
     /**
      * Renders the widget.
      *
+     * @throws JsonException
+     *
      * @return string the result of widget execution to be outputted.
      */
     public function run(): string
@@ -145,7 +152,7 @@ class Breadcrumbs extends Widget
         }
 
         foreach ($this->links as $link) {
-            if (!\is_array($link)) {
+            if (!is_array($link)) {
                 $link = ['label' => $link];
             }
 
@@ -167,7 +174,7 @@ class Breadcrumbs extends Widget
      * @param string $template the template to be used to rendered the link. The token "{link}" will be replaced by the
      * link.
      *
-     * @throws \InvalidArgumentException if `$link` does not have "label" element.
+     * @throws JsonException|InvalidArgumentException if `$link` does not have "label" element.
      *
      * @return string the rendering result
      */
@@ -196,9 +203,9 @@ class Breadcrumbs extends Widget
      *
      * @param string $value
      *
-     * @return Breadcrumbs
+     * @return $this
      */
-    public function tag(string $value): Breadcrumbs
+    public function tag(string $value): self
     {
         $this->tag = $value;
 
@@ -210,9 +217,9 @@ class Breadcrumbs extends Widget
      *
      * @param array $value
      *
-     * @return Breadcrumbs
+     * @return $this
      */
-    public function options(array $value): Breadcrumbs
+    public function options(array $value): self
     {
         $this->options = $value;
 
@@ -224,9 +231,9 @@ class Breadcrumbs extends Widget
      *
      * @param bool $value
      *
-     * @return Breadcrumbs
+     * @return $this
      */
-    public function encodeLabels(bool $value): Breadcrumbs
+    public function encodeLabels(bool $value): self
     {
         $this->encodeLabels = $value;
 
@@ -238,9 +245,9 @@ class Breadcrumbs extends Widget
      *
      * @param bool $value
      *
-     * @return Breadcrumbs
+     * @return $this
      */
-    public function homeLink(bool $value): Breadcrumbs
+    public function homeLink(bool $value): self
     {
         $this->homeLink = $value;
 
@@ -252,9 +259,9 @@ class Breadcrumbs extends Widget
      *
      * @param array $value
      *
-     * @return Breadcrumbs
+     * @return $this
      */
-    public function homeUrlLink(array $value): Breadcrumbs
+    public function homeUrlLink(array $value): self
     {
         $this->homeUrlLink = $value;
 
@@ -266,12 +273,12 @@ class Breadcrumbs extends Widget
      *
      * @param array $value
      *
-     * @return Breadcrumbs
+     * @return $this
      */
-    public function links(array $value): Breadcrumbs
+    public function links(array $value): self
     {
-        if (!\array_key_exists('label', $value)) {
-            throw new \InvalidArgumentException('The "label" element is required for each link.');
+        if (!array_key_exists('label', $value)) {
+            throw new InvalidArgumentException('The "label" element is required for each link.');
         }
 
         $this->links = $value;
@@ -284,9 +291,9 @@ class Breadcrumbs extends Widget
      *
      * @param string $value
      *
-     * @return Breadcrumbs
+     * @return $this
      */
-    public function itemTemplate(string $value): Breadcrumbs
+    public function itemTemplate(string $value): self
     {
         $this->itemTemplate = $value;
 
@@ -298,9 +305,9 @@ class Breadcrumbs extends Widget
      *
      * @param string $value
      *
-     * @return Breadcrumbs
+     * @return $this
      */
-    public function activeItemTemplate(string $value): Breadcrumbs
+    public function activeItemTemplate(string $value): self
     {
         $this->activeItemTemplate = $value;
 

@@ -8,9 +8,13 @@ use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Cache\Dependency\Dependency;
 use Yiisoft\View\DynamicContentAwareInterface;
 use Yiisoft\View\DynamicContentAwareTrait;
-use Yiisoft\View\View;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
+
+use function array_merge;
+use function ob_get_clean;
+use function ob_implicit_flush;
+use function ob_start;
 
 /**
  * FragmentCache is used by {@see \Yiisoft\View\View} to provide caching of page fragments.
@@ -18,7 +22,7 @@ use Yiisoft\Widget\Widget;
  * @property-read string|false $cachedContent The cached content. False is returned if valid content is not found in the
  * cache. This property is read-only.
  */
-class FragmentCache extends Widget implements DynamicContentAwareInterface
+final class FragmentCache extends Widget implements DynamicContentAwareInterface
 {
     use DynamicContentAwareTrait;
 
@@ -30,7 +34,7 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      * After the FragmentCache object is created, if you want to change this property, you should only assign it with
      * a cache object.
      */
-    private ?CacheInterface $cache = null;
+    private CacheInterface $cache;
 
     /**
      * @var int number of seconds that the data can remain valid in cache.
@@ -58,9 +62,9 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     private $variations;
 
     /**
-     * @var string|bool the cached content. Null if the content is not cached.
+     * @var string|null the cached content. Null if the content is not cached.
      */
-    private $content = false;
+    private ?string $content = null;
 
     private WebView $webView;
 
@@ -75,10 +79,10 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public function start(): void
     {
-        if ($this->getCachedContent() === false) {
+        if ($this->getCachedContent() === null) {
             $this->webView->pushDynamicContent($this);
             ob_start();
-            ob_implicit_flush(0);
+            PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
         }
     }
 
@@ -93,55 +97,40 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public function run(): string
     {
-        if (($content = $this->getCachedContent()) !== false) {
+        if (($content = $this->getCachedContent()) !== null) {
             return $content;
         }
 
-        if ($this->cache instanceof CacheInterface) {
-            $this->webView->popDynamicContent();
+        $this->webView->popDynamicContent();
 
-            $content = ob_get_clean();
+        $content = ob_get_clean();
 
-            if ($content === false || $content === '') {
-                return '';
-            }
-
-            $data = [$content, $this->getDynamicPlaceholders()];
-            $this->cache->set($this->calculateKey(), $data, $this->duration, $this->dependency);
-
-            return $this->updateDynamicContent($content, $this->getDynamicPlaceholders());
+        if ($content === false || $content === '') {
+            return '';
         }
 
-        return '';
+        $data = [$content, $this->getDynamicPlaceholders()];
+        $this->cache->set($this->calculateKey(), $data, $this->duration, $this->dependency);
+
+        return $this->updateDynamicContent($content, $this->getDynamicPlaceholders());
     }
 
     /**
      * Returns the cached content if available.
      *
-     * @return string|false the cached content. False is returned if valid content is not found in the cache.
+     * @return string|null the cached content. False is returned if valid content is not found in the cache.
      */
-    public function getCachedContent()
+    public function getCachedContent(): ?string
     {
-        if ($this->content !== null) {
-            return $this->content;
-        }
-
-        if (!($this->cache instanceof CacheInterface)) {
-            return $this->content;
-        }
-
         $key = $this->calculateKey();
+
+        if (!$this->cache->has($key)) {
+            return null;
+        }
+
         $data = $this->cache->get($key);
 
-        if (!\is_array($data) || count($data) !== 2) {
-            return $this->content;
-        }
-
         [$this->content, $placeholders] = $data;
-
-        if (!\is_array($placeholders) || count($placeholders) === 0) {
-            return $this->content;
-        }
 
         $this->content = $this->updateDynamicContent($this->content, $placeholders, true);
 
@@ -161,27 +150,13 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     }
 
     /**
-     * {@see $cache}
-     *
-     * @param CacheInterface|null $value
-     *
-     * @return FragmentCache
-     */
-    public function cache(?CacheInterface $value): FragmentCache
-    {
-        $this->cache = $value;
-
-        return $this;
-    }
-
-    /**
      * {@see $content}
      *
-     * @param string|bool $value
+     * @param string|null $value
      *
-     * @return FragmentCache
+     * @return $this
      */
-    public function content($value): FragmentCache
+    public function content(?string $value): self
     {
         $this->content = $value;
 
@@ -193,9 +168,9 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      *
      * @param Dependency $value
      *
-     * @return FragmentCache
+     * @return $this
      */
-    public function dependency(Dependency $value): FragmentCache
+    public function dependency(Dependency $value): self
     {
         $this->dependency = $value;
 
@@ -207,9 +182,9 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      *
      * @param int $value
      *
-     * @return FragmentCache
+     * @return $this
      */
-    public function duration(int $value): FragmentCache
+    public function duration(int $value): self
     {
         $this->duration = $value;
 
@@ -221,9 +196,9 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
      *
      * @param string $value
      *
-     * @return FragmentCache
+     * @return $this
      */
-    public function id(string $value): FragmentCache
+    public function id(string $value): self
     {
         $this->id = $value;
 
@@ -233,20 +208,17 @@ class FragmentCache extends Widget implements DynamicContentAwareInterface
     /**
      * {@see $variations}
      *
-     * @param string[]|string $value
+     * @param array|string $value
      *
-     * @return FragmentCache
+     * @return $this
      */
-    public function variations($value): FragmentCache
+    public function variations($value): self
     {
         $this->variations = $value;
 
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function getView(): WebView
     {
         return $this->webView;
