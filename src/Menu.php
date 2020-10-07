@@ -37,7 +37,7 @@ use function strtr;
  *     ]);
  * ```
  */
-class Menu extends Widget
+final class Menu extends Widget
 {
     /**
      * @var array list of menu items. Each menu item should be an array of the following structure:

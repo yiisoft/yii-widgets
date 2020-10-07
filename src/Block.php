@@ -37,7 +37,7 @@ use function ob_start;
  * Second parameter defines if block content should be outputted which is desired when rendering its content but isn't
  * desired when redefining it in subviews.
  */
-class Block extends Widget
+final class Block extends Widget
 {
     private string $id;
 

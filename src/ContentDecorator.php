@@ -29,7 +29,7 @@ use function ob_start;
  * <?= ContentDecorator::end() ?>
  * ```
  */
-class ContentDecorator extends Widget
+final class ContentDecorator extends Widget
 {
     /**
      * @var array the parameters (name => value) to be extracted and made available in the decorative view.

@@ -47,7 +47,7 @@ use function is_array;
  *     ->links() => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [];
  * ```
  */
-class Breadcrumbs extends Widget
+final class Breadcrumbs extends Widget
 {
     /**
      * @var string the name of the breadcrumb container tag.
