@@ -133,7 +133,6 @@ final class FragmentCacheTest extends TestCase
         FragmentCache::begin()
             ->id('test')
             ->variations(['variations' => ['ru']])
-            ->content(null)
             ->start();
 
         $this->assertTrue($this->cache->has($key), 'Cached fragment should be exist');
@@ -158,7 +157,6 @@ final class FragmentCacheTest extends TestCase
         FragmentCache::begin()
             ->id('test')
             ->variations(['variations' => ['en']])
-            ->content(null)
             ->start();
 
         FragmentCache::end();
@@ -199,7 +197,6 @@ final class FragmentCacheTest extends TestCase
         FragmentCache::begin()
             ->id('test')
             ->variations(['variations' => 'uz'])
-            ->content(null)
             ->start();
 
         $html5 = FragmentCache::end();

@@ -40,13 +40,7 @@ use function ob_start;
 final class Block extends Widget
 {
     private string $id;
-
-    /**
-     * @var bool whether to render the block content in place. Defaults to false, meaning the captured block content
-     * will not be displayed.
-     */
     private bool $renderInPlace = false;
-
     private WebView $webView;
 
     public function __construct(WebView $webView)
@@ -84,11 +78,6 @@ final class Block extends Widget
         return '';
     }
 
-    /**
-     * @param string $value
-     *
-     * @return $this
-     */
     public function id(string $value): self
     {
         $this->id = $value;
@@ -97,9 +86,8 @@ final class Block extends Widget
     }
 
     /**
-     * {@see $renderInPlace}
-     *
-     * @param bool $value
+     * @param bool $value whether to render the block content in place. Defaults to false, meaning the captured block
+     * content will not be displayed.
      *
      * @return $this
      */
