@@ -13,177 +13,129 @@ final class BreadcrumbsTest extends TestCase
 {
     public function testHomeLinkTrue(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Breadcrumbs::widget()
+        $html = Breadcrumbs::widget()
             ->links([
                 'label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'
-            ]);
-
-        $actualHtml = ob_get_contents();
+            ])
+            ->render();
 
         $expectedHtml = "<ul class=\"breadcrumb\"><li><a href=\"/\">Home</a></li>\n" .
         "<li class=\"active\">My Home Page</li>\n" .
         "<li class=\"active\">http://my.example.com/yii2/link/page</li>\n" .
         '</ul>';
 
-        $this->assertEquals($expectedHtml, $actualHtml);
-
-        ob_end_clean();
+        $this->assertEquals($expectedHtml, $html);
     }
 
     public function testEmptyLinks(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
+        $html = Breadcrumbs::widget()->render();
 
-        echo Breadcrumbs::widget();
-
-        $actualHtml = ob_get_contents();
-
-        $this->assertEmpty($actualHtml);
-
-        ob_end_clean();
+        $this->assertEmpty($html);
     }
 
     public function testHomeLinkFalse(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Breadcrumbs::widget()
+        $html = Breadcrumbs::widget()
             ->homeLink(false)
             ->links([
                 'label' => 'My Home Page',
                 'url' => 'http://my.example.com/yii2/link/page'
-            ]);
-
-        $actualHtml = ob_get_contents();
+            ])
+            ->render();
 
         $expectedHtml = "<ul class=\"breadcrumb\"><li class=\"active\">My Home Page</li>\n" .
             "<li class=\"active\">http://my.example.com/yii2/link/page</li>\n" .
             '</ul>';
 
-        $this->assertEquals($expectedHtml, $actualHtml);
-
-        ob_end_clean();
+        $this->assertEquals($expectedHtml, $html);
     }
 
     public function testHomeUrlLink(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Breadcrumbs::widget()
+        $html = Breadcrumbs::widget()
             ->homeLink(false)
             ->homeUrlLink(['label' => 'home-link'])
-            ->links(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page']);
+            ->links(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
+            ->render();
 
         $expectedHtml = "<ul class=\"breadcrumb\"><li>home-link</li>\n" .
             "<li class=\"active\">My Home Page</li>\n" .
             "<li class=\"active\">http://my.example.com/yii2/link/page</li>\n" .
             '</ul>';
 
-        $actualHtml = ob_get_contents();
-
-        $this->assertEquals($expectedHtml, $actualHtml);
-
-        ob_end_clean();
+        $this->assertEquals($expectedHtml, $html);
     }
 
     public function testRenderItemException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        echo Breadcrumbs::widget()
+        $html = Breadcrumbs::widget()
             ->homeLink(false)
             ->links([
                 'url' => 'http://my.example.com/yii2/link/page',
-            ]);
+            ])
+            ->render();
     }
 
     public function testRenderItemLabelOnlyEncodeLabelFalse(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Breadcrumbs::widget()
+        $html = Breadcrumbs::widget()
             ->activeItemTemplate("<li>{link}</li>\n")
             ->encodeLabels(false)
             ->homeLink(false)
             ->links(['label' => 'My-<br>Test-Label'])
             ->options([])
-            ->tag('');
+            ->tag('')
+            ->render();
 
-        $actualHtml = ob_get_contents();
-
-        $this->assertEquals("<li>My-<br>Test-Label</li>\n", $actualHtml);
-
-        ob_end_clean();
+        $this->assertEquals("<li>My-<br>Test-Label</li>\n", $html);
     }
 
 
     public function testRenderItemLabelOnlyEncodeLabelTrue(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Breadcrumbs::widget()
+        $html = Breadcrumbs::widget()
             ->activeItemTemplate("<li>{link}</li>\n")
             ->homeLink(false)
             ->links(['label' => 'My-<br>Test-Label'])
             ->options([])
-            ->tag('');
+            ->tag('')
+            ->render();
 
-        $actualHtml = ob_get_contents();
-
-        $this->assertEquals("<li>My-&lt;br&gt;Test-Label</li>\n", $actualHtml);
-
-        ob_end_clean();
+        $this->assertEquals("<li>My-&lt;br&gt;Test-Label</li>\n", $html);
     }
 
     public function testOptions(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Breadcrumbs::widget()
+        $html = Breadcrumbs::widget()
             ->homeLink(false)
             ->links(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
-            ->options(['class' => 'breadcrumb external']);
-
-        $actualHtml = ob_get_contents();
+            ->options(['class' => 'breadcrumb external'])
+            ->render();
 
         $expectedHtml = "<ul class=\"breadcrumb external\"><li class=\"active\">My Home Page</li>\n";
 
-        $this->assertStringContainsString($expectedHtml, $actualHtml);
-
-        ob_end_clean();
+        $this->assertStringContainsString($expectedHtml, $html);
     }
 
     public function testTag(): void
     {
-        ob_start();
-        ob_implicit_flush(0);
-
-        echo Breadcrumbs::widget()
+        $html = Breadcrumbs::widget()
             ->activeItemTemplate("{link}\n")
             ->itemTemplate("{link}\n")
             ->homeLink(true)
             ->links(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
             ->options(['class' => 'breadcrumb'])
-            ->tag('div');
-
-        $actualHtml = ob_get_contents();
+            ->tag('div')
+            ->render();
 
         $expectedHtml = "<div class=\"breadcrumb\"><a href=\"/\">Home</a>\n" .
             "My Home Page\n" .
             "http://my.example.com/yii2/link/page\n" .
             '</div>';
 
-        $this->assertEquals($expectedHtml, $actualHtml);
-
-        ob_end_clean();
+        $this->assertEquals($expectedHtml, $html);
     }
 }

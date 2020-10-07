@@ -7,6 +7,10 @@ namespace Yiisoft\Yii\Widgets;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
 
+use function ob_get_clean;
+use function ob_implicit_flush;
+use function ob_start;
+
 /**
  * Block records all output between {@see begin()} and {@see end()} calls and stores it in
  *
@@ -56,7 +60,7 @@ class Block extends Widget
     public function start(): void
     {
         ob_start();
-        ob_implicit_flush(0);
+        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
     }
 
     /**
@@ -83,9 +87,9 @@ class Block extends Widget
     /**
      * @param string $value
      *
-     * @return Block
+     * @return $this
      */
-    public function id(string $value): Block
+    public function id(string $value): self
     {
         $this->id = $value;
 
@@ -97,9 +101,9 @@ class Block extends Widget
      *
      * @param bool $value
      *
-     * @return Block
+     * @return $this
      */
-    public function renderInPlace(bool $value): Block
+    public function renderInPlace(bool $value): self
     {
         $this->renderInPlace = $value;
 
