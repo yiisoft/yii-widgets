@@ -61,12 +61,10 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     private $variations;
 
-    private bool $noCache = false;
-
     /**
      * @var string|null the cached content. Null if the content is not cached.
      */
-    private $content;
+    private ?string $content = null;
 
     private WebView $webView;
 
@@ -103,22 +101,18 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
             return $content;
         }
 
-        if ($this->cache instanceof CacheInterface && $this->noCache === false) {
-            $this->webView->popDynamicContent();
+        $this->webView->popDynamicContent();
 
-            $content = ob_get_clean();
+        $content = ob_get_clean();
 
-            if ($content === false || $content === '') {
-                return '';
-            }
-
-            $data = [$content, $this->getDynamicPlaceholders()];
-            $this->cache->set($this->calculateKey(), $data, $this->duration, $this->dependency);
-
-            return $this->updateDynamicContent($content, $this->getDynamicPlaceholders());
+        if ($content === false || $content === '') {
+            return '';
         }
 
-        return ob_get_clean();
+        $data = [$content, $this->getDynamicPlaceholders()];
+        $this->cache->set($this->calculateKey(), $data, $this->duration, $this->dependency);
+
+        return $this->updateDynamicContent($content, $this->getDynamicPlaceholders());
     }
 
     /**
@@ -128,10 +122,6 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public function getCachedContent(): ?string
     {
-        if (!($this->cache instanceof CacheInterface) || $this->noCache) {
-            return null;
-        }
-
         $key = $this->calculateKey();
 
         if (!$this->cache->has($key)) {
@@ -162,11 +152,11 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
     /**
      * {@see $content}
      *
-     * @param string|bool $value
+     * @param string|null $value
      *
      * @return $this
      */
-    public function content($value): self
+    public function content(?string $value): self
     {
         $this->content = $value;
 
@@ -225,20 +215,6 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
     public function variations($value): self
     {
         $this->variations = $value;
-
-        return $this;
-    }
-
-    /**
-     * Disabled cache.
-     *
-     * @param bool $value
-     *
-     * @return $this
-     */
-    public function noCache(bool $value = true): self
-    {
-        $this->noCache = $value;
 
         return $this;
     }

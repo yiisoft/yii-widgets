@@ -24,50 +24,6 @@ final class FragmentCacheTest extends TestCase
         $this->assertEquals('cached fragment', $html);
     }
 
-    public function testCacheDisabled1(): void
-    {
-        $key = array_merge([FragmentCache::class, 'test']);
-
-        FragmentCache::begin()
-            ->id('test')
-            ->noCache()
-            ->start();
-
-        echo 'cached fragment';
-
-        $html = FragmentCache::end();
-
-        $this->assertFalse($this->cache->has($key));
-        $this->assertEquals('cached fragment', $html);
-    }
-
-    public function testCacheDisabled2(): void
-    {
-        $key = array_merge([FragmentCache::class, 'test']);
-
-        FragmentCache::begin()
-            ->id('test')
-            ->start();
-
-        echo 'cached fragment';
-
-        $html = FragmentCache::end();
-
-        $this->assertTrue($this->cache->has($key));
-        $this->assertEquals('cached fragment', $html);
-
-        FragmentCache::begin()
-            ->id('test')
-            ->noCache()
-            ->start();
-
-        echo 'cached fragment other';
-
-        $html = FragmentCache::end();
-
-        $this->assertEquals('cached fragment other', $html);
-    }
-
     public function testSingleDynamicFragment(): void
     {
         $params = '0';
