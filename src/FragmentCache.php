@@ -58,8 +58,10 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public function run(): string
     {
-        if ($this->getCachedContent() !== null) {
-            return $this->getCachedContent();
+        $content = $this->getCachedContent();
+
+        if ($content !== null) {
+            return $content;
         }
 
         $this->webView->popDynamicContent();
