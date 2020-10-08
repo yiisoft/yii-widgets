@@ -143,7 +143,7 @@ final class Menu extends Widget
     }
 
     /**
-     * @param string|null the CSS class that will be assigned to the first item in the main menu or each submenu.
+     * @param string|null $value the CSS class that will be assigned to the first item in the main menu or each submenu.
      * Defaults to null, meaning no such CSS class will be assigned.
      *
      * @return $this
