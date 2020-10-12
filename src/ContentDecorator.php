@@ -31,17 +31,8 @@ use function ob_start;
  */
 final class ContentDecorator extends Widget
 {
-    /**
-     * @var array the parameters (name => value) to be extracted and made available in the decorative view.
-     */
     private array $params = [];
-
-    /**
-     * @var string|null the view file that will be used to decorate the content enclosed by this widget. This can be
-     * specified as either the view file path or alias path.
-     */
     private ?string $viewFile = null;
-
     private WebView $webView;
 
     public function __construct(WebView $webView)
@@ -76,9 +67,7 @@ final class ContentDecorator extends Widget
     }
 
     /**
-     * {@see $params}
-     *
-     * @param array $value
+     * @param array $value the parameters (name => value) to be extracted and made available in the decorative view.
      *
      * @return ContentDecorator
      */
@@ -90,13 +79,12 @@ final class ContentDecorator extends Widget
     }
 
     /**
-     * {@see $viewFile}
-     *
-     * @param string $value
+     * @param string|null $value the view file that will be used to decorate the content enclosed by this widget.
+     * This can be specified as either the view file path or alias path.
      *
      * @return ContentDecorator
      */
-    public function viewFile(string $value): ContentDecorator
+    public function viewFile(?string $value): ContentDecorator
     {
         $this->viewFile = $value;
 

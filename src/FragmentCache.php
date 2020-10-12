@@ -16,54 +16,15 @@ use function ob_get_clean;
 use function ob_implicit_flush;
 use function ob_start;
 
-/**
- * FragmentCache is used by {@see \Yiisoft\View\View} to provide caching of page fragments.
- *
- * @property-read string|false $cachedContent The cached content. False is returned if valid content is not found in the
- * cache. This property is read-only.
- */
 final class FragmentCache extends Widget implements DynamicContentAwareInterface
 {
     use DynamicContentAwareTrait;
 
     private string $id;
-
-    /**
-     * @var CacheInterface|null the cache object or the application component ID of the cache object.
-     *
-     * After the FragmentCache object is created, if you want to change this property, you should only assign it with
-     * a cache object.
-     */
     private CacheInterface $cache;
-
-    /**
-     * @var int number of seconds that the data can remain valid in cache.
-     *
-     * Use 0 to indicate that the cached data will never expire.
-     */
     private int $duration = 60;
-
-    /**
-     * @var Dependency|null the dependency that the cached content depends on.
-     *
-     * This can be either a {@see Dependency} object or a configuration array for creating the dependency object.
-     *
-     * Would make the output cache depends on the last modified time of all posts. If any post has its modification time
-     * changed, the cached content would be invalidated.
-     */
     private ?Dependency $dependency = null;
-
-    /**
-     * @var string[]|string list of factors that would cause the variation of the content being cached.
-     *
-     * Each factor is a string representing a variation (e.g. the language, a GET parameter). The following variation
-     * setting will cause the content to be cached in different versions according to the current application language:
-     */
     private $variations;
-
-    /**
-     * @var string|null the cached content. Null if the content is not cached.
-     */
     private ?string $content = null;
 
     private WebView $webView;
@@ -97,7 +58,9 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public function run(): string
     {
-        if (($content = $this->getCachedContent()) !== null) {
+        $content = $this->getCachedContent();
+
+        if ($content !== null) {
             return $content;
         }
 
@@ -110,6 +73,7 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
         }
 
         $data = [$content, $this->getDynamicPlaceholders()];
+
         $this->cache->set($this->calculateKey(), $data, $this->duration, $this->dependency);
 
         return $this->updateDynamicContent($content, $this->getDynamicPlaceholders());
@@ -150,27 +114,16 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
     }
 
     /**
-     * {@see $content}
+     * @param Dependency|null $value the dependency that the cached content depends on.
      *
-     * @param string|null $value
+     * This can be either a {@see Dependency} object or a configuration array for creating the dependency object.
      *
-     * @return $this
-     */
-    public function content(?string $value): self
-    {
-        $this->content = $value;
-
-        return $this;
-    }
-
-    /**
-     * {@see $dependency}
-     *
-     * @param Dependency $value
+     * Would make the output cache depends on the last modified time of all posts. If any post has its modification time
+     * changed, the cached content would be invalidated.
      *
      * @return $this
      */
-    public function dependency(Dependency $value): self
+    public function dependency(?Dependency $value): self
     {
         $this->dependency = $value;
 
@@ -178,9 +131,7 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
     }
 
     /**
-     * {@see $duration}
-     *
-     * @param int $value
+     * @param int $value number of seconds that the data can remain valid in cache.
      *
      * @return $this
      */
@@ -191,13 +142,6 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
         return $this;
     }
 
-    /**
-     * @see $id
-     *
-     * @param string $value
-     *
-     * @return $this
-     */
     public function id(string $value): self
     {
         $this->id = $value;
@@ -206,9 +150,10 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
     }
 
     /**
-     * {@see $variations}
+     * @param array|string $value list of factors that would cause the variation of the content being cached.
      *
-     * @param array|string $value
+     * Each factor is a string representing a variation (e.g. the language, a GET parameter). The following variation
+     * setting will cause the content to be cached in different versions according to the current application language:
      *
      * @return $this
      */

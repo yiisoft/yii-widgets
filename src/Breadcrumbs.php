@@ -49,82 +49,13 @@ use function is_array;
  */
 final class Breadcrumbs extends Widget
 {
-    /**
-     * @var string the name of the breadcrumb container tag.
-     */
     private string $tag = 'ul';
-
-    /**
-     * @var array the HTML attributes for the breadcrumb container tag.
-     *
-     * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
-     */
     private array $options = ['class' => 'breadcrumb'];
-
-    /**
-     * @var bool whether to HTML-encode the link labels.
-     */
     private bool $encodeLabels = true;
-
-    /**
-     * @var bool the first hyperlink in the breadcrumbs (called home link). If this property is true, it will default
-     * to a link pointing to HomeUrl '\' with the label 'Home'. If this property is false, the home link will
-     * not be rendered.
-     */
     private bool $homeLink = true;
-
-    /**
-     * @var array $homeUrlLink
-     */
     private array $homeUrlLink = [];
-
-    /**
-     * @var array list of links to appear in the breadcrumbs. If this property is empty, the widget will not render
-     * anything. Each array element represents a single link in the breadcrumbs with the following structure:
-     *
-     * ```php
-     * [
-     *     'label' => 'label of the link',  // required
-     *     'url' => 'url of the link',      // optional
-     *     'template' => 'own template of the item', // optional, if not set $this->itemTemplate will be used
-     * ]
-     * ```
-     *
-     * If a link is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
-     * simply use `$label`.
-     *
-     * Additional array elements for each link will be treated as the HTML attributes for the hyperlink tag.
-     * For example, the following link specification will generate a hyperlink with CSS class `external`:
-     *
-     * ```php
-     * [
-     *     'label' => 'demo',
-     *     'url' => 'http://example.com',
-     *     'class' => 'external',
-     * ]
-     * ```
-     *
-     * Each individual link can override global {@see encodeLabels} param like the following:
-     *
-     * ```php
-     * [
-     *     'label' => '<strong>Hello!</strong>',
-     *     'encode' => false,
-     * ]
-     * ```
-     */
     private array $links = [];
-
-    /**
-     * @var string the template used to render each inactive item in the breadcrumbs. The token `{link}` will be
-     * replaced with the actual HTML link for each inactive item.
-     */
     private string $itemTemplate = "<li>{link}</li>\n";
-
-    /**
-     * @var string the template used to render each active item in the breadcrumbs. The token `{link}` will be replaced
-     * with the actual HTML link for each active item.
-     */
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
 
     /**
@@ -198,13 +129,6 @@ final class Breadcrumbs extends Widget
         return strtr($template, ['{link}' => $link]);
     }
 
-    /**
-     * {@see $tag}
-     *
-     * @param string $value
-     *
-     * @return $this
-     */
     public function tag(string $value): self
     {
         $this->tag = $value;
@@ -213,11 +137,15 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see $options}
+     * @param array $value the HTML attributes for the menu's container tag. The following special options are
+     * recognized:
      *
-     * @param array $value
+     * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
+     *   See also {@see \Yiisoft\Html\Html::tag()}.
      *
      * @return $this
+     *
+     * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
     public function options(array $value): self
     {
@@ -227,9 +155,7 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see $encodeLabel}
-     *
-     * @param bool $value
+     * @param bool $value whether the labels for menu items should be HTML-encoded.
      *
      * @return $this
      */
@@ -241,9 +167,9 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see $homeLink}
-     *
-     * @param bool $value
+     * @param bool $value the first hyperlink in the breadcrumbs (called home link). If this property is true, it will
+     * default to a link pointing to HomeUrl '\' with the label 'Home'. If this property is false, the home link will
+     * not be rendered.
      *
      * @return $this
      */
@@ -254,13 +180,6 @@ final class Breadcrumbs extends Widget
         return $this;
     }
 
-    /**
-     * {@see $homeUrlLink}
-     *
-     * @param array $value
-     *
-     * @return $this
-     */
     public function homeUrlLink(array $value): self
     {
         $this->homeUrlLink = $value;
@@ -269,9 +188,39 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see $links}
+     * @param array $value list of links to appear in the breadcrumbs. If this property is empty, the widget will not
+     * render anything. Each array element represents a single link in the breadcrumbs with the following structure:
      *
-     * @param array $value
+     * ```php
+     * [
+     *     'label' => 'label of the link',  // required
+     *     'url' => 'url of the link',      // optional
+     *     'template' => 'own template of the item', // optional, if not set $this->itemTemplate will be used
+     * ]
+     * ```
+     *
+     * If a link is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
+     * simply use `$label`.
+     *
+     * Additional array elements for each link will be treated as the HTML attributes for the hyperlink tag.
+     * For example, the following link specification will generate a hyperlink with CSS class `external`:
+     *
+     * ```php
+     * [
+     *     'label' => 'demo',
+     *     'url' => 'http://example.com',
+     *     'class' => 'external',
+     * ]
+     * ```
+     *
+     * Each individual link can override global {@see encodeLabels} param like the following:
+     *
+     * ```php
+     * [
+     *     'label' => '<strong>Hello!</strong>',
+     *     'encode' => false,
+     * ]
+     * ```
      *
      * @return $this
      */
@@ -287,9 +236,8 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see $itemTemplate}
-     *
-     * @param string $value
+     * @param string $value the template used to render each inactive item in the breadcrumbs. The token `{link}` will
+     * be replaced with the actual HTML link for each inactive item.
      *
      * @return $this
      */
@@ -301,9 +249,8 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * {@see $activeItemTemplate}
-     *
-     * @param string $value
+     * @param string $value the template used to render each active item in the breadcrumbs. The token `{link}` will be
+     * replaced with the actual HTML link for each active item.
      *
      * @return $this
      */

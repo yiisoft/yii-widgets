@@ -40,123 +40,23 @@ use function strtr;
 final class Menu extends Widget
 {
     /**
-     * @var array list of menu items. Each menu item should be an array of the following structure:
-     *
-     * - label: string, optional, specifies the menu item label. When {@see encodeLabels} is true, the label will be
-     *   HTML-encoded. If the label is not specified, an empty string will be used.
-     * - encode: bool, optional, whether this item`s label should be HTML-encoded. This param will override global
-     *   {@see encodeLabels} param.
-     * - url: string or array, optional, specifies the URL of the menu item. When this is set, the actual menu item
-     *   content will be generated using {@see linkTemplate}; otherwise, {@see labelTemplate} will be used.
-     * - visible: bool, optional, whether this menu item is visible. Defaults to true.
-     * - items: array, optional, specifies the sub-menu items. Its format is the same as the parent items.
-     * - active: bool or Closure, optional, whether this menu item is in active state (currently selected). When
-     *   using a closure, its signature should be `function ($item, $hasActiveChild, $isItemActive, $Widget)`. Closure
-     *   must return `true` if item should be marked as `active`, otherwise - `false`. If a menu item is active, its CSS
-     *   class will be appended with {@see activeCssClass}. If this option is not set, the menu item will be set active
-     *   automatically when the current request is triggered by `url`. For more details, please refer to
-     *   {@see isItemActive()}.
-     * - template: string, optional, the template used to render the content of this menu item. The token `{url}` will
-     *   be replaced by the URL associated with this menu item, and the token `{label}` will be replaced by the label
-     *   of the menu item. If this option is not set, {@see linkTemplate} or {@see labelTemplate} will be used instead.
-     * - submenuTemplate: string, optional, the template used to render the list of sub-menus. The token `{items}` will
-     *   be replaced with the rendered sub-menu items. If this option is not set, [[submenuTemplate]] will be used
-     *   instead.
-     * - options: array, optional, the HTML attributes for the menu container tag.
-     */
-    private array $items = [];
-
-    /**
-     * @var array list of HTML attributes shared by all menu {@see items}. If any individual menu item specifies its
-     * `options`, it will be merged with this property before being used to generate the HTML attributes for the menu
-     * item tag. The following special options are recognized:
-     *
-     * - tag: string, defaults to "li", the tag name of the item container tags. Set to false to disable container tag.
-     *   See also {@see \Yiisoft\Html\Html::tag()}
-     *
-     * {@see \Yiisoft\Html\Html::renderTagAttributes() for details on how attributes are being rendered}
-     */
-    private array $itemOptions = [];
-
-    /**
-     * @var string the template used to render the body of a menu which is a link. In this template, the token `{url}`
-     * will be replaced with the corresponding link URL; while `{label}` will be replaced with the link text.
-     *
-     * This property will be overridden by the `template` option set in individual menu items via {@see items}.
-     */
-    private string $linkTemplate = '<a href="{url}">{label}</a>';
-
-    /**
-     * @var string the template used to render the body of a menu which is NOT a link.
-     *
-     * In this template, the token `{label}` will be replaced with the label of the menu item.
-     *
-     * This property will be overridden by the `template` option set in individual menu items via {@see items}.
-     */
-    private string $labelTemplate = '{label}';
-
-    /**
      * @var string the template used to render a list of sub-menus.
      *
      * In this template, the token `{items}` will be replaced with the rendered sub-menu items.
      */
     private string $submenuTemplate = "\n<ul>\n{items}\n</ul>\n";
-
-    /**
-     * @var bool whether the labels for menu items should be HTML-encoded.
-     */
+    private array $items = [];
+    private array $itemOptions = [];
+    private string $linkTemplate = '<a href="{url}">{label}</a>';
+    private string $labelTemplate = '{label}';
     private bool $encodeLabels = true;
-
-    /**
-     * @var string the CSS class to be appended to the active menu item.
-     */
     private string $activeCssClass = 'active';
-
-    /**
-     * @var bool whether to automatically activate items according to whether their route setting matches the currently
-     * requested route.
-     *
-     * {@see isItemActive()}
-     */
     private bool $activateItems = true;
-
-    /**
-     * @var bool whether to activate parent menu items when one of the corresponding child menu items is active. The
-     * activated parent menu items will also have its CSS classes appended with {@see activeCssClass}.
-     */
     private bool $activateParents = false;
-
-    /**
-     * @var string|null $currentPath Allows you to assign the current path of the url from request controller.
-     */
     private ?string $currentPath = null;
-
-    /**
-     * @var bool whether to hide empty menu items. An empty menu item is one whose `url` option is not set and which has
-     * no visible child menu items.
-     */
     private bool $hideEmptyItems = true;
-
-    /**
-     * @var array the HTML attributes for the menu's container tag. The following special options are recognized:
-     *
-     * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
-     *   See also {@see \Yiisoft\Html\Html::tag()}.
-     *
-     * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
-     */
     private array $options = [];
-
-    /**
-     * @var string|null the CSS class that will be assigned to the first item in the main menu or each submenu. Defaults to
-     * null, meaning no such CSS class will be assigned.
-     */
     private ?string $firstItemCssClass = null;
-
-    /**
-     * @var string|null the CSS class that will be assigned to the last item in the main menu or each submenu. Defaults to
-     * null, meaning no such CSS class will be assigned.
-     */
     private ?string $lastItemCssClass = null;
 
     /**
@@ -181,9 +81,8 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $activateItems}
-     *
-     * @param bool $value
+     * @param bool $value whether to automatically activate items according to whether their route setting matches the
+     * currently requested route.
      *
      * @return $this
      */
@@ -195,9 +94,8 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $activateParents}
-     *
-     * @param bool $value
+     * @param bool $value whether to activate parent menu items when one of the corresponding child menu items is
+     * active. The activated parent menu items will also have its CSS classes appended with {@see activeCssClass}.
      *
      * @return $this
      */
@@ -209,9 +107,7 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $activeCssClass}
-     *
-     * @param string $value
+     * @param string $value the CSS class to be appended to the active menu item.
      *
      * @return $this
      */
@@ -223,13 +119,11 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $currentPath}
-     *
-     * @param string $value
+     * @param string|null $value allows you to assign the current path of the url from request controller.
      *
      * @return $this
      */
-    public function currentPath(string $value): self
+    public function currentPath(?string $value): self
     {
         $this->currentPath = $value;
 
@@ -237,9 +131,7 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $encodeLabels}
-     *
-     * @param bool $value
+     * @param bool $value whether the labels for menu items should be HTML-encoded.
      *
      * @return $this
      */
@@ -251,13 +143,12 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $firstItemCssClass}
-     *
-     * @param string $value
+     * @param string|null $value the CSS class that will be assigned to the first item in the main menu or each submenu.
+     * Defaults to null, meaning no such CSS class will be assigned.
      *
      * @return $this
      */
-    public function firstItemCssClass(string $value): self
+    public function firstItemCssClass(?string $value): self
     {
         $this->firstItemCssClass = $value;
 
@@ -265,9 +156,8 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $hideEmptyItems}
-     *
-     * @param bool $value
+     * @param bool $value whether to hide empty menu items. An empty menu item is one whose `url` option is not set and
+     * which has no visible child menu items.
      *
      * @return $this
      */
@@ -279,9 +169,29 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $items}
+     * @param array $value list of menu items. Each menu item should be an array of the following structure:
      *
-     * @param array $value
+     * - label: string, optional, specifies the menu item label. When {@see encodeLabels} is true, the label will be
+     *   HTML-encoded. If the label is not specified, an empty string will be used.
+     * - encode: bool, optional, whether this item`s label should be HTML-encoded. This param will override global
+     *   {@see encodeLabels} param.
+     * - url: string or array, optional, specifies the URL of the menu item. When this is set, the actual menu item
+     *   content will be generated using {@see linkTemplate}; otherwise, {@see labelTemplate} will be used.
+     * - visible: bool, optional, whether this menu item is visible. Defaults to true.
+     * - items: array, optional, specifies the sub-menu items. Its format is the same as the parent items.
+     * - active: bool or Closure, optional, whether this menu item is in active state (currently selected). When
+     *   using a closure, its signature should be `function ($item, $hasActiveChild, $isItemActive, $Widget)`. Closure
+     *   must return `true` if item should be marked as `active`, otherwise - `false`. If a menu item is active, its CSS
+     *   class will be appended with {@see activeCssClass}. If this option is not set, the menu item will be set active
+     *   automatically when the current request is triggered by `url`. For more details, please refer to
+     *   {@see isItemActive()}.
+     * - template: string, optional, the template used to render the content of this menu item. The token `{url}` will
+     *   be replaced by the URL associated with this menu item, and the token `{label}` will be replaced by the label
+     *   of the menu item. If this option is not set, {@see linkTemplate} or {@see labelTemplate} will be used instead.
+     * - submenuTemplate: string, optional, the template used to render the list of sub-menus. The token `{items}` will
+     *   be replaced with the rendered sub-menu items. If this option is not set, {@see submenuTemplate} will be used
+     *   instead.
+     * - options: array, optional, the HTML attributes for the menu container tag.
      *
      * @return $this
      */
@@ -293,11 +203,16 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $itemOptions}
+     * @param array $value list of HTML attributes shared by all menu {@see items}. If any individual menu item
+     * specifies its `options`, it will be merged with this property before being used to generate the HTML attributes
+     * for the menu item tag. The following special options are recognized:
      *
-     * @param array $value
+     * - tag: string, defaults to "li", the tag name of the item container tags. Set to false to disable container tag.
+     *   See also {@see \Yiisoft\Html\Html::tag()}
      *
      * @return $this
+     *
+     * {@see \Yiisoft\Html\Html::renderTagAttributes() for details on how attributes are being rendered}
      */
     public function itemOptions(array $value): self
     {
@@ -307,9 +222,11 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $labelTemplate}
+     * @param string $value the template used to render the body of a menu which is NOT a link.
      *
-     * @param string $value
+     * In this template, the token `{label}` will be replaced with the label of the menu item.
+     *
+     * This property will be overridden by the `template` option set in individual menu items via {@see items}.
      *
      * @return $this
      */
@@ -321,13 +238,12 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $lastItemCssClass}
-     *
-     * @param string $value
+     * @param string|null $value the CSS class that will be assigned to the last item in the main menu or each submenu.
+     * Defaults to null, meaning no such CSS class will be assigned.
      *
      * @return $this
      */
-    public function lastItemCssClass(string $value): self
+    public function lastItemCssClass(?string $value): self
     {
         $this->lastItemCssClass = $value;
 
@@ -335,9 +251,10 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $linkTemplate}
+     * @param string $value the template used to render the body of a menu which is a link. In this template, the token
+     * `{url}` will be replaced with the corresponding link URL; while `{label}` will be replaced with the link text.
      *
-     * @param string $value
+     * This property will be overridden by the `template` option set in individual menu items via {@see items}.
      *
      * @return $this
      */
@@ -349,11 +266,15 @@ final class Menu extends Widget
     }
 
     /**
-     * {@see $options}
+     * @param array $value the HTML attributes for the menu's container tag. The following special options are
+     * recognized:
      *
-     * @param array $value
+     * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
+     *   See also {@see \Yiisoft\Html\Html::tag()}.
      *
      * @return $this
+     *
+     * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
     public function options(array $value): self
     {
