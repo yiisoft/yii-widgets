@@ -115,93 +115,99 @@ final class FragmentCacheTest extends TestCase
             return null;
         });
 
-        $key = array_merge([FragmentCache::class, 'test'], ['variations' => ['ru']]);
+        $widget1 = FragmentCache::begin();
 
-        FragmentCache::begin()
+        $widget1
             ->id('test')
             ->variations(['variations' => ['ru']])
             ->start();
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($widget1->calculateKey()), 'Cached fragment should not be exist');
 
         $html1 = FragmentCache::end();
 
         $this->assertEquals('cached fragment', $html1);
 
-        FragmentCache::begin()
+        $widget2 = FragmentCache::begin();
+
+        $widget2
             ->id('test')
             ->variations(['variations' => ['ru']])
             ->start();
 
-        $this->assertTrue($this->cache->has($key), 'Cached fragment should be exist');
+        $this->assertTrue($this->cache->has($widget2->calculateKey()), 'Cached fragment should be exist');
 
         $html2 = FragmentCache::end();
 
         $this->assertEquals($html1, $html2);
 
-        $key = array_merge([FragmentCache::class, 'test'], ['variations' => ['en']]);
+        $widget3 = FragmentCache::begin();
 
-        FragmentCache::begin()
+        $widget3
             ->id('test')
             ->variations(['variations' => ['en']])
             ->start();
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($widget3->calculateKey()), 'Cached fragment should not be exist');
 
         FragmentCache::end();
 
-        FragmentCache::begin()
+        $widget4 = FragmentCache::begin();
+
+        $widget4
             ->id('test')
             ->variations(['variations' => ['en']])
             ->start();
 
         FragmentCache::end();
 
-        $this->assertTrue($this->cache->has($key), 'Cached fragment should be exist');
+        $this->assertTrue($this->cache->has($widget4->calculateKey()), 'Cached fragment should be exist');
 
         /** without variations */
-        $key = [FragmentCache::class, 'test'];
+        $widget5 = FragmentCache::begin();
 
-        FragmentCache::begin()
+        $widget5
             ->id('test')
             ->start();
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($widget5->calculateKey()), 'Cached fragment should not be exist');
 
         $html3 = FragmentCache::end();
 
         $this->assertEquals('cached fragment', $html3);
 
         /**  with variations as a string */
-        $key = array_merge([FragmentCache::class, 'test'], ['variations' => 'uz']);
+        $widget6 = FragmentCache::begin();
 
-        FragmentCache::begin()
+        $widget6
             ->id('test')
             ->variations(['variations' => 'uz'])
             ->start();
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->cache->has($key), 'Cached fragment should not be exist');
+        $this->assertFalse($this->cache->has($widget6->calculateKey()), 'Cached fragment should not be exist');
 
         $html4 = FragmentCache::end();
 
         $this->assertEquals('cached fragment', $html4);
 
-        FragmentCache::begin()
+        $widget7 = FragmentCache::begin();
+
+        $widget7
             ->id('test')
             ->variations(['variations' => 'uz'])
             ->start();
 
         $html5 = FragmentCache::end();
 
-        $this->assertTrue($this->cache->has($key), 'Cached fragment should be exist');
+        $this->assertTrue($this->cache->has($widget7->calculateKey()), 'Cached fragment should be exist');
         $this->assertEquals($html4, $html5);
     }
 }

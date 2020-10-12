@@ -110,7 +110,11 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public function calculateKey()
     {
-        return array_merge([__CLASS__, $this->id], (array) $this->variations);
+        $key = array_merge([__CLASS__, $this->id], (array) $this->variations);
+
+        $jsonKey = json_encode($key);
+
+        return ctype_alnum($jsonKey) && mb_strlen($jsonKey, '8bit') <= 32 ? $jsonKey : md5($jsonKey);
     }
 
     /**
