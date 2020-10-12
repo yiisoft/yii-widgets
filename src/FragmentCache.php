@@ -114,7 +114,7 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
 
         $jsonKey = json_encode($key);
 
-        return ctype_alnum($jsonKey) && mb_strlen($jsonKey, '8bit') <= 32 ? $jsonKey : md5($jsonKey);
+        return md5($jsonKey);
     }
 
     /**
