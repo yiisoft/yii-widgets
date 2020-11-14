@@ -72,7 +72,7 @@ final class Block extends Widget
         }
 
         if (!empty($block)) {
-            $this->webView->setBlocks($this->id, $block);
+            $this->webView->setBlock($this->id, $block);
         }
 
         return '';
