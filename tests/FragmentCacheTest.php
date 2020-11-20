@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Yii\Widgets\Tests;
 
-use Yiisoft\Yii\Widgets\FragmentCache;
-
-use function array_merge;
 use function md5;
+
 use function sha1;
 use function vsprintf;
+use Yiisoft\Yii\Widgets\FragmentCache;
 
 final class FragmentCacheTest extends TestCase
 {

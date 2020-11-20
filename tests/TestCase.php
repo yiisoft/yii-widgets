@@ -50,11 +50,10 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Asserting two strings equality ignoring line endings.
+     *
      * @param string $expected
      * @param string $actual
      * @param string $message
-     *
-     * @return void
      */
     protected function assertEqualsWithoutLE(string $expected, string $actual, string $message = ''): void
     {
@@ -69,8 +68,6 @@ abstract class TestCase extends BaseTestCase
      *
      * @param string $expected
      * @param string $actual
-     *
-     * @return void
      */
     protected function assertSameIgnoringSlash(string $expected, string $actual): void
     {
@@ -87,16 +84,16 @@ abstract class TestCase extends BaseTestCase
                 '__construct()' => [
                     [
                         '@root' => __DIR__,
-                        '@public' => '@root/public'
-                    ]
-                ]
+                        '@public' => '@root/public',
+                    ],
+                ],
             ],
 
             Cache::class => [
                 '__class' => Cache::class,
                 '__construct()' => [
-                    Reference::to(ArrayCache::class)
-                ]
+                    Reference::to(ArrayCache::class),
+                ],
             ],
 
             CacheInterface::class => Cache::class,
@@ -113,9 +110,9 @@ abstract class TestCase extends BaseTestCase
                     __DIR__ . '/public/view',
                     Reference::to(Theme::class),
                     Reference::to(EventDispatcherInterface::class),
-                    Reference::to(LoggerInterface::class)
-                ]
-            ]
+                    Reference::to(LoggerInterface::class),
+                ],
+            ],
         ];
     }
 }

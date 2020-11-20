@@ -6,10 +6,6 @@ namespace Yiisoft\Yii\Widgets\Tests;
 
 use Yiisoft\Yii\Widgets\Menu;
 
-use function ob_get_clean;
-use function ob_implicit_flush;
-use function ob_start;
-
 /**
  * MenuTest.
  */
@@ -22,13 +18,13 @@ final class MenuTest extends TestCase
             ->items([
                 [
                     'encode' => false,
-                    'label'  => '<span class="glyphicon glyphicon-user"></span> Users',
-                    'url'    => '#',
+                    'label' => '<span class="glyphicon glyphicon-user"></span> Users',
+                    'url' => '#',
                 ],
                 [
                     'encode' => true,
-                    'label'  => 'Authors & Publications',
-                    'url'    => '#',
+                    'label' => 'Authors & Publications',
+                    'url' => '#',
                 ],
             ])
             ->render();
@@ -47,13 +43,13 @@ HTML;
             ->items([
                 [
                     'encode' => false,
-                    'label'  => '<span class="glyphicon glyphicon-user"></span> Users',
-                    'url'    => '#',
+                    'label' => '<span class="glyphicon glyphicon-user"></span> Users',
+                    'url' => '#',
                 ],
                 [
                     'encode' => true,
-                    'label'  => 'Authors & Publications',
-                    'url'    => '#',
+                    'label' => 'Authors & Publications',
+                    'url' => '#',
                 ],
             ])
             ->render();
@@ -77,13 +73,13 @@ HTML;
             ])
             ->items([
                 [
-                    'label'   => 'item1',
-                    'url'     => '#',
+                    'label' => 'item1',
+                    'url' => '#',
                     'options' => ['tag' => 'div'],
                 ],
                 [
-                    'label'   => 'item2',
-                    'url'     => '#',
+                    'label' => 'item2',
+                    'url' => '#',
                     'options' => ['tag' => false],
                 ],
             ])
@@ -104,11 +100,11 @@ HTML;
             ->items([
                 [
                     'label' => 'item1',
-                    'url'   => '#',
+                    'url' => '#',
                 ],
                 [
                     'label' => 'item2',
-                    'url'   => '#',
+                    'url' => '#',
                 ],
             ])
             ->itemOptions(['tag' => false])
@@ -128,12 +124,12 @@ HTML;
             ->linkTemplate('')
             ->items([
                 [
-                    'label'    => 'item1',
-                    'url'      => '#',
+                    'label' => 'item1',
+                    'url' => '#',
                     'template' => 'label: {label}; url: {url}',
                 ],
                 [
-                    'label'    => 'item2',
+                    'label' => 'item2',
                     'template' => 'label: {label}',
                 ],
                 [
@@ -157,20 +153,20 @@ HTML;
             ->labelTemplate('')
             ->items([
                 [
-                    'label'    => 'item1',
-                    'url'      => '#',
+                    'label' => 'item1',
+                    'url' => '#',
                     'template' => 'label: {label}; url: {url}',
-                    'active'   => function ($item, $hasActiveChild, $isItemActive, $widget) {
+                    'active' => function ($item, $hasActiveChild, $isItemActive, $widget) {
                         return isset($item, $hasActiveChild, $isItemActive, $widget);
                     },
                 ],
                 [
-                    'label'    => 'item2',
+                    'label' => 'item2',
                     'template' => 'label: {label}',
-                    'active'   => false,
+                    'active' => false,
                 ],
                 [
-                    'label'  => 'item3 (no template)',
+                    'label' => 'item3 (no template)',
                     'active' => 'somestring',
                 ],
             ])
@@ -191,9 +187,9 @@ HTML;
             ->activeCssClass('item-active')
             ->items([
                 [
-                    'label'   => 'item1',
-                    'url'     => '#',
-                    'active'  => true,
+                    'label' => 'item1',
+                    'url' => '#',
+                    'active' => true,
                     'options' => [
                         'class' => [
                             'someclass',
@@ -201,8 +197,8 @@ HTML;
                     ],
                 ],
                 [
-                    'label'   => 'item2',
-                    'url'     => '#',
+                    'label' => 'item2',
+                    'url' => '#',
                     'options' => [
                         'class' => [
                             'another-class',
@@ -213,11 +209,11 @@ HTML;
                 ],
                 [
                     'label' => 'item3',
-                    'url'   => '#',
+                    'url' => '#',
                 ],
                 [
-                    'label'   => 'item4',
-                    'url'     => '#',
+                    'label' => 'item4',
+                    'url' => '#',
                     'options' => [
                         'class' => [
                             'some-other-class',
@@ -244,27 +240,27 @@ HTML;
             ->activeCssClass('item-active')
             ->items([
                 [
-                    'label'   => 'item1',
-                    'url'     => '#',
+                    'label' => 'item1',
+                    'url' => '#',
                     'options' => [
                         'class' => 'someclass',
                     ],
                 ],
                 [
                     'label' => 'item2',
-                    'url'   => '#',
+                    'url' => '#',
                 ],
                 [
-                    'label'   => 'item3',
-                    'url'     => '#',
+                    'label' => 'item3',
+                    'url' => '#',
                     'options' => [
                         'class' => 'some classes',
                     ],
                 ],
                 [
-                    'label'   => 'item4',
-                    'url'     => '#',
-                    'active'  => true,
+                    'label' => 'item4',
+                    'url' => '#',
+                    'active' => true,
                     'options' => [
                         'class' => 'another-class other--class two classes',
                     ],

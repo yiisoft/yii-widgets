@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use Yiisoft\View\WebView;
-use Yiisoft\Widget\Widget;
-
 use function ob_get_clean;
 use function ob_implicit_flush;
+
 use function ob_start;
+use Yiisoft\View\WebView;
+use Yiisoft\Widget\Widget;
 
 /**
  * Block records all output between {@see begin()} and {@see end()} calls and stores it in

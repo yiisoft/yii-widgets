@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use Throwable;
-use Yiisoft\View\Exception\ViewNotFoundException;
-use Yiisoft\View\WebView;
-use Yiisoft\Widget\Widget;
-
 use function ob_get_clean;
 use function ob_implicit_flush;
 use function ob_start;
+use Throwable;
+
+use Yiisoft\View\Exception\ViewNotFoundException;
+use Yiisoft\View\WebView;
+use Yiisoft\Widget\Widget;
 
 /**
  * ContentDecorator records all output between {@see begin()} and {@see end()]} calls, passes it to the given view file
@@ -71,7 +71,7 @@ final class ContentDecorator extends Widget
      *
      * @return ContentDecorator
      */
-    public function params(array $value): ContentDecorator
+    public function params(array $value): self
     {
         $this->params = $value;
 
@@ -84,7 +84,7 @@ final class ContentDecorator extends Widget
      *
      * @return ContentDecorator
      */
-    public function viewFile(?string $value): ContentDecorator
+    public function viewFile(?string $value): self
     {
         $this->viewFile = $value;
 

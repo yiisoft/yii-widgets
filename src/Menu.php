@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use Closure;
-use JsonException;
-use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Html\Html;
-use Yiisoft\Widget\Widget;
-
 use function array_merge;
 use function array_values;
 use function call_user_func;
+use Closure;
 use function count;
+
 use function implode;
+use JsonException;
 use function strtr;
+use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Html\Html;
+use Yiisoft\Widget\Widget;
 
 /**
  * Menu displays a multi-level menu using nested HTML lists.
@@ -347,7 +347,7 @@ final class Menu extends Widget
             $template = ArrayHelper::getValue($item, 'template', $this->linkTemplate);
 
             return strtr($template, [
-                '{url}'   => Html::encode($item['url']),
+                '{url}' => Html::encode($item['url']),
                 '{label}' => $item['label'],
             ]);
         }
