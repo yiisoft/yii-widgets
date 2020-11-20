@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use Yiisoft\Cache\CacheInterface;
-use Yiisoft\Cache\Dependency\Dependency;
-use Yiisoft\View\DynamicContentAwareInterface;
-use Yiisoft\View\DynamicContentAwareTrait;
-use Yiisoft\View\WebView;
-use Yiisoft\Widget\Widget;
-
 use function array_merge;
 use function ob_get_clean;
 use function ob_implicit_flush;
 use function ob_start;
+use Yiisoft\Cache\CacheInterface;
+use Yiisoft\Cache\Dependency\Dependency;
+
+use Yiisoft\View\DynamicContentAwareInterface;
+use Yiisoft\View\DynamicContentAwareTrait;
+use Yiisoft\View\WebView;
+use Yiisoft\Widget\Widget;
 
 final class FragmentCache extends Widget implements DynamicContentAwareInterface
 {

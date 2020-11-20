@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use function array_key_exists;
 use InvalidArgumentException;
+use function is_array;
 use JsonException;
 use Yiisoft\Arrays\ArrayHelper;
+
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
-
-use function array_key_exists;
-use function is_array;
 
 /**
  * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.
@@ -76,7 +76,7 @@ final class Breadcrumbs extends Widget
         if ($this->homeLink === true) {
             $links[] = $this->renderItem([
                 'label' => 'Home',
-                'url'   => '/',
+                'url' => '/',
             ], $this->itemTemplate);
         } elseif (!empty($this->homeUrlLink)) {
             $links[] = $this->renderItem($this->homeUrlLink, $this->itemTemplate);
@@ -105,7 +105,7 @@ final class Breadcrumbs extends Widget
      * @param string $template the template to be used to rendered the link. The token "{link}" will be replaced by the
      * link.
      *
-     * @throws JsonException|InvalidArgumentException if `$link` does not have "label" element.
+     * @throws InvalidArgumentException|JsonException if `$link` does not have "label" element.
      *
      * @return string the rendering result
      */

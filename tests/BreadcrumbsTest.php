@@ -15,7 +15,7 @@ final class BreadcrumbsTest extends TestCase
     {
         $html = Breadcrumbs::widget()
             ->links([
-                'label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'
+                'label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page',
             ])
             ->render();
 
@@ -40,7 +40,7 @@ final class BreadcrumbsTest extends TestCase
             ->homeLink(false)
             ->links([
                 'label' => 'My Home Page',
-                'url' => 'http://my.example.com/yii2/link/page'
+                'url' => 'http://my.example.com/yii2/link/page',
             ])
             ->render();
 
@@ -92,7 +92,6 @@ final class BreadcrumbsTest extends TestCase
 
         $this->assertEquals("<li>My-<br>Test-Label</li>\n", $html);
     }
-
 
     public function testRenderItemLabelOnlyEncodeLabelTrue(): void
     {
