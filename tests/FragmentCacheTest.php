@@ -34,7 +34,6 @@ final class FragmentCacheTest extends TestCase
 
             $html->begin();
             if ($html->getCachedContent() === null) {
-
                 echo 'single dynamic cached fragment: ';
                 echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
             }
