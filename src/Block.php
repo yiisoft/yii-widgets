@@ -51,10 +51,12 @@ final class Block extends Widget
     /**
      * Starts recording a block.
      */
-    public function start(): void
+    public function begin(): ?string
     {
+        parent::begin();
         ob_start();
         PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+        return null;
     }
 
     /**

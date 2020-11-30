@@ -11,9 +11,9 @@ final class BlockTest extends TestCase
 {
     public function testBlock(): void
     {
-        Block::begin()
+        Block::widget()
             ->id('testme')
-            ->start();
+            ->begin();
 
         echo '<block-testme>';
 
@@ -24,10 +24,10 @@ final class BlockTest extends TestCase
 
     public function testBlockRenderInPlaceTrue(): void
     {
-        Block::begin()
+        Block::widget()
             ->id('testme')
             ->renderInPlace(true)
-            ->start();
+            ->begin();
 
         echo '<block-testme>';
 

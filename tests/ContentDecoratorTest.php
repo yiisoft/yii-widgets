@@ -16,10 +16,10 @@ final class ContentDecoratorTest extends TestCase
      */
     public function testContentDecorator(): void
     {
-        ContentDecorator::begin()
+        ContentDecorator::widget()
             ->viewFile($this->aliases->get('@public/view/layout.php'))
             ->params([])
-            ->start();
+            ->begin();
 
         echo "\t\t<div class='left-column'>\n";
         echo "\t\t\t<p>This is a left bar!</p>\n";

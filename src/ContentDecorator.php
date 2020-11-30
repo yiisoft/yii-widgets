@@ -40,11 +40,13 @@ final class ContentDecorator extends Widget
         $this->webView = $webView;
     }
 
-    public function start(): void
+    public function begin(): ?string
     {
+        parent::begin();
         /** Starts recording a clip. */
         ob_start();
         PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+        return null;
     }
 
     /**

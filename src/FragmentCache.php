@@ -38,13 +38,15 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
     /**
      * Initializes the FragmentCache object.
      */
-    public function start(): void
+    public function begin(): ?string
     {
+        parent::begin();
         if ($this->getCachedContent() === null) {
             $this->webView->pushDynamicContent($this);
             ob_start();
             PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
         }
+        return null;
     }
 
     /**
