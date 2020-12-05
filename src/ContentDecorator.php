@@ -18,11 +18,10 @@ use Yiisoft\Widget\Widget;
  * as `$content` and then echoes rendering result.
  *
  * ```php
- * <?= ContentDecorator::begin()
+ * <?= ContentDecorator::widget()
  *     ->viewFile('@app/views/layouts/base.php')
  *     ->params([])
- *     ->view($this)
- *     ->start(); ?>
+ *     ->begin(); ?>
  *
  * some content here
  *
