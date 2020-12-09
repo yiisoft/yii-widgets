@@ -37,6 +37,7 @@ final class ContentDecoratorTest extends TestCase
                     "\t\t\t<p>This is a right bar!</p>\n" .
                     "\t\t</div>\n";
 
+        $this->assertStringContainsString('<title>Test</title>', $html);
         $this->assertStringContainsString($expected, $html);
     }
 }
