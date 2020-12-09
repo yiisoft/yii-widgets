@@ -90,7 +90,7 @@ final class ContentDecorator extends Widget
      */
     public function viewFile(?string $value): self
     {
-        $this->viewFile = $aliases->get($value);
+        $this->viewFile = $this->aliases->get($value);
 
         return $this;
     }
