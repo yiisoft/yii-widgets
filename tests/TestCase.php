@@ -9,7 +9,6 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
-use Yiisoft\Aliases\Aliases;
 use Yiisoft\Cache\ArrayCache;
 use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface;
@@ -24,7 +23,6 @@ use Yiisoft\Widget\WidgetFactory;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected Aliases $aliases;
     protected CacheInterface $cache;
     private ContainerInterface $container;
     protected WebView $webView;
@@ -35,7 +33,6 @@ abstract class TestCase extends BaseTestCase
 
         $this->container = new Container($this->config());
 
-        $this->aliases = $this->container->get(Aliases::class);
         $this->cache = $this->container->get(CacheInterface::class);
         $this->webView = $this->container->get(WebView::class);
 
