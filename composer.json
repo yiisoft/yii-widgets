@@ -19,6 +19,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.4|^8.0",
+        "yiisoft/aliases": "^1.1",
         "yiisoft/cache": "^3.0@dev",
         "yiisoft/view": "^3.0@dev",
         "yiisoft/widget": "^3.0@dev"
@@ -28,7 +29,6 @@
         "roave/infection-static-analysis-plugin": "^1.5",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^4.2",
-        "yiisoft/aliases": "^1.1",
         "yiisoft/di": "^3.0@dev",
         "yiisoft/event-dispatcher": "^3.0@dev",
         "yiisoft/log": "^3.0@dev"
