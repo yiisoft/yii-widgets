@@ -9,6 +9,7 @@ use function ob_implicit_flush;
 use function ob_start;
 use Throwable;
 
+use Yiisoft\Aliases\Aliases;
 use Yiisoft\View\Exception\ViewNotFoundException;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
@@ -30,12 +31,14 @@ use Yiisoft\Widget\Widget;
  */
 final class ContentDecorator extends Widget
 {
+    private Aliases $aliases;
     private array $params = [];
     private ?string $viewFile = null;
     private WebView $webView;
 
-    public function __construct(WebView $webView)
+    public function __construct(Aliases $aliases, WebView $webView)
     {
+        $this->aliases = $aliases;
         $this->webView = $webView;
     }
 
@@ -87,7 +90,7 @@ final class ContentDecorator extends Widget
      */
     public function viewFile(?string $value): self
     {
-        $this->viewFile = $value;
+        $this->viewFile = $aliases->get($value);
 
         return $this;
     }
