@@ -17,7 +17,7 @@ final class ContentDecoratorTest extends TestCase
     public function testContentDecorator(): void
     {
         ContentDecorator::widget()
-            ->viewFile($this->aliases->get('@public/view/layout.php'))
+            ->viewFile('@public/view/layout.php')
             ->params([])
             ->begin();
 
