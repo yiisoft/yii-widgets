@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests;
 
-use function md5;
+use ReflectionClass;
+use Yiisoft\Yii\Widgets\FragmentCache;
 
+use function md5;
 use function sha1;
 use function vsprintf;
-use Yiisoft\Yii\Widgets\FragmentCache;
 
 final class FragmentCacheTest extends TestCase
 {
@@ -125,7 +126,7 @@ final class FragmentCacheTest extends TestCase
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->cache->has($widget1->calculateKey()), 'Cached fragment should not be exist');
+        $this->assertFalse($this->hasCache($widget1->calculateKey()), 'Cached fragment should not be exist');
 
         $html1 = FragmentCache::end();
 
@@ -138,7 +139,7 @@ final class FragmentCacheTest extends TestCase
             ->variations(['variations' => ['ru']])
             ->begin();
 
-        $this->assertTrue($this->cache->has($widget2->calculateKey()), 'Cached fragment should be exist');
+        $this->assertTrue($this->hasCache($widget2->calculateKey()), 'Cached fragment should be exist');
 
         $html2 = FragmentCache::end();
 
@@ -153,7 +154,7 @@ final class FragmentCacheTest extends TestCase
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->cache->has($widget3->calculateKey()), 'Cached fragment should not be exist');
+        $this->assertFalse($this->hasCache($widget3->calculateKey()), 'Cached fragment should not be exist');
 
         FragmentCache::end();
 
@@ -166,7 +167,7 @@ final class FragmentCacheTest extends TestCase
 
         FragmentCache::end();
 
-        $this->assertTrue($this->cache->has($widget4->calculateKey()), 'Cached fragment should be exist');
+        $this->assertTrue($this->hasCache($widget4->calculateKey()), 'Cached fragment should be exist');
 
         /** without variations */
         $widget5 = FragmentCache::widget();
@@ -177,7 +178,7 @@ final class FragmentCacheTest extends TestCase
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->cache->has($widget5->calculateKey()), 'Cached fragment should not be exist');
+        $this->assertFalse($this->hasCache($widget5->calculateKey()), 'Cached fragment should not be exist');
 
         $html3 = FragmentCache::end();
 
@@ -193,7 +194,7 @@ final class FragmentCacheTest extends TestCase
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->cache->has($widget6->calculateKey()), 'Cached fragment should not be exist');
+        $this->assertFalse($this->hasCache($widget6->calculateKey()), 'Cached fragment should not be exist');
 
         $html4 = FragmentCache::end();
 
@@ -208,7 +209,17 @@ final class FragmentCacheTest extends TestCase
 
         $html5 = FragmentCache::end();
 
-        $this->assertTrue($this->cache->has($widget7->calculateKey()), 'Cached fragment should be exist');
+        $this->assertTrue($this->hasCache($widget7->calculateKey()), 'Cached fragment should be exist');
         $this->assertEquals($html4, $html5);
+    }
+
+    private function hasCache(string $key): bool
+    {
+        $class = new ReflectionClass($this->cache);
+        $property = $class->getProperty('handler');
+        $property->setAccessible(true);
+        $handler = $property->getValue($this->cache);
+        $property->setAccessible(false);
+        return $handler->has($key);
     }
 }
