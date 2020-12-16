@@ -92,7 +92,7 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
         $data = $this->cache->getOrSet($key, static fn () => null);
 
         if ($data === null) {
-            $this->cache->remove($this->calculateKey());
+            $this->cache->remove($key);
             return null;
         }
 
