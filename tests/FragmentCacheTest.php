@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests;
 
-use ReflectionClass;
 use Yiisoft\Yii\Widgets\FragmentCache;
 
 use function md5;
