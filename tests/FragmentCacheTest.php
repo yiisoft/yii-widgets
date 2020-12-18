@@ -215,11 +215,6 @@ final class FragmentCacheTest extends TestCase
 
     private function hasCache(string $key): bool
     {
-        $class = new ReflectionClass($this->cache);
-        $property = $class->getProperty('handler');
-        $property->setAccessible(true);
-        $handler = $property->getValue($this->cache);
-        $property->setAccessible(false);
-        return $handler->has($key);
+        return $this->cache->psr()->has($key);
     }
 }
