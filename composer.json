@@ -20,7 +20,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "yiisoft/aliases": "^1.1",
-        "yiisoft/cache": "^3.0@dev",
+        "yiisoft/cache": "^1.0",
         "yiisoft/view": "^3.0@dev",
         "yiisoft/widget": "^3.0@dev"
     },
