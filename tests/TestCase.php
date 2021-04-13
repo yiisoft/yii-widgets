@@ -16,7 +16,7 @@ use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Di\Container;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
-use Yiisoft\Factory\Definitions\Reference;
+use Yiisoft\Factory\Definition\Reference;
 use Yiisoft\Log\Logger;
 use Yiisoft\View\Theme;
 use Yiisoft\View\WebView;
@@ -78,7 +78,7 @@ abstract class TestCase extends BaseTestCase
     {
         return [
             Aliases::class => [
-                '__class' => Aliases::class,
+                'class' => Aliases::class,
                 '__construct()' => [
                     [
                         '@root' => __DIR__,
@@ -88,7 +88,7 @@ abstract class TestCase extends BaseTestCase
             ],
 
             Cache::class => [
-                '__class' => Cache::class,
+                'class' => Cache::class,
                 '__construct()' => [
                     Reference::to(ArrayCache::class),
                 ],
@@ -103,7 +103,7 @@ abstract class TestCase extends BaseTestCase
             LoggerInterface::class => Logger::class,
 
             WebView::class => [
-                '__class' => WebView::class,
+                'class' => WebView::class,
                 '__construct()' => [
                     __DIR__ . '/public/view',
                     Reference::to(Theme::class),
