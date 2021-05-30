@@ -58,7 +58,7 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
      *
      * @return string the result of widget execution to be outputted.
      */
-    public function run(): string
+    protected function run(): string
     {
         $content = $this->getCachedContent();
 

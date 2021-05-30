@@ -65,7 +65,7 @@ final class Breadcrumbs extends Widget
      *
      * @return string the result of widget execution to be outputted.
      */
-    public function run(): string
+    protected function run(): string
     {
         if (empty($this->links)) {
             return '';

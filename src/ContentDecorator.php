@@ -60,7 +60,7 @@ final class ContentDecorator extends Widget
      *
      * @return string the result of widget execution to be outputted.
      */
-    public function run(): string
+    protected function run(): string
     {
         $params = $this->params;
 
