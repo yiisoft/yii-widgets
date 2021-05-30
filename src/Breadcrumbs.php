@@ -65,7 +65,7 @@ final class Breadcrumbs extends Widget
      *
      * @return string the result of widget execution to be outputted.
      */
-    public function run(): string
+    protected function run(): string
     {
         if (empty($this->links)) {
             return '';
@@ -95,7 +95,12 @@ final class Breadcrumbs extends Widget
             }
         }
 
-        return Html::tag(!empty($this->tag) ? $this->tag : false, implode('', $links), $this->options);
+        $body = implode('', $links);
+
+        return empty($this->tag)
+            ? $body
+            : Html::tag($this->tag, $body, $this->options)->encode(false)->render()
+        ;
     }
 
     /**
