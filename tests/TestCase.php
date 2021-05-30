@@ -6,19 +6,13 @@ namespace Yiisoft\Yii\Widgets\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Psr\Container\ContainerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\EventDispatcher\ListenerProviderInterface;
-use Psr\Log\LoggerInterface;
 use Yiisoft\Aliases\Aliases;
-use Yiisoft\Cache\ArrayCache;
 use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface;
-use Yiisoft\Di\Container;
-use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
-use Yiisoft\EventDispatcher\Provider\Provider;
-use Yiisoft\Factory\Definition\Reference;
-use Yiisoft\Log\Logger;
-use Yiisoft\View\Theme;
+use Yiisoft\Test\Support\Container\SimpleContainer;
+use Yiisoft\Test\Support\EventDispatcher\SimpleEventDispatcher;
+use Yiisoft\Test\Support\Log\SimpleLogger;
+use Yiisoft\Test\Support\SimpleCache\MemorySimpleCache;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\WidgetFactory;
 
@@ -32,7 +26,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->container = new Container($this->config());
+        $this->container = new SimpleContainer($this->config());
 
         $this->cache = $this->container->get(CacheInterface::class);
         $this->webView = $this->container->get(WebView::class);
@@ -74,43 +68,21 @@ abstract class TestCase extends BaseTestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function config(): array
+    private function config(): array
     {
         return [
-            Aliases::class => [
-                'class' => Aliases::class,
-                '__construct()' => [
-                    [
-                        '@root' => __DIR__,
-                        '@public' => '@root/public',
-                    ],
-                ],
-            ],
+            Aliases::class => new Aliases([
+                '@root' => __DIR__,
+                '@public' => '@root/public',
+            ]),
 
-            Cache::class => [
-                'class' => Cache::class,
-                '__construct()' => [
-                    Reference::to(ArrayCache::class),
-                ],
-            ],
+            CacheInterface::class => new Cache(new MemorySimpleCache()),
 
-            CacheInterface::class => Cache::class,
-
-            ListenerProviderInterface::class => Provider::class,
-
-            EventDispatcherInterface::class => Dispatcher::class,
-
-            LoggerInterface::class => Logger::class,
-
-            WebView::class => [
-                'class' => WebView::class,
-                '__construct()' => [
-                    __DIR__ . '/public/view',
-                    Reference::to(Theme::class),
-                    Reference::to(EventDispatcherInterface::class),
-                    Reference::to(LoggerInterface::class),
-                ],
-            ],
+            WebView::class => new WebView(
+                __DIR__ . '/public/view',
+                new SimpleEventDispatcher(),
+                new SimpleLogger(),
+            ),
         ];
     }
 }

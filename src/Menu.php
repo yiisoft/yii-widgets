@@ -77,7 +77,10 @@ final class Menu extends Widget
         $options = $this->options;
         $tag = ArrayHelper::remove($options, 'tag', 'ul');
 
-        return Html::tag($tag, $this->renderItems($items), $options);
+        return empty($tag)
+            ? $this->renderItems($items)
+            : Html::tag($tag, $this->renderItems($items), $options)->encode(false)->render()
+        ;
     }
 
     /**
@@ -325,7 +328,7 @@ final class Menu extends Widget
                 ]);
             }
 
-            $lines[] = Html::tag($tag, $menu, $options);
+            $lines[] = empty($tag) ? $menu : Html::tag($tag, $menu, $options)->encode(false);
         }
 
         return implode("\n", $lines);

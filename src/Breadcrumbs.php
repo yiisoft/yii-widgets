@@ -95,7 +95,12 @@ final class Breadcrumbs extends Widget
             }
         }
 
-        return Html::tag(!empty($this->tag) ? $this->tag : false, implode('', $links), $this->options);
+        $body = implode('', $links);
+
+        return empty($this->tag)
+            ? $body
+            : Html::tag($this->tag, $body, $this->options)->encode(false)->render()
+        ;
     }
 
     /**
