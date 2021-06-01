@@ -4,35 +4,34 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use function array_merge;
+use RuntimeException;
+use Yiisoft\Cache\CacheInterface;
+use Yiisoft\Cache\Dependency\Dependency;
+use Yiisoft\View\CacheContent;
+use Yiisoft\View\DynamicContent;
+use Yiisoft\Widget\Widget;
+
+use function ob_end_clean;
 use function ob_get_clean;
 use function ob_implicit_flush;
 use function ob_start;
-use Yiisoft\Cache\CacheInterface;
-use Yiisoft\Cache\Dependency\Dependency;
 
-use Yiisoft\View\DynamicContentAwareInterface;
-use Yiisoft\View\DynamicContentAwareTrait;
-use Yiisoft\View\WebView;
-use Yiisoft\Widget\Widget;
-
-final class FragmentCache extends Widget implements DynamicContentAwareInterface
+final class FragmentCache extends Widget
 {
-    use DynamicContentAwareTrait;
-
-    private string $id;
+    private ?string $id = null;
     private CacheInterface $cache;
-    private int $duration = 60;
     private ?Dependency $dependency = null;
-    private $variations;
-    private ?string $content = null;
+    private int $ttl = 60;
+    private array $variations = [];
 
-    private WebView $webView;
+    /**
+     * @var array<string, DynamicContent>
+     */
+    private array $dynamicContents = [];
 
-    public function __construct(CacheInterface $cache, WebView $webview)
+    public function __construct(CacheInterface $cache)
     {
         $this->cache = $cache;
-        $this->webView = $webview;
     }
 
     /**
@@ -40,12 +39,13 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
      */
     public function begin(): ?string
     {
-        parent::begin();
-        if ($this->getCachedContent() === null) {
-            $this->webView->pushDynamicContent($this);
-            ob_start();
-            PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+        if ($this->id === null) {
+            throw new RuntimeException('You must assign the "id" using the "id()" setter.');
         }
+
+        parent::begin();
+        ob_start();
+        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
         return null;
     }
 
@@ -56,17 +56,17 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
      *
      * This method does nothing if valid content is already found in cache.
      *
-     * @return string the result of widget execution to be outputted.
+     * @return string The result of widget execution to be outputted.
      */
     protected function run(): string
     {
-        $content = $this->getCachedContent();
+        $cacheContent = new CacheContent($this->id, $this->cache, $this->dynamicContents, $this->variations);
+        $content = $cacheContent->cachedContent();
 
         if ($content !== null) {
+            ob_end_clean();
             return $content;
         }
-
-        $this->webView->popDynamicContent();
 
         $content = ob_get_clean();
 
@@ -74,104 +74,75 @@ final class FragmentCache extends Widget implements DynamicContentAwareInterface
             return '';
         }
 
-        $data = [$content, $this->getDynamicPlaceholders()];
-
-        $this->cache->getOrSet($this->calculateKey(), static fn () => $data, $this->duration, $this->dependency);
-
-        return $this->updateDynamicContent($content, $this->getDynamicPlaceholders());
+        return $cacheContent->cache($content, $this->ttl, $this->dependency);
     }
 
     /**
-     * Returns the cached content if available.
+     * @param string $value The unique identifier of the cache fragment.
      *
-     * @return string|null the cached content. False is returned if valid content is not found in the cache.
+     * @return self
      */
-    public function getCachedContent(): ?string
+    public function id(string $value): self
     {
-        $key = $this->calculateKey();
-        $data = $this->cache->getOrSet($key, static fn () => null);
-
-        if ($data === null) {
-            $this->cache->remove($key);
-            return null;
-        }
-
-        [$this->content, $placeholders] = $data;
-
-        $this->content = $this->updateDynamicContent($this->content, $placeholders, true);
-
-        return $this->content;
+        $this->id = $value;
+        return $this;
     }
 
     /**
-     * Generates a unique key used for storing the content in cache.
-     *
-     * The key generated depends on both {@see id} and {@see variations}.
-     *
-     * @return mixed a valid cache key
-     */
-    public function calculateKey()
-    {
-        $key = array_merge([__CLASS__, $this->id], (array) $this->variations);
-
-        $jsonKey = json_encode($key);
-
-        return md5($jsonKey);
-    }
-
-    /**
-     * @param Dependency|null $value the dependency that the cached content depends on.
+     * @param Dependency $value The dependency that the cached content depends on.
      *
      * This can be either a {@see Dependency} object or a configuration array for creating the dependency object.
      *
      * Would make the output cache depends on the last modified time of all posts. If any post has its modification time
      * changed, the cached content would be invalidated.
      *
-     * @return $this
+     * @return self
      */
-    public function dependency(?Dependency $value): self
+    public function dependency(Dependency $value): self
     {
         $this->dependency = $value;
-
         return $this;
     }
 
     /**
-     * @param int $value number of seconds that the data can remain valid in cache.
+     * @param int $value The number of seconds that the data can remain valid in cache.
      *
-     * @return $this
+     * @return self
      */
-    public function duration(int $value): self
+    public function ttl(int $value): self
     {
-        $this->duration = $value;
-
-        return $this;
-    }
-
-    public function id(string $value): self
-    {
-        $this->id = $value;
-
+        $this->ttl = $value;
         return $this;
     }
 
     /**
-     * @param array|string $value list of factors that would cause the variation of the content being cached.
+     * @param DynamicContent ...$value The dynamic content instances.
+     *
+     * @return self
+     */
+    public function dynamicContents(DynamicContent ...$value): self
+    {
+        foreach ($value as $dynamicContent) {
+            $this->dynamicContents[$dynamicContent->id()] = $dynamicContent;
+        }
+        return $this;
+    }
+
+    /**
+     * @param string ...$value The factors that would cause the variation of the content being cached.
      *
      * Each factor is a string representing a variation (e.g. the language, a GET parameter). The following variation
      * setting will cause the content to be cached in different versions according to the current application language:
      *
-     * @return $this
+     * ```php
+     * $fragmentCache->variations('en');
+     * ```
+     *
+     * @return self
      */
-    public function variations($value): self
+    public function variations(string ...$value): self
     {
         $this->variations = $value;
-
         return $this;
-    }
-
-    protected function getView(): WebView
-    {
-        return $this->webView;
     }
 }
