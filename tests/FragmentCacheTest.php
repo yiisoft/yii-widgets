@@ -178,7 +178,7 @@ final class FragmentCacheTest extends TestCase
         $this->assertTrue($this->hasCache($id, $variation), 'Cached fragment should not be exist');
 
         /** without variations */
-        FragmentCache::widget()->id($id ='test')->begin();
+        FragmentCache::widget()->id($id = 'test')->begin();
 
         echo 'cached fragment';
 
