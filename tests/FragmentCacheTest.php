@@ -4,216 +4,202 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests;
 
+use RuntimeException;
+use Yiisoft\Cache\CacheKeyNormalizer;
+use Yiisoft\Cache\Dependency\TagDependency;
+use Yiisoft\View\Cache\CachedContent;
+use Yiisoft\View\Cache\DynamicContent;
 use Yiisoft\Yii\Widgets\FragmentCache;
 
+use function array_merge;
 use function md5;
 use function sha1;
-use function vsprintf;
+use function sprintf;
 
 final class FragmentCacheTest extends TestCase
 {
-    public function testCacheEnabled(): void
+    public function testCacheFragment(): void
     {
-        FragmentCache::widget()
-            ->id('test')
-            ->begin();
+        FragmentCache::widget()->id('test')->ttl(30)->dependency(new TagDependency('test'))->begin();
 
         echo 'cached fragment';
 
-        $html = FragmentCache::end();
+        $content = FragmentCache::end();
 
-        $this->assertEquals('cached fragment', $html);
+        $this->assertSame('cached fragment', $content);
+    }
+
+    public function testCacheFragmentThrowExceptionIfNotSetId(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('You must assign the "id" using the "id()" setter.');
+
+        FragmentCache::widget()->begin();
+
+        echo 'cached fragment';
+
+        FragmentCache::end();
     }
 
     public function testSingleDynamicFragment(): void
     {
-        $params = '0';
-
         for ($counter = 0; $counter < 42; $counter++) {
-            $html = FragmentCache::widget()->id('test');
+            $dynamicContent = new DynamicContent(
+                'dynamic-test',
+                static fn ($params) => (string) $params['counter'],
+                ['counter' => $counter],
+            );
 
-            $html->begin();
-            if ($html->getCachedContent() === null) {
-                echo 'single dynamic cached fragment: ';
-                echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
-            }
+            FragmentCache::widget()->id('test')->dynamicContents($dynamicContent)->begin();
 
-            $html = FragmentCache::end();
+            echo 'single dynamic cached fragment: ';
+            echo $dynamicContent->placeholder();
 
+            $content = FragmentCache::end();
 
-            $expectedContent = vsprintf('single dynamic cached fragment: %d', [
-                $params,
-            ]);
+            $expectedContent = sprintf('single dynamic cached fragment: %d', $counter);
 
-            $this->assertEquals($expectedContent, $html);
+            $this->assertSame($expectedContent, $content);
         }
     }
 
     public function testMultipleDynamicFragments(): void
     {
-        $params = '0';
-
         for ($counter = 0; $counter < 42; $counter++) {
-            $html = FragmentCache::widget()->id('test');
-            $html->begin();
+            $dynamicContent1 = new DynamicContent(
+                'dynamic-test-1',
+                static fn ($params) => md5((string) $params['counter']),
+                ['counter' => $counter],
+            );
+            $dynamicContent2 = new DynamicContent(
+                'dynamic-test-2',
+                static fn ($params) => (string) $params['counter'],
+                ['counter' => $counter],
+            );
 
-            if ($html->getCachedContent() === null) {
-                echo 'multiple dynamic cached fragments: ';
-                echo $this->webView->renderDynamic('return md5($counter);', ['counter' => $params]);
-                echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
-            }
+            FragmentCache::widget()
+                ->id('test')
+                ->dynamicContents($dynamicContent1)
+                ->dynamicContents($dynamicContent2)
+                ->begin()
+            ;
 
-            $html = FragmentCache::end();
+            echo 'multiple dynamic cached fragments: ';
+            echo $dynamicContent1->placeholder();
+            echo $dynamicContent2->placeholder();
 
-            $expectedContent = vsprintf('multiple dynamic cached fragments: %s%d', [
-                md5($params),
-                $params,
-            ]);
+            $content = FragmentCache::end();
 
-            $this->assertEquals($expectedContent, $html);
+            $expectedContent = sprintf(
+                'multiple dynamic cached fragments: %s%d',
+                md5((string) $counter),
+                $counter,
+            );
+
+            $this->assertSame($expectedContent, $content);
         }
     }
 
     public function testNestedDynamicFragments(): void
     {
-        $params = '0';
-
         for ($counter = 0; $counter < 42; $counter++) {
-            $html1 = FragmentCache::widget()->id('test');
-            $html1->begin();
+            $dynamicContent1 = new DynamicContent(
+                'dynamic-test-1',
+                static fn ($params) => md5((string) $params['counter']),
+                ['counter' => $counter],
+            );
+            $dynamicContent2 = new DynamicContent(
+                'dynamic-test-2',
+                static fn ($params) => sha1((string) $params['counter']),
+                ['counter' => $counter],
+            );
+            $dynamicContent3 = new DynamicContent(
+                'dynamic-test-3',
+                static fn ($params) => (string) ($params['counter'] + 1),
+                ['counter' => $counter],
+            );
 
-            if ($html1->getCachedContent() === null) {
-                echo 'nested dynamic cached fragments: ';
-                echo $this->webView->renderDynamic('return md5($counter);', ['counter' => $params]);
-            }
+            FragmentCache::widget()->id('test')->dynamicContents($dynamicContent1)->begin();
 
-            $html = FragmentCache::end();
+            echo 'nested dynamic cached fragments: ';
+            echo $dynamicContent1->placeholder();
 
-            $html2 = FragmentCache::widget()->id('test-nested');
-            $html2->begin();
+            $content = FragmentCache::end();
 
-            if ($html2->getCachedContent() === null) {
-                echo $this->webView->renderDynamic('return sha1($counter);', ['counter' => $params]);
-                echo $this->webView->renderDynamic('return $counter++;', ['counter' => $params]);
-            }
+            FragmentCache::widget()
+                ->id('test-nested')
+                ->dynamicContents($dynamicContent2)
+                ->dynamicContents($dynamicContent3)
+                ->begin()
+            ;
 
-            $html .= FragmentCache::end();
+            echo $dynamicContent2->placeholder();
+            echo $dynamicContent3->placeholder();
 
-            $expectedContent = vsprintf('nested dynamic cached fragments: %s%s%d', [
-                md5($params),
-                sha1($params),
-                $params,
-            ]);
+            $content .= FragmentCache::end();
+
+            $expectedContent = sprintf(
+                'nested dynamic cached fragments: %s%s%d',
+                md5((string) $counter),
+                sha1((string) $counter),
+                $counter + 1,
+            );
 
 
-            $this->assertEquals($expectedContent, $html);
+            $this->assertSame($expectedContent, $content);
         }
     }
 
     public function testVariations(): void
     {
-        $this->setOutputCallback(static function () {
-            return null;
-        });
+        $this->setOutputCallback(static fn () => null);
 
-        $widget1 = FragmentCache::widget();
-
-        $widget1
-            ->id('test')
-            ->variations(['variations' => ['ru']])
-            ->begin();
+        FragmentCache::widget()->id($id = 'test')->variations($variation = 'ru')->begin();
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->hasCache($widget1->calculateKey()), 'Cached fragment should not be exist');
+        $this->assertFalse($this->hasCache($id, $variation), 'Cached fragment should not be exist');
 
-        $html1 = FragmentCache::end();
+        $content1 = FragmentCache::end();
 
-        $this->assertEquals('cached fragment', $html1);
+        $this->assertSame('cached fragment', $content1);
 
-        $widget2 = FragmentCache::widget();
+        FragmentCache::widget()->id($id = 'test')->variations($variation = 'ru')->begin();
 
-        $widget2
-            ->id('test')
-            ->variations(['variations' => ['ru']])
-            ->begin();
+        $this->assertTrue($this->hasCache($id, $variation), 'Cached fragment should be exist');
 
-        $this->assertTrue($this->hasCache($widget2->calculateKey()), 'Cached fragment should be exist');
+        $content2 = FragmentCache::end();
 
-        $html2 = FragmentCache::end();
+        $this->assertSame($content1, $content2);
 
-        $this->assertEquals($html1, $html2);
-
-        $widget3 = FragmentCache::widget();
-
-        $widget3
-            ->id('test')
-            ->variations(['variations' => ['en']])
-            ->begin();
+        FragmentCache::widget()->id($id = 'test')->variations($variation = 'en')->begin();
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->hasCache($widget3->calculateKey()), 'Cached fragment should not be exist');
+        $this->assertFalse($this->hasCache($id, $variation), 'Cached fragment should not be exist');
 
         FragmentCache::end();
 
-        $widget4 = FragmentCache::widget();
-
-        $widget4
-            ->id('test')
-            ->variations(['variations' => ['en']])
-            ->begin();
-
-        FragmentCache::end();
-
-        $this->assertTrue($this->hasCache($widget4->calculateKey()), 'Cached fragment should be exist');
+        $this->assertTrue($this->hasCache($id, $variation), 'Cached fragment should not be exist');
 
         /** without variations */
-        $widget5 = FragmentCache::widget();
-
-        $widget5
-            ->id('test')
-            ->begin();
+        FragmentCache::widget()->id($id = 'test')->begin();
 
         echo 'cached fragment';
 
-        $this->assertFalse($this->hasCache($widget5->calculateKey()), 'Cached fragment should not be exist');
+        $this->assertFalse($this->hasCache($id), 'Cached fragment should not be exist');
 
-        $html3 = FragmentCache::end();
+        $content4 = FragmentCache::end();
 
-        $this->assertEquals('cached fragment', $html3);
-
-        /**  with variations as a string */
-        $widget6 = FragmentCache::widget();
-
-        $widget6
-            ->id('test')
-            ->variations(['variations' => 'uz'])
-            ->begin();
-
-        echo 'cached fragment';
-
-        $this->assertFalse($this->hasCache($widget6->calculateKey()), 'Cached fragment should not be exist');
-
-        $html4 = FragmentCache::end();
-
-        $this->assertEquals('cached fragment', $html4);
-
-        $widget7 = FragmentCache::widget();
-
-        $widget7
-            ->id('test')
-            ->variations(['variations' => 'uz'])
-            ->begin();
-
-        $html5 = FragmentCache::end();
-
-        $this->assertTrue($this->hasCache($widget7->calculateKey()), 'Cached fragment should be exist');
-        $this->assertEquals($html4, $html5);
+        $this->assertSame('cached fragment', $content4);
     }
 
-    private function hasCache(string $key): bool
+    private function hasCache(string $id, string $variation = null): bool
     {
+        $key = (new CacheKeyNormalizer())->normalize(array_merge(
+            [CachedContent::class, $id],
+            (array) ($variation ?? []),
+        ));
         return $this->cache->psr()->has($key);
     }
 }
