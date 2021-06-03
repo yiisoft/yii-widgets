@@ -7,8 +7,8 @@ namespace Yiisoft\Yii\Widgets;
 use RuntimeException;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Cache\Dependency\Dependency;
-use Yiisoft\View\CacheContent;
-use Yiisoft\View\DynamicContent;
+use Yiisoft\View\Cache\CacheContent;
+use Yiisoft\View\Cache\DynamicContent;
 use Yiisoft\Widget\Widget;
 
 use function ob_end_clean;

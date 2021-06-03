@@ -7,8 +7,8 @@ namespace Yiisoft\Yii\Widgets\Tests;
 use RuntimeException;
 use Yiisoft\Cache\CacheKeyNormalizer;
 use Yiisoft\Cache\Dependency\TagDependency;
-use Yiisoft\View\CacheContent;
-use Yiisoft\View\DynamicContent;
+use Yiisoft\View\Cache\CacheContent;
+use Yiisoft\View\Cache\DynamicContent;
 use Yiisoft\Yii\Widgets\FragmentCache;
 
 use function array_merge;
