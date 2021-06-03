@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Widgets\Tests;
 use RuntimeException;
 use Yiisoft\Cache\CacheKeyNormalizer;
 use Yiisoft\Cache\Dependency\TagDependency;
-use Yiisoft\View\Cache\CacheContent;
+use Yiisoft\View\Cache\CachedContent;
 use Yiisoft\View\Cache\DynamicContent;
 use Yiisoft\Yii\Widgets\FragmentCache;
 
@@ -192,7 +192,7 @@ final class FragmentCacheTest extends TestCase
     private function hasCache(string $id, string $variation = null): bool
     {
         $key = (new CacheKeyNormalizer())->normalize(array_merge(
-            [CacheContent::class, $id],
+            [CachedContent::class, $id],
             (array) ($variation ?? []),
         ));
         return $this->cache->psr()->has($key);

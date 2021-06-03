@@ -7,7 +7,7 @@ namespace Yiisoft\Yii\Widgets;
 use RuntimeException;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Cache\Dependency\Dependency;
-use Yiisoft\View\Cache\CacheContent;
+use Yiisoft\View\Cache\CachedContent;
 use Yiisoft\View\Cache\DynamicContent;
 use Yiisoft\Widget\Widget;
 
@@ -16,6 +16,26 @@ use function ob_get_clean;
 use function ob_implicit_flush;
 use function ob_start;
 
+/**
+ * FragmentCache caches a fragment of content.
+ *
+ * @see CachedContent
+ * @see DynamicContent
+ *
+ * Example of use:
+ *
+ * ```php
+ * $dynamicContent = new Yiisoft\View\Cache\DynamicContent('dynamic-id', static function (array $parameters): string {
+ *     return strtoupper("{$parameters['a']} - {$parameters['b']}");
+ * }, ['a' => 'string-a', 'b' => 'string-b']);
+ *
+ * FragmentCache::widget()->id('cache-id')->ttl(30)->dynamicContents($dynamicContent)->begin();
+ *     echo 'Content to be cached ...';
+ *     echo $dynamicContent->placeholder();
+ *     echo 'Content to be cached ...';
+ * FragmentCache::end();
+ * ```
+ */
 final class FragmentCache extends Widget
 {
     private ?string $id = null;
@@ -60,8 +80,8 @@ final class FragmentCache extends Widget
      */
     protected function run(): string
     {
-        $cacheContent = new CacheContent($this->id, $this->cache, $this->dynamicContents, $this->variations);
-        $content = $cacheContent->cachedContent();
+        $cachedContent = new CachedContent($this->id, $this->cache, $this->dynamicContents, $this->variations);
+        $content = $cachedContent->get();
 
         if ($content !== null) {
             ob_end_clean();
@@ -74,7 +94,7 @@ final class FragmentCache extends Widget
             return '';
         }
 
-        return $cacheContent->cache($content, $this->ttl, $this->dependency);
+        return $cachedContent->cache($content, $this->ttl, $this->dependency);
     }
 
     /**
