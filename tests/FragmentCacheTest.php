@@ -33,7 +33,12 @@ final class FragmentCacheTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('You must assign the "id" using the "id()" setter.');
+
         FragmentCache::widget()->begin();
+
+        echo 'cached fragment';
+
+        FragmentCache::end();
     }
 
     public function testSingleDynamicFragment(): void

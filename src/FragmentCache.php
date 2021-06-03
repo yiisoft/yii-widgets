@@ -59,10 +59,6 @@ final class FragmentCache extends Widget
      */
     public function begin(): ?string
     {
-        if ($this->id === null) {
-            throw new RuntimeException('You must assign the "id" using the "id()" setter.');
-        }
-
         parent::begin();
         ob_start();
         PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
@@ -80,6 +76,11 @@ final class FragmentCache extends Widget
      */
     protected function run(): string
     {
+        if ($this->id === null) {
+            ob_end_clean();
+            throw new RuntimeException('You must assign the "id" using the "id()" setter.');
+        }
+
         $cachedContent = new CachedContent($this->id, $this->cache, $this->dynamicContents, $this->variations);
         $content = $cachedContent->get();
 
