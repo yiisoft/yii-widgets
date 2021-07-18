@@ -18,7 +18,7 @@ final class ContentDecoratorTest extends TestCase
     {
         ContentDecorator::widget()
             ->viewFile('@public/view/layout.php')
-            ->params([])
+            ->parameters([])
             ->begin();
 
         echo "\t\t<div class='left-column'>\n";
@@ -45,7 +45,7 @@ final class ContentDecoratorTest extends TestCase
     {
         $widget = ContentDecorator::widget();
 
-        $this->assertNotSame($widget, $widget->params([]));
+        $this->assertNotSame($widget, $widget->parameters([]));
         $this->assertNotSame($widget, $widget->viewFile(''));
     }
 }

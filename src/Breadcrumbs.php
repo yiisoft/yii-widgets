@@ -62,102 +62,16 @@ final class Breadcrumbs extends Widget
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
 
     /**
-     * Renders the widget.
+     * Returns a new instance with the specified tag.
      *
-     * @throws JsonException
+     * @param string $value The tag name.
      *
-     * @return string The result of widget execution to be outputted.
+     * @return self
      */
-    protected function run(): string
-    {
-        if (empty($this->items)) {
-            return '';
-        }
-
-        $items = [];
-
-        if ($this->withoutHomeItem === false) {
-            $items[] = $this->renderHomeLink();
-        }
-
-        foreach ($this->items as $item) {
-            if (!is_array($item)) {
-                $item = ['label' => $item];
-            }
-
-            if (!empty($item)) {
-                $items[] = $this->renderItem(
-                    $item,
-                    isset($item['url']) ? $this->itemTemplate : $this->activeItemTemplate
-                );
-            }
-        }
-
-        $body = implode('', $items);
-
-        return empty($this->tag)
-            ? $body
-            : Html::tag($this->tag, $body, $this->options)->encode(false)->render()
-        ;
-    }
-
-    /**
-     * Renders a single breadcrumb item.
-     *
-     * @param array $item The item to be rendered. It must contain the "label" element. The "url" element is optional.
-     * @param string $template the template to be used to rendered the link. The token "{link}" will be replaced by the
-     * link.
-     *
-     * @throws InvalidArgumentException|JsonException if `$item` does not have "label" element.
-     *
-     * @return string the rendering result
-     */
-    private function renderItem(array $item, string $template): string
-    {
-        if (!array_key_exists('label', $item)) {
-            throw new InvalidArgumentException('The "label" element is required for each link.');
-        }
-
-        $encodeLabel = ArrayHelper::remove($item, 'encode', $this->encodeLabels);
-        $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
-
-        if (isset($item['template'])) {
-            $template = $item['template'];
-        }
-
-        if (isset($item['url'])) {
-            $options = $item;
-            unset($options['template'], $options['label'], $options['url']);
-            $item = Html::a($label, $item['url'], $options);
-        } else {
-            $item = $label;
-        }
-
-        return strtr($template, ['{link}' => $item]);
-    }
-
     public function tag(string $value): self
     {
         $new = clone $this;
         $new->tag = $value;
-        return $new;
-    }
-
-    /**
-     * @param array $value the HTML attributes for the menu's container tag. The following special options are
-     * recognized:
-     *
-     * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
-     *   See also {@see \Yiisoft\Html\Html::tag()}.
-     *
-     * @return self
-     *
-     * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
-     */
-    public function options(array $value): self
-    {
-        $new = clone $this;
-        $new->options = $value;
         return $new;
     }
 
@@ -186,7 +100,7 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * The first item in the breadcrumbs (called home link).
+     * Returns a new instance with the specified first item in the breadcrumbs (called home link).
      *
      * @param array $value Please refer to {@see items()} on the format.
      *
@@ -246,6 +160,24 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * @param array $value The HTML attributes for the menu's container tag. The following special options are
+     * recognized:
+     *
+     * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
+     *   See also {@see \Yiisoft\Html\Html::tag()}.
+     *
+     * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
+     *
+     * @return self
+     */
+    public function options(array $value): self
+    {
+        $new = clone $this;
+        $new->options = $value;
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified item template.
      *
      * @param string $value The template used to render each inactive item in the breadcrumbs.
@@ -275,6 +207,88 @@ final class Breadcrumbs extends Widget
         return $new;
     }
 
+    /**
+     * Renders the widget.
+     *
+     * @throws JsonException
+     *
+     * @return string The result of widget execution to be outputted.
+     */
+    protected function run(): string
+    {
+        if (empty($this->items)) {
+            return '';
+        }
+
+        $items = [];
+
+        if ($this->withoutHomeItem === false) {
+            $items[] = $this->renderHomeLink();
+        }
+
+        foreach ($this->items as $item) {
+            if (!is_array($item)) {
+                $item = ['label' => $item];
+            }
+
+            if (!empty($item)) {
+                $items[] = $this->renderItem(
+                    $item,
+                    isset($item['url']) ? $this->itemTemplate : $this->activeItemTemplate
+                );
+            }
+        }
+
+        $body = implode('', $items);
+
+        return empty($this->tag)
+            ? $body
+            : Html::tag($this->tag, $body, $this->options)->encode(false)->render()
+            ;
+    }
+
+    /**
+     * Renders a single breadcrumb item.
+     *
+     * @param array $item The item to be rendered. It must contain the "label" element. The "url" element is optional.
+     * @param string $template the template to be used to rendered the link. The token "{link}" will be replaced by the
+     * link.
+     *
+     * @throws InvalidArgumentException|JsonException if `$item` does not have "label" element.
+     *
+     * @return string The rendering result.
+     */
+    private function renderItem(array $item, string $template): string
+    {
+        if (!array_key_exists('label', $item)) {
+            throw new InvalidArgumentException('The "label" element is required for each link.');
+        }
+
+        $encodeLabel = ArrayHelper::remove($item, 'encode', $this->encodeLabels);
+        $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
+
+        if (isset($item['template'])) {
+            $template = $item['template'];
+        }
+
+        if (isset($item['url'])) {
+            $options = $item;
+            unset($options['template'], $options['label'], $options['url']);
+            $item = Html::a($label, $item['url'], $options);
+        } else {
+            $item = $label;
+        }
+
+        return strtr($template, ['{link}' => $item]);
+    }
+
+    /**
+     * Renders a home item.
+     *
+     * @throws JsonException
+     *
+     * @return string The rendering result.
+     */
     private function renderHomeLink(): string
     {
         if ($this->homeItem === []) {

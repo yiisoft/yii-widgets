@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use function ob_get_clean;
-use function ob_implicit_flush;
-use function ob_start;
 use Throwable;
-
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\View\Exception\ViewNotFoundException;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
+
+use function ob_get_clean;
+use function ob_implicit_flush;
+use function ob_start;
 
 /**
  * ContentDecorator records all output between {@see Widget::begin()} and {@see Widget::end()} calls,
@@ -33,7 +33,7 @@ use Yiisoft\Widget\Widget;
 final class ContentDecorator extends Widget
 {
     private Aliases $aliases;
-    private array $params = [];
+    private array $parameters = [];
     private string $viewFile = '';
     private WebView $webView;
 
@@ -43,33 +43,6 @@ final class ContentDecorator extends Widget
         $this->webView = $webView;
     }
 
-    public function begin(): ?string
-    {
-        parent::begin();
-        /** Starts recording a clip. */
-        ob_start();
-        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
-        return null;
-    }
-
-    /**
-     * Ends recording a clip.
-     *
-     * This method stops output buffering and saves the rendering result as a named clip in the controller.
-     *
-     * @throws Throwable|ViewNotFoundException
-     *
-     * @return string The result of widget execution to be outputted.
-     */
-    protected function run(): string
-    {
-        $params = $this->params;
-        $params['content'] = ob_get_clean();
-
-        /** render under the existing context */
-        return $this->webView->renderFile($this->viewFile, $params);
-    }
-
     /**
      * Returns a new instance with the specified parameters.
      *
@@ -77,10 +50,10 @@ final class ContentDecorator extends Widget
      *
      * @return self
      */
-    public function params(array $value): self
+    public function parameters(array $value): self
     {
         $new = clone $this;
-        $new->params = $value;
+        $new->parameters = $value;
         return $new;
     }
 
@@ -97,5 +70,31 @@ final class ContentDecorator extends Widget
         $new = clone $this;
         $new->viewFile = $this->aliases->get($value);
         return $new;
+    }
+
+    public function begin(): ?string
+    {
+        parent::begin();
+        ob_start();
+        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+        return null;
+    }
+
+    /**
+     * Ends recording a clip.
+     *
+     * This method stops output buffering and saves the rendering result as a named clip in the controller.
+     *
+     * @throws Throwable|ViewNotFoundException
+     *
+     * @return string The result of widget execution to be outputted.
+     */
+    protected function run(): string
+    {
+        $parameters = $this->parameters;
+        $parameters['content'] = ob_get_clean();
+
+        /** render under the existing context */
+        return $this->webView->renderFile($this->viewFile, $parameters);
     }
 }

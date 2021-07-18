@@ -50,6 +50,35 @@ final class Block extends Widget
     }
 
     /**
+     * Returns a new instance with the specified Widget ID.
+     *
+     * @param string $value The Widget ID.
+     *
+     * @return self
+     */
+    public function id(string $value): self
+    {
+        $new = clone $this;
+        $new->id = $value;
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified flag of "render in place".
+     *
+     * @param bool $value Whether to render the block content in place. Defaults to false, meaning the captured block
+     * content will not be displayed.
+     *
+     * @return self
+     */
+    public function renderInPlace(bool $value): self
+    {
+        $new = clone $this;
+        $new->renderInPlace = $value;
+        return $new;
+    }
+
+    /**
      * Starts recording a block.
      */
     public function begin(): ?string
@@ -85,34 +114,5 @@ final class Block extends Widget
         }
 
         return '';
-    }
-
-    /**
-     * Returns a new instance with the specified Widget ID.
-     *
-     * @param string $value The Widget ID.
-     *
-     * @return self
-     */
-    public function id(string $value): self
-    {
-        $new = clone $this;
-        $new->id = $value;
-        return $new;
-    }
-
-    /**
-     * Returns a new instance with the specified flag of "render in place".
-     *
-     * @param bool $value Whether to render the block content in place. Defaults to false, meaning the captured block
-     * content will not be displayed.
-     *
-     * @return self
-     */
-    public function renderInPlace(bool $value): self
-    {
-        $new = clone $this;
-        $new->renderInPlace = $value;
-        return $new;
     }
 }

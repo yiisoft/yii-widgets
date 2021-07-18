@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use function array_merge;
-use function array_values;
-use function call_user_func;
 use Closure;
-use function count;
-
-use function implode;
 use JsonException;
-use function strtr;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
+
+use function array_merge;
+use function array_values;
+use function call_user_func;
+use function count;
+use function implode;
+use function strtr;
 
 /**
  * Menu displays a multi-level menu using nested HTML lists.
@@ -58,30 +58,6 @@ final class Menu extends Widget
     private array $options = [];
     private ?string $firstItemCssClass = null;
     private ?string $lastItemCssClass = null;
-
-    /**
-     * Renders the menu.
-     *
-     * @throws JsonException
-     *
-     * @return string The result of Widget execution to be outputted.
-     */
-    protected function run(): string
-    {
-        $items = $this->normalizeItems($this->items, $hasActiveChild);
-
-        if (empty($items)) {
-            return '';
-        }
-
-        $options = $this->options;
-        $tag = ArrayHelper::remove($options, 'tag', 'ul');
-
-        return empty($tag)
-            ? $this->renderItems($items)
-            : Html::tag($tag, $this->renderItems($items), $options)->encode(false)->render()
-        ;
-    }
 
     /**
      * Returns a new instance with deactivated items.
@@ -310,6 +286,30 @@ final class Menu extends Widget
     }
 
     /**
+     * Renders the menu.
+     *
+     * @throws JsonException
+     *
+     * @return string The result of Widget execution to be outputted.
+     */
+    protected function run(): string
+    {
+        $items = $this->normalizeItems($this->items, $hasActiveChild);
+
+        if (empty($items)) {
+            return '';
+        }
+
+        $options = $this->options;
+        $tag = ArrayHelper::remove($options, 'tag', 'ul');
+
+        return empty($tag)
+            ? $this->renderItems($items)
+            : Html::tag($tag, $this->renderItems($items), $options)->encode(false)->render()
+            ;
+    }
+
+    /**
      * Recursively renders the menu items (without the container tag).
      *
      * @param array $items The menu items to be rendered recursively.
@@ -318,7 +318,7 @@ final class Menu extends Widget
      *
      * @return string The rendering result.
      */
-    protected function renderItems(array $items): string
+    private function renderItems(array $items): string
     {
         $n = count($items);
         $lines = [];
@@ -367,7 +367,7 @@ final class Menu extends Widget
      *
      * @return string The rendering result.
      */
-    protected function renderItem(array $item): string
+    private function renderItem(array $item): string
     {
         if (isset($item['url'])) {
             $template = ArrayHelper::getValue($item, 'template', $this->linkTemplate);
@@ -393,7 +393,7 @@ final class Menu extends Widget
      *
      * @return array The normalized menu items.
      */
-    protected function normalizeItems(array $items, ?bool &$active): array
+    private function normalizeItems(array $items, ?bool &$active): array
     {
         foreach ($items as $i => $item) {
             if (isset($item['visible']) && !$item['visible']) {
@@ -457,7 +457,7 @@ final class Menu extends Widget
      *
      * @return bool Whether the menu item is active
      */
-    protected function isItemActive(array $item, bool $active = false): bool
+    private function isItemActive(array $item, bool $active = false): bool
     {
         if (
             $this->activateItems

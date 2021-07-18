@@ -55,50 +55,6 @@ final class FragmentCache extends Widget
     }
 
     /**
-     * Starts recording a fragment cache.
-     */
-    public function begin(): ?string
-    {
-        parent::begin();
-        ob_start();
-        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
-        return null;
-    }
-
-    /**
-     * Marks the end of content to be cached.
-     *
-     * Content displayed before this method call and after {@see begin()} will be captured and saved in cache.
-     *
-     * This method does nothing if valid content is already found in cache.
-     *
-     * @return string The result of widget execution to be outputted.
-     */
-    protected function run(): string
-    {
-        if ($this->id === null) {
-            ob_end_clean();
-            throw new RuntimeException('You must assign the "id" using the "id()" setter.');
-        }
-
-        $cachedContent = new CachedContent($this->id, $this->cache, $this->dynamicContents, $this->variations);
-        $content = $cachedContent->get();
-
-        if ($content !== null) {
-            ob_end_clean();
-            return $content;
-        }
-
-        $content = ob_get_clean();
-
-        if ($content === false || $content === '') {
-            return '';
-        }
-
-        return $cachedContent->cache($content, $this->ttl, $this->dependency);
-    }
-
-    /**
      * Returns a new instance with the specified Widget ID.
      *
      * @param string $value The unique identifier of the cache fragment.
@@ -181,5 +137,49 @@ final class FragmentCache extends Widget
         $new = clone $this;
         $new->variations = $value;
         return $new;
+    }
+
+    /**
+     * Starts recording a fragment cache.
+     */
+    public function begin(): ?string
+    {
+        parent::begin();
+        ob_start();
+        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+        return null;
+    }
+
+    /**
+     * Marks the end of content to be cached.
+     *
+     * Content displayed before this method call and after {@see begin()} will be captured and saved in cache.
+     *
+     * This method does nothing if valid content is already found in cache.
+     *
+     * @return string The result of widget execution to be outputted.
+     */
+    protected function run(): string
+    {
+        if ($this->id === null) {
+            ob_end_clean();
+            throw new RuntimeException('You must assign the "id" using the "id()" setter.');
+        }
+
+        $cachedContent = new CachedContent($this->id, $this->cache, $this->dynamicContents, $this->variations);
+        $content = $cachedContent->get();
+
+        if ($content !== null) {
+            ob_end_clean();
+            return $content;
+        }
+
+        $content = ob_get_clean();
+
+        if ($content === false || $content === '') {
+            return '';
+        }
+
+        return $cachedContent->cache($content, $this->ttl, $this->dependency);
     }
 }
