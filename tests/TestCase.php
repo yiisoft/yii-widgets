@@ -11,7 +11,6 @@ use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Test\Support\Container\SimpleContainer;
 use Yiisoft\Test\Support\EventDispatcher\SimpleEventDispatcher;
-use Yiisoft\Test\Support\Log\SimpleLogger;
 use Yiisoft\Test\Support\SimpleCache\MemorySimpleCache;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\WidgetFactory;
@@ -81,7 +80,6 @@ abstract class TestCase extends BaseTestCase
             WebView::class => new WebView(
                 __DIR__ . '/public/view',
                 new SimpleEventDispatcher(),
-                new SimpleLogger(),
             ),
         ];
     }
