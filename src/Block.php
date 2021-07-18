@@ -4,42 +4,43 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use function ob_get_clean;
-use function ob_implicit_flush;
-
-use function ob_start;
+use RuntimeException;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
 
+use function ob_end_clean;
+use function ob_get_clean;
+use function ob_implicit_flush;
+use function ob_start;
+
 /**
- * Block records all output between {@see begin()} and {@see end()} calls and stores it in
+ * Block records all output between {@see Widget::begin()} and {@see Widget::end()} calls and stores it in.
  *
  * The general idea is that you're defining block default in a view or layout:
  *
  * ```php
- * <?php $this->beginBlock('index') ?>
- * Nothing.
- * <?php $this->endBlock() ?>
+ * <?php Block::widget()->id('my-block')->begin() ?>
+ *     Nothing.
+ * <?php Block::end() ?>
  * ```
  *
  * And then overriding default in views:
  *
  * ```php
- * <?php $this->beginBlock('index') ?>
- * Umm... hello?
- * <?php $this->endBlock() ?>
+ * <?php Block::widget()->id('my-block')->begin() ?>
+ *     Umm... hello?
+ * <?php Block::end() ?>
  * ```
  *
  * in subviews show block:
  *
- * <?= $this->getBlock('index') ?>
- *
- * Second parameter defines if block content should be outputted which is desired when rendering its content but isn't
- * desired when redefining it in subviews.
+ * ```php
+ * <?= $this->getBlock('my-block') ?>
+ * ```
  */
 final class Block extends Widget
 {
-    private string $id;
+    private ?string $id = null;
     private bool $renderInPlace = false;
     private WebView $webView;
 
@@ -67,6 +68,11 @@ final class Block extends Widget
      */
     protected function run(): string
     {
+        if ($this->id === null) {
+            ob_end_clean();
+            throw new RuntimeException('You must assign the "id" using the "id()" setter.');
+        }
+
         $block = ob_get_clean();
 
         if ($this->renderInPlace) {
@@ -88,10 +94,10 @@ final class Block extends Widget
     }
 
     /**
-     * @param bool $value whether to render the block content in place. Defaults to false, meaning the captured block
+     * @param bool $value Whether to render the block content in place. Defaults to false, meaning the captured block
      * content will not be displayed.
      *
-     * @return $this
+     * @return self
      */
     public function renderInPlace(bool $value): self
     {
