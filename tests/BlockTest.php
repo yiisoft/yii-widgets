@@ -54,4 +54,12 @@ final class BlockTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->webView->getBlock('notfound');
     }
+
+    public function testImmutability(): void
+    {
+        $widget = Block::widget();
+
+        $this->assertNotSame($widget, $widget->id(Block::class));
+        $this->assertNotSame($widget, $widget->renderInPlace(false));
+    }
 }

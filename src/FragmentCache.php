@@ -55,7 +55,7 @@ final class FragmentCache extends Widget
     }
 
     /**
-     * Initializes the FragmentCache object.
+     * Starts recording a fragment cache.
      */
     public function begin(): ?string
     {
@@ -68,7 +68,7 @@ final class FragmentCache extends Widget
     /**
      * Marks the end of content to be cached.
      *
-     * Content displayed before this method call and after {@see init()} will be captured and saved in cache.
+     * Content displayed before this method call and after {@see begin()} will be captured and saved in cache.
      *
      * This method does nothing if valid content is already found in cache.
      *
@@ -99,17 +99,22 @@ final class FragmentCache extends Widget
     }
 
     /**
+     * Returns a new instance with the specified Widget ID.
+     *
      * @param string $value The unique identifier of the cache fragment.
      *
      * @return self
      */
     public function id(string $value): self
     {
-        $this->id = $value;
-        return $this;
+        $new = clone $this;
+        $new->id = $value;
+        return $new;
     }
 
     /**
+     * Returns a new instance with the dependency.
+     *
      * @param Dependency $value The dependency that the cached content depends on.
      *
      * This can be either a {@see Dependency} object or a configuration array for creating the dependency object.
@@ -121,35 +126,45 @@ final class FragmentCache extends Widget
      */
     public function dependency(Dependency $value): self
     {
-        $this->dependency = $value;
-        return $this;
+        $new = clone $this;
+        $new->dependency = $value;
+        return $new;
     }
 
     /**
+     * Returns a new instance with the specified TTL.
+     *
      * @param int $value The number of seconds that the data can remain valid in cache.
      *
      * @return self
      */
     public function ttl(int $value): self
     {
-        $this->ttl = $value;
-        return $this;
+        $new = clone $this;
+        $new->ttl = $value;
+        return $new;
     }
 
     /**
+     * Returns a new instance with the specified dynamic contents.
+     *
      * @param DynamicContent ...$value The dynamic content instances.
      *
      * @return self
      */
     public function dynamicContents(DynamicContent ...$value): self
     {
+        $new = clone $this;
+
         foreach ($value as $dynamicContent) {
-            $this->dynamicContents[$dynamicContent->id()] = $dynamicContent;
+            $new->dynamicContents[$dynamicContent->id()] = $dynamicContent;
         }
-        return $this;
+        return $new;
     }
 
     /**
+     * Returns a new instance with the specified variations.
+     *
      * @param string ...$value The factors that would cause the variation of the content being cached.
      *
      * Each factor is a string representing a variation (e.g. the language, a GET parameter). The following variation
@@ -163,7 +178,8 @@ final class FragmentCache extends Widget
      */
     public function variations(string ...$value): self
     {
-        $this->variations = $value;
-        return $this;
+        $new = clone $this;
+        $new->variations = $value;
+        return $new;
     }
 }

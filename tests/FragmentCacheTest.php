@@ -194,6 +194,17 @@ final class FragmentCacheTest extends TestCase
         $this->assertSame('cached fragment', $content4);
     }
 
+    public function testImmutability(): void
+    {
+        $widget = FragmentCache::widget();
+
+        $this->assertNotSame($widget, $widget->id(''));
+        $this->assertNotSame($widget, $widget->ttl(3600));
+        $this->assertNotSame($widget, $widget->dependency(new TagDependency('test')));
+        $this->assertNotSame($widget, $widget->dynamicContents(new DynamicContent('test', fn (): string => 'test')));
+        $this->assertNotSame($widget, $widget->variations(''));
+    }
+
     private function hasCache(string $id, string $variation = null): bool
     {
         $key = (new CacheKeyNormalizer())->normalize(array_merge(

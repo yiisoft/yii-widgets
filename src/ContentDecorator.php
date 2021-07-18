@@ -15,14 +15,15 @@ use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
 
 /**
- * ContentDecorator records all output between {@see begin()} and {@see end()]} calls, passes it to the given view file
- * as `$content` and then echoes rendering result.
+ * ContentDecorator records all output between {@see Widget::begin()} and {@see Widget::end()} calls,
+ * passes it to the given view file as `$content` and then echoes rendering result.
  *
  * ```php
  * <?= ContentDecorator::widget()
  *     ->viewFile('@app/views/layouts/base.php')
  *     ->params([])
- *     ->begin(); ?>
+ *     ->begin();
+ * ?>
  *
  * some content here
  *
@@ -33,7 +34,7 @@ final class ContentDecorator extends Widget
 {
     private Aliases $aliases;
     private array $params = [];
-    private ?string $viewFile = null;
+    private string $viewFile = '';
     private WebView $webView;
 
     public function __construct(Aliases $aliases, WebView $webView)
@@ -58,12 +59,11 @@ final class ContentDecorator extends Widget
      *
      * @throws Throwable|ViewNotFoundException
      *
-     * @return string the result of widget execution to be outputted.
+     * @return string The result of widget execution to be outputted.
      */
     protected function run(): string
     {
         $params = $this->params;
-
         $params['content'] = ob_get_clean();
 
         /** render under the existing context */
@@ -71,27 +71,31 @@ final class ContentDecorator extends Widget
     }
 
     /**
-     * @param array $value the parameters (name => value) to be extracted and made available in the decorative view.
+     * Returns a new instance with the specified parameters.
      *
-     * @return ContentDecorator
+     * @param array $value The parameters (name => value) to be extracted and made available in the decorative view.
+     *
+     * @return self
      */
     public function params(array $value): self
     {
-        $this->params = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->params = $value;
+        return $new;
     }
 
     /**
-     * @param string|null $value the view file that will be used to decorate the content enclosed by this widget.
+     * Returns a new instance with the specified view file.
+     *
+     * @param string $value The view file that will be used to decorate the content enclosed by this widget.
      * This can be specified as either the view file path or alias path.
      *
-     * @return ContentDecorator
+     * @return self
      */
-    public function viewFile(?string $value): self
+    public function viewFile(string $value): self
     {
-        $this->viewFile = $this->aliases->get($value);
-
-        return $this;
+        $new = clone $this;
+        $new->viewFile = $this->aliases->get($value);
+        return $new;
     }
 }

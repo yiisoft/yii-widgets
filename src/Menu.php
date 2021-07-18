@@ -20,13 +20,13 @@ use Yiisoft\Widget\Widget;
 /**
  * Menu displays a multi-level menu using nested HTML lists.
  *
- * The main property of Menu is {@see items}, which specifies the possible items in the menu. A menu item can contain
- * sub-items which specify the sub-menu under that menu item.
+ * The {@see items() method specifies the possible items in the menu.
+ * A menu item can contain sub-items which specify the sub-menu under that menu item.
  *
  * Menu checks the current route and request parameters to toggle certain menu items with active state.
  *
- * Note that Menu only renders the HTML tags about the menu. It does not do any styling. You are responsible to provide
- * CSS styles to make it look like a real menu.
+ * Note that Menu only renders the HTML tags about the menu. It does not do any styling.
+ * You are responsible to provide CSS styles to make it look like a real menu.
  *
  * The following example shows how to use Menu:
  *
@@ -40,7 +40,7 @@ use Yiisoft\Widget\Widget;
 final class Menu extends Widget
 {
     /**
-     * @var string the template used to render a list of sub-menus.
+     * @var string The template used to render a list of sub-menus.
      *
      * In this template, the token `{items}` will be replaced with the rendered sub-menu items.
      */
@@ -64,7 +64,7 @@ final class Menu extends Widget
      *
      * @throws JsonException
      *
-     * @return string the result of Widget execution to be outputted.
+     * @return string The result of Widget execution to be outputted.
      */
     protected function run(): string
     {
@@ -84,95 +84,111 @@ final class Menu extends Widget
     }
 
     /**
-     * @param bool $value whether to automatically activate items according to whether their route setting matches the
+     * Returns a new instance with the specified flag of "activate items".
+     *
+     * @param bool $value Whether to automatically activate items according to whether their route setting matches the
      * currently requested route.
      *
-     * @return $this
+     * @return self
      */
     public function activateItems(bool $value): self
     {
-        $this->activateItems = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->activateItems = $value;
+        return $new;
     }
 
     /**
-     * @param bool $value whether to activate parent menu items when one of the corresponding child menu items is
-     * active. The activated parent menu items will also have its CSS classes appended with {@see activeCssClass}.
+     * Returns a new instance with the specified flag of "activate parents".
      *
-     * @return $this
+     * @param bool $value Whether to activate parent menu items when one of the corresponding child menu items is
+     * active. The activated parent menu items will also have its CSS classes appended with {@see activeCssClass()}.
+     *
+     * @return self
      */
     public function activateParents(bool $value): self
     {
-        $this->activateParents = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->activateParents = $value;
+        return $new;
     }
 
     /**
-     * @param string $value the CSS class to be appended to the active menu item.
+     * Returns a new instance with the specified active CSS class.
      *
-     * @return $this
+     * @param string $value The CSS class to be appended to the active menu item.
+     *
+     * @return self
      */
     public function activeCssClass(string $value): self
     {
-        $this->activeCssClass = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->activeCssClass = $value;
+        return $new;
     }
 
     /**
-     * @param string|null $value allows you to assign the current path of the url from request controller.
+     * Returns a new instance with the specified current path.
      *
-     * @return $this
+     * @param string|null $value Allows you to assign the current path of the url from request controller.
+     *
+     * @return self
      */
     public function currentPath(?string $value): self
     {
-        $this->currentPath = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->currentPath = $value;
+        return $new;
     }
 
     /**
-     * @param bool $value whether the labels for menu items should be HTML-encoded.
+     * Returns a new instance with the specified flag of "encode labels".
      *
-     * @return $this
+     * @param bool $value Whether the labels for menu items should be HTML-encoded.
+     *
+     * @return self
      */
     public function encodeLabels(bool $value): self
     {
-        $this->encodeLabels = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->encodeLabels = $value;
+        return $new;
     }
 
     /**
-     * @param string|null $value the CSS class that will be assigned to the first item in the main menu or each submenu.
+     * Returns a new instance with the specified first item CSS class.
+     *
+     * @param string|null $value The CSS class that will be assigned to the first item in the main menu or each submenu.
      * Defaults to null, meaning no such CSS class will be assigned.
      *
-     * @return $this
+     * @return self
      */
     public function firstItemCssClass(?string $value): self
     {
-        $this->firstItemCssClass = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->firstItemCssClass = $value;
+        return $new;
     }
 
     /**
-     * @param bool $value whether to hide empty menu items. An empty menu item is one whose `url` option is not set and
+     * Returns a new instance with the specified flag of "hide empty items".
+     *
+     * @param bool $value Whether to hide empty menu items. An empty menu item is one whose `url` option is not set and
      * which has no visible child menu items.
      *
-     * @return $this
+     * @return self
      */
     public function hideEmptyItems(bool $value): self
     {
-        $this->hideEmptyItems = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->hideEmptyItems = $value;
+        return $new;
     }
 
     /**
-     * @param array $value list of menu items. Each menu item should be an array of the following structure:
+     * Returns a new instance with the specified items.
+     *
+     * @param array $value List of menu items. Each menu item should be an array of the following structure:
      *
      * - label: string, optional, specifies the menu item label. When {@see encodeLabels} is true, the label will be
      *   HTML-encoded. If the label is not specified, an empty string will be used.
@@ -196,104 +212,114 @@ final class Menu extends Widget
      *   instead.
      * - options: array, optional, the HTML attributes for the menu container tag.
      *
-     * @return $this
+     * @return self
      */
     public function items(array $value): self
     {
-        $this->items = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->items = $value;
+        return $new;
     }
 
     /**
-     * @param array $value list of HTML attributes shared by all menu {@see items}. If any individual menu item
+     * Returns a new instance with the specified item options.
+     *
+     * @param array $value List of HTML attributes shared by all menu {@see items}. If any individual menu item
      * specifies its `options`, it will be merged with this property before being used to generate the HTML attributes
      * for the menu item tag. The following special options are recognized:
      *
      * - tag: string, defaults to "li", the tag name of the item container tags. Set to false to disable container tag.
      *   See also {@see \Yiisoft\Html\Html::tag()}
      *
-     * @return $this
+     * @return self
      *
      * {@see \Yiisoft\Html\Html::renderTagAttributes() for details on how attributes are being rendered}
      */
     public function itemOptions(array $value): self
     {
-        $this->itemOptions = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->itemOptions = $value;
+        return $new;
     }
 
     /**
-     * @param string $value the template used to render the body of a menu which is NOT a link.
+     * Returns a new instance with the specified label template.
+     *
+     * @param string $value The template used to render the body of a menu which is NOT a link.
      *
      * In this template, the token `{label}` will be replaced with the label of the menu item.
      *
      * This property will be overridden by the `template` option set in individual menu items via {@see items}.
      *
-     * @return $this
+     * @return self
      */
     public function labelTemplate(string $value): self
     {
-        $this->labelTemplate = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->labelTemplate = $value;
+        return $new;
     }
 
     /**
-     * @param string|null $value the CSS class that will be assigned to the last item in the main menu or each submenu.
+     * Returns a new instance with the specified last item CSS class.
+     *
+     * @param string|null $value The CSS class that will be assigned to the last item in the main menu or each submenu.
      * Defaults to null, meaning no such CSS class will be assigned.
      *
-     * @return $this
+     * @return self
      */
     public function lastItemCssClass(?string $value): self
     {
-        $this->lastItemCssClass = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->lastItemCssClass = $value;
+        return $new;
     }
 
     /**
-     * @param string $value the template used to render the body of a menu which is a link. In this template, the token
+     * Returns a new instance with the specified link template.
+     *
+     * @param string $value The template used to render the body of a menu which is a link. In this template, the token
      * `{url}` will be replaced with the corresponding link URL; while `{label}` will be replaced with the link text.
      *
      * This property will be overridden by the `template` option set in individual menu items via {@see items}.
      *
-     * @return $this
+     * @return self
      */
     public function linkTemplate(string $value): self
     {
-        $this->linkTemplate = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->linkTemplate = $value;
+        return $new;
     }
 
     /**
-     * @param array $value the HTML attributes for the menu's container tag. The following special options are
+     * Returns a new instance with the specified options.
+     *
+     * @param array $value The HTML attributes for the menu's container tag. The following special options are
      * recognized:
      *
      * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
      *   See also {@see \Yiisoft\Html\Html::tag()}.
      *
-     * @return $this
+     * @return self
      *
      * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
     public function options(array $value): self
     {
-        $this->options = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->options = $value;
+        return $new;
     }
 
     /**
      * Recursively renders the menu items (without the container tag).
      *
-     * @param array $items the menu items to be rendered recursively
+     * @param array $items The menu items to be rendered recursively.
      *
      * @throws JsonException
      *
-     * @return string the rendering result
+     * @return string The rendering result.
      */
     protected function renderItems(array $items): string
     {
@@ -339,10 +365,10 @@ final class Menu extends Widget
      *
      * Note that the container and the sub-menus are not rendered here.
      *
-     * @param array $item the menu item to be rendered. Please refer to {@see items} to see what data might be in the
+     * @param array $item The menu item to be rendered. Please refer to {@see items} to see what data might be in the
      * item.
      *
-     * @return string the rendering result
+     * @return string The rendering result.
      */
     protected function renderItem(array $item): string
     {
@@ -365,10 +391,10 @@ final class Menu extends Widget
     /**
      * Normalizes the {@see items} property to remove invisible items and activate certain items.
      *
-     * @param array $items  the items to be normalized.
-     * @param bool|null $active whether there is an active child menu item.
+     * @param array $items The items to be normalized.
+     * @param bool|null $active Whether there is an active child menu item.
      *
-     * @return array the normalized menu items
+     * @return array The normalized menu items.
      */
     protected function normalizeItems(array $items, ?bool &$active): array
     {
@@ -429,10 +455,10 @@ final class Menu extends Widget
      *
      * Only when 'url' match $_SERVER['REQUEST_URI'] respectively, will a menu item be considered active.
      *
-     * @param array $item the menu item to be checked
-     * @param bool $active returns the result when the item is active
+     * @param array $item The menu item to be checked.
+     * @param bool $active The result when the item is active.
      *
-     * @return bool whether the menu item is active
+     * @return bool Whether the menu item is active
      */
     protected function isItemActive(array $item, bool $active = false): bool
     {

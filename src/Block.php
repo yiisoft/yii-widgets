@@ -62,9 +62,10 @@ final class Block extends Widget
 
     /**
      * Ends recording a block.
+     *
      * This method stops output buffering and saves the rendering result as a named block in the view.
      *
-     * @return string the result of widget execution to be outputted.
+     * @return string The result of widget execution to be outputted.
      */
     protected function run(): string
     {
@@ -86,14 +87,23 @@ final class Block extends Widget
         return '';
     }
 
+    /**
+     * Returns a new instance with the specified Widget ID.
+     *
+     * @param string $value The Widget ID.
+     *
+     * @return self
+     */
     public function id(string $value): self
     {
-        $this->id = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->id = $value;
+        return $new;
     }
 
     /**
+     * Returns a new instance with the specified flag of "render in place".
+     *
      * @param bool $value Whether to render the block content in place. Defaults to false, meaning the captured block
      * content will not be displayed.
      *
@@ -101,8 +111,8 @@ final class Block extends Widget
      */
     public function renderInPlace(bool $value): self
     {
-        $this->renderInPlace = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->renderInPlace = $value;
+        return $new;
     }
 }

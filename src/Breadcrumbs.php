@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use function array_key_exists;
 use InvalidArgumentException;
-use function is_array;
 use JsonException;
 use Yiisoft\Arrays\ArrayHelper;
-
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
+
+use function array_key_exists;
+use function is_array;
 
 /**
  * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.
@@ -19,8 +19,8 @@ use Yiisoft\Widget\Widget;
  * For example, breadcrumbs like "Home / Sample Post / Edit" means the user is viewing an edit page for the
  * "Sample Post". He can click on "Sample Post" to view that page, or he can click on "Home" to return to the homepage.
  *
- * To use Breadcrumbs, you need to configure its {@see links} property, which specifies the links to be displayed. For
- * example,
+ * To use Breadcrumbs, you need to configure its {@see Breadcrumbs::links()} method,
+ * which specifies the links to be displayed. For example:
  *
  * ```php
  * // $this is the view object currently being used
@@ -38,13 +38,14 @@ use Yiisoft\Widget\Widget;
  * ```
  *
  * Because breadcrumbs usually appears in nearly every page of a website, you may consider placing it in a layout view.
- * You can use a view parameter (e.g. `$this->params['breadcrumbs']`) to configure the links in different views. In the
- * layout view, you assign this view parameter to the {@see links} property like the following:
+ * You can use a view common parameter (e.g. `$this->getCommonParameter('breadcrumbs')`) to configure the links in
+ * different views. In the layout view, you assign this view parameter to the {@see Breadcrumbs::links()} method
+ * like the following:
  *
  * ```php
  * // $this is the view object currently being used
  * echo Breadcrumbs::widget()
- *     ->links() => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [];
+ *     ->links($this->hasCommonParameter('breadcrumbs') ? $this->getCommonParameter('breadcrumbs') : []);
  * ```
  */
 final class Breadcrumbs extends Widget
@@ -136,9 +137,9 @@ final class Breadcrumbs extends Widget
 
     public function tag(string $value): self
     {
-        $this->tag = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->tag = $value;
+        return $new;
     }
 
     /**
@@ -148,52 +149,54 @@ final class Breadcrumbs extends Widget
      * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
      *   See also {@see \Yiisoft\Html\Html::tag()}.
      *
-     * @return $this
+     * @return self
      *
      * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
     public function options(array $value): self
     {
-        $this->options = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->options = $value;
+        return $new;
     }
 
     /**
-     * @param bool $value whether the labels for menu items should be HTML-encoded.
+     * @param bool $value Whether the labels for menu items should be HTML-encoded.
      *
-     * @return $this
+     * @return self
      */
     public function encodeLabels(bool $value): self
     {
-        $this->encodeLabels = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->encodeLabels = $value;
+        return $new;
     }
 
     /**
-     * @param bool $value the first hyperlink in the breadcrumbs (called home link). If this property is true, it will
+     * @param bool $value The first hyperlink in the breadcrumbs (called home link). If this property is true, it will
      * default to a link pointing to HomeUrl '\' with the label 'Home'. If this property is false, the home link will
      * not be rendered.
      *
-     * @return $this
+     * @return self
      */
     public function homeLink(bool $value): self
     {
-        $this->homeLink = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->homeLink = $value;
+        return $new;
     }
 
     public function homeUrlLink(array $value): self
     {
-        $this->homeUrlLink = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->homeUrlLink = $value;
+        return $new;
     }
 
     /**
-     * @param array $value list of links to appear in the breadcrumbs. If this property is empty, the widget will not
+     * Returns a new instance with the specified list of links.
+     *
+     * @param array $value List of links to appear in the breadcrumbs. If this property is empty, the widget will not
      * render anything. Each array element represents a single link in the breadcrumbs with the following structure:
      *
      * ```php
@@ -227,7 +230,7 @@ final class Breadcrumbs extends Widget
      * ]
      * ```
      *
-     * @return $this
+     * @return self
      */
     public function links(array $value): self
     {
@@ -235,34 +238,38 @@ final class Breadcrumbs extends Widget
             throw new InvalidArgumentException('The "label" element is required for each link.');
         }
 
-        $this->links = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->links = $value;
+        return $new;
     }
 
     /**
-     * @param string $value the template used to render each inactive item in the breadcrumbs. The token `{link}` will
-     * be replaced with the actual HTML link for each inactive item.
+     * Returns a new instance with the specified item template.
      *
-     * @return $this
+     * @param string $value The template used to render each inactive item in the breadcrumbs.
+     * The token `{link}` will be replaced with the actual HTML link for each inactive item.
+     *
+     * @return self
      */
     public function itemTemplate(string $value): self
     {
-        $this->itemTemplate = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->itemTemplate = $value;
+        return $new;
     }
 
     /**
-     * @param string $value the template used to render each active item in the breadcrumbs. The token `{link}` will be
-     * replaced with the actual HTML link for each active item.
+     * Returns a new instance with the specified active item template.
      *
-     * @return $this
+     * @param string $value The template used to render each active item in the breadcrumbs.
+     * The token `{link}` will be replaced with the actual HTML link for each active item.
+     *
+     * @return self
      */
     public function activeItemTemplate(string $value): self
     {
-        $this->activeItemTemplate = $value;
-
-        return $this;
+        $new = clone $this;
+        $new->activeItemTemplate = $value;
+        return $new;
     }
 }

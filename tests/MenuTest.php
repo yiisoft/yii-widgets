@@ -276,4 +276,23 @@ HTML;
 HTML;
         $this->assertEqualsWithoutLE($expected, $html);
     }
+
+    public function testImmutability(): void
+    {
+        $widget = Menu::widget();
+
+        $this->assertNotSame($widget, $widget->activateItems(true));
+        $this->assertNotSame($widget, $widget->activateParents(false));
+        $this->assertNotSame($widget, $widget->activeCssClass(''));
+        $this->assertNotSame($widget, $widget->currentPath(null));
+        $this->assertNotSame($widget, $widget->encodeLabels(true));
+        $this->assertNotSame($widget, $widget->firstItemCssClass(null));
+        $this->assertNotSame($widget, $widget->hideEmptyItems(true));
+        $this->assertNotSame($widget, $widget->items([]));
+        $this->assertNotSame($widget, $widget->itemOptions([]));
+        $this->assertNotSame($widget, $widget->labelTemplate(''));
+        $this->assertNotSame($widget, $widget->lastItemCssClass(null));
+        $this->assertNotSame($widget, $widget->linkTemplate(''));
+        $this->assertNotSame($widget, $widget->options([]));
+    }
 }

@@ -40,4 +40,12 @@ final class ContentDecoratorTest extends TestCase
         $this->assertStringContainsString('<title>Test</title>', $html);
         $this->assertStringContainsString($expected, $html);
     }
+
+    public function testImmutability(): void
+    {
+        $widget = ContentDecorator::widget();
+
+        $this->assertNotSame($widget, $widget->params([]));
+        $this->assertNotSame($widget, $widget->viewFile(''));
+    }
 }
