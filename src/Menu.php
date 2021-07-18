@@ -54,7 +54,7 @@ final class Menu extends Widget
     private bool $activateItems = true;
     private bool $activateParents = false;
     private ?string $currentPath = null;
-    private bool $hideEmptyItems = true;
+    private bool $showEmptyItems = false;
     private array $options = [];
     private ?string $firstItemCssClass = null;
     private ?string $lastItemCssClass = null;
@@ -84,32 +84,31 @@ final class Menu extends Widget
     }
 
     /**
-     * Returns a new instance with the specified flag of "activate items".
+     * Returns a new instance with deactivated items.
      *
-     * @param bool $value Whether to automatically activate items according to whether their route setting matches the
-     * currently requested route.
+     * Deactivates items according to whether their route setting matches the currently requested route.
      *
      * @return self
      */
-    public function activateItems(bool $value): self
+    public function deactivateItems(): self
     {
         $new = clone $this;
-        $new->activateItems = $value;
+        $new->activateItems = false;
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified flag of "activate parents".
+     * Returns a new instance with activated parent items.
      *
-     * @param bool $value Whether to activate parent menu items when one of the corresponding child menu items is
-     * active. The activated parent menu items will also have its CSS classes appended with {@see activeCssClass()}.
+     * Activates parent menu items when one of the corresponding child menu items is active.
+     * The activated parent menu items will also have its CSS classes appended with {@see activeCssClass()}.
      *
      * @return self
      */
-    public function activateParents(bool $value): self
+    public function activateParents(): self
     {
         $new = clone $this;
-        $new->activateParents = $value;
+        $new->activateParents = true;
         return $new;
     }
 
@@ -142,16 +141,14 @@ final class Menu extends Widget
     }
 
     /**
-     * Returns a new instance with the specified flag of "encode labels".
+     * Disables encoding for labels and returns a new instance.
      *
-     * @param bool $value Whether the labels for menu items should be HTML-encoded.
-     *
-     * @return self
+     * @return self Whether the labels for menu items should be HTML-encoded.
      */
-    public function encodeLabels(bool $value): self
+    public function withoutEncodeLabels(): self
     {
         $new = clone $this;
-        $new->encodeLabels = $value;
+        $new->encodeLabels = false;
         return $new;
     }
 
@@ -171,17 +168,17 @@ final class Menu extends Widget
     }
 
     /**
-     * Returns a new instance with the specified flag of "hide empty items".
+     * Returns a new instance with the enable showing empty items.
      *
-     * @param bool $value Whether to hide empty menu items. An empty menu item is one whose `url` option is not set and
-     * which has no visible child menu items.
+     * Enables showing an empty menu item is one whose `url` option
+     * is not set and which has no visible child menu items.
      *
      * @return self
      */
-    public function hideEmptyItems(bool $value): self
+    public function showEmptyItems(): self
     {
         $new = clone $this;
-        $new->hideEmptyItems = $value;
+        $new->showEmptyItems = true;
         return $new;
     }
 
@@ -414,7 +411,7 @@ final class Menu extends Widget
 
             if (isset($item['items'])) {
                 $items[$i]['items'] = $this->normalizeItems($item['items'], $hasActiveChild);
-                if (empty($items[$i]['items']) && $this->hideEmptyItems) {
+                if (empty($items[$i]['items']) && !$this->showEmptyItems) {
                     unset($items[$i]['items']);
                     if (!isset($item['url'])) {
                         unset($items[$i]);

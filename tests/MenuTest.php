@@ -14,7 +14,6 @@ final class MenuTest extends TestCase
     public function testEncodeLabelTrue(): void
     {
         $html = Menu::widget()
-            ->encodeLabels(true)
             ->items([
                 [
                     'encode' => false,
@@ -39,7 +38,7 @@ HTML;
     public function testEncodeLabelFalse(): void
     {
         $html = Menu::widget()
-            ->encodeLabels(false)
+            ->withoutEncodeLabels()
             ->items([
                 [
                     'encode' => false,
@@ -67,7 +66,6 @@ HTML;
     public function testTagOption(): void
     {
         $html = Menu::widget()
-            ->encodeLabels(true)
             ->options([
                 'tag' => false,
             ])
@@ -93,7 +91,6 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $html);
 
         $html = Menu::widget()
-            ->encodeLabels(true)
             ->options([
                 'tag' => false,
             ])
@@ -183,7 +180,6 @@ HTML;
     public function testItemClassAsArray(): void
     {
         $html = Menu::widget()
-            ->encodeLabels(true)
             ->activeCssClass('item-active')
             ->items([
                 [
@@ -236,7 +232,6 @@ HTML;
     public function testItemClassAsString(): void
     {
         $html = Menu::widget()
-            ->encodeLabels(true)
             ->activeCssClass('item-active')
             ->items([
                 [
@@ -281,13 +276,13 @@ HTML;
     {
         $widget = Menu::widget();
 
-        $this->assertNotSame($widget, $widget->activateItems(true));
+        $this->assertNotSame($widget, $widget->deactivateItems());
         $this->assertNotSame($widget, $widget->activateParents(false));
         $this->assertNotSame($widget, $widget->activeCssClass(''));
         $this->assertNotSame($widget, $widget->currentPath(null));
-        $this->assertNotSame($widget, $widget->encodeLabels(true));
+        $this->assertNotSame($widget, $widget->withoutEncodeLabels());
         $this->assertNotSame($widget, $widget->firstItemCssClass(null));
-        $this->assertNotSame($widget, $widget->hideEmptyItems(true));
+        $this->assertNotSame($widget, $widget->showEmptyItems());
         $this->assertNotSame($widget, $widget->items([]));
         $this->assertNotSame($widget, $widget->itemOptions([]));
         $this->assertNotSame($widget, $widget->labelTemplate(''));

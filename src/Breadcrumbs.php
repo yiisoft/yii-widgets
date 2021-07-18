@@ -11,7 +11,9 @@ use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
 use function array_key_exists;
+use function implode;
 use function is_array;
+use function strtr;
 
 /**
  * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.
@@ -19,7 +21,7 @@ use function is_array;
  * For example, breadcrumbs like "Home / Sample Post / Edit" means the user is viewing an edit page for the
  * "Sample Post". He can click on "Sample Post" to view that page, or he can click on "Home" to return to the homepage.
  *
- * To use Breadcrumbs, you need to configure its {@see Breadcrumbs::links()} method,
+ * To use Breadcrumbs, you need to configure its {@see Breadcrumbs::items()} method,
  * which specifies the links to be displayed. For example:
  *
  * ```php
@@ -39,7 +41,7 @@ use function is_array;
  *
  * Because breadcrumbs usually appears in nearly every page of a website, you may consider placing it in a layout view.
  * You can use a view common parameter (e.g. `$this->getCommonParameter('breadcrumbs')`) to configure the links in
- * different views. In the layout view, you assign this view parameter to the {@see Breadcrumbs::links()} method
+ * different views. In the layout view, you assign this view parameter to the {@see Breadcrumbs::items()} method
  * like the following:
  *
  * ```php
@@ -53,9 +55,9 @@ final class Breadcrumbs extends Widget
     private string $tag = 'ul';
     private array $options = ['class' => 'breadcrumb'];
     private bool $encodeLabels = true;
-    private bool $homeLink = true;
-    private array $homeUrlLink = [];
-    private array $links = [];
+    private bool $withoutHomeItem = false;
+    private array $homeItem = [];
+    private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
 
@@ -64,39 +66,34 @@ final class Breadcrumbs extends Widget
      *
      * @throws JsonException
      *
-     * @return string the result of widget execution to be outputted.
+     * @return string The result of widget execution to be outputted.
      */
     protected function run(): string
     {
-        if (empty($this->links)) {
+        if (empty($this->items)) {
             return '';
         }
 
-        $links = [];
+        $items = [];
 
-        if ($this->homeLink === true) {
-            $links[] = $this->renderItem([
-                'label' => 'Home',
-                'url' => '/',
-            ], $this->itemTemplate);
-        } elseif (!empty($this->homeUrlLink)) {
-            $links[] = $this->renderItem($this->homeUrlLink, $this->itemTemplate);
+        if ($this->withoutHomeItem === false) {
+            $items[] = $this->renderHomeLink();
         }
 
-        foreach ($this->links as $link) {
-            if (!is_array($link)) {
-                $link = ['label' => $link];
+        foreach ($this->items as $item) {
+            if (!is_array($item)) {
+                $item = ['label' => $item];
             }
 
-            if (!empty($link)) {
-                $links[] = $this->renderItem(
-                    $link,
-                    isset($link['url']) ? $this->itemTemplate : $this->activeItemTemplate
+            if (!empty($item)) {
+                $items[] = $this->renderItem(
+                    $item,
+                    isset($item['url']) ? $this->itemTemplate : $this->activeItemTemplate
                 );
             }
         }
 
-        $body = implode('', $links);
+        $body = implode('', $items);
 
         return empty($this->tag)
             ? $body
@@ -107,32 +104,36 @@ final class Breadcrumbs extends Widget
     /**
      * Renders a single breadcrumb item.
      *
-     * @param array $link the link to be rendered. It must contain the "label" element. The "url" element is optional.
+     * @param array $item The item to be rendered. It must contain the "label" element. The "url" element is optional.
      * @param string $template the template to be used to rendered the link. The token "{link}" will be replaced by the
      * link.
      *
-     * @throws InvalidArgumentException|JsonException if `$link` does not have "label" element.
+     * @throws InvalidArgumentException|JsonException if `$item` does not have "label" element.
      *
      * @return string the rendering result
      */
-    protected function renderItem(array $link, string $template): string
+    private function renderItem(array $item, string $template): string
     {
-        $encodeLabel = ArrayHelper::remove($link, 'encode', $this->encodeLabels);
-        $label = $encodeLabel ? Html::encode($link['label']) : $link['label'];
-
-        if (isset($link['template'])) {
-            $template = $link['template'];
+        if (!array_key_exists('label', $item)) {
+            throw new InvalidArgumentException('The "label" element is required for each link.');
         }
 
-        if (isset($link['url'])) {
-            $options = $link;
+        $encodeLabel = ArrayHelper::remove($item, 'encode', $this->encodeLabels);
+        $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
+
+        if (isset($item['template'])) {
+            $template = $item['template'];
+        }
+
+        if (isset($item['url'])) {
+            $options = $item;
             unset($options['template'], $options['label'], $options['url']);
-            $link = Html::a($label, $link['url'], $options);
+            $item = Html::a($label, $item['url'], $options);
         } else {
-            $link = $label;
+            $item = $label;
         }
 
-        return strtr($template, ['{link}' => $link]);
+        return strtr($template, ['{link}' => $item]);
     }
 
     public function tag(string $value): self
@@ -161,42 +162,47 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * @param bool $value Whether the labels for menu items should be HTML-encoded.
+     * Disables encoding for labels and returns a new instance..
      *
-     * @return self
+     * @return self Whether the labels for menu items should be HTML-encoded.
      */
-    public function encodeLabels(bool $value): self
+    public function withoutEncodeLabels(): self
     {
         $new = clone $this;
-        $new->encodeLabels = $value;
+        $new->encodeLabels = false;
         return $new;
     }
 
     /**
-     * @param bool $value The first hyperlink in the breadcrumbs (called home link). If this property is true, it will
-     * default to a link pointing to HomeUrl '\' with the label 'Home'. If this property is false, the home link will
-     * not be rendered.
+     * Disables rendering of the home item and returns a new instance.
      *
      * @return self
      */
-    public function homeLink(bool $value): self
+    public function withoutHomeItem(): self
     {
         $new = clone $this;
-        $new->homeLink = $value;
-        return $new;
-    }
-
-    public function homeUrlLink(array $value): self
-    {
-        $new = clone $this;
-        $new->homeUrlLink = $value;
+        $new->withoutHomeItem = true;
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified list of links.
+     * The first item in the breadcrumbs (called home link).
      *
-     * @param array $value List of links to appear in the breadcrumbs. If this property is empty, the widget will not
+     * @param array $value Please refer to {@see items()} on the format.
+     *
+     * @return self
+     */
+    public function homeItem(array $value): self
+    {
+        $new = clone $this;
+        $new->homeItem = $value;
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified list of items.
+     *
+     * @param array $value List of items to appear in the breadcrumbs. If this property is empty, the widget will not
      * render anything. Each array element represents a single link in the breadcrumbs with the following structure:
      *
      * ```php
@@ -232,14 +238,10 @@ final class Breadcrumbs extends Widget
      *
      * @return self
      */
-    public function links(array $value): self
+    public function items(array $value): self
     {
-        if (!array_key_exists('label', $value)) {
-            throw new InvalidArgumentException('The "label" element is required for each link.');
-        }
-
         $new = clone $this;
-        $new->links = $value;
+        $new->items = $value;
         return $new;
     }
 
@@ -271,5 +273,14 @@ final class Breadcrumbs extends Widget
         $new = clone $this;
         $new->activeItemTemplate = $value;
         return $new;
+    }
+
+    private function renderHomeLink(): string
+    {
+        if ($this->homeItem === []) {
+            $this->homeItem = ['label' => 'Home', 'url' => '/'];
+        }
+
+        return $this->renderItem($this->homeItem, $this->itemTemplate);
     }
 }
