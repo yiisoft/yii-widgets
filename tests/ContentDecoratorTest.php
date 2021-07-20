@@ -18,7 +18,6 @@ final class ContentDecoratorTest extends TestCase
     {
         ContentDecorator::widget()
             ->viewFile('@public/view/layout.php')
-            ->parameters([])
             ->begin();
 
         echo "\t\t<div class='left-column'>\n";

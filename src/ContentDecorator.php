@@ -21,7 +21,7 @@ use function ob_start;
  * ```php
  * <?= ContentDecorator::widget()
  *     ->viewFile('@app/views/layouts/base.php')
- *     ->params([])
+ *     ->parameters([])
  *     ->begin();
  * ?>
  *
