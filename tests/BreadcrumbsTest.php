@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests;
 
+use InvalidArgumentException;
 use Yiisoft\Yii\Widgets\Breadcrumbs;
 
 /**
@@ -11,17 +12,17 @@ use Yiisoft\Yii\Widgets\Breadcrumbs;
  */
 final class BreadcrumbsTest extends TestCase
 {
-    public function testHomeLinkTrue(): void
+    public function testItems(): void
     {
         $html = Breadcrumbs::widget()
-            ->links([
-                'label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page',
+            ->items([
+                'label' => 'My Home Page', 'url' => 'https://my.example.com/yii2/link/page',
             ])
             ->render();
 
         $expectedHtml = "<ul class=\"breadcrumb\"><li><a href=\"/\">Home</a></li>\n" .
         "<li class=\"active\">My Home Page</li>\n" .
-        "<li class=\"active\">http://my.example.com/yii2/link/page</li>\n" .
+        "<li class=\"active\">https://my.example.com/yii2/link/page</li>\n" .
         '</ul>';
 
         $this->assertEquals($expectedHtml, $html);
@@ -34,11 +35,11 @@ final class BreadcrumbsTest extends TestCase
         $this->assertEmpty($html);
     }
 
-    public function testHomeLinkFalse(): void
+    public function testWithoutHomeItem(): void
     {
         $html = Breadcrumbs::widget()
-            ->homeLink(false)
-            ->links([
+            ->withoutHomeItem()
+            ->items([
                 'label' => 'My Home Page',
                 'url' => 'http://my.example.com/yii2/link/page',
             ])
@@ -51,12 +52,11 @@ final class BreadcrumbsTest extends TestCase
         $this->assertEquals($expectedHtml, $html);
     }
 
-    public function testHomeUrlLink(): void
+    public function testHomeItem(): void
     {
         $html = Breadcrumbs::widget()
-            ->homeLink(false)
-            ->homeUrlLink(['label' => 'home-link'])
-            ->links(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
+            ->homeItem(['label' => 'home-link'])
+            ->items(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
             ->render();
 
         $expectedHtml = "<ul class=\"breadcrumb\"><li>home-link</li>\n" .
@@ -69,12 +69,12 @@ final class BreadcrumbsTest extends TestCase
 
     public function testRenderItemException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
-        $html = Breadcrumbs::widget()
-            ->homeLink(false)
-            ->links([
-                'url' => 'http://my.example.com/yii2/link/page',
+        Breadcrumbs::widget()
+            ->withoutHomeItem()
+            ->items([
+                ['url' => 'http://my.example.com/yii2/link/page'],
             ])
             ->render();
     }
@@ -83,9 +83,9 @@ final class BreadcrumbsTest extends TestCase
     {
         $html = Breadcrumbs::widget()
             ->activeItemTemplate("<li>{link}</li>\n")
-            ->encodeLabels(false)
-            ->homeLink(false)
-            ->links(['label' => 'My-<br>Test-Label'])
+            ->withoutEncodeLabels()
+            ->withoutHomeItem()
+            ->items(['label' => 'My-<br>Test-Label'])
             ->options([])
             ->tag('')
             ->render();
@@ -97,8 +97,8 @@ final class BreadcrumbsTest extends TestCase
     {
         $html = Breadcrumbs::widget()
             ->activeItemTemplate("<li>{link}</li>\n")
-            ->homeLink(false)
-            ->links(['label' => 'My-<br>Test-Label'])
+            ->withoutHomeItem()
+            ->items(['label' => 'My-<br>Test-Label'])
             ->options([])
             ->tag('')
             ->render();
@@ -109,8 +109,8 @@ final class BreadcrumbsTest extends TestCase
     public function testOptions(): void
     {
         $html = Breadcrumbs::widget()
-            ->homeLink(false)
-            ->links(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
+            ->withoutHomeItem()
+            ->items(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
             ->options(['class' => 'breadcrumb external'])
             ->render();
 
@@ -124,8 +124,7 @@ final class BreadcrumbsTest extends TestCase
         $html = Breadcrumbs::widget()
             ->activeItemTemplate("{link}\n")
             ->itemTemplate("{link}\n")
-            ->homeLink(true)
-            ->links(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
+            ->items(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
             ->options(['class' => 'breadcrumb'])
             ->tag('div')
             ->render();
@@ -136,5 +135,19 @@ final class BreadcrumbsTest extends TestCase
             '</div>';
 
         $this->assertEquals($expectedHtml, $html);
+    }
+
+    public function testImmutability(): void
+    {
+        $widget = Breadcrumbs::widget();
+
+        $this->assertNotSame($widget, $widget->tag('ul'));
+        $this->assertNotSame($widget, $widget->options([]));
+        $this->assertNotSame($widget, $widget->withoutEncodeLabels());
+        $this->assertNotSame($widget, $widget->withoutHomeItem());
+        $this->assertNotSame($widget, $widget->homeItem([]));
+        $this->assertNotSame($widget, $widget->items(['label' => 'value']));
+        $this->assertNotSame($widget, $widget->itemTemplate(''));
+        $this->assertNotSame($widget, $widget->activeItemTemplate(''));
     }
 }

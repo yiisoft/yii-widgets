@@ -18,7 +18,6 @@ final class ContentDecoratorTest extends TestCase
     {
         ContentDecorator::widget()
             ->viewFile('@public/view/layout.php')
-            ->params([])
             ->begin();
 
         echo "\t\t<div class='left-column'>\n";
@@ -39,5 +38,13 @@ final class ContentDecoratorTest extends TestCase
 
         $this->assertStringContainsString('<title>Test</title>', $html);
         $this->assertStringContainsString($expected, $html);
+    }
+
+    public function testImmutability(): void
+    {
+        $widget = ContentDecorator::widget();
+
+        $this->assertNotSame($widget, $widget->parameters([]));
+        $this->assertNotSame($widget, $widget->viewFile(''));
     }
 }
