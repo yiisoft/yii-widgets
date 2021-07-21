@@ -54,12 +54,11 @@ final class Breadcrumbs extends Widget
 {
     private string $tag = 'ul';
     private array $options = ['class' => 'breadcrumb'];
-    private bool $encodeLabels = true;
-    private bool $withoutHomeItem = false;
-    private array $homeItem = [];
+    private array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
+    private bool $encodeLabels = true;
 
     /**
      * Returns a new instance with the specified tag.
@@ -76,7 +75,7 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * Disables encoding for labels and returns a new instance..
+     * Disables encoding for labels and returns a new instance.
      *
      * @return self Whether the labels for menu items should be HTML-encoded.
      */
@@ -88,19 +87,9 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * Disables rendering of the home item and returns a new instance.
-     *
-     * @return self
-     */
-    public function withoutHomeItem(): self
-    {
-        $new = clone $this;
-        $new->withoutHomeItem = true;
-        return $new;
-    }
-
-    /**
      * Returns a new instance with the specified first item in the breadcrumbs (called home link).
+     *
+     * If an empty array is specified, the home item will not be rendered.
      *
      * @param array $value Please refer to {@see items()} on the format.
      *
@@ -222,8 +211,8 @@ final class Breadcrumbs extends Widget
 
         $items = [];
 
-        if ($this->withoutHomeItem === false) {
-            $items[] = $this->renderHomeLink();
+        if (!empty($this->homeItem)) {
+            $items[] = $this->renderItem($this->homeItem, $this->itemTemplate);
         }
 
         foreach ($this->items as $item) {
@@ -280,21 +269,5 @@ final class Breadcrumbs extends Widget
         }
 
         return strtr($template, ['{link}' => $item]);
-    }
-
-    /**
-     * Renders a home item.
-     *
-     * @throws JsonException
-     *
-     * @return string The rendering result.
-     */
-    private function renderHomeLink(): string
-    {
-        if ($this->homeItem === []) {
-            $this->homeItem = ['label' => 'Home', 'url' => '/'];
-        }
-
-        return $this->renderItem($this->homeItem, $this->itemTemplate);
     }
 }
