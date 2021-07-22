@@ -54,7 +54,7 @@ final class Breadcrumbs extends Widget
 {
     private string $tag = 'ul';
     private array $options = ['class' => 'breadcrumb'];
-    private array $homeItem = ['label' => 'Home', 'url' => '/'];
+    private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
@@ -89,14 +89,22 @@ final class Breadcrumbs extends Widget
     /**
      * Returns a new instance with the specified first item in the breadcrumbs (called home link).
      *
-     * If an empty array is specified, the home item will not be rendered.
+     * If a null is specified, the home item will not be rendered.
      *
-     * @param array $value Please refer to {@see items()} on the format.
+     * @param array|null $value Please refer to {@see items()} on the format.
+     *
+     * @throws InvalidArgumentException If an empty array is specified.
      *
      * @return self
      */
-    public function homeItem(array $value): self
+    public function homeItem(?array $value): self
     {
+        if ($value === []) {
+            throw new InvalidArgumentException(
+                'The home item cannot be an empty array. To disable rendering of the home item, specify null.',
+            );
+        }
+
         $new = clone $this;
         $new->homeItem = $value;
         return $new;
@@ -211,7 +219,7 @@ final class Breadcrumbs extends Widget
 
         $items = [];
 
-        if (!empty($this->homeItem)) {
+        if ($this->homeItem !== null) {
             $items[] = $this->renderItem($this->homeItem, $this->itemTemplate);
         }
 
