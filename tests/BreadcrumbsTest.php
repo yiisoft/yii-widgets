@@ -38,7 +38,7 @@ final class BreadcrumbsTest extends TestCase
     public function testWithoutHomeItem(): void
     {
         $html = Breadcrumbs::widget()
-            ->withoutHomeItem()
+            ->homeItem(null)
             ->items([
                 'label' => 'My Home Page',
                 'url' => 'http://my.example.com/yii2/link/page',
@@ -72,7 +72,7 @@ final class BreadcrumbsTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         Breadcrumbs::widget()
-            ->withoutHomeItem()
+            ->homeItem(null)
             ->items([
                 ['url' => 'http://my.example.com/yii2/link/page'],
             ])
@@ -84,8 +84,8 @@ final class BreadcrumbsTest extends TestCase
         $html = Breadcrumbs::widget()
             ->activeItemTemplate("<li>{link}</li>\n")
             ->withoutEncodeLabels()
-            ->withoutHomeItem()
             ->items(['label' => 'My-<br>Test-Label'])
+            ->homeItem(null)
             ->options([])
             ->tag('')
             ->render();
@@ -97,8 +97,8 @@ final class BreadcrumbsTest extends TestCase
     {
         $html = Breadcrumbs::widget()
             ->activeItemTemplate("<li>{link}</li>\n")
-            ->withoutHomeItem()
             ->items(['label' => 'My-<br>Test-Label'])
+            ->homeItem(null)
             ->options([])
             ->tag('')
             ->render();
@@ -109,7 +109,7 @@ final class BreadcrumbsTest extends TestCase
     public function testOptions(): void
     {
         $html = Breadcrumbs::widget()
-            ->withoutHomeItem()
+            ->homeItem(null)
             ->items(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
             ->options(['class' => 'breadcrumb external'])
             ->render();
@@ -137,6 +137,15 @@ final class BreadcrumbsTest extends TestCase
         $this->assertEquals($expectedHtml, $html);
     }
 
+    public function testHomeItemThrowExceptionForEmptyArray(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The home item cannot be an empty array. To disable rendering of the home item, specify null.',
+        );
+        Breadcrumbs::widget()->homeItem([]);
+    }
+
     public function testImmutability(): void
     {
         $widget = Breadcrumbs::widget();
@@ -144,8 +153,7 @@ final class BreadcrumbsTest extends TestCase
         $this->assertNotSame($widget, $widget->tag('ul'));
         $this->assertNotSame($widget, $widget->options([]));
         $this->assertNotSame($widget, $widget->withoutEncodeLabels());
-        $this->assertNotSame($widget, $widget->withoutHomeItem());
-        $this->assertNotSame($widget, $widget->homeItem([]));
+        $this->assertNotSame($widget, $widget->homeItem(null));
         $this->assertNotSame($widget, $widget->items(['label' => 'value']));
         $this->assertNotSame($widget, $widget->itemTemplate(''));
         $this->assertNotSame($widget, $widget->activeItemTemplate(''));
