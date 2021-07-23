@@ -271,13 +271,13 @@ final class Breadcrumbs extends Widget
         }
 
         if (isset($item['url'])) {
-            $options = $item;
-            unset($options['template'], $options['label'], $options['url']);
-            $item = Html::a($label, $item['url'], $options);
+            $link = $item['url'];
+            unset($item['template'], $item['label'], $item['url']);
+            $link = Html::a($label, $link, $item);
         } else {
-            $item = $label;
+            $link = $label;
         }
 
-        return strtr($template, ['{link}' => $item]);
+        return strtr($template, ['{link}' => $link]);
     }
 }

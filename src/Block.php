@@ -85,6 +85,7 @@ final class Block extends Widget
     {
         parent::begin();
         ob_start();
+        /** @psalm-suppress PossiblyFalseArgument */
         PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
         return null;
     }
