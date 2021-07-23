@@ -305,7 +305,7 @@ final class Menu extends Widget
         return empty($tag)
             ? $this->renderItems($items)
             : Html::tag($tag, $this->renderItems($items), $options)->encode(false)->render()
-            ;
+        ;
     }
 
     /**
