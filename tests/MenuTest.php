@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests;
 
+use Yiisoft\Widget\Widget;
 use Yiisoft\Yii\Widgets\Menu;
 
 /**
@@ -41,7 +42,6 @@ HTML;
             ->withoutEncodeLabels()
             ->items([
                 [
-                    'encode' => false,
                     'label' => '<span class="glyphicon glyphicon-user"></span> Users',
                     'url' => '#',
                 ],
@@ -153,7 +153,12 @@ HTML;
                     'label' => 'item1',
                     'url' => '#',
                     'template' => 'label: {label}; url: {url}',
-                    'active' => function ($item, $hasActiveChild, $isItemActive, $widget) {
+                    'active' => static function (
+                        array $item,
+                        bool $hasActiveChild,
+                        bool $isItemActive,
+                        Widget $widget
+                    ): bool {
                         return isset($item, $hasActiveChild, $isItemActive, $widget);
                     },
                 ],
@@ -188,7 +193,7 @@ HTML;
                     'active' => true,
                     'options' => [
                         'class' => [
-                            'someclass',
+                            'some-class',
                         ],
                     ],
                 ],
@@ -217,14 +222,50 @@ HTML;
                         ],
                     ],
                 ],
+                [
+                    'label' => 'item5',
+                    'url' => '#',
+                    'visible' => false,
+                    'options' => [
+                        'class' => [
+                            'some-other-class',
+                            'foo_bar_baz_class',
+                        ],
+                    ],
+                ],
+                [
+                    'items' => [
+                        ['label' => 'subItem1'],
+                        ['label' => 'subItem2'],
+                    ],
+                ],
+                [
+                    'url' => '#',
+                    'items' => [
+                        ['label' => 'subItem1'],
+                        ['label' => 'subItem2'],
+                    ],
+                ],
             ])
             ->render();
 
         $expected = <<<'HTML'
-<ul><li class="someclass item-active"><a href="#">item1</a></li>
+<ul><li class="some-class item-active"><a href="#">item1</a></li>
 <li class="another-class other--class two classes"><a href="#">item2</a></li>
 <li><a href="#">item3</a></li>
-<li class="some-other-class foo_bar_baz_class"><a href="#">item4</a></li></ul>
+<li class="some-other-class foo_bar_baz_class"><a href="#">item4</a></li>
+<li>
+<ul>
+<li>subItem1</li>
+<li>subItem2</li>
+</ul>
+</li>
+<li><a href="#"></a>
+<ul>
+<li>subItem1</li>
+<li>subItem2</li>
+</ul>
+</li></ul>
 HTML;
         $this->assertEqualsWithoutLE($expected, $html);
     }
@@ -238,7 +279,7 @@ HTML;
                     'label' => 'item1',
                     'url' => '#',
                     'options' => [
-                        'class' => 'someclass',
+                        'class' => 'some-class',
                     ],
                 ],
                 [
@@ -264,7 +305,7 @@ HTML;
             ->render();
 
         $expected = <<<'HTML'
-<ul><li class="someclass"><a href="#">item1</a></li>
+<ul><li class="some-class"><a href="#">item1</a></li>
 <li><a href="#">item2</a></li>
 <li class="some classes"><a href="#">item3</a></li>
 <li class="another-class other--class two classes item-active"><a href="#">item4</a></li></ul>
@@ -272,12 +313,205 @@ HTML;
         $this->assertEqualsWithoutLE($expected, $html);
     }
 
+    public function testFirstAndLastItemCssClass(): void
+    {
+        $html = Menu::widget()
+            ->firstItemCssClass('first-class')
+            ->lastItemCssClass('last-class')
+            ->items([
+                6 => [
+                    'label' => 'item1',
+                    'url' => '#',
+                    'options' => [
+                        'class' => 'some-class',
+                    ],
+                ],
+                3 => [
+                    'label' => 'item2',
+                    'url' => '#',
+                    'options' => [
+                        'class' => 'some-class',
+                    ],
+                ],
+                1 => [
+                    'label' => 'item3',
+                    'url' => '#',
+                    'options' => [
+                        'class' => 'some-class',
+                    ],
+                ],
+            ])
+            ->render();
+        $expected = <<<'HTML'
+<ul><li class="some-class first-class"><a href="#">item1</a></li>
+<li class="some-class"><a href="#">item2</a></li>
+<li class="some-class last-class"><a href="#">item3</a></li></ul>
+HTML;
+        $this->assertEqualsWithoutLE($expected, $html);
+    }
+
+    public function testCurrentPath(): void
+    {
+        $html = Menu::widget()
+            ->currentPath('/path')
+            ->items([
+                [
+                    'label' => 'item',
+                    'url' => '/path',
+                ],
+            ])
+            ->render();
+
+        $expected = '<ul><li class="active"><a href="/path">item</a></li></ul>';
+
+        $this->assertEqualsWithoutLE($expected, $html);
+    }
+
+    public function testHomeCurrentPath(): void
+    {
+        $html = Menu::widget()
+            ->currentPath('/')
+            ->items([
+                [
+                    'label' => 'item',
+                    'url' => '/',
+                ],
+            ])
+            ->render();
+
+        $expected = '<ul><li><a href="/">item</a></li></ul>';
+
+        $this->assertEqualsWithoutLE($expected, $html);
+    }
+
+    public function testDeactivateItems(): void
+    {
+        $html = Menu::widget()
+            ->currentPath('/path')
+            ->deactivateItems()
+            ->items([
+                [
+                    'label' => 'item',
+                    'url' => '/path',
+                ],
+            ])
+            ->render();
+
+        $expected = '<ul><li><a href="/path">item</a></li></ul>';
+
+        $this->assertEqualsWithoutLE($expected, $html);
+    }
+
+    public function testActivateParents(): void
+    {
+        $html = Menu::widget()
+            ->activateParents()
+            ->items([
+                [
+                    'label' => 'item1',
+                    'active' => true,
+                    'items' => [
+                        ['label' => 'subItem1'],
+                        ['label' => 'subItem2'],
+                    ],
+                ],
+                [
+                    'label' => 'item2',
+                    'active' => false,
+                    'items' => [
+                        ['label' => 'subItem1', 'active' => true],
+                        ['label' => 'subItem2'],
+                    ],
+                ],
+                [
+                    'label' => 'item3',
+                    'items' => [
+                        ['label' => 'subItem1'],
+                        ['label' => 'subItem2', 'active' => true],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $expected = <<<'HTML'
+<ul><li class="active">item1
+<ul>
+<li>subItem1</li>
+<li>subItem2</li>
+</ul>
+</li>
+<li>item2
+<ul>
+<li class="active">subItem1</li>
+<li>subItem2</li>
+</ul>
+</li>
+<li class="active">item3
+<ul>
+<li>subItem1</li>
+<li class="active">subItem2</li>
+</ul>
+</li></ul>
+HTML;
+
+        $this->assertEqualsWithoutLE($expected, $html);
+    }
+
+    public function testShowEmptyItems(): void
+    {
+        $html = Menu::widget()
+            ->showEmptyItems()
+            ->items([
+                [
+                    'label' => 'item',
+                    'options' => [
+                        'class' => 'some-class',
+                    ],
+                    'items' => [
+                        ['label' => 'subItem1', 'visible' => false],
+                        ['label' => 'subItem2', 'visible' => false],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $expected = '<ul><li class="some-class">item</li></ul>';
+
+        $this->assertEqualsWithoutLE($expected, $html);
+    }
+
+    public function testEmptyItems(): void
+    {
+        $this->assertEqualsWithoutLE('', Menu::widget()->items([])->render());
+    }
+
+    public function testShowEmptyChildItems(): void
+    {
+        $this->assertEqualsWithoutLE('', Menu::widget()->items([
+            [
+                'label' => 'item1',
+                'options' => [
+                    'class' => 'some-class',
+                ],
+                'items' => [],
+            ],
+            [
+                'label' => 'item2',
+                'options' => [
+                    'class' => 'some-class',
+                ],
+                'items' => [],
+            ],
+        ])
+        ->render());
+    }
+
     public function testImmutability(): void
     {
         $widget = Menu::widget();
 
         $this->assertNotSame($widget, $widget->deactivateItems());
-        $this->assertNotSame($widget, $widget->activateParents(false));
+        $this->assertNotSame($widget, $widget->activateParents());
         $this->assertNotSame($widget, $widget->activeCssClass(''));
         $this->assertNotSame($widget, $widget->currentPath(null));
         $this->assertNotSame($widget, $widget->withoutEncodeLabels());
