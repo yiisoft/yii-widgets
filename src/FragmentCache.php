@@ -69,7 +69,7 @@ final class FragmentCache extends Widget
     }
 
     /**
-     * Returns a new instance with the dependency.
+     * Returns a new instance with the specified dependency.
      *
      * @param Dependency $value The dependency that the cached content depends on.
      *

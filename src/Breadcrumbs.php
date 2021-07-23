@@ -157,6 +157,8 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * Returns a new instance with the specified options.
+     *
      * @param array $value The HTML attributes for the menu's container tag. The following special options are
      * recognized:
      *
@@ -241,7 +243,7 @@ final class Breadcrumbs extends Widget
         return empty($this->tag)
             ? $body
             : Html::tag($this->tag, $body, $this->options)->encode(false)->render()
-            ;
+        ;
     }
 
     /**

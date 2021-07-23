@@ -72,6 +72,9 @@ final class ContentDecorator extends Widget
         return $new;
     }
 
+    /**
+     * Starts recording a clip.
+     */
     public function begin(): ?string
     {
         parent::begin();

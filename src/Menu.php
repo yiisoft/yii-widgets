@@ -20,7 +20,7 @@ use function strtr;
 /**
  * Menu displays a multi-level menu using nested HTML lists.
  *
- * The {@see items() method specifies the possible items in the menu.
+ * The {@see Menu::items()} method specifies the possible items in the menu.
  * A menu item can contain sub-items which specify the sub-menu under that menu item.
  *
  * Menu checks the current route and request parameters to toggle certain menu items with active state.
@@ -60,7 +60,7 @@ final class Menu extends Widget
     private ?string $lastItemCssClass = null;
 
     /**
-     * Returns a new instance with deactivated items.
+     * Returns a new instance with the specified deactivated items.
      *
      * Deactivates items according to whether their route setting matches the currently requested route.
      *
@@ -74,7 +74,7 @@ final class Menu extends Widget
     }
 
     /**
-     * Returns a new instance with activated parent items.
+     * Returns a new instance with the specified activated parent items.
      *
      * Activates parent menu items when one of the corresponding child menu items is active.
      * The activated parent menu items will also have its CSS classes appended with {@see activeCssClass()}.
@@ -370,17 +370,13 @@ final class Menu extends Widget
     private function renderItem(array $item): string
     {
         if (isset($item['url'])) {
-            $template = ArrayHelper::getValue($item, 'template', $this->linkTemplate);
-
-            return strtr($template, [
+            return strtr(ArrayHelper::getValue($item, 'template', $this->linkTemplate), [
                 '{url}' => Html::encode($item['url']),
                 '{label}' => $item['label'],
             ]);
         }
 
-        $template = ArrayHelper::getValue($item, 'template', $this->labelTemplate);
-
-        return strtr($template, [
+        return strtr(ArrayHelper::getValue($item, 'template', $this->labelTemplate), [
             '{label}' => $item['label'],
         ]);
     }
@@ -411,8 +407,10 @@ final class Menu extends Widget
 
             if (isset($item['items'])) {
                 $items[$i]['items'] = $this->normalizeItems($item['items'], $hasActiveChild);
+
                 if (empty($items[$i]['items']) && !$this->showEmptyItems) {
                     unset($items[$i]['items']);
+
                     if (!isset($item['url'])) {
                         unset($items[$i]);
                         continue;
@@ -435,7 +433,7 @@ final class Menu extends Widget
                     $item,
                     $hasActiveChild,
                     $this->isItemActive($item),
-                    $this
+                    $this,
                 );
             } elseif ($item['active']) {
                 $active = true;
@@ -450,24 +448,17 @@ final class Menu extends Widget
      *
      * This is done by checking match that specified in the `url` option of the menu item.
      *
-     * Only when 'url' match $_SERVER['REQUEST_URI'] respectively, will a menu item be considered active.
-     *
      * @param array $item The menu item to be checked.
-     * @param bool $active The result when the item is active.
      *
-     * @return bool Whether the menu item is active
+     * @return bool Whether the menu item is active.
      */
-    private function isItemActive(array $item, bool $active = false): bool
+    private function isItemActive(array $item): bool
     {
-        if (
+        return
             $this->activateItems
             && $this->currentPath !== '/'
             && isset($item['url'])
             && $item['url'] === $this->currentPath
-        ) {
-            $active = true;
-        }
-
-        return $active;
+        ;
     }
 }
