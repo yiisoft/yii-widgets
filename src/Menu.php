@@ -12,7 +12,6 @@ use Yiisoft\Widget\Widget;
 
 use function array_merge;
 use function array_values;
-use function call_user_func;
 use function count;
 use function implode;
 use function strtr;
@@ -428,8 +427,7 @@ final class Menu extends Widget
                     $items[$i]['active'] = false;
                 }
             } elseif ($item['active'] instanceof Closure) {
-                $active = $items[$i]['active'] = call_user_func(
-                    $item['active'],
+                $active = $items[$i]['active'] = $item['active'](
                     $item,
                     $hasActiveChild,
                     $this->isItemActive($item),
