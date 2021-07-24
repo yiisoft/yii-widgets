@@ -64,17 +64,16 @@ final class Block extends Widget
     }
 
     /**
-     * Returns a new instance with the specified flag of "render in place".
+     * Enables in-place rendering and returns a new instance.
      *
-     * @param bool $value Whether to render the block content in place. Defaults to false, meaning the captured block
-     * content will not be displayed.
+     * Without calling this method, the captured content of the block is not displayed.
      *
      * @return self
      */
-    public function renderInPlace(bool $value): self
+    public function renderInPlace(): self
     {
         $new = clone $this;
-        $new->renderInPlace = $value;
+        $new->renderInPlace = true;
         return $new;
     }
 
@@ -85,6 +84,7 @@ final class Block extends Widget
     {
         parent::begin();
         ob_start();
+        /** @psalm-suppress PossiblyFalseArgument */
         PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
         return null;
     }

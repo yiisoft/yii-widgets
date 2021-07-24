@@ -69,7 +69,7 @@ final class FragmentCache extends Widget
     }
 
     /**
-     * Returns a new instance with the dependency.
+     * Returns a new instance with the specified dependency.
      *
      * @param Dependency $value The dependency that the cached content depends on.
      *
@@ -146,6 +146,7 @@ final class FragmentCache extends Widget
     {
         parent::begin();
         ob_start();
+        /** @psalm-suppress PossiblyFalseArgument */
         PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
         return null;
     }

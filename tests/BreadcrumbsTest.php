@@ -7,23 +7,39 @@ namespace Yiisoft\Yii\Widgets\Tests;
 use InvalidArgumentException;
 use Yiisoft\Yii\Widgets\Breadcrumbs;
 
-/**
- * BreadcrumbsTest.
- */
 final class BreadcrumbsTest extends TestCase
 {
     public function testItems(): void
     {
         $html = Breadcrumbs::widget()
             ->items([
-                'label' => 'My Home Page', 'url' => 'https://my.example.com/yii2/link/page',
+                'label' => 'My Home Page', 'url' => 'https://my.example.com/yii/link/page',
             ])
             ->render();
 
         $expectedHtml = "<ul class=\"breadcrumb\"><li><a href=\"/\">Home</a></li>\n" .
-        "<li class=\"active\">My Home Page</li>\n" .
-        "<li class=\"active\">https://my.example.com/yii2/link/page</li>\n" .
-        '</ul>';
+            "<li class=\"active\">My Home Page</li>\n" .
+            "<li class=\"active\">https://my.example.com/yii/link/page</li>\n" .
+            '</ul>'
+        ;
+
+        $this->assertEquals($expectedHtml, $html);
+    }
+
+    public function testItemsWithTemplate(): void
+    {
+        $html = Breadcrumbs::widget()
+            ->items([
+                ['label' => 'Link', 'url' => 'https://my.example.com/yii/link/page'],
+                ['label' => 'Text', 'template' => "<span>{link}</span>\n"],
+            ])
+            ->render();
+
+        $expectedHtml = "<ul class=\"breadcrumb\"><li><a href=\"/\">Home</a></li>\n" .
+            "<li><a href=\"https://my.example.com/yii/link/page\">Link</a></li>\n" .
+            "<span>Text</span>\n" .
+            '</ul>'
+        ;
 
         $this->assertEquals($expectedHtml, $html);
     }

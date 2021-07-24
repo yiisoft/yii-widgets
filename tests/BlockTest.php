@@ -27,7 +27,7 @@ final class BlockTest extends TestCase
     {
         Block::widget()
             ->id('testme')
-            ->renderInPlace(true)
+            ->renderInPlace()
             ->begin();
 
         echo '<block-testme>';
@@ -60,6 +60,6 @@ final class BlockTest extends TestCase
         $widget = Block::widget();
 
         $this->assertNotSame($widget, $widget->id(Block::class));
-        $this->assertNotSame($widget, $widget->renderInPlace(false));
+        $this->assertNotSame($widget, $widget->renderInPlace());
     }
 }

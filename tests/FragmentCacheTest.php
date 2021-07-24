@@ -29,6 +29,14 @@ final class FragmentCacheTest extends TestCase
         $this->assertSame('cached fragment', $content);
     }
 
+    public function testCacheFragmentWithEmptyContent(): void
+    {
+        FragmentCache::widget()->id('test')->ttl(30)->begin();
+        $content = FragmentCache::end();
+
+        $this->assertSame('', $content);
+    }
+
     public function testCacheFragmentThrowExceptionIfNotSetId(): void
     {
         $this->expectException(RuntimeException::class);

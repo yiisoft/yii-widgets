@@ -72,10 +72,14 @@ final class ContentDecorator extends Widget
         return $new;
     }
 
+    /**
+     * Starts recording a clip.
+     */
     public function begin(): ?string
     {
         parent::begin();
         ob_start();
+        /** @psalm-suppress PossiblyFalseArgument */
         PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
         return null;
     }

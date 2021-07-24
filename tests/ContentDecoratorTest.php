@@ -6,9 +6,6 @@ namespace Yiisoft\Yii\Widgets\Tests;
 
 use Yiisoft\Yii\Widgets\ContentDecorator;
 
-/**
- * ContentDecoratorTest.
- */
 final class ContentDecoratorTest extends TestCase
 {
     /**
@@ -30,11 +27,12 @@ final class ContentDecoratorTest extends TestCase
         $html = ContentDecorator::end();
 
         $expected = "\t\t<div class='left-column'>\n" .
-                    "\t\t\t<p>This is a left bar!</p>\n" .
-                    "\t\t</div>\n\n" .
-                    "\t\t<div class='right-column'>\n" .
-                    "\t\t\t<p>This is a right bar!</p>\n" .
-                    "\t\t</div>\n";
+            "\t\t\t<p>This is a left bar!</p>\n" .
+            "\t\t</div>\n\n" .
+            "\t\t<div class='right-column'>\n" .
+            "\t\t\t<p>This is a right bar!</p>\n" .
+            "\t\t</div>\n"
+        ;
 
         $this->assertStringContainsString('<title>Test</title>', $html);
         $this->assertStringContainsString($expected, $html);
