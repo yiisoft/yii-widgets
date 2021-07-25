@@ -27,6 +27,17 @@ composer require yiisoft/yii-widgets --prefer-dist
 
 ## General usage
 
+All widgets extend the abstract `Yiisoft\Widget\Widget` class from the
+[yiisoft/widget](https://github.com/yiisoft/widget) package.
+
+For a description of how to use it, see the documentation for each widget:
+
+- [Block](docs/block.md)
+- [Breadcrumbs](docs/breadcrumbs.md)
+- [ContentDecorator](docs/content-decorator.md)
+- [FragmentCache](docs/fragment-cache.md)
+- [Menu](docs/menu.md)
+
 ## Testing
 
 ### Unit testing

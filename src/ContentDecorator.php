@@ -73,7 +73,7 @@ final class ContentDecorator extends Widget
     }
 
     /**
-     * Starts recording a clip.
+     * Starts recording a content.
      */
     public function begin(): ?string
     {
@@ -85,9 +85,10 @@ final class ContentDecorator extends Widget
     }
 
     /**
-     * Ends recording a clip.
+     * Ends recording a content.
      *
-     * This method stops output buffering and saves the rendering result as a named clip in the controller.
+     * This method stops output buffering and saves the rendering result as a `$content`
+     * variable and then echoes rendering result.
      *
      * @throws Throwable|ViewNotFoundException
      *

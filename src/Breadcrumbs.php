@@ -16,19 +16,19 @@ use function is_array;
 use function strtr;
 
 /**
- * Breadcrumbs displays a list of links indicating the position of the current page in the whole site hierarchy.
+ * Breadcrumbs displays a list of items indicating the position of the current page in the whole site hierarchy.
  *
  * For example, breadcrumbs like "Home / Sample Post / Edit" means the user is viewing an edit page for the
  * "Sample Post". He can click on "Sample Post" to view that page, or he can click on "Home" to return to the homepage.
  *
  * To use Breadcrumbs, you need to configure its {@see Breadcrumbs::items()} method,
- * which specifies the links to be displayed. For example:
+ * which specifies the items to be displayed. For example:
  *
  * ```php
  * // $this is the view object currently being used
  * echo Breadcrumbs::widget()
  *     -> itemTemplate() => "<li><i>{link}</i></li>\n", // template for all links
- *     -> links() => [
+ *     -> items() => [
  *         [
  *             'label' => 'Post Category',
  *             'url' => 'post-category/view?id=10',
@@ -40,14 +40,14 @@ use function strtr;
  * ```
  *
  * Because breadcrumbs usually appears in nearly every page of a website, you may consider placing it in a layout view.
- * You can use a view common parameter (e.g. `$this->getCommonParameter('breadcrumbs')`) to configure the links in
+ * You can use a view common parameter (e.g. `$this->getCommonParameter('breadcrumbs')`) to configure the items in
  * different views. In the layout view, you assign this view parameter to the {@see Breadcrumbs::items()} method
  * like the following:
  *
  * ```php
  * // $this is the view object currently being used
  * echo Breadcrumbs::widget()
- *     ->links($this->hasCommonParameter('breadcrumbs') ? $this->getCommonParameter('breadcrumbs') : []);
+ *     ->items($this->hasCommonParameter('breadcrumbs') ? $this->getCommonParameter('breadcrumbs') : []);
  * ```
  */
 final class Breadcrumbs extends Widget
@@ -114,21 +114,21 @@ final class Breadcrumbs extends Widget
      * Returns a new instance with the specified list of items.
      *
      * @param array $value List of items to appear in the breadcrumbs. If this property is empty, the widget will not
-     * render anything. Each array element represents a single link in the breadcrumbs with the following structure:
+     * render anything. Each array element represents a single item in the breadcrumbs with the following structure:
      *
      * ```php
      * [
-     *     'label' => 'label of the link',  // required
-     *     'url' => 'url of the link',      // optional
+     *     'label' => 'label of the item',  // required
+     *     'url' => 'url of the item',      // optional
      *     'template' => 'own template of the item', // optional, if not set $this->itemTemplate will be used
      * ]
      * ```
      *
-     * If a link is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
+     * If a item is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
      * simply use `$label`.
      *
-     * Additional array elements for each link will be treated as the HTML attributes for the hyperlink tag.
-     * For example, the following link specification will generate a hyperlink with CSS class `external`:
+     * Additional array elements for each item will be treated as the HTML attributes for the hyperlink tag.
+     * For example, the following item specification will generate a hyperlink with CSS class `external`:
      *
      * ```php
      * [
@@ -138,7 +138,7 @@ final class Breadcrumbs extends Widget
      * ]
      * ```
      *
-     * Each individual link can override global {@see encodeLabels} param like the following:
+     * Each individual item can override global {@see encodeLabels} param like the following:
      *
      * ```php
      * [
@@ -250,7 +250,7 @@ final class Breadcrumbs extends Widget
      * Renders a single breadcrumb item.
      *
      * @param array $item The item to be rendered. It must contain the "label" element. The "url" element is optional.
-     * @param string $template the template to be used to rendered the link. The token "{link}" will be replaced by the
+     * @param string $template The template to be used to rendered the link. The token "{link}" will be replaced by the
      * link.
      *
      * @throws InvalidArgumentException|JsonException if `$item` does not have "label" element.
@@ -260,7 +260,7 @@ final class Breadcrumbs extends Widget
     private function renderItem(array $item, string $template): string
     {
         if (!array_key_exists('label', $item)) {
-            throw new InvalidArgumentException('The "label" element is required for each link.');
+            throw new InvalidArgumentException('The "label" element is required for each item.');
         }
 
         $encodeLabel = ArrayHelper::remove($item, 'encode', $this->encodeLabels);
