@@ -513,14 +513,14 @@ HTML;
         $this->assertNotSame($widget, $widget->deactivateItems());
         $this->assertNotSame($widget, $widget->activateParents());
         $this->assertNotSame($widget, $widget->activeCssClass(''));
-        $this->assertNotSame($widget, $widget->currentPath(null));
+        $this->assertNotSame($widget, $widget->currentPath(''));
         $this->assertNotSame($widget, $widget->withoutEncodeLabels());
-        $this->assertNotSame($widget, $widget->firstItemCssClass(null));
+        $this->assertNotSame($widget, $widget->firstItemCssClass(''));
         $this->assertNotSame($widget, $widget->showEmptyItems());
         $this->assertNotSame($widget, $widget->items([]));
         $this->assertNotSame($widget, $widget->itemOptions([]));
         $this->assertNotSame($widget, $widget->labelTemplate(''));
-        $this->assertNotSame($widget, $widget->lastItemCssClass(null));
+        $this->assertNotSame($widget, $widget->lastItemCssClass(''));
         $this->assertNotSame($widget, $widget->linkTemplate(''));
         $this->assertNotSame($widget, $widget->options([]));
     }

@@ -77,7 +77,7 @@ final class Breadcrumbs extends Widget
     /**
      * Disables encoding for labels and returns a new instance.
      *
-     * @return self Whether the labels for menu items should be HTML-encoded.
+     * @return self
      */
     public function withoutEncodeLabels(): self
     {

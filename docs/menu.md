@@ -77,9 +77,9 @@ Method | Description | Default
 `items(array $value)` | List of menu items. | `[]`
 `itemOptions(array $value)` | List of HTML attributes shared by all menu items. | `[]`
 `options(array $value)` | The HTML attributes for the menu's container tag. | `[]`
-`currentPath(?string $value)` | Allows you to assign the current path. | `null`
-`firstItemCssClass(?string $value)` | The CSS class for the first item in the main menu or each submenu. | `null`
-`lastItemCssClass(?string $value)` | The CSS class for the last item in the main menu or each submenu. | `null`
+`currentPath(string $value)` | Allows you to assign the current path. | `null`
+`firstItemCssClass(string $value)` | The CSS class for the first item in the main menu or each submenu. | `null`
+`lastItemCssClass(string $value)` | The CSS class for the last item in the main menu or each submenu. | `null`
 `labelTemplate(string $value)`| The template used to render the body of a menu which is NOT a link. | `'{label}'`
 `linkTemplate(string $value)` | The template used to render the body of a menu which is a link. | `'<a href="{url}">{label}</a>'`
 `activeCssClass(string $value)` | The CSS class to be appended to the active menu item. | `'active'`
