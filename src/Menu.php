@@ -59,9 +59,7 @@ final class Menu extends Widget
     private ?string $lastItemCssClass = null;
 
     /**
-     * Returns a new instance with the specified deactivated items.
-     *
-     * Deactivates items according to whether their route setting matches the currently requested route.
+     * Disables active items according to their current path and returns a new instance.
      *
      * @return self
      */
@@ -73,7 +71,7 @@ final class Menu extends Widget
     }
 
     /**
-     * Returns a new instance with the specified activated parent items.
+     * Returns a new instance with the activated parent items.
      *
      * Activates parent menu items when one of the corresponding child menu items is active.
      * The activated parent menu items will also have its CSS classes appended with {@see activeCssClass()}.
@@ -104,11 +102,11 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified current path.
      *
-     * @param string|null $value Allows you to assign the current path of the url from request controller.
+     * @param string $value The current path.
      *
      * @return self
      */
-    public function currentPath(?string $value): self
+    public function currentPath(string $value): self
     {
         $new = clone $this;
         $new->currentPath = $value;
@@ -118,7 +116,7 @@ final class Menu extends Widget
     /**
      * Disables encoding for labels and returns a new instance.
      *
-     * @return self Whether the labels for menu items should be HTML-encoded.
+     * @return self
      */
     public function withoutEncodeLabels(): self
     {
@@ -130,12 +128,11 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified first item CSS class.
      *
-     * @param string|null $value The CSS class that will be assigned to the first item in the main menu or each submenu.
-     * Defaults to null, meaning no such CSS class will be assigned.
+     * @param string $value The CSS class that will be assigned to the first item in the main menu or each submenu.
      *
      * @return self
      */
-    public function firstItemCssClass(?string $value): self
+    public function firstItemCssClass(string $value): self
     {
         $new = clone $this;
         $new->firstItemCssClass = $value;
@@ -235,12 +232,11 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified last item CSS class.
      *
-     * @param string|null $value The CSS class that will be assigned to the last item in the main menu or each submenu.
-     * Defaults to null, meaning no such CSS class will be assigned.
+     * @param string $value The CSS class that will be assigned to the last item in the main menu or each submenu.
      *
      * @return self
      */
-    public function lastItemCssClass(?string $value): self
+    public function lastItemCssClass(string $value): self
     {
         $new = clone $this;
         $new->lastItemCssClass = $value;
