@@ -46,8 +46,7 @@ use function strtr;
  *
  * ```php
  * // $this is the view object currently being used
- * echo Breadcrumbs::widget()
- *     ->items($this->hasCommonParameter('breadcrumbs') ? $this->getCommonParameter('breadcrumbs') : []);
+ * echo Breadcrumbs::widget()->items($this->getCommonParameter('breadcrumbs', []));
  * ```
  */
 final class Breadcrumbs extends Widget
