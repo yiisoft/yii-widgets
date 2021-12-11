@@ -160,9 +160,9 @@ final class Alert extends Widget
      *
      * @param string $value
      *
-     * @return static
      * @throws InvalidArgumentException
      *
+     * @return static
      */
     public function bodyTag(string $value): self
     {
@@ -260,6 +260,7 @@ final class Alert extends Widget
         $new->id = $value;
         return $new;
     }
+
     /**
      * The header content in the alert component. Alert widget will also be treated as the header content, and will be
      * rendered before this.
@@ -354,9 +355,9 @@ final class Alert extends Widget
      *
      * @param string $value
      *
-     * @return static
      * @throws InvalidArgumentException
      *
+     * @return static
      */
     public function headerTag(string $value): self
     {
