@@ -561,6 +561,7 @@ final class AlertTest extends TestCase
         $this->assertEqualsWithoutLE(
             $expected,
             Alert::widget()
+                ->attributes(['id' => 'w0-alert'])
                 ->body(
                     '<p class="font-bold">Our privacy policy has changed</p>' .
                     '<p class="text-sm">Make sure you know how these changes affect you.</p>'
@@ -574,7 +575,6 @@ final class AlertTest extends TestCase
                 ->iconClass('not-italic')
                 ->iconContainerClass('fill-current h-6 mr-4 py-1 text-green-500 w-6')
                 ->iconText('🛈')
-                ->id('w0-alert')
                 ->layoutBody('{icon}{body}{button}')
                 ->render(),
         );
