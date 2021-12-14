@@ -31,7 +31,7 @@ final class Alert extends Widget
     private bool $bodyContainer = false;
     private array $bodyContainerAttributes = [];
     private string $bodyContainerClass = '';
-    /** @var non-empty-string */
+    /** @psalm-var non-empty-string */
     private string $bodyTag = 'span';
     private string $class = '';
     private ?string $id = null;
@@ -41,7 +41,7 @@ final class Alert extends Widget
     private bool $headerContainer = false;
     private array $headerContainerAttributes = [];
     private string $headerContainerClass = '';
-    /** @var non-empty-string */
+    /** @psalm-var non-empty-string */
     private string $headerTag = 'span';
     private array $iconAttributes = [];
     private array $iconContainerAttributes = [];
