@@ -475,15 +475,15 @@ final class Alert extends Widget
 
     protected function run(): string
     {
-        $new = clone $this;
-        return $new->renderAlert($new);
+        return $this->renderAlert();
     }
 
     /**
      * Render Alert.
      */
-    private function renderAlert(self $new): string
+    private function renderAlert(): string
     {
+        $new = clone $this;
         $new->attributes['role'] = 'alert';
         $new->attributes['id'] ??= $new->id ?? Html::generateId('alert-');
 
