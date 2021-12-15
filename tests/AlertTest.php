@@ -93,7 +93,6 @@ final class AlertTest extends TestCase
                 ->buttonAttributes(['data-bs-dismiss' => 'alert', 'aria-label' => 'Close'])
                 ->buttonClass('btn-close')
                 ->buttonLabel()
-                ->buttonOnClick()
                 ->class('alert alert-success alert-dismissible fade show')
                 ->id('w0-alert')
                 ->header('Well done!')
@@ -125,7 +124,6 @@ final class AlertTest extends TestCase
                 ->buttonAttributes(['data-bs-dismiss' => 'alert', 'aria-label' => 'Close'])
                 ->buttonClass('btn-close')
                 ->buttonLabel()
-                ->buttonOnClick()
                 ->class('alert alert-warning alert-dismissible fade show')
                 ->id('w0-alert')
                 ->render(),
@@ -157,7 +155,6 @@ final class AlertTest extends TestCase
                 ->buttonAttributes(['data-bs-dismiss' => 'alert', 'aria-label' => 'Close'])
                 ->buttonClass('btn-close')
                 ->buttonLabel()
-                ->buttonOnClick()
                 ->class('alert alert-primary alert-dismissible fade show')
                 ->iconClass('bi bi-exclamation-triangle-fill flex-shrink-0 me-2')
                 ->id('w0-alert')
@@ -189,7 +186,6 @@ final class AlertTest extends TestCase
                 ->buttonAttributes(['data-bs-dismiss' => 'alert', 'aria-label' => 'Close'])
                 ->buttonClass('float-right')
                 ->buttonLabel()
-                ->buttonOnClick()
                 ->class('alert alert-primary')
                 ->id('w0-alert')
                 ->render(),

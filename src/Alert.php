@@ -22,31 +22,22 @@ final class Alert extends Widget
 {
     private array $attributes = [];
     private array $buttonAttributes = [];
-    private string $buttonClass = '';
     private string $buttonLabel = '&times;';
-    private string $buttonOnClick = '';
     private string $body = '';
     private array $bodyAttributes = [];
-    private string $bodyClass = '';
     private bool $bodyContainer = false;
     private array $bodyContainerAttributes = [];
-    private string $bodyContainerClass = '';
     /** @psalm-var non-empty-string */
     private string $bodyTag = 'span';
-    private string $class = '';
     private ?string $id = null;
     private string $header = '';
     private array $headerAttributes = [];
-    private string $headerClass = '';
     private bool $headerContainer = false;
     private array $headerContainerAttributes = [];
-    private string $headerContainerClass = '';
     /** @psalm-var non-empty-string */
     private string $headerTag = 'span';
     private array $iconAttributes = [];
     private array $iconContainerAttributes = [];
-    private string $iconContainerClass = '';
-    private string $iconClass = '';
     private string $iconText = '';
     private string $layoutHeader = '';
     private string $layoutBody = '{body}{button}';
@@ -107,7 +98,7 @@ final class Alert extends Widget
     public function bodyClass(string $value): self
     {
         $new = clone $this;
-        $new->bodyClass = $value;
+        Html::addCssClass($new->bodyAttributes, $value);
         return $new;
     }
 
@@ -151,7 +142,7 @@ final class Alert extends Widget
     public function bodyContainerClass(string $value): self
     {
         $new = clone $this;
-        $new->bodyContainerClass = $value;
+        Html::addCssClass($new->bodyContainerAttributes, $value);
         return $new;
     }
 
@@ -208,7 +199,7 @@ final class Alert extends Widget
     public function buttonClass(string $value): self
     {
         $new = clone $this;
-        $new->buttonClass = $value;
+        Html::addCssClass($new->buttonAttributes, $value);
         return $new;
     }
 
@@ -233,10 +224,10 @@ final class Alert extends Widget
      *
      * @return static
      */
-    public function buttonOnClick(string $value = ''): self
+    public function buttonOnClick(string $value): self
     {
         $new = clone $this;
-        $new->buttonOnClick = $value;
+        $new->buttonAttributes['onclick'] = $value;
         return $new;
     }
 
@@ -250,7 +241,7 @@ final class Alert extends Widget
     public function class(string $value): self
     {
         $new = clone $this;
-        $new->class = $value;
+        Html::addCssClass($new->attributes, $value);
         return $new;
     }
 
@@ -302,7 +293,7 @@ final class Alert extends Widget
     public function headerClass(string $value): self
     {
         $new = clone $this;
-        $new->headerClass = $value;
+        Html::addCssClass($new->headerAttributes, $value);
         return $new;
     }
 
@@ -330,7 +321,7 @@ final class Alert extends Widget
     public function headerContainerClass(string $value): self
     {
         $new = clone $this;
-        $new->headerContainerClass = $value;
+        Html::addCssClass($new->headerContainerAttributes, $value);
         return $new;
     }
 
@@ -396,7 +387,7 @@ final class Alert extends Widget
     public function iconClass(string $value): self
     {
         $new = clone $this;
-        $new->iconClass = $value;
+        Html::addCssClass($new->iconAttributes, $value);
         return $new;
     }
 
@@ -428,7 +419,7 @@ final class Alert extends Widget
     public function iconContainerClass(string $value): self
     {
         $new = clone $this;
-        $new->iconContainerClass = $value;
+        Html::addCssClass($new->iconContainerAttributes, $value);
         return $new;
     }
 
@@ -485,7 +476,6 @@ final class Alert extends Widget
     private function renderAlert(): string
     {
         $new = clone $this;
-        $new->attributes['role'] = 'alert';
         $new->attributes['id'] ??= $new->id ?? Html::generateId('alert-');
 
         if (!isset($new->parts['{button}'])) {
@@ -506,12 +496,9 @@ final class Alert extends Widget
 
         $contentAlert = $new->renderPanelHeader($new) . PHP_EOL . $new->renderPanelBody($new);
 
-        if ($new->class !== '') {
-            Html::addCssClass($new->attributes, $new->class);
-        }
-
         return $new->body !== ''
             ? Div::tag()
+                ->attribute('role', 'alert')
                 ->attributes($new->attributes)
                 ->content(PHP_EOL . trim($contentAlert) . PHP_EOL)
                 ->encode(false)
@@ -524,16 +511,6 @@ final class Alert extends Widget
      */
     private function renderCloseButton(self $new): void
     {
-        $new->parts['{button}'] = '';
-
-        if ($new->buttonOnClick !== '') {
-            $new->buttonAttributes['onclick'] = $new->buttonOnClick;
-        }
-
-        if ($new->buttonClass !== '') {
-            Html::addCssClass($new->buttonAttributes, $new->buttonClass);
-        }
-
         $new->parts['{button}'] = PHP_EOL .
             Button::tag()
                 ->attributes($new->buttonAttributes)
@@ -548,14 +525,6 @@ final class Alert extends Widget
      */
     private function renderIcon(self $new): void
     {
-        if ($new->iconClass !== '') {
-            Html::addCssClass($new->iconAttributes, $new->iconClass);
-        }
-
-        if ($new->iconContainerClass !== '') {
-            Html::addCssClass($new->iconContainerAttributes, $new->iconContainerClass);
-        }
-
         $icon = CustomTag::name('i')->attributes($new->iconAttributes)->content($new->iconText)->render();
 
         $new->parts['{icon}'] = PHP_EOL .
@@ -571,10 +540,6 @@ final class Alert extends Widget
      */
     private function renderBody(self $new): void
     {
-        if ($new->bodyClass !== '') {
-            Html::addCssClass($new->bodyAttributes, $new->bodyClass);
-        }
-
         $new->parts['{body}'] = CustomTag::name($new->bodyTag)
             ->attributes($new->bodyAttributes)
             ->content($new->body)
@@ -587,10 +552,6 @@ final class Alert extends Widget
      */
     private function renderHeader(self $new): void
     {
-        if ($new->headerClass !== '') {
-            Html::addCssClass($new->headerAttributes, $new->headerClass);
-        }
-
         $new->parts['{header}'] = CustomTag::name($new->headerTag)
             ->attributes($new->headerAttributes)
             ->content($new->header)
@@ -604,10 +565,6 @@ final class Alert extends Widget
     private function renderPanelHeader(self $new): string
     {
         $headerHtml = trim(strtr($new->layoutHeader, $new->parts));
-
-        if ($new->headerContainerClass !== '') {
-            Html::addCssClass($new->headerContainerAttributes, $new->headerContainerClass);
-        }
 
         if ($new->headerContainer && $headerHtml !== '') {
             $headerHtml = Div::tag()
@@ -626,10 +583,6 @@ final class Alert extends Widget
     private function renderPanelBody(self $new): string
     {
         $bodyHtml = trim(strtr($new->layoutBody, $new->parts));
-
-        if ($new->bodyContainerClass !== '') {
-            Html::addCssClass($new->bodyContainerAttributes, $new->bodyContainerClass);
-        }
 
         if ($new->bodyContainer) {
             $bodyHtml = Div::tag()
