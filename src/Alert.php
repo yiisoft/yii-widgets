@@ -29,7 +29,6 @@ final class Alert extends Widget
     private array $bodyContainerAttributes = [];
     /** @psalm-var non-empty-string */
     private string $bodyTag = 'span';
-    private ?string $id = null;
     private string $header = '';
     private array $headerAttributes = [];
     private bool $headerContainer = false;
@@ -248,7 +247,7 @@ final class Alert extends Widget
     public function id(?string $value): self
     {
         $new = clone $this;
-        $new->id = $value;
+        $new->attributes['id'] = $value;
         return $new;
     }
 
@@ -476,7 +475,12 @@ final class Alert extends Widget
     private function renderAlert(): string
     {
         $new = clone $this;
-        $new->attributes['id'] ??= $new->id ?? Html::generateId('alert-');
+
+        $div = Div::tag();
+
+        if (!array_key_exists('id', $this->attributes)) {
+            $div->id(Html::generateId('alert-'));
+        }
 
         if (!isset($new->parts['{button}'])) {
             $new->renderCloseButton($new);
@@ -497,7 +501,7 @@ final class Alert extends Widget
         $contentAlert = $new->renderPanelHeader($new) . PHP_EOL . $new->renderPanelBody($new);
 
         return $new->body !== ''
-            ? Div::tag()
+            ? $div
                 ->attribute('role', 'alert')
                 ->attributes($new->attributes)
                 ->content(PHP_EOL . trim($contentAlert) . PHP_EOL)
