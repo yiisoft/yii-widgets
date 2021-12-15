@@ -479,7 +479,7 @@ final class Alert extends Widget
         $div = Div::tag();
 
         if (!array_key_exists('id', $this->attributes)) {
-            $div->id(Html::generateId('alert-'));
+            $div = $div->id(Html::generateId('alert-'));
         }
 
         if (!isset($new->parts['{button}'])) {
