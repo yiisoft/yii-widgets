@@ -466,16 +466,7 @@ final class Alert extends Widget
 
     protected function run(): string
     {
-        return $this->renderAlert();
-    }
-
-    /**
-     * Render Alert.
-     */
-    private function renderAlert(): string
-    {
         $new = clone $this;
-
         $div = Div::tag();
 
         if (!array_key_exists('id', $this->attributes)) {
