@@ -25,10 +25,10 @@ final class Alert extends Widget
     private string $buttonLabel = '&times;';
     private string $body = '';
     private array $bodyAttributes = [];
-    private bool $bodyContainer = false;
-    private array $bodyContainerAttributes = [];
     /** @psalm-var non-empty-string */
-    private string $bodyTag = 'span';
+    private string|null $bodyContainer = 'span';
+    private bool $bodyContainerPanel = false;
+    private array $bodyContainerAttributes = [];
     private string $header = '';
     private array $headerAttributes = [];
     private bool $headerContainer = false;
@@ -43,9 +43,9 @@ final class Alert extends Widget
     private array $parts = [];
 
     /**
-     * The HTML attributes for widget. The following special options are recognized.
+     * The HTML attributes for the main widget tag.
      *
-     * @param array $value
+     * @param array $value Array of attribute name => attribute value pairs.
      *
      * @return static
      */
@@ -57,9 +57,9 @@ final class Alert extends Widget
     }
 
     /**
-     * The message content in the alert component.
+     * The message body.
      *
-     * @param string $value
+     * @param string $value The message body.
      *
      * @return static
      */
@@ -71,9 +71,9 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering message content in the alert component.
+     * HTML attributes for the message body tag.
      *
-     * @param array $value
+     * @param array $value Array of attribute name => attribute value pairs.
      *
      * @return static
      *
@@ -87,9 +87,9 @@ final class Alert extends Widget
     }
 
     /**
-     * The CSS class for the alert panel body.
+     * CSS class for the message body tag.
      *
-     * @param string $value
+     * @param string $value CSS class name.
      *
      * @return static
      */
@@ -101,21 +101,25 @@ final class Alert extends Widget
     }
 
     /**
-     * Allows you to add a div tag to the alert panel body.
+     * Allows you to add an extra wrapper for the message body.
      *
-     * @param bool $value
+     * @param string|null $tag
      *
      * @return static
      */
-    public function bodyContainer(bool $value = true): self
+    public function bodyContainer(?string $tag = null): self
     {
+        if ($tag === '') {
+            throw new InvalidArgumentException('Body tag must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
-        $new->bodyContainer = $value;
+        $new->bodyContainer = $tag;
         return $new;
     }
 
     /**
-     * The attributes for rendering the panel alert body.
+     * The attributes for rendering extra message wrapper.
      *
      * @param array $value
      *
@@ -131,7 +135,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The CSS class for the alert panel body.
+     * The CSS class for extra message wrapper.
      *
      * @param string $value
      *
@@ -145,32 +149,25 @@ final class Alert extends Widget
     }
 
     /**
-     * Set tag name for the alert panel body.
+     * Allows you to add an extra wrapper for the panel body.
      *
-     * @param string $value
-     *
-     * @throws InvalidArgumentException
+     * @param bool $value
      *
      * @return static
      */
-    public function bodyTag(string $value): self
+    public function bodyContainerPanel(bool $value): self
     {
-        if (empty($value)) {
-            throw new InvalidArgumentException('Body tag must be a string and cannot be empty.');
-        }
-
         $new = clone $this;
-        $new->bodyTag = $value;
+        $new->bodyContainerPanel = $value;
         return $new;
     }
 
     /**
-     * The attributes for rendering the close button tag.
+     * The attributes for rendering the button tag.
      *
-     * The close button is displayed in the header of the modal window. Clicking on the button will hide the modal
-     * window.
+     * The button is displayed in the header of the modal window. Clicking on the button will hide the modal.
      *
-     * If {@see closeButtonEnabled} is false, no close button will be rendered.
+     * If {@see buttonEnabled} is `false`, no button will be rendered.
      *
      * The rest of the options will be rendered as the HTML attributes of the button tag.
      *
@@ -188,7 +185,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The CSS class for the close button.
+     * The CSS class for the button.
      *
      * @param string $value
      *
@@ -202,7 +199,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The label for the close button.
+     * The label for the button.
      *
      * @param string $value
      *
@@ -216,7 +213,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The onclick JavaScript for the close button.
+     * The onclick JavaScript for the button.
      *
      * @param string $value
      *
@@ -230,7 +227,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Set attribute class for widget.
+     * Set attribute class for main widget tag.
      *
      * @param string $value
      *
@@ -251,7 +248,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The header content in the alert component.
+     * The header content.
      *
      * @param string $value
      *
@@ -265,7 +262,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering the header content in the alert component.
+     * The attributes for rendering the header content.
      *
      * @param array $value
      *
@@ -281,7 +278,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The CSS class for the alert panel header.
+     * The CSS class for the header.
      *
      * @param string $value
      *
@@ -295,7 +292,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Allows you to add a div tag to the alert panel header.
+     * Allows you to add a div tag to the header extra wrapper.
      *
      * @param bool $value
      *
@@ -309,7 +306,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The CSS class for the alert panel header.
+     * The CSS class for the header extra wrapper.
      *
      * @param string $value
      *
@@ -323,7 +320,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering the panel alert header.
+     * The attributes for rendering the header.
      *
      * @param array $value
      *
@@ -339,7 +336,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Set tag name for the alert panel header.
+     * Set tag name for the header.
      *
      * @param string $value
      *
@@ -359,7 +356,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering the `<i>` tag for icons alerts.
+     * The attributes for rendering the `<i>` tag for the icon.
      *
      * @param array $value
      *
@@ -375,7 +372,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Set icon css class in the alert component.
+     * Set icon CSS class.
      *
      * @param string $value
      *
@@ -389,9 +386,9 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering the container `<i>` tag.
+     * The attributes for rendering icon container.
      *
-     * The rest of the options will be rendered as the HTML attributes of the `<i>` tag.
+     * The rest of the options will be rendered as the HTML attributes of the icon container.
      *
      * @param array $value
      *
@@ -407,7 +404,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The CSS class for the container `<i>` tag.
+     * The CSS class for the icon container.
      *
      * @param string $value
      *
@@ -421,7 +418,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Set icon text in the alert component.
+     * Set icon text.
      *
      * @param string $value
      *
@@ -435,7 +432,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Set layout the alert panel body.
+     * Set layout body.
      *
      * @param string $value
      *
@@ -449,7 +446,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Set layout the alert panel header.
+     * Set layout header.
      *
      * @param string $value
      *
@@ -472,7 +469,7 @@ final class Alert extends Widget
         }
 
         if (!isset($new->parts['{button}'])) {
-            $new->renderCloseButton($new);
+            $new->renderButton($new);
         }
 
         if (!isset($new->parts['{icon}'])) {
@@ -487,7 +484,7 @@ final class Alert extends Widget
             $new->renderHeader($new);
         }
 
-        $contentAlert = $new->renderPanelHeader($new) . PHP_EOL . $new->renderPanelBody($new);
+        $contentAlert = $new->renderHeaderContainer($new) . PHP_EOL . $new->renderPanelBody($new);
 
         return $new->body !== ''
             ? $div
@@ -502,7 +499,7 @@ final class Alert extends Widget
     /**
      * Renders close button.
      */
-    private function renderCloseButton(self $new): void
+    private function renderButton(self $new): void
     {
         $new->parts['{button}'] = PHP_EOL .
             Button::tag()
@@ -529,19 +526,23 @@ final class Alert extends Widget
     }
 
     /**
-     * Render the alert message.
+     * Render the alert message body.
      */
     private function renderBody(self $new): void
     {
-        $new->parts['{body}'] = CustomTag::name($new->bodyTag)
-            ->attributes($new->bodyAttributes)
-            ->content($new->body)
-            ->encode(false)
-            ->render();
+        if ($new->bodyContainer !== null) {
+            $new->parts['{body}'] = CustomTag::name($new->bodyContainer)
+                ->attributes($new->bodyAttributes)
+                ->content($new->body)
+                ->encode(false)
+                ->render();
+        } else {
+            $new->parts['{body}'] = $new->body;
+        }
     }
 
     /**
-     * Render the alert message header.
+     * Render the header.
      */
     private function renderHeader(self $new): void
     {
@@ -553,9 +554,9 @@ final class Alert extends Widget
     }
 
     /**
-     * Render the alert panel header.
+     * Render the header container.
      */
-    private function renderPanelHeader(self $new): string
+    private function renderHeaderContainer(self $new): string
     {
         $headerHtml = trim(strtr($new->layoutHeader, $new->parts));
 
@@ -571,13 +572,13 @@ final class Alert extends Widget
     }
 
     /**
-     * Render the alert panel body.
+     * Render the panel body.
      */
     private function renderPanelBody(self $new): string
     {
         $bodyHtml = trim(strtr($new->layoutBody, $new->parts));
 
-        if ($new->bodyContainer) {
+        if ($new->bodyContainerPanel) {
             $bodyHtml = Div::tag()
                 ->attributes($new->bodyContainerAttributes)
                 ->content(PHP_EOL . $bodyHtml . PHP_EOL)
