@@ -26,8 +26,8 @@ final class Alert extends Widget
     private string $body = '';
     private array $bodyAttributes = [];
     /** @psalm-var non-empty-string */
-    private ?string $bodyContainer = 'span';
-    private bool $bodyContainerPanel = false;
+    private ?string $bodyTag = 'span';
+    private bool $bodyContainer = false;
     private array $bodyContainerAttributes = [];
     private string $header = '';
     private array $headerAttributes = [];
@@ -107,14 +107,14 @@ final class Alert extends Widget
      *
      * @return static
      */
-    public function bodyContainer(?string $tag = null): self
+    public function bodyTag(?string $tag = null): self
     {
         if ($tag === '') {
             throw new InvalidArgumentException('Body tag must be a string and cannot be empty.');
         }
 
         $new = clone $this;
-        $new->bodyContainer = $tag;
+        $new->bodyTag = $tag;
         return $new;
     }
 
@@ -155,10 +155,10 @@ final class Alert extends Widget
      *
      * @return static
      */
-    public function bodyContainerPanel(bool $value): self
+    public function bodyContainer(bool $value): self
     {
         $new = clone $this;
-        $new->bodyContainerPanel = $value;
+        $new->bodyContainer = $value;
         return $new;
     }
 
@@ -484,7 +484,7 @@ final class Alert extends Widget
             $new->renderHeader($new);
         }
 
-        $contentAlert = $new->renderHeaderContainer($new) . PHP_EOL . $new->renderPanelBody($new);
+        $contentAlert = $new->renderHeaderContainer($new) . PHP_EOL . $new->renderBodyContainer($new);
 
         return $new->body !== ''
             ? $div
@@ -530,8 +530,8 @@ final class Alert extends Widget
      */
     private function renderBody(self $new): void
     {
-        if ($new->bodyContainer !== null) {
-            $new->parts['{body}'] = CustomTag::name($new->bodyContainer)
+        if ($new->bodyTag !== null) {
+            $new->parts['{body}'] = CustomTag::name($new->bodyTag)
                 ->attributes($new->bodyAttributes)
                 ->content($new->body)
                 ->encode(false)
@@ -574,11 +574,11 @@ final class Alert extends Widget
     /**
      * Render the panel body.
      */
-    private function renderPanelBody(self $new): string
+    private function renderBodyContainer(self $new): string
     {
         $bodyHtml = trim(strtr($new->layoutBody, $new->parts));
 
-        if ($new->bodyContainerPanel) {
+        if ($new->bodyContainer) {
             $bodyHtml = Div::tag()
                 ->attributes($new->bodyContainerAttributes)
                 ->content(PHP_EOL . $bodyHtml . PHP_EOL)

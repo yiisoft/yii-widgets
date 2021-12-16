@@ -48,8 +48,8 @@ final class AlertTest extends TestCase
             $expected,
             Alert::widget()
                 ->body('This is a test.')
+                ->bodyContainer(true)
                 ->bodyContainerAttributes(['class' => 'test-class'])
-                ->bodyContainerPanel(true)
                 ->id('w0-alert')
                 ->render(),
         );
@@ -62,7 +62,7 @@ final class AlertTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Body tag must be a string and cannot be empty.');
-        Alert::widget()->bodyContainer('');
+        Alert::widget()->bodyTag('');
     }
 
     /**
@@ -78,7 +78,7 @@ final class AlertTest extends TestCase
         HTML;
         $this->assertEqualsWithoutLE(
             $expected,
-            Alert::widget()->body('This is a test.')->bodyContainer(null)->id('w0-alert')->render(),
+            Alert::widget()->body('This is a test.')->bodyTag(null)->id('w0-alert')->render(),
         );
     }
 
@@ -168,8 +168,8 @@ final class AlertTest extends TestCase
                 ->body('An example alert with an icon')
                 ->bodyContainerClass('align-items-center d-flex')
                 ->buttonAttributes(['data-bs-dismiss' => 'alert', 'aria-label' => 'Close'])
+                ->bodyContainer(true)
                 ->buttonClass('btn-close')
-                ->bodyContainerPanel(true)
                 ->buttonLabel()
                 ->class('alert alert-primary alert-dismissible fade show')
                 ->iconClass('bi bi-exclamation-triangle-fill flex-shrink-0 me-2')
@@ -347,8 +347,8 @@ final class AlertTest extends TestCase
             $expected,
             Alert::widget()
                 ->body('An example alert with an icon.')
+                ->bodyContainer(true)
                 ->bodyContainerClass('is-flex is-align-items-center')
-                ->bodyContainerPanel(true)
                 ->buttonClass('delete')
                 ->class('notification is-danger')
                 ->iconClass('fa-2x fas fa-exclamation-circle mr-4')
@@ -445,8 +445,8 @@ final class AlertTest extends TestCase
             Alert::widget()
                 ->body('Get the coolest t-shirts from our brand new store')
                 ->bodyClass('flex-auto font-semibold mr-2 text-left')
+                ->bodyContainer(true)
                 ->bodyContainerClass('bg-gray-800 p-2 flex items-center leading-none lg:inline-flex lg:rounded-full')
-                ->bodyContainerPanel(true)
                 ->buttonClass('bottom-0 px-4 py-3 right-0 top-0')
                 ->buttonOnClick('closeAlert()')
                 ->class('bg-gray-900 lg:px-4 py-4 text-center text-white')
@@ -479,7 +479,7 @@ final class AlertTest extends TestCase
             Alert::widget()
                 ->body('Something happened that you should know about.')
                 ->bodyClass('align-middle flex-grow inline-block mr-8')
-                ->bodyContainer('p')
+                ->bodyTag('p')
                 ->buttonClass('float-right px-4 py-3')
                 ->buttonOnClick('closeAlert()')
                 ->class('bg-blue-500 flex font-bold items-center px-4 py-3 text-sm text-white')
@@ -540,8 +540,8 @@ final class AlertTest extends TestCase
             Alert::widget()
                 ->body('Something not ideal might be happening.')
                 ->bodyClass('align-middle inline-block mr-8 px-4 py-3')
+                ->bodyContainer(true)
                 ->bodyContainerClass('bg-red-100 border border-red-400 border-t-0 rounded-b text-red-700')
-                ->bodyContainerPanel(true)
                 ->buttonClass('float-right px-4 py-3')
                 ->buttonOnClick('closeAlert()')
                 ->header('Danger')
@@ -579,8 +579,8 @@ final class AlertTest extends TestCase
                     '<p class="text-sm">Make sure you know how these changes affect you.</p>'
                 )
                 ->bodyClass('align-middle inline-block flex-grow mr-8')
+                ->bodyContainer(true)
                 ->bodyContainerClass('flex')
-                ->bodyContainerPanel(true)
                 ->buttonClass('float-right px-4 py-3')
                 ->buttonOnClick('closeAlert()')
                 ->class('bg-green-100 border-t-4 border-green-500 px-4 py-3 rounded-b shadow-md text-green-900')
