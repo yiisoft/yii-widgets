@@ -57,8 +57,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The message content in the alert component. Alert widget will also be treated as the message content, and will be
-     * rendered before this.
+     * The message content in the alert component.
      *
      * @param string $value
      *
@@ -252,8 +251,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The header content in the alert component. Alert widget will also be treated as the header content, and will be
-     * rendered before this.
+     * The header content in the alert component.
      *
      * @param string $value
      *
