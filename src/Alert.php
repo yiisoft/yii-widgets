@@ -26,7 +26,7 @@ final class Alert extends Widget
     private string $body = '';
     private array $bodyAttributes = [];
     /** @psalm-var non-empty-string */
-    private string|null $bodyContainer = 'span';
+    private ?string $bodyContainer = 'span';
     private bool $bodyContainerPanel = false;
     private array $bodyContainerAttributes = [];
     private string $header = '';
