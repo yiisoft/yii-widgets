@@ -1,8 +1,8 @@
 # Alert widget
 
-Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages.
+The widget provides contextual feedback messages for typical user actions with the handful of available and flexible alert messages.
 
-## Docs frameworks CSS
+## CSS frameworks documentation
 
 - [Bootstrap5](https://getbootstrap.com/docs/5.0/components/alerts/)
 - [Bulma](https://bulma.io/documentation/elements/notification/)
@@ -91,7 +91,7 @@ The code above generates the following HTML:
 </div>
 ```
 
-For other examples of different Alert designs you can see the different examples in the [Alert Test](https://github.com/yiisoft/yii-widgets/blob/master/tests/AlertTest.php)
+For other examples of different Alert designs you can see [AlertTest](https://github.com/yiisoft/yii-widgets/blob/master/tests/AlertTest.php)
 
 ## Setters
 
