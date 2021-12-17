@@ -32,6 +32,7 @@ All widgets extend the abstract `Yiisoft\Widget\Widget` class from the
 
 For a description of how to use it, see the documentation for each widget:
 
+- [Alert](docs/alert.md)
 - [Block](docs/block.md)
 - [Breadcrumbs](docs/breadcrumbs.md)
 - [ContentDecorator](docs/content-decorator.md)
