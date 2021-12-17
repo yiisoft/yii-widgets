@@ -36,11 +36,11 @@ echo Alert::widget()
 The code above generates the following HTML:
 ```html
 <div id="w0-alert" class="alert alert-primary alert-dismissible fade show" role="alert">
-<div class="align-items-center d-flex">
-<div><i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i></div>
-<span>An example alert with an icon</span>
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+    <div class="align-items-center d-flex">
+        <div><i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i></div>
+        <span>An example alert with an icon</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 </div>
 ```
 
@@ -62,8 +62,8 @@ The code above generates the following HTML:
 
 ```html
 <div id="w0-alert" class="notification is-danger" role="alert">
-<span>An example alert.</span>
-<button type="button" class="delete">&times;</button>
+    <span>An example alert.</span>
+    <button type="button" class="delete">&times;</button>
 </div>
 ```
 
@@ -86,8 +86,8 @@ The code above generates the following HTML:
 
 ```html
 <div id="w0-alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-<span class="align-middle inline-block mr-8"><b>Holy smokes!</b> Something seriously bad happened.</span>
-<button type="button" class="absolute bottom-0 px-4 py-3 right-0 top-0" onclick="closeAlert()">&times;</button>
+    <span class="align-middle inline-block mr-8"><b>Holy smokes!</b> Something seriously bad happened.</span>
+    <button type="button" class="absolute bottom-0 px-4 py-3 right-0 top-0" onclick="closeAlert()">&times;</button>
 </div>
 ```
 
