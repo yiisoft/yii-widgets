@@ -10,7 +10,7 @@ The widget provides contextual feedback messages for typical user actions with t
 
 ## Assets
 
-To use this widget you must register the assets, you can see the documentation at [yiisoft/assets](https://github.com/yiisoft/assets#general-usage) our asset registration package, or just add an html link for asset registration, the package does not provide any `JS` code to use the close button of bulma and talwind. 
+This widget is meant to be used with your CSS framework of choice. The framework could be added either by [registering its assets](https://github.com/yiisoft/assets#general-usage), or by adding it directly via HTML `link` and `script` tags. The package does not provide any JavaScript code for the close button as well.
 
 ## Usage
 
