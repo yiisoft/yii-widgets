@@ -20,7 +20,11 @@ final class FragmentCacheTest extends TestCase
 {
     public function testCacheFragment(): void
     {
-        FragmentCache::widget()->id('test')->ttl(30)->dependency(new TagDependency('test'))->begin();
+        FragmentCache::widget()
+            ->id('test')
+            ->ttl(30)
+            ->dependency(new TagDependency('test'))
+            ->begin();
 
         echo 'cached fragment';
 
@@ -31,7 +35,10 @@ final class FragmentCacheTest extends TestCase
 
     public function testCacheFragmentWithEmptyContent(): void
     {
-        FragmentCache::widget()->id('test')->ttl(30)->begin();
+        FragmentCache::widget()
+            ->id('test')
+            ->ttl(30)
+            ->begin();
         $content = FragmentCache::end();
 
         $this->assertSame('', $content);
@@ -58,7 +65,10 @@ final class FragmentCacheTest extends TestCase
                 ['counter' => $counter],
             );
 
-            FragmentCache::widget()->id('test')->dynamicContents($dynamicContent)->begin();
+            FragmentCache::widget()
+                ->id('test')
+                ->dynamicContents($dynamicContent)
+                ->begin();
 
             echo 'single dynamic cached fragment: ';
             echo $dynamicContent->placeholder();
@@ -127,7 +137,10 @@ final class FragmentCacheTest extends TestCase
                 ['counter' => $counter],
             );
 
-            FragmentCache::widget()->id('test')->dynamicContents($dynamicContent1)->begin();
+            FragmentCache::widget()
+                ->id('test')
+                ->dynamicContents($dynamicContent1)
+                ->begin();
 
             echo 'nested dynamic cached fragments: ';
             echo $dynamicContent1->placeholder();
@@ -162,7 +175,10 @@ final class FragmentCacheTest extends TestCase
     {
         $this->setOutputCallback(static fn () => null);
 
-        FragmentCache::widget()->id($id = 'test')->variations($variation = 'ru')->begin();
+        FragmentCache::widget()
+            ->id($id = 'test')
+            ->variations($variation = 'ru')
+            ->begin();
 
         echo 'cached fragment';
 
@@ -172,7 +188,10 @@ final class FragmentCacheTest extends TestCase
 
         $this->assertSame('cached fragment', $content1);
 
-        FragmentCache::widget()->id($id = 'test')->variations($variation = 'ru')->begin();
+        FragmentCache::widget()
+            ->id($id = 'test')
+            ->variations($variation = 'ru')
+            ->begin();
 
         $this->assertTrue($this->hasCache($id, $variation), 'Cached fragment should be exist');
 
@@ -180,7 +199,10 @@ final class FragmentCacheTest extends TestCase
 
         $this->assertSame($content1, $content2);
 
-        FragmentCache::widget()->id($id = 'test')->variations($variation = 'en')->begin();
+        FragmentCache::widget()
+            ->id($id = 'test')
+            ->variations($variation = 'en')
+            ->begin();
 
         echo 'cached fragment';
 
@@ -191,7 +213,9 @@ final class FragmentCacheTest extends TestCase
         $this->assertTrue($this->hasCache($id, $variation), 'Cached fragment should not be exist');
 
         /** without variations */
-        FragmentCache::widget()->id($id = 'test')->begin();
+        FragmentCache::widget()
+            ->id($id = 'test')
+            ->begin();
 
         echo 'cached fragment';
 
@@ -219,6 +243,8 @@ final class FragmentCacheTest extends TestCase
             [CachedContent::class, $id],
             (array) ($variation ?? []),
         ));
-        return $this->cache->psr()->has($key);
+        return $this->cache
+            ->psr()
+            ->has($key);
     }
 }

@@ -515,7 +515,10 @@ final class Alert extends Widget
      */
     private function renderIcon(self $new): void
     {
-        $icon = CustomTag::name('i')->attributes($new->iconAttributes)->content($new->iconText)->render();
+        $icon = CustomTag::name('i')
+            ->attributes($new->iconAttributes)
+            ->content($new->iconText)
+            ->render();
 
         $new->parts['{icon}'] = PHP_EOL .
             Div::tag()
