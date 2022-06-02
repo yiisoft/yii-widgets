@@ -241,8 +241,10 @@ final class Breadcrumbs extends Widget
 
         return empty($this->tag)
             ? $body
-            : Html::tag($this->tag, $body, $this->options)->encode(false)->render()
-        ;
+            : Html::tag($this->tag, $body, $this->options)
+                ->encode(false)
+                ->render()
+            ;
     }
 
     /**

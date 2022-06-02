@@ -78,7 +78,11 @@ final class AlertTest extends TestCase
         HTML;
         $this->assertEqualsWithoutLE(
             $expected,
-            Alert::widget()->body('This is a test.')->bodyTag(null)->id('w0-alert')->render(),
+            Alert::widget()
+                ->body('This is a test.')
+                ->bodyTag(null)
+                ->id('w0-alert')
+                ->render(),
         );
     }
 
@@ -600,6 +604,8 @@ final class AlertTest extends TestCase
         <button type="button">&times;</button>
         </div>
         HTML;
-        $this->assertEqualsWithoutLE($expected, Alert::widget()->body('This is a test.')->render());
+        $this->assertEqualsWithoutLE($expected, Alert::widget()
+            ->body('This is a test.')
+            ->render());
     }
 }

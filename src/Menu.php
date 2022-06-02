@@ -300,8 +300,10 @@ final class Menu extends Widget
 
         return empty($tag)
             ? $this->renderItems($items)
-            : Html::tag($tag, $this->renderItems($items), $options)->encode(false)->render()
-        ;
+            : Html::tag($tag, $this->renderItems($items), $options)
+                ->encode(false)
+                ->render()
+            ;
     }
 
     /**
@@ -453,6 +455,6 @@ final class Menu extends Widget
             && $this->currentPath !== '/'
             && isset($item['url'])
             && $item['url'] === $this->currentPath
-        ;
+            ;
     }
 }

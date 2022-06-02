@@ -23,7 +23,10 @@ $dynamicContent = new DynamicContent(
 );
 
 // We use the widget as a wrapper over the content that should be cached:
-FragmentCache::widget()->id('cache-id')->dynamicContents($dynamicContent)->begin();
+FragmentCache::widget()
+    ->id('cache-id')
+    ->dynamicContents($dynamicContent)
+    ->begin();
     echo "Content to be cached ...\n";
     echo $dynamicContent->placeholder();
     echo "\nContent to be cached ...\n";

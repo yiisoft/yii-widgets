@@ -13,7 +13,9 @@ The general idea is that you're defining block default in a view or layout:
 ```php
 use Yiisoft\Yii\Widgets\Block;
 
-Block::widget()->id('my-block')->begin();
+Block::widget()
+    ->id('my-block')
+    ->begin();
     echo 'Nothing.';
 Block::end();
 ```
@@ -23,7 +25,9 @@ And then redefining the default value in the views:
 ```php
 use Yiisoft\Yii\Widgets\Block;
 
-Block::widget()->id('my-block')->begin();
+Block::widget()
+    ->id('my-block')
+    ->begin();
     echo 'Umm... hello?';
 Block::end();
 ```

@@ -19,7 +19,9 @@ use function ob_start;
  * The general idea is that you're defining block default in a view or layout:
  *
  * ```php
- * <?php Block::widget()->id('my-block')->begin() ?>
+ * <?php Block::widget()
+ *     ->id('my-block')
+ *     ->begin() ?>
  *     Nothing.
  * <?php Block::end() ?>
  * ```
@@ -27,7 +29,9 @@ use function ob_start;
  * And then overriding default in views:
  *
  * ```php
- * <?php Block::widget()->id('my-block')->begin() ?>
+ * <?php Block::widget()
+ *     ->id('my-block')
+ *     ->begin() ?>
  *     Umm... hello?
  * <?php Block::end() ?>
  * ```

@@ -29,7 +29,11 @@ use function ob_start;
  *     return strtoupper("{$parameters['a']} - {$parameters['b']}");
  * }, ['a' => 'string-a', 'b' => 'string-b']);
  *
- * FragmentCache::widget()->id('cache-id')->ttl(30)->dynamicContents($dynamicContent)->begin();
+ * FragmentCache::widget()
+ *     ->id('cache-id')
+ *     ->ttl(30)
+ *     ->dynamicContents($dynamicContent)
+ *     ->begin();
  *     echo 'Content to be cached ...';
  *     echo $dynamicContent->placeholder();
  *     echo 'Content to be cached ...';

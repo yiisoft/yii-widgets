@@ -482,28 +482,31 @@ HTML;
 
     public function testEmptyItems(): void
     {
-        $this->assertEqualsWithoutLE('', Menu::widget()->items([])->render());
+        $this->assertEqualsWithoutLE('', Menu::widget()
+            ->items([])
+            ->render());
     }
 
     public function testShowEmptyChildItems(): void
     {
-        $this->assertEqualsWithoutLE('', Menu::widget()->items([
-            [
-                'label' => 'item1',
-                'options' => [
-                    'class' => 'some-class',
+        $this->assertEqualsWithoutLE('', Menu::widget()
+            ->items([
+                [
+                    'label' => 'item1',
+                    'options' => [
+                        'class' => 'some-class',
+                    ],
+                    'items' => [],
                 ],
-                'items' => [],
-            ],
-            [
-                'label' => 'item2',
-                'options' => [
-                    'class' => 'some-class',
+                [
+                    'label' => 'item2',
+                    'options' => [
+                        'class' => 'some-class',
+                    ],
+                    'items' => [],
                 ],
-                'items' => [],
-            ],
-        ])
-        ->render());
+            ])
+            ->render());
     }
 
     public function testImmutability(): void
