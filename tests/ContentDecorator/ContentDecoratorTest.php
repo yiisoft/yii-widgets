@@ -23,7 +23,7 @@ final class ContentDecoratorTest extends TestCase
     /**
      * {@see https://github.com/yiisoft/yii2/issues/15536}
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testContentDecorator(): void
     {
@@ -33,7 +33,7 @@ final class ContentDecoratorTest extends TestCase
         echo "</div>\n";
         echo "<div class='right-column'>\n";
         echo "<p>This is a right bar!</p>\n";
-        echo "</div>";
+        echo '</div>';
         $html = ContentDecorator::end();
 
         $this->assertStringContainsString('<title>Test</title>', $html);

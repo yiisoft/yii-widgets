@@ -21,7 +21,7 @@ final class MenuTest extends TestCase
     use TestTrait;
 
     private array $items = [
-        ['label' => 'item', 'link' => '/path']
+        ['label' => 'item', 'link' => '/path'],
     ];
     private array $itemsWithOptions = [
         ['label' => 'Active', 'link' => '/active'],
@@ -31,7 +31,7 @@ final class MenuTest extends TestCase
     ];
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testAttributes(): void
     {
@@ -46,7 +46,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testActiveItemsWithFalse(): void
     {
@@ -61,7 +61,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testAfter(): void
     {
@@ -105,7 +105,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testBefore(): void
     {
@@ -149,7 +149,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testClass(): void
     {
@@ -164,7 +164,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testContainerWithFalse(): void
     {
@@ -180,7 +180,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testDisabledClass(): void
     {
@@ -198,7 +198,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testDropdown(): void
     {
@@ -245,7 +245,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testDropdownContainerClass(): void
     {
@@ -293,7 +293,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testDropdownDefinitions(): void
     {
@@ -358,7 +358,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testFirstItemCssClass(): void
     {
@@ -376,7 +376,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testIcon(): void
     {
@@ -403,7 +403,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testItemClassAsArray(): void
     {
@@ -450,7 +450,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testItemsContainerAttributes(): void
     {
@@ -468,7 +468,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testItemsContainerClass(): void
     {
@@ -486,7 +486,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testItemsContainerWithFalse(): void
     {
@@ -504,7 +504,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testLastItemCssClass(): void
     {
@@ -522,7 +522,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testLinkClass(): void
     {
@@ -540,7 +540,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testRender(): void
     {
@@ -548,7 +548,7 @@ final class MenuTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testTemplate(): void
     {

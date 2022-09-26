@@ -223,7 +223,7 @@ final class Breadcrumbs extends Widget
             }
         }
 
-        $body =  implode('', $items);
+        $body = implode('', $items);
 
         return empty($this->tag)
             ? $body

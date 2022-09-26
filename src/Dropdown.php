@@ -583,7 +583,7 @@ final class Dropdown extends Widget
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     private function renderDropdown(array $items, array $itemsAttributes = []): string
     {
