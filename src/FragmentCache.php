@@ -42,9 +42,8 @@ use function ob_start;
  */
 final class FragmentCache extends Widget
 {
-    private ?string $id = null;
-    private CacheInterface $cache;
-    private ?Dependency $dependency = null;
+    private string|null $id = null;
+    private Dependency|null $dependency = null;
     private int $ttl = 60;
     private array $variations = [];
 
@@ -53,9 +52,8 @@ final class FragmentCache extends Widget
      */
     private array $dynamicContents = [];
 
-    public function __construct(CacheInterface $cache)
+    public function __construct(private CacheInterface $cache)
     {
-        $this->cache = $cache;
     }
 
     /**

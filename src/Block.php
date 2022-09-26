@@ -44,13 +44,11 @@ use function ob_start;
  */
 final class Block extends Widget
 {
-    private ?string $id = null;
+    private string|null $id = null;
     private bool $renderInPlace = false;
-    private WebView $webView;
 
-    public function __construct(WebView $webView)
+    public function __construct(private WebView $webView)
     {
-        $this->webView = $webView;
     }
 
     /**
@@ -64,6 +62,7 @@ final class Block extends Widget
     {
         $new = clone $this;
         $new->id = $value;
+
         return $new;
     }
 
@@ -78,18 +77,19 @@ final class Block extends Widget
     {
         $new = clone $this;
         $new->renderInPlace = true;
+
         return $new;
     }
 
     /**
      * Starts recording a block.
      */
-    public function begin(): ?string
+    public function begin(): string|null
     {
         parent::begin();
+
         ob_start();
-        /** @psalm-suppress InvalidArgument */
-        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+
         return null;
     }
 

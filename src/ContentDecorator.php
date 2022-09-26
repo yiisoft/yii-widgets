@@ -32,15 +32,11 @@ use function ob_start;
  */
 final class ContentDecorator extends Widget
 {
-    private Aliases $aliases;
     private array $parameters = [];
     private string $viewFile = '';
-    private WebView $webView;
 
-    public function __construct(Aliases $aliases, WebView $webView)
+    public function __construct(private Aliases $aliases, private WebView $webView)
     {
-        $this->aliases = $aliases;
-        $this->webView = $webView;
     }
 
     /**
@@ -54,6 +50,7 @@ final class ContentDecorator extends Widget
     {
         $new = clone $this;
         $new->parameters = $value;
+
         return $new;
     }
 
@@ -69,6 +66,7 @@ final class ContentDecorator extends Widget
     {
         $new = clone $this;
         $new->viewFile = $this->aliases->get($value);
+
         return $new;
     }
 
@@ -78,9 +76,9 @@ final class ContentDecorator extends Widget
     public function begin(): ?string
     {
         parent::begin();
+
         ob_start();
-        /** @psalm-suppress InvalidArgument */
-        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+
         return null;
     }
 
