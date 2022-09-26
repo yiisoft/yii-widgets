@@ -625,7 +625,7 @@ final class Menu extends Widget
                     $active = $child['active'] ?? false;
 
                     if ($active === false) {
-                        $items[$i]['active'] = self::isItemActive($link, $currentPath, $activateItems);
+                        $items[$i]['active'] = $this->isItemActive($link, $currentPath, $activateItems);
                     }
 
                     /** @var bool */
