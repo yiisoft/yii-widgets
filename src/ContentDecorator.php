@@ -11,7 +11,6 @@ use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
 
 use function ob_get_clean;
-use function ob_implicit_flush;
 use function ob_start;
 
 /**

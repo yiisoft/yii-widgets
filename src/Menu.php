@@ -673,7 +673,7 @@ final class Menu extends Widget
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     private function renderDropdown(array $items): string
     {

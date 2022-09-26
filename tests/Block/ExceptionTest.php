@@ -22,7 +22,7 @@ final class ExceptionTest extends TestCase
     use TestTrait;
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testCacheFragmentThrowExceptionIfNotSetId(): void
     {

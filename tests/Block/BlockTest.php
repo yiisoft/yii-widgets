@@ -20,7 +20,7 @@ final class BlockTest extends TestCase
     use TestTrait;
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testBlock(): void
     {
@@ -32,7 +32,7 @@ final class BlockTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testBlockRenderInPlaceTrue(): void
     {

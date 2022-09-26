@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests\Breadcrumbs;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
@@ -22,7 +21,7 @@ final class BreadcrumbsTest extends TestCase
     use TestTrait;
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testAttributes(): void
     {
@@ -42,7 +41,7 @@ final class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testEmptyLinks(): void
     {
@@ -50,7 +49,7 @@ final class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testHomeItem(): void
     {
@@ -70,7 +69,7 @@ final class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testItems(): void
     {
@@ -89,7 +88,7 @@ final class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testItemsWithTemplate(): void
     {
@@ -113,7 +112,7 @@ final class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testRenderItemLabelOnlyEncodeLabelFalse(): void
     {
@@ -129,14 +128,14 @@ final class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testRenderItemLabelOnlyEncodeLabelTrue(): void
     {
         $this->assertSame(
-            "<li>My-&lt;br&gt;Test-Label</li>",
+            '<li>My-&lt;br&gt;Test-Label</li>',
             Breadcrumbs::widget()
-                ->activeItemTemplate("<li>{link}</li>")
+                ->activeItemTemplate('<li>{link}</li>')
                 ->homeItem(null)
                 ->items(['label' => 'My-<br>Test-Label'])
                 ->tag('')
@@ -145,7 +144,7 @@ final class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testTag(): void
     {
@@ -168,7 +167,7 @@ final class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testWithoutHomeItem(): void
     {

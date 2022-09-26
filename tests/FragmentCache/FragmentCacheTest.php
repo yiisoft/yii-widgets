@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\FragmentCache;
 
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use Yiisoft\Cache\CacheKeyNormalizer;
 use Yiisoft\Cache\Dependency\TagDependency;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
@@ -27,7 +26,7 @@ final class FragmentCacheTest extends TestCase
     use TestTrait;
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testCacheFragment(): void
     {
@@ -39,7 +38,7 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testCacheFragmentWithEmptyContent(): void
     {
@@ -50,7 +49,7 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testSingleDynamicFragment(): void
     {
@@ -73,7 +72,7 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testMultipleDynamicFragments(): void
     {
@@ -111,7 +110,7 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testNestedDynamicFragments(): void
     {
@@ -160,7 +159,7 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testVariations(): void
     {
@@ -204,7 +203,7 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotInstantiableException|NotFoundException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     public function testImmutability(): void
     {
