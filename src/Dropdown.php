@@ -21,7 +21,6 @@ use function gettype;
 final class Dropdown extends Widget
 {
     private string $activeClass = 'active';
-    private array $attributes = [];
     private bool $container = true;
     private array $containerAttributes = [];
     private string $containerClass = '';
@@ -32,6 +31,7 @@ final class Dropdown extends Widget
     private string $dividerTag = 'hr';
     private string $headerClass = '';
     private string $headerTag = 'span';
+    private string $id = '';
     private string $itemClass = '';
     private string $itemTag = 'a';
     private bool $itemContainer = true;
@@ -56,21 +56,6 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->activeClass = $value;
-
-        return $new;
-    }
-
-    /**
-     * Returns a new instance with the HTML attributes. The following special options are recognized.
-     *
-     * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return static
-     */
-    public function attributes(array $values): static
-    {
-        $new = clone $this;
-        $new->attributes = $values;
 
         return $new;
     }
@@ -220,6 +205,21 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->headerTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the id of the widget.
+     *
+     * @param string $value The id of the widget.
+     *
+     * @return self
+     */
+    public function id(string $value): self
+    {
+        $new = clone $this;
+        $new->id = $value;
 
         return $new;
     }
@@ -378,6 +378,21 @@ final class Dropdown extends Widget
     }
 
     /**
+     * Returns a new instance with the specified items container tag.
+     *
+     * @param string $value The items container tag.
+     *
+     * @return self
+     */
+    public function itemsContainerTag(string $value): self
+    {
+        $new = clone $this;
+        $new->itemsContainerTag = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified split button attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
@@ -505,13 +520,9 @@ final class Dropdown extends Widget
         }
 
         /** @var bool */
-        $encodeLabels = $item['encodeLabel'] ?? true;
+        $encode = $item['encodeLabel'] ?? true;
 
-        if ($encodeLabels) {
-            return htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8', false);
-        }
-
-        return $item['label'];
+        return $encode ? Html::encode($item['label']) : $item['label'];
     }
 
     private function normalizeItems(array $items): array
@@ -563,10 +574,6 @@ final class Dropdown extends Widget
     {
         $dividerAttributes = $this->dividerAttributes;
 
-        if ($this->itemContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         if ($this->dividerClass !== '') {
             Html::addCssClass($dividerAttributes, $this->dividerClass);
         }
@@ -575,11 +582,9 @@ final class Dropdown extends Widget
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
-        return Html::normalTag(
-            $this->itemContainerTag,
-            Html::tag($this->dividerTag, '', $dividerAttributes),
-            $this->itemContainerAttributes,
-        )->encode(false)->render();
+        return $this->renderItemContainer(
+            Html::tag($this->dividerTag, '', $dividerAttributes)->encode(false)->render(),
+        );
     }
 
     /**
@@ -588,8 +593,8 @@ final class Dropdown extends Widget
     private function renderDropdown(array $items, array $itemsAttributes = []): string
     {
         return self::widget()
-            ->attributes($itemsAttributes)
             ->container(false)
+            //->containerAttributes($itemsAttributes)
             ->dividerAttributes($this->dividerAttributes)
             ->headerClass($this->headerClass)
             ->headerTag($this->headerTag)
@@ -610,19 +615,13 @@ final class Dropdown extends Widget
             Html::addCssClass($headerAttributes, $this->headerClass);
         }
 
-        if ($this->itemContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         if ($this->headerTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
-        return Html::normalTag(
-            $this->itemContainerTag,
-            Html::normalTag($this->headerTag, $label, $headerAttributes),
-            $this->itemContainerAttributes,
-        )->encode(false)->render();
+        return $this->renderItemContainer(
+            Html::normalTag($this->headerTag, $label, $headerAttributes)->encode(false)->render(),
+        );
     }
 
     /**
@@ -679,7 +678,7 @@ final class Dropdown extends Widget
         if ($items === []) {
             $lines[] = $this->renderItemContent($label, $link, $enclose, $linkAttributes, $headerAttributes);
         } else {
-            $itemContainer = $this->renderItemContainer($items, $itemsAttributes);
+            $itemContainer = $this->renderItemsContainer($this->renderDropdown($items, $itemsAttributes));
             $toggle = $this->renderToggle($label, $link, $toggleAttributes);
             $toggleSplitButton = $this->renderToggleSplitButton($label);
 
@@ -699,25 +698,35 @@ final class Dropdown extends Widget
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    private function renderItemContainer(array $items, array $itemsContainerAttributes = []): string
+    private function renderItemContainer(string $content): string
     {
-        if ($itemsContainerAttributes === []) {
-            $itemsContainerAttributes = $this->itemsContainerAttributes;
+        if ($this->itemContainerTag === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
-        if (isset($this->attributes['id'])) {
-            $itemsContainerAttributes['aria-labelledby'] = $this->attributes['id'];
+        return Html::normalTag($this->itemContainerTag, $content, $this->itemContainerAttributes)
+            ->encode(false)
+            ->render();
+    }
+
+    /**
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    private function renderItemsContainer(string $content): string
+    {
+        $itemsContainerAttributes = $this->itemsContainerAttributes;
+
+        if ($this->id !== '') {
+            $itemsContainerAttributes['aria-labelledby'] =  $this->id;
         }
 
         if ($this->itemsContainerTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
-        return Html::normalTag(
-            $this->itemsContainerTag,
-            $this->renderDropdown($items, $itemsContainerAttributes),
-            $itemsContainerAttributes,
-        )->encode(false)->render();
+        return Html::normalTag($this->itemsContainerTag, $content, $itemsContainerAttributes)
+            ->encode(false)
+            ->render();
     }
 
     private function renderItemContent(
@@ -790,15 +799,11 @@ final class Dropdown extends Widget
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
-        $a = Html::normalTag($this->itemTag, $label, $linkAttributes)->encode(false);
-
-        if ($this->itemContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
+        $linkTag = Html::normalTag($this->itemTag, $label, $linkAttributes)->encode(false)->render();
 
         return match ($this->itemContainer) {
-            true => Html::normalTag($this->itemContainerTag, $a, $itemContainerAttributes)->encode(false)->render(),
-            default => $a->render(),
+            true => $this->renderItemContainer($linkTag),
+            default => $linkTag,
         };
     }
 
@@ -808,8 +813,8 @@ final class Dropdown extends Widget
             $toggleAttributes = $this->toggleAttributes;
         }
 
-        if (isset($this->attributes['id'])) {
-            $toggleAttributes['id'] = $this->attributes['id'];
+        if ($this->id !== '') {
+            $toggleAttributes['id'] = $this->id;
         }
 
         return match ($this->toggleType) {
@@ -821,7 +826,7 @@ final class Dropdown extends Widget
 
     private function renderToggleButton(string $label, array $toggleAttributes = []): string
     {
-        return Button::tag()->addAttributes($toggleAttributes)->content($label)->render();
+        return Button::tag()->addAttributes($toggleAttributes)->content($label)->type('button')->render();
     }
 
     private function renderToggleLink(string $label, string $link, array $toggleAttributes = []): string
@@ -834,11 +839,12 @@ final class Dropdown extends Widget
         return Button::tag()
             ->addAttributes($toggleAttributes)
             ->content(Span::tag()->addAttributes($this->splitButtonSpanAttributes)->content($label))
+            ->type('button')
             ->render();
     }
 
     private function renderToggleSplitButton(string $label): string
     {
-        return Button::tag()->addAttributes($this->splitButtonAttributes)->content($label)->render();
+        return Button::tag()->addAttributes($this->splitButtonAttributes)->content($label)->type('button')->render();
     }
 }
