@@ -72,7 +72,6 @@ final class Alert extends Widget
      *
      * @param array $values Attribute values indexed by attribute names.
      *
-     *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
     public function bodyAttributes(array $values): self
@@ -117,7 +116,6 @@ final class Alert extends Widget
      * Returns a new instance with the HTML attributes for rendering extra message wrapper.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -165,7 +163,6 @@ final class Alert extends Widget
      * The rest of the options will be rendered as the HTML attributes of the button tag.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -247,7 +244,6 @@ final class Alert extends Widget
      *
      * @param array $values Attribute values indexed by attribute names.
      *
-     *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
     public function headerAttributes(array $values): self
@@ -288,7 +284,6 @@ final class Alert extends Widget
      * Returns a new instance with the HTML attributes for rendering the header.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -337,7 +332,6 @@ final class Alert extends Widget
      *
      * @param array $values Attribute values indexed by attribute names.
      *
-     *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
     public function iconAttributes(array $values): self
@@ -367,7 +361,6 @@ final class Alert extends Widget
      * The rest of the options will be rendered as the HTML attributes of the icon container.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
