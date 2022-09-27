@@ -45,6 +45,7 @@ final class FragmentCache extends Widget
     private string|null $id = null;
     private Dependency|null $dependency = null;
     private int $ttl = 60;
+    /** @psalm-var string[] */
     private array $variations = [];
 
     /**

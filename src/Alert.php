@@ -42,26 +42,26 @@ final class Alert extends Widget
     private string $layoutBody = '{body}{button}';
 
     /**
-     * The HTML attributes for the main widget tag.
+     * Returns a new instance with the HTML attributes. The following special options are recognized.
      *
-     * @param array $value Array of attribute name => attribute value pairs.
+     * @param array $values Attribute values indexed by attribute names.
      *
-     * @return static
+     * @return self
      */
-    public function attributes(array $value): self
+    public function attributes(array $values): self
     {
         $new = clone $this;
-        $new->attributes = $value;
+        $new->attributes = $values;
 
         return $new;
     }
 
     /**
-     * The message body.
+     * Returns a new instance with the message body.
      *
      * @param string $value The message body.
      *
-     * @return static
+     * @return self
      */
     public function body(string $value): self
     {
@@ -72,28 +72,28 @@ final class Alert extends Widget
     }
 
     /**
-     * HTML attributes for the message body tag.
+     * Returns a new instance with the HTML attributes for the message body tag.
      *
-     * @param array $value Array of attribute name => attribute value pairs.
+     * @param array $values Attribute values indexed by attribute names.
      *
-     * @return static
+     * @return self
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function bodyAttributes(array $value): self
+    public function bodyAttributes(array $values): self
     {
         $new = clone $this;
-        $new->bodyAttributes = $value;
+        $new->bodyAttributes = $values;
 
         return $new;
     }
 
     /**
-     * CSS class for the message body tag.
+     * Returns a new instance with CSS class for the message body tag.
      *
-     * @param string $value CSS class name.
+     * @param string $value The CSS class name.
      *
-     * @return static
+     * @return self
      */
     public function bodyClass(string $value): self
     {
@@ -104,11 +104,11 @@ final class Alert extends Widget
     }
 
     /**
-     * Allows you to add an extra wrapper for the message body.
+     * Returns a new instance specifying when allows you to add an extra wrapper for the message body.
      *
-     * @param string|null $tag
+     * @param string|null $tag The tag name.
      *
-     * @return static
+     * @return self
      */
     public function bodyTag(?string $tag = null): self
     {
@@ -123,28 +123,28 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering extra message wrapper.
+     * Returns a new instance with the HTML attributes for rendering extra message wrapper.
      *
-     * @param array $value
+     * @param array $values Attribute values indexed by attribute names.
      *
-     * @return static
+     * @return self
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function bodyContainerAttributes(array $value): self
+    public function bodyContainerAttributes(array $values): self
     {
         $new = clone $this;
-        $new->bodyContainerAttributes = $value;
+        $new->bodyContainerAttributes = $values;
 
         return $new;
     }
 
     /**
-     * The CSS class for extra message wrapper.
+     * Returns a new instance with the CSS class for extra message wrapper.
      *
-     * @param string $value
+     * @param string $value The CSS class name.
      *
-     * @return static
+     * @return self
      */
     public function bodyContainerClass(string $value): self
     {
@@ -155,11 +155,11 @@ final class Alert extends Widget
     }
 
     /**
-     * Allows you to add an extra wrapper for the panel body.
+     * Returns a new instance specifying when allows you to add an extra wrapper for the panel body.
      *
-     * @param bool $value
+     * @param bool $value The value indicating whether to add an extra wrapper for the panel body.
      *
-     * @return static
+     * @return self
      */
     public function bodyContainer(bool $value): self
     {
@@ -170,7 +170,7 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering the button tag.
+     * Returns a new instance with the HTML the attributes for rendering the button tag.
      *
      * The button is displayed in the header of the modal window. Clicking on the button will hide the modal.
      *
@@ -178,26 +178,26 @@ final class Alert extends Widget
      *
      * The rest of the options will be rendered as the HTML attributes of the button tag.
      *
-     * @param array $value
+     * @param array $values Attribute values indexed by attribute names.
      *
-     * @return static
+     * @return self
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function buttonAttributes(array $value): self
+    public function buttonAttributes(array $values): self
     {
         $new = clone $this;
-        $new->buttonAttributes = $value;
+        $new->buttonAttributes = $values;
 
         return $new;
     }
 
     /**
-     * The CSS class for the button.
+     * Returns a new instance with the CSS class for the button.
      *
-     * @param string $value
+     * @param string $value The CSS class name.
      *
-     * @return static
+     * @return self
      */
     public function buttonClass(string $value): self
     {
@@ -208,11 +208,11 @@ final class Alert extends Widget
     }
 
     /**
-     * The label for the button.
+     * Returns a new instance with the label for the button.
      *
-     * @param string $value
+     * @param string $value The label for the button.
      *
-     * @return static
+     * @return self
      */
     public function buttonLabel(string $value = ''): self
     {
@@ -223,11 +223,11 @@ final class Alert extends Widget
     }
 
     /**
-     * The onclick JavaScript for the button.
+     * Returns a new instance with the onclick JavaScript for the button.
      *
-     * @param string $value
+     * @param string $value The onclick JavaScript for the button.
      *
-     * @return static
+     * @return self
      */
     public function buttonOnClick(string $value): self
     {
@@ -238,11 +238,11 @@ final class Alert extends Widget
     }
 
     /**
-     * Set attribute class for main widget tag.
+     * Returns a new instance with the CSS class for the widget.
      *
-     * @param string $value
+     * @param string $value The CSS class name.
      *
-     * @return static
+     * @return self
      */
     public function class(string $value): self
     {
@@ -252,20 +252,12 @@ final class Alert extends Widget
         return $new;
     }
 
-    public function id(?string $value): self
-    {
-        $new = clone $this;
-        $new->attributes['id'] = $value;
-
-        return $new;
-    }
-
     /**
-     * The header content.
+     * Returns a new instance with the header content.
      *
-     * @param string $value
+     * @param string $value The header content in the message.
      *
-     * @return static
+     * @return self
      */
     public function header(string $value): self
     {
@@ -276,28 +268,28 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering the header content.
+     * Returns a new instance with the HTML attributes for rendering the header content.
      *
-     * @param array $value
+     * @param array $values Attribute values indexed by attribute names.
      *
-     * @return static
+     * @return self
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function headerAttributes(array $value): self
+    public function headerAttributes(array $values): self
     {
         $new = clone $this;
-        $new->headerAttributes = $value;
+        $new->headerAttributes = $values;
 
         return $new;
     }
 
     /**
-     * The CSS class for the header.
+     * Returns a new instance with the CSS class for the header.
      *
-     * @param string $value
+     * @param string $value The CSS class name.
      *
-     * @return static
+     * @return self
      */
     public function headerClass(string $value): self
     {
@@ -308,11 +300,11 @@ final class Alert extends Widget
     }
 
     /**
-     * Allows you to add a div tag to the header extra wrapper.
+     * Returns a new instance specifying when allows you to add a div tag to the header extra wrapper.
      *
-     * @param bool $value
+     * @param bool $value The value indicating whether to add a div tag to the header extra wrapper.
      *
-     * @return static
+     * @return self
      */
     public function headerContainer(bool $value = true): self
     {
@@ -323,28 +315,28 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering the header.
+     * Returns a new instance with the HTML attributes for rendering the header.
      *
-     * @param array $value
+     * @param array $values Attribute values indexed by attribute names.
      *
-     * @return static
+     * @return self
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function headerContainerAttributes(array $value): self
+    public function headerContainerAttributes(array $values): self
     {
         $new = clone $this;
-        $new->headerContainerAttributes = $value;
+        $new->headerContainerAttributes = $values;
 
         return $new;
     }
 
     /**
-     * The CSS class for the header extra wrapper.
+     * Returns a new instance with the CSS class for the header extra wrapper.
      *
-     * @param string $value
+     * @param string $value The CSS class name.
      *
-     * @return static
+     * @return self
      */
     public function headerContainerClass(string $value): self
     {
@@ -355,13 +347,13 @@ final class Alert extends Widget
     }
 
     /**
-     * Set tag name for the header.
+     * Returns a new instance with the tag name for the header.
      *
-     * @param string $value
+     * @param string $value The tag name for the header.
      *
      * @throws InvalidArgumentException
      *
-     * @return static
+     * @return self
      */
     public function headerTag(string $value): self
     {
@@ -376,28 +368,28 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering the `<i>` tag for the icon.
+     * Returns a new instance with the HTML attributes for rendering the `<i>` tag for the icon.
      *
-     * @param array $value
+     * @param array $values Attribute values indexed by attribute names.
      *
-     * @return static
+     * @return self
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function iconAttributes(array $value): self
+    public function iconAttributes(array $values): self
     {
         $new = clone $this;
-        $new->iconAttributes = $value;
+        $new->iconAttributes = $values;
 
         return $new;
     }
 
     /**
-     * Set icon CSS class.
+     * Returns a new instance with the icon CSS class.
      *
-     * @param string $value
+     * @param string $value The icon CSS class.
      *
-     * @return static
+     * @return self
      */
     public function iconClass(string $value): self
     {
@@ -408,30 +400,30 @@ final class Alert extends Widget
     }
 
     /**
-     * The attributes for rendering icon container.
+     * Returns a new instance with the HTML attributes for rendering icon container.
      *
      * The rest of the options will be rendered as the HTML attributes of the icon container.
      *
-     * @param array $value
+     * @param array $values Attribute values indexed by attribute names.
      *
-     * @return static
+     * @return self
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function iconContainerAttributes(array $value): self
+    public function iconContainerAttributes(array $values): self
     {
         $new = clone $this;
-        $new->iconContainerAttributes = $value;
+        $new->iconContainerAttributes = $values;
 
         return $new;
     }
 
     /**
-     * The CSS class for the icon container.
+     * Returns a new instance with the CSS class for the icon container.
      *
-     * @param string $value
+     * @param string $value The CSS class name.
      *
-     * @return static
+     * @return self
      */
     public function iconContainerClass(string $value): self
     {
@@ -442,11 +434,11 @@ final class Alert extends Widget
     }
 
     /**
-     * Set icon text.
+     * Returns a new instance with the icon text.
      *
-     * @param string $value
+     * @param string $value The icon text.
      *
-     * @return static
+     * @return self
      */
     public function iconText(string $value): self
     {
@@ -457,11 +449,26 @@ final class Alert extends Widget
     }
 
     /**
-     * Set layout body.
+     * Returns a new instance with the specified Widget ID.
      *
-     * @param string $value
+     * @param string $value The id of the widget.
      *
-     * @return static
+     * @return self
+     */
+    public function id(string $value): self
+    {
+        $new = clone $this;
+        $new->attributes['id'] = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the config layout body.
+     *
+     * @param string $value The config layout body.
+     *
+     * @return self
      */
     public function layoutBody(string $value): self
     {
@@ -472,11 +479,11 @@ final class Alert extends Widget
     }
 
     /**
-     * Set layout header.
+     * Returns a new instance with the config layout header.
      *
-     * @param string $value
+     * @param string $value The config layout header.
      *
-     * @return static
+     * @return self
      */
     public function layoutHeader(string $value): self
     {

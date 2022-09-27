@@ -739,7 +739,7 @@ final class Menu extends Widget
             $label = Html::encode($label);
         }
 
-        if (isset($item['link'])) {
+        if (isset($item['link']) && is_string($item['link'])) {
             $linkAttributes['href'] = $item['link'];
         }
 

@@ -210,7 +210,7 @@ final class Dropdown extends Widget
     }
 
     /**
-     * Returns a new instance with the id of the widget.
+     * Returns a new instance with the specified Widget ID.
      *
      * @param string $value The id of the widget.
      *
@@ -594,16 +594,15 @@ final class Dropdown extends Widget
     {
         return self::widget()
             ->container(false)
-            //->containerAttributes($itemsAttributes)
             ->dividerAttributes($this->dividerAttributes)
             ->headerClass($this->headerClass)
             ->headerTag($this->headerTag)
             ->itemClass($this->itemClass)
             ->itemContainerAttributes($this->itemContainerAttributes)
             ->itemContainerTag($this->itemContainerTag)
-            ->itemTag($this->itemTag)
             ->items($items)
-            ->itemsContainerAttributes($this->itemsContainerAttributes)
+            ->itemsContainerAttributes(array_merge($this->itemsContainerAttributes, $itemsAttributes))
+            ->itemTag($this->itemTag)
             ->toggleAttributes($this->toggleAttributes)
             ->toggleType($this->toggleType)
             ->render();
@@ -792,7 +791,6 @@ final class Dropdown extends Widget
         string $link,
         array $linkAttributes = []
     ): string {
-        $itemContainerAttributes = $this->itemContainerAttributes;
         $linkAttributes['href'] = $link;
 
         if ($this->itemTag === '') {

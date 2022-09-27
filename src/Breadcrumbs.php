@@ -74,16 +74,16 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * The HTML attributes for the main widget tag.
+     * Returns a new instance with the HTML attributes. The following special options are recognized.
      *
-     * @param array $value Array of attribute name => attribute value pairs.
+     * @param array $values Attribute values indexed by attribute names.
      *
      * @return static
      */
-    public function attributes(array $value): self
+    public function attributes(array $values): self
     {
         $new = clone $this;
-        $new->attributes = $value;
+        $new->attributes = $values;
 
         return $new;
     }
@@ -210,6 +210,7 @@ final class Breadcrumbs extends Widget
             $items[] = $this->renderItem($this->homeItem, $this->itemTemplate);
         }
 
+        /** @var mixed $item */
         foreach ($this->items as $item) {
             if (!is_array($item)) {
                 $item = ['label' => $item];
@@ -247,14 +248,19 @@ final class Breadcrumbs extends Widget
             throw new InvalidArgumentException('The "label" element is required for each item.');
         }
 
+        if (!is_string($item['label'])) {
+            throw new InvalidArgumentException('The "label" element must be a string.');
+        }
+
+        /** @var bool */
         $encodeLabel = $item['encode'] ?? true;
         $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
 
-        if (isset($item['template'])) {
+        if (isset($item['template']) && is_string($item['template'])) {
             $template = $item['template'];
         }
 
-        if (isset($item['url'])) {
+        if (isset($item['url']) && is_string($item['url'])) {
             $link = $item['url'];
             unset($item['template'], $item['label'], $item['url']);
             $link = Html::a($label, $link, $item);

@@ -35,6 +35,16 @@ final class ExceptionTest extends TestCase
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
+    public function testLabelNotString(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "label" element must be a string.');
+        Breadcrumbs::widget()->items([['label' => 1]])->render();
+    }
+
+    /**
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
     public function testRenderItem(): void
     {
         $this->expectException(InvalidArgumentException::class);
