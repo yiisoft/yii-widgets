@@ -153,7 +153,7 @@ HTML;
                     'label' => 'item1',
                     'url' => '#',
                     'template' => 'label: {label}; url: {url}',
-                    'active' => static fn(array $item, bool $hasActiveChild, bool $isItemActive, Widget $widget): bool => isset($item, $hasActiveChild, $isItemActive, $widget),
+                    'active' => static fn (array $item, bool $hasActiveChild, bool $isItemActive, Widget $widget): bool => isset($item, $hasActiveChild, $isItemActive, $widget),
                 ],
                 [
                     'label' => 'item2',
