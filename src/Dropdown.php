@@ -49,8 +49,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified active class.
      *
      * @param string $value The active class.
-     *
-     * @return self
      */
     public function activeClass(string $value): self
     {
@@ -64,8 +62,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified if the container is enabled, or not. Default is true.
      *
      * @param bool $value The container enabled.
-     *
-     * @return self
      */
     public function container(bool $value): self
     {
@@ -79,8 +75,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified container HTML attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function containerAttributes(array $values): self
     {
@@ -94,8 +88,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified container class.
      *
      * @param string $value The container class.
-     *
-     * @return self
      */
     public function containerClass(string $value): self
     {
@@ -109,8 +101,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified container tag.
      *
      * @param string $value The container tag.
-     *
-     * @return self
      */
     public function containerTag(string $value): self
     {
@@ -123,8 +113,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified disabled class.
      *
      * @param string $value The disabled class.
-     *
-     * @return self
      */
     public function disabledClass(string $value): self
     {
@@ -138,8 +126,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified divider HTML attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function dividerAttributes(array $values): self
     {
@@ -153,8 +139,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified divider class.
      *
      * @param string $value The divider class.
-     *
-     * @return self
      */
     public function dividerClass(string $value): self
     {
@@ -168,8 +152,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified divider tag.
      *
      * @param string $value The divider tag.
-     *
-     * @return self
      */
     public function dividerTag(string $value): self
     {
@@ -183,8 +165,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified header class.
      *
      * @param string $value The header class.
-     *
-     * @return self
      */
     public function headerClass(string $value): self
     {
@@ -198,8 +178,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified header tag.
      *
      * @param string $value The header tag.
-     *
-     * @return self
      */
     public function headerTag(string $value): self
     {
@@ -213,8 +191,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified Widget ID.
      *
      * @param string $value The id of the widget.
-     *
-     * @return self
      */
     public function id(string $value): self
     {
@@ -228,8 +204,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified item class.
      *
      * @param string $value The item class.
-     *
-     * @return self
      */
     public function itemClass(string $value): self
     {
@@ -243,8 +217,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified item container, if false, the item container will not be rendered.
      *
      * @param bool $value The item container.
-     *
-     * @return self
      */
     public function itemContainer(bool $value): self
     {
@@ -258,8 +230,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified item container HTML attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function itemContainerAttributes(array $values): self
     {
@@ -273,8 +243,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified item container class.
      *
      * @param string $value The item container class.
-     *
-     * @return self
      */
     public function itemContainerClass(string $value): self
     {
@@ -288,8 +256,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified item container tag.
      *
      * @param string $value The item container tag.
-     *
-     * @return self
      */
     public function itemContainerTag(string $value): self
     {
@@ -303,8 +269,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified item tag.
      *
      * @param string $value The item tag.
-     *
-     * @return self
      */
     public function itemTag(string $value): self
     {
@@ -336,8 +300,6 @@ final class Dropdown extends Widget
      * To insert dropdown divider use `-`.
      *
      * @param array $value
-     *
-     * @return static
      */
     public function items(array $value): self
     {
@@ -351,8 +313,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified items container HTML attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function itemsContainerAttributes(array $values): self
     {
@@ -366,8 +326,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified item container class.
      *
      * @param string $value The item container class.
-     *
-     * @return self
      */
     public function itemsContainerClass(string $value): self
     {
@@ -381,8 +339,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified items container tag.
      *
      * @param string $value The items container tag.
-     *
-     * @return self
      */
     public function itemsContainerTag(string $value): self
     {
@@ -396,8 +352,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified split button attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function splitButtonAttributes(array $values): self
     {
@@ -410,8 +364,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified split button class.
      *
      * @param string $value The split button class.
-     *
-     * @return self
      */
     public function splitButtonClass(string $value): self
     {
@@ -425,8 +377,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified split button span class.
      *
      * @param string $value The split button span class.
-     *
-     * @return self
      */
     public function splitButtonSpanClass(string $value): self
     {
@@ -440,8 +390,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified toggle HTML attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function toggleAttributes(array $values): self
     {
@@ -455,8 +403,6 @@ final class Dropdown extends Widget
      * Returns a new instance with the specified toggle class.
      *
      * @param string $value The toggle class.
-     *
-     * @return self
      */
     public function toggleClass(string $value): self
     {
@@ -471,8 +417,6 @@ final class Dropdown extends Widget
      * `a` tag will be used.
      *
      * @param string $value The toggle tag.
-     *
-     * @return self
      */
     public function toggleType(string $value): self
     {

@@ -76,8 +76,6 @@ final class Menu extends Widget
      * Return new instance with specified active or disable activate items.
      *
      * @param bool $value The value to be assigned to the activateItems property.
-     *
-     * @return self
      */
     public function activateItems(bool $value): self
     {
@@ -91,8 +89,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified active CSS class.
      *
      * @param string $value The CSS class to be appended to the active menu item.
-     *
-     * @return self
      */
     public function activeClass(string $value): self
     {
@@ -106,8 +102,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified after container attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function afterAttributes(array $values): self
     {
@@ -121,8 +115,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified after container class.
      *
      * @param string $value The class name.
-     *
-     * @return self
      */
     public function afterClass(string $value): self
     {
@@ -136,8 +128,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified after content.
      *
      * @param string|Stringable $content The content.
-     *
-     * @return self
      */
     public function afterContent(string|Stringable $content): self
     {
@@ -151,8 +141,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified after container tag.
      *
      * @param string $value The after container tag.
-     *
-     * @return self
      */
     public function afterTag(string $value): self
     {
@@ -166,8 +154,6 @@ final class Menu extends Widget
      * Returns a new instance with the HTML attributes. The following special options are recognized.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function attributes(array $values): self
     {
@@ -181,8 +167,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified before container attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function beforeAttributes(array $values): self
     {
@@ -196,8 +180,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified before container class.
      *
      * @param string $value The before container class.
-     *
-     * @return self
      */
     public function beforeClass(string $value): self
     {
@@ -211,8 +193,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified before content.
      *
      * @param string|Stringable $value The content.
-     *
-     * @return self
      */
     public function beforeContent(string|Stringable $value): self
     {
@@ -226,8 +206,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified before container tag.
      *
      * @param string $value The before container tag.
-     *
-     * @return self
      */
     public function beforeTag(string $value): self
     {
@@ -241,8 +219,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified the class `menu` widget.
      *
      * @param string $value The class `menu` widget.
-     *
-     * @return self
      */
     public function class(string $value): self
     {
@@ -256,8 +232,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified enable or disable the container widget.
      *
      * @param bool $value The container widget enable or disable, for default is `true`.
-     *
-     * @return self
      */
     public function container(bool $value): self
     {
@@ -271,8 +245,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified the current path.
      *
      * @param string $value The current path.
-     *
-     * @return self
      */
     public function currentPath(string $value): self
     {
@@ -286,8 +258,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified disabled CSS class.
      *
      * @param string $value The CSS class to be appended to the disabled menu item.
-     *
-     * @return self
      */
     public function disabledClass(string $value): self
     {
@@ -301,8 +271,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified dropdown container class.
      *
      * @param string $value The dropdown container class.
-     *
-     * @return self
      */
     public function dropdownContainerClass(string $value): self
     {
@@ -316,8 +284,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified dropdown container tag.
      *
      * @param string $value The dropdown container tag.
-     *
-     * @return self
      */
     public function dropdownContainerTag(string $value): self
     {
@@ -331,8 +297,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified dropdown definition widget.
      *
      * @param array $values The dropdown definition widget.
-     *
-     * @return self
      */
     public function dropdownDefinitions(array $values): self
     {
@@ -346,8 +310,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified first item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the first item in the main menu or each submenu.
-     *
-     * @return self
      */
     public function firstItemClass(string $value): self
     {
@@ -361,8 +323,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified icon container attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function iconContainerAttributes(array $values): self
     {
@@ -395,8 +355,6 @@ final class Menu extends Widget
      * If a menu item is a string, it will be rendered directly without HTML encoding.
      *
      * @param array $values the list of items to be rendered.
-     *
-     * @return self
      */
     public function items(array $values): self
     {
@@ -410,8 +368,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified if enabled or disabled the items' container.
      *
      * @param bool $value The items container enable or disable, for default is `true`.
-     *
-     * @return self
      */
     public function itemsContainer(bool $value): self
     {
@@ -425,8 +381,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified items' container attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function itemsContainerAttributes(array $values): self
     {
@@ -440,8 +394,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified items' container class.
      *
      * @param string $value The CSS class that will be assigned to the items' container.
-     *
-     * @return self
      */
     public function itemsContainerClass(string $value): self
     {
@@ -455,8 +407,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified items tag.
      *
      * @param string $value The tag that will be used to wrap the items.
-     *
-     * @return self
      */
     public function itemsTag(string $value): self
     {
@@ -470,8 +420,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified last item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the last item in the main menu or each submenu.
-     *
-     * @return self
      */
     public function lastItemClass(string $value): self
     {
@@ -485,8 +433,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified link attributes.
      *
      * @param array $values Attribute values indexed by attribute names.
-     *
-     * @return self
      */
     public function linkAttributes(array $values): self
     {
@@ -500,8 +446,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified link css class.
      *
      * @param string $value The CSS class that will be assigned to the link.
-     *
-     * @return self
      */
     public function linkClass(string $value): self
     {
@@ -515,8 +459,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified link tag.
      *
      * @param string $value The tag that will be used to wrap the link.
-     *
-     * @return self
      */
     public function linkTag(string $value): self
     {
@@ -530,8 +472,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified tag for rendering the menu.
      *
      * @param string $value The tag for rendering the menu.
-     *
-     * @return self
      */
     public function tagName(string $value): self
     {
@@ -546,8 +486,6 @@ final class Menu extends Widget
      *
      * @param string $value The template used to render the main menu. In this template, the token `{items}` will be
      * replaced.
-     *
-     * @return self
      */
     public function template(string $value): self
     {

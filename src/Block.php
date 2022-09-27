@@ -54,8 +54,6 @@ final class Block extends Widget
      * Returns a new instance with the specified Widget ID.
      *
      * @param string $value The Widget ID.
-     *
-     * @return self
      */
     public function id(string $value): self
     {
@@ -69,8 +67,6 @@ final class Block extends Widget
      * Enables in-place rendering and returns a new instance.
      *
      * Without calling this method, the captured content of the block is not displayed.
-     *
-     * @return self
      */
     public function renderInPlace(): self
     {
