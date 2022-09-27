@@ -46,8 +46,6 @@ final class Alert extends Widget
      * The HTML attributes for the main widget tag.
      *
      * @param array $value Array of attribute name => attribute value pairs.
-     *
-     * @return static
      */
     public function attributes(array $value): self
     {
@@ -60,8 +58,6 @@ final class Alert extends Widget
      * The message body.
      *
      * @param string $value The message body.
-     *
-     * @return static
      */
     public function body(string $value): self
     {
@@ -75,7 +71,6 @@ final class Alert extends Widget
      *
      * @param array $value Array of attribute name => attribute value pairs.
      *
-     * @return static
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -90,8 +85,6 @@ final class Alert extends Widget
      * CSS class for the message body tag.
      *
      * @param string $value CSS class name.
-     *
-     * @return static
      */
     public function bodyClass(string $value): self
     {
@@ -103,9 +96,7 @@ final class Alert extends Widget
     /**
      * Allows you to add an extra wrapper for the message body.
      *
-     * @param string|null $tag
      *
-     * @return static
      */
     public function bodyTag(?string $tag = null): self
     {
@@ -123,7 +114,6 @@ final class Alert extends Widget
      *
      * @param array $value
      *
-     * @return static
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -137,9 +127,7 @@ final class Alert extends Widget
     /**
      * The CSS class for extra message wrapper.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function bodyContainerClass(string $value): self
     {
@@ -151,9 +139,7 @@ final class Alert extends Widget
     /**
      * Allows you to add an extra wrapper for the panel body.
      *
-     * @param bool $value
      *
-     * @return static
      */
     public function bodyContainer(bool $value): self
     {
@@ -173,7 +159,6 @@ final class Alert extends Widget
      *
      * @param array $value
      *
-     * @return static
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -187,9 +172,7 @@ final class Alert extends Widget
     /**
      * The CSS class for the button.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function buttonClass(string $value): self
     {
@@ -201,9 +184,7 @@ final class Alert extends Widget
     /**
      * The label for the button.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function buttonLabel(string $value = ''): self
     {
@@ -215,9 +196,7 @@ final class Alert extends Widget
     /**
      * The onclick JavaScript for the button.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function buttonOnClick(string $value): self
     {
@@ -229,9 +208,7 @@ final class Alert extends Widget
     /**
      * Set attribute class for main widget tag.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function class(string $value): self
     {
@@ -250,9 +227,7 @@ final class Alert extends Widget
     /**
      * The header content.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function header(string $value): self
     {
@@ -266,7 +241,6 @@ final class Alert extends Widget
      *
      * @param array $value
      *
-     * @return static
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -280,9 +254,7 @@ final class Alert extends Widget
     /**
      * The CSS class for the header.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function headerClass(string $value): self
     {
@@ -294,9 +266,7 @@ final class Alert extends Widget
     /**
      * Allows you to add a div tag to the header extra wrapper.
      *
-     * @param bool $value
      *
-     * @return static
      */
     public function headerContainer(bool $value = true): self
     {
@@ -308,9 +278,7 @@ final class Alert extends Widget
     /**
      * The CSS class for the header extra wrapper.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function headerContainerClass(string $value): self
     {
@@ -324,7 +292,6 @@ final class Alert extends Widget
      *
      * @param array $value
      *
-     * @return static
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -338,11 +305,9 @@ final class Alert extends Widget
     /**
      * Set tag name for the header.
      *
-     * @param string $value
      *
      * @throws InvalidArgumentException
      *
-     * @return static
      */
     public function headerTag(string $value): self
     {
@@ -360,7 +325,6 @@ final class Alert extends Widget
      *
      * @param array $value
      *
-     * @return static
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -374,9 +338,7 @@ final class Alert extends Widget
     /**
      * Set icon CSS class.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function iconClass(string $value): self
     {
@@ -392,7 +354,6 @@ final class Alert extends Widget
      *
      * @param array $value
      *
-     * @return static
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
@@ -406,9 +367,7 @@ final class Alert extends Widget
     /**
      * The CSS class for the icon container.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function iconContainerClass(string $value): self
     {
@@ -420,9 +379,7 @@ final class Alert extends Widget
     /**
      * Set icon text.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function iconText(string $value): self
     {
@@ -434,9 +391,7 @@ final class Alert extends Widget
     /**
      * Set layout body.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function layoutBody(string $value): self
     {
@@ -448,9 +403,7 @@ final class Alert extends Widget
     /**
      * Set layout header.
      *
-     * @param string $value
      *
-     * @return static
      */
     public function layoutHeader(string $value): self
     {

@@ -60,8 +60,6 @@ final class Menu extends Widget
 
     /**
      * Disables active items according to their current path and returns a new instance.
-     *
-     * @return self
      */
     public function deactivateItems(): self
     {
@@ -75,8 +73,6 @@ final class Menu extends Widget
      *
      * Activates parent menu items when one of the corresponding child menu items is active.
      * The activated parent menu items will also have its CSS classes appended with {@see activeCssClass()}.
-     *
-     * @return self
      */
     public function activateParents(): self
     {
@@ -89,8 +85,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified active CSS class.
      *
      * @param string $value The CSS class to be appended to the active menu item.
-     *
-     * @return self
      */
     public function activeCssClass(string $value): self
     {
@@ -103,8 +97,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified current path.
      *
      * @param string $value The current path.
-     *
-     * @return self
      */
     public function currentPath(string $value): self
     {
@@ -115,8 +107,6 @@ final class Menu extends Widget
 
     /**
      * Disables encoding for labels and returns a new instance.
-     *
-     * @return self
      */
     public function withoutEncodeLabels(): self
     {
@@ -129,8 +119,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified first item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the first item in the main menu or each submenu.
-     *
-     * @return self
      */
     public function firstItemCssClass(string $value): self
     {
@@ -144,8 +132,6 @@ final class Menu extends Widget
      *
      * Enables showing an empty menu item is one whose `url` option
      * is not set and which has no visible child menu items.
-     *
-     * @return self
      */
     public function showEmptyItems(): self
     {
@@ -180,8 +166,6 @@ final class Menu extends Widget
      *   be replaced with the rendered sub-menu items. If this option is not set, {@see submenuTemplate} will be used
      *   instead.
      * - options: array, optional, the HTML attributes for the menu container tag.
-     *
-     * @return self
      */
     public function items(array $value): self
     {
@@ -200,7 +184,6 @@ final class Menu extends Widget
      * - tag: string, defaults to "li", the tag name of the item container tags. Set to false to disable container tag.
      *   See also {@see \Yiisoft\Html\Html::tag()}
      *
-     * @return self
      *
      * {@see \Yiisoft\Html\Html::renderTagAttributes() for details on how attributes are being rendered}
      */
@@ -219,8 +202,6 @@ final class Menu extends Widget
      * In this template, the token `{label}` will be replaced with the label of the menu item.
      *
      * This property will be overridden by the `template` option set in individual menu items via {@see items}.
-     *
-     * @return self
      */
     public function labelTemplate(string $value): self
     {
@@ -233,8 +214,6 @@ final class Menu extends Widget
      * Returns a new instance with the specified last item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the last item in the main menu or each submenu.
-     *
-     * @return self
      */
     public function lastItemCssClass(string $value): self
     {
@@ -250,8 +229,6 @@ final class Menu extends Widget
      * `{url}` will be replaced with the corresponding link URL; while `{label}` will be replaced with the link text.
      *
      * This property will be overridden by the `template` option set in individual menu items via {@see items}.
-     *
-     * @return self
      */
     public function linkTemplate(string $value): self
     {
@@ -269,7 +246,6 @@ final class Menu extends Widget
      * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
      *   See also {@see \Yiisoft\Html\Html::tag()}.
      *
-     * @return self
      *
      * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
      */

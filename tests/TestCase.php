@@ -41,10 +41,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Asserting two strings equality ignoring line endings.
-     *
-     * @param string $expected
-     * @param string $actual
-     * @param string $message
      */
     protected function assertEqualsWithoutLE(string $expected, string $actual, string $message = ''): void
     {
@@ -56,9 +52,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Asserting same ignoring slash.
-     *
-     * @param string $expected
-     * @param string $actual
      */
     protected function assertSameIgnoringSlash(string $expected, string $actual): void
     {
