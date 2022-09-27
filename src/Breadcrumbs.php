@@ -63,8 +63,6 @@ final class Breadcrumbs extends Widget
      * Returns a new instance with the specified tag.
      *
      * @param string $value The tag name.
-     *
-     * @return self
      */
     public function tag(string $value): self
     {
@@ -75,8 +73,6 @@ final class Breadcrumbs extends Widget
 
     /**
      * Disables encoding for labels and returns a new instance.
-     *
-     * @return self
      */
     public function withoutEncodeLabels(): self
     {
@@ -93,8 +89,6 @@ final class Breadcrumbs extends Widget
      * @param array|null $value Please refer to {@see items()} on the format.
      *
      * @throws InvalidArgumentException If an empty array is specified.
-     *
-     * @return self
      */
     public function homeItem(?array $value): self
     {
@@ -145,8 +139,6 @@ final class Breadcrumbs extends Widget
      *     'encode' => false,
      * ]
      * ```
-     *
-     * @return self
      */
     public function items(array $value): self
     {
@@ -165,8 +157,6 @@ final class Breadcrumbs extends Widget
      *   See also {@see \Yiisoft\Html\Html::tag()}.
      *
      * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
-     *
-     * @return self
      */
     public function options(array $value): self
     {
@@ -180,8 +170,6 @@ final class Breadcrumbs extends Widget
      *
      * @param string $value The template used to render each inactive item in the breadcrumbs.
      * The token `{link}` will be replaced with the actual HTML link for each inactive item.
-     *
-     * @return self
      */
     public function itemTemplate(string $value): self
     {
@@ -195,8 +183,6 @@ final class Breadcrumbs extends Widget
      *
      * @param string $value The template used to render each active item in the breadcrumbs.
      * The token `{link}` will be replaced with the actual HTML link for each active item.
-     *
-     * @return self
      */
     public function activeItemTemplate(string $value): self
     {

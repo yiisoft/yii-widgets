@@ -32,23 +32,17 @@ use function ob_start;
  */
 final class ContentDecorator extends Widget
 {
-    private Aliases $aliases;
     private array $parameters = [];
     private string $viewFile = '';
-    private WebView $webView;
 
-    public function __construct(Aliases $aliases, WebView $webView)
+    public function __construct(private Aliases $aliases, private WebView $webView)
     {
-        $this->aliases = $aliases;
-        $this->webView = $webView;
     }
 
     /**
      * Returns a new instance with the specified parameters.
      *
      * @param array $value The parameters (name => value) to be extracted and made available in the decorative view.
-     *
-     * @return self
      */
     public function parameters(array $value): self
     {
@@ -62,8 +56,6 @@ final class ContentDecorator extends Widget
      *
      * @param string $value The view file that will be used to decorate the content enclosed by this widget.
      * This can be specified as either the view file path or alias path.
-     *
-     * @return self
      */
     public function viewFile(string $value): self
     {
