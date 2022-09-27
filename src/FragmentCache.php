@@ -61,8 +61,6 @@ final class FragmentCache extends Widget
      * Returns a new instance with the specified Widget ID.
      *
      * @param string $value The unique identifier of the cache fragment.
-     *
-     * @return self
      */
     public function id(string $value): self
     {
@@ -80,8 +78,6 @@ final class FragmentCache extends Widget
      *
      * Would make the output cache depends on the last modified time of all posts. If any post has its modification time
      * changed, the cached content would be invalidated.
-     *
-     * @return self
      */
     public function dependency(Dependency $value): self
     {
@@ -94,8 +90,6 @@ final class FragmentCache extends Widget
      * Returns a new instance with the specified TTL.
      *
      * @param int $value The number of seconds that the data can remain valid in cache.
-     *
-     * @return self
      */
     public function ttl(int $value): self
     {
@@ -108,8 +102,6 @@ final class FragmentCache extends Widget
      * Returns a new instance with the specified dynamic contents.
      *
      * @param DynamicContent ...$value The dynamic content instances.
-     *
-     * @return self
      */
     public function dynamicContents(DynamicContent ...$value): self
     {
@@ -132,8 +124,6 @@ final class FragmentCache extends Widget
      * ```php
      * $fragmentCache->variations('en');
      * ```
-     *
-     * @return self
      */
     public function variations(string ...$value): self
     {
