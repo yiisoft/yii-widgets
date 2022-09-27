@@ -717,7 +717,7 @@ final class Dropdown extends Widget
         $itemsContainerAttributes = $this->itemsContainerAttributes;
 
         if ($this->id !== '') {
-            $itemsContainerAttributes['aria-labelledby'] =  $this->id;
+            $itemsContainerAttributes['aria-labelledby'] = $this->id;
         }
 
         if ($this->itemsContainerTag === '') {
