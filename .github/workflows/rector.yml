@@ -22,7 +22,7 @@ on:
 name: rector
 
 jobs:
-  phpunit:
+  rector:
     uses: yiisoft/actions/.github/workflows/rector.yml@add-rector-actions
     with:
       os: >-
