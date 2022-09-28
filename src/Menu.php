@@ -506,87 +506,13 @@ final class Menu extends Widget
      */
     protected function run(): string
     {
-        $items = $this->normalizeItems($this->items, $this->currentPath, $this->activateItems);
+        $items = Helper\Normalize::menu($this->items, $this->currentPath, $this->activateItems);
 
         if ($items === []) {
             return '';
         }
 
         return $this->renderMenu($items);
-    }
-
-    /**
-     * Checks whether a menu item is active.
-     *
-     * This is done by checking match that specified in the `url` option of the menu item.
-     *
-     * @param string $link The link of the menu item.
-     * @param string $currentPath The current path.
-     * @param bool $activateItems Whether to activate items having no link.
-     *
-     * @return bool Whether the menu item is active.
-     */
-    private function isItemActive(string $link, string $currentPath, bool $activateItems): bool
-    {
-        return ($link === $currentPath) && $activateItems;
-    }
-
-    /**
-     * Normalize the given array of items for the menu.
-     *
-     * @param array $items The items to be normalized.
-     * @param string $currentPath The current path.
-     * @param bool $activateItems Whether to activate items.
-     * @param bool $active Should The parent be active too.
-     *
-     * @return array The normalized array of items.
-     */
-    public function normalizeItems(
-        array $items,
-        string $currentPath = '/',
-        bool $activateItems = true,
-        bool &$active = false,
-    ): array {
-        /**
-         * @psalm-var array[] $items
-         * @psalm-suppress RedundantConditionGivenDocblockType
-         */
-        foreach ($items as $i => $child) {
-            if (is_array($child)) {
-                /** @var array */
-                $dropdown = $child['items'] ?? [];
-
-                if ($dropdown !== []) {
-                    $items[$i]['items'] = $this->normalizeItems($dropdown, $currentPath, $activateItems, $active);
-                } else {
-                    /** @var string */
-                    $link = $child['link'] ?? '/';
-                    /** @var bool */
-                    $active = $child['active'] ?? false;
-
-                    if ($active === false) {
-                        $items[$i]['active'] = $this->isItemActive($link, $currentPath, $activateItems);
-                    }
-
-                    /** @var bool */
-                    $items[$i]['disabled'] = $child['disabled'] ?? false;
-                    /** @var bool */
-                    $items[$i]['encodeLabel'] = $child['encodeLabel'] ?? true;
-                    /** @var string */
-                    $items[$i]['icon'] = $child['icon'] ?? '';
-                    /** @var array */
-                    $items[$i]['iconAttributes'] = $child['iconAttributes'] ?? [];
-                    /** @var string */
-                    $items[$i]['iconClass'] = $child['iconClass'] ?? '';
-                    /** @var array */
-                    $items[$i]['iconContainerAttributes'] = $child['iconContainerAttributes'] ?? [];
-                    /** @var bool */
-                    $items[$i]['visible'] = $child['visible'] ?? true;
-                }
-            }
-        }
-
-        return $items;
     }
 
     private function renderAfterContent(): string
@@ -656,8 +582,6 @@ final class Menu extends Widget
      */
     private function renderItem(array $item): string
     {
-        /** @var string */
-        $label = $item['label'] ?? '';
         /** @var array */
         $linkAttributes = $item['linkAttributes'] ?? [];
         $linkAttributes = array_merge($linkAttributes, $this->linkAttributes);
@@ -675,22 +599,19 @@ final class Menu extends Widget
             Html::addCssClass($linkAttributes, $this->disabledClass);
         }
 
-        if ($item['encodeLabel']) {
-            $label = Html::encode($label);
-        }
-
         if (isset($item['link']) && is_string($item['link'])) {
             $linkAttributes['href'] = $item['link'];
         }
 
         /**
+         * @var string $item['label']
          * @var string $item['icon']
          * @var string $item['iconClass']
          * @var array $item['iconAttributes']
          * @var array $item['iconContainerAttributes']
          */
         $label = $this->renderLabel(
-            $label,
+            $item['label'],
             $item['icon'],
             $item['iconClass'],
             $item['iconAttributes'],
@@ -807,7 +728,7 @@ final class Menu extends Widget
             Html::addCssClass($iconAttributes, $iconClass);
         }
 
-        if ($icon !== '' || $iconClass !== '') {
+        if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
             $i = I::tag()->addAttributes($iconAttributes)->content($icon)->encode(false)->render();
             $html = Span::tag()->addAttributes($iconContainerAttributes)->content($i)->encode(false)->render();
         }

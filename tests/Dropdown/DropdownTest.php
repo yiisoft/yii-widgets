@@ -120,7 +120,152 @@ final class DropdownTest extends TestCase
         );
     }
 
-    public function testIcons(): void
+    public function testItemContainerWithFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <a class="active" href="#" aria-current="true">Action</a>
+            <a href="#">Another action</a>
+            <a href="#">Something else here</a>
+            <li><hr class="dropdown-divider"></li>
+            <a class="disabled" href="#">Separated link</a>
+            </div>
+            HTML,
+            Dropdown::widget()->itemContainer(false)->items($this->items)->render(),
+        );
+    }
+
+    public function testItemContainerAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li class="test-class"><a class="active" href="#" aria-current="true">Action</a></li>
+            <li class="test-class"><a href="#">Another action</a></li>
+            <li class="test-class"><a href="#">Something else here</a></li>
+            <li class="test-class"><hr class="dropdown-divider"></li>
+            <li class="test-class"><a class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->itemContainerAttributes(['class' => 'test-class'])->items($this->items)->render(),
+        );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li class="test-class"><a class="active" href="#" aria-current="true">Action</a></li>
+            <li class="test-class-2"><a href="#">Another action</a></li>
+            <li class="test-class"><a href="#">Something else here</a></li>
+            <li class="test-class"><hr class="dropdown-divider"></li>
+            <li class="test-class-5"><a class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->itemContainerAttributes(['class' => 'test-class'])
+                ->items(
+                    [
+                        ['label' => 'Action', 'link' => '#', 'active' => true],
+                        [
+                            'label' => 'Another action',
+                            'link' => '#',
+                            'itemContainerAttributes' => ['class' => 'test-class-2']
+                        ],
+                        ['label' => 'Something else here', 'link' => '#'],
+                        '-',
+                        [
+                            'label' => 'Separated link',
+                            'link' => '#', 'disabled' => true,
+                            'itemContainerAttributes' => ['class' => 'test-class-5']
+                        ]
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testItemContainerClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li class="test-class"><a class="active" href="#" aria-current="true">Action</a></li>
+            <li class="test-class"><a href="#">Another action</a></li>
+            <li class="test-class"><a href="#">Something else here</a></li>
+            <li class="test-class"><hr class="dropdown-divider"></li>
+            <li class="test-class"><a class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->itemContainerClass('test-class')->items($this->items)->render(),
+        );
+    }
+
+    public function testItemsEncodeDefault(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/">Black &amp; White</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Black & White']])->render(),
+        );
+    }
+
+    public function testItemsEncodeWithFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/">Black & White</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Black & White', 'encode' => false]])->render(),
+        );
+    }
+
+    public function testItemsIcon(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/active"><span><i>🏠</i></span>Home</a></li>
+            <li><a href="#"><span><i>📧</i></span>Contact</a></li>
+            <li><a href="#"><span><i>🔑</i></span>Login</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items([
+                    ['label' => 'Home', 'link' => '/active', 'icon' => '🏠'],
+                    ['label' => 'Contact', 'link' => '#', 'icon' => '📧'],
+                    ['label' => 'Login', 'link' => '#', 'icon' => '🔑'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testItemsIconAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/active"><span><i class="bi bi-house"></i></span>Home</a></li>
+            <li><a href="#"><span><i class="bi bi-envelope"></i></span>Contact</a></li>
+            <li><a href="#"><span><i class="bi bi-lock"></i></span>Login</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items(
+                    [
+                        ['label' => 'Home', 'link' => '/active', 'iconAttributes' => ['class' => 'bi bi-house']],
+                        ['label' => 'Contact', 'link' => '#', 'iconAttributes' => ['class' => 'bi bi-envelope']],
+                        ['label' => 'Login', 'link' => '#', 'iconAttributes' => ['class' => 'bi bi-lock']],
+                    ]
+                )->render(),
+        );
+    }
+
+    public function testItemsIconClass(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
@@ -140,35 +285,67 @@ final class DropdownTest extends TestCase
         );
     }
 
-    public function testItemContainerWithFalse(): void
+    public function testItemsIconContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <a class="active" href="#" aria-current="true">Action</a>
-            <a href="#">Another action</a>
-            <a href="#">Something else here</a>
-            <li><hr class="dropdown-divider"></li>
-            <a class="disabled" href="#">Separated link</a>
+            <li><a href="/active"><span><i class="bi bi-house"></i></span>Home</a></li>
+            <li><a href="#"><span><i class="bi bi-envelope"></i></span>Contact</a></li>
+            <li><a href="#"><span class="test-class-1"><i class="bi bi-lock"></i></span>Login</a></li>
             </div>
             HTML,
-            Dropdown::widget()->itemContainer(false)->items($this->items)->render(),
+            Dropdown::widget()
+                ->items([
+                    ['label' => 'Home', 'link' => '/active', 'iconClass' => 'bi bi-house'],
+                    ['label' => 'Contact', 'link' => '#', 'iconClass' => 'bi bi-envelope'],
+                    [
+                        'label' => 'Login',
+                        'link' => '#',
+                        'iconClass' => 'bi bi-lock',
+                        'iconContainerAttributes' => ['class' => 'test-class-1']
+                    ],
+                ])
+                ->render(),
         );
     }
 
-    public function testItemContainerClass(): void
+    public function testItemsLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li class="test-class"><a class="active" href="#" aria-current="true">Action</a></li>
-            <li class="test-class"><a href="#">Another action</a></li>
-            <li class="test-class"><a href="#">Something else here</a></li>
-            <li class="test-class"><hr class="dropdown-divider"></li>
-            <li class="test-class"><a class="disabled" href="#">Separated link</a></li>
+            <li><a class="text-danger" href="/">Black &amp; White</a></li>
             </div>
             HTML,
-            Dropdown::widget()->itemContainerClass('test-class')->items($this->items)->render(),
+            Dropdown::widget()
+                ->items([['label' => 'Black & White', 'linkAttributes' => ['class' => 'text-danger']]])
+                ->render(),
+        );
+    }
+
+    public function testItemsVisible(): void
+    {
+        $this->assertEmpty(
+            Dropdown::widget()->items([['label' => 'Black & White', 'visible' => false]])->render(),
+        );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/">Black &amp; White</a></li>
+            <li><a href="/">Green &amp; Blue</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items(
+                    [
+                        ['label' => 'Black & White'],
+                        ['label' => 'Red & Yellow', 'visible' => false],
+                        ['label' => 'Green & Blue', 'visible' => true],
+                    ]
+                )
+                ->render(),
         );
     }
 }

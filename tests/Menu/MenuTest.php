@@ -378,34 +378,7 @@ final class MenuTest extends TestCase
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    public function testIcon(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <ul>
-            <li><a class="me-2" href="/active"><span class="me-2"><i class="bi bi-house"></i></span>Home</a></li>
-            <li><a class="me-2" href="#"><span class="me-2"><i class="bi bi-envelope"></i></span>Contact</a></li>
-            <li><a class="me-2" href="#"><span class="me-2"><i class="bi bi-lock"></i></span>Login</a></li>
-            </ul>
-            HTML,
-            Menu::widget()
-                ->iconContainerAttributes(['class' => 'me-2'])
-                ->linkAttributes(['class' => 'me-2'])
-                ->items(
-                    [
-                        ['label' => 'Home', 'link' => '/active', 'iconClass' => 'bi bi-house'],
-                        ['label' => 'Contact', 'link' => '#', 'iconClass' => 'bi bi-envelope'],
-                        ['label' => 'Login', 'link' => '#', 'iconClass' => 'bi bi-lock'],
-                    ],
-                )
-                ->render(),
-        );
-    }
-
-    /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
-     */
-    public function testItemClassAsArray(): void
+    public function testItemsClassAsArray(): void
     {
         $items = [
             [
@@ -500,6 +473,143 @@ final class MenuTest extends TestCase
             </ul>
             HTML,
             Menu::widget()->itemsContainer(false)->items($this->itemsWithOptions)->render(),
+        );
+    }
+
+    public function testItemsEncodeDefault(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>Black &amp; White</li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'Black & White']])->render(),
+        );
+    }
+
+    public function testItemsEncodeWithFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>Black & White</li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'Black & White', 'encode' => false]])->render(),
+        );
+    }
+
+    /**
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    public function testItemsIcon(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a class="me-2" href="/active"><span class="me-2"><i>🏠</i></span>Home</a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i>📧</i></span>Contact</a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i>🔑</i></span>Login</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->linkAttributes(['class' => 'me-2'])
+                ->items(
+                    [
+                        ['label' => 'Home', 'link' => '/active', 'icon' => '🏠'],
+                        ['label' => 'Contact', 'link' => '#', 'icon' => '📧'],
+                        ['label' => 'Login', 'link' => '#', 'icon' => '🔑'],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    /**
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    public function testItemsIconAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a class="me-2" href="/active"><span class="me-2"><i class="bi bi-house"></i></span>Home</a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i class="bi bi-envelope"></i></span>Contact</a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i class="bi bi-lock"></i></span>Login</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->linkAttributes(['class' => 'me-2'])
+                ->items(
+                    [
+                        ['label' => 'Home', 'link' => '/active', 'iconAttributes' => ['class' => 'bi bi-house']],
+                        ['label' => 'Contact', 'link' => '#', 'iconAttributes' => ['class' => 'bi bi-envelope']],
+                        ['label' => 'Login', 'link' => '#', 'iconAttributes' => ['class' => 'bi bi-lock']],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    /**
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    public function testItemsIconClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a class="me-2" href="/active"><span class="me-2"><i class="bi bi-house"></i></span>Home</a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i class="bi bi-envelope"></i></span>Contact</a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i class="bi bi-lock"></i></span>Login</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->linkAttributes(['class' => 'me-2'])
+                ->items(
+                    [
+                        ['label' => 'Home', 'link' => '/active', 'iconClass' => 'bi bi-house'],
+                        ['label' => 'Contact', 'link' => '#', 'iconClass' => 'bi bi-envelope'],
+                        ['label' => 'Login', 'link' => '#', 'iconClass' => 'bi bi-lock'],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    /**
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    public function testItemsIconContainerAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a class="me-2" href="/active"><span class="me-2"><i class="bi bi-house"></i></span>Home</a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i class="bi bi-envelope"></i></span>Contact</a></li>
+            <li><a class="me-2" href="#"><span class="me-3"><i class="bi bi-lock"></i></span>Login</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->linkAttributes(['class' => 'me-2'])
+                ->items(
+                    [
+                        ['label' => 'Home', 'link' => '/active', 'iconClass' => 'bi bi-house'],
+                        ['label' => 'Contact', 'link' => '#', 'iconClass' => 'bi bi-envelope'],
+                        [
+                            'label' => 'Login',
+                            'link' => '#',
+                            'iconClass' => 'bi bi-lock',
+                            'iconContainerAttributes' => ['class' => 'me-3'],
+                        ],
+                    ],
+                )
+                ->render(),
         );
     }
 

@@ -13,7 +13,6 @@ use Yiisoft\Widget\Widget;
 
 use function ob_end_clean;
 use function ob_get_clean;
-use function ob_implicit_flush;
 use function ob_start;
 
 /**
@@ -145,7 +144,6 @@ final class FragmentCache extends Widget
         parent::begin();
 
         ob_start();
-        ob_implicit_flush(false);
 
         return null;
     }

@@ -22,6 +22,7 @@ use function implode;
 use function is_array;
 use function is_string;
 use function str_contains;
+use function trim;
 
 final class Dropdown extends Widget
 {
@@ -300,7 +301,7 @@ final class Dropdown extends Widget
      * - visible: bool, optional, whether this menu item is visible. Defaults to true.
      * - items: array, optional, the submenu items. The structure is the same as this property.
      *   Note that Bootstrap doesn't support dropdown submenu. You have to add your own CSS styles to support it.
-     * - itemsAttributes: array, optional, the HTML attributes for sub-menu.
+     * - itemsContainerAttributes: array, optional, the HTML attributes for tag `<li>`.
      *
      * To insert dropdown divider use `-`.
      *
@@ -438,8 +439,12 @@ final class Dropdown extends Widget
     protected function run(): string
     {
         $containerAttributes = $this->containerAttributes;
-        $items = $this->normalizeItems($this->items);
+        $items = Helper\Normalize::dropdown($this->items);
         $items = $this->renderItems($items) . PHP_EOL;
+
+        if (trim($items) === '') {
+            return '';
+        }
 
         if ($this->containerClass !== '') {
             Html::addCssClass($containerAttributes, $this->containerClass);
@@ -453,71 +458,6 @@ final class Dropdown extends Widget
             true => Html::normalTag($this->containerTag, $items, $containerAttributes)->encode(false)->render(),
             false => $items,
         };
-    }
-
-    private function label(array $item): string
-    {
-        if (!isset($item['label'])) {
-            throw new InvalidArgumentException('The "label" option is required.');
-        }
-
-        if (!is_string($item['label'])) {
-            throw new InvalidArgumentException('The "label" option must be a string.');
-        }
-
-        if ($item['label'] === '') {
-            throw new InvalidArgumentException('The "label" cannot be an empty string.');
-        }
-
-        /** @var bool */
-        $encode = $item['encodeLabel'] ?? true;
-
-        return $encode ? Html::encode($item['label']) : $item['label'];
-    }
-
-    private function normalizeItems(array $items): array
-    {
-        /**
-         * @psalm-var array[] $items
-         * @psalm-suppress RedundantConditionGivenDocblockType
-         */
-        foreach ($items as $i => $child) {
-            if (is_array($child)) {
-                $items[$i]['label'] = $this->label($child);
-                /** @var bool */
-                $items[$i]['active'] = $child['active'] ?? false;
-                /** @var bool */
-                $items[$i]['disabled'] = $child['disabled'] ?? false;
-                /** @var bool */
-                $items[$i]['enclose'] = $child['enclose'] ?? true;
-                /** @var array */
-                $items[$i]['headerAttributes'] = $child['headerAttributes'] ?? [];
-                /** @var string */
-                $items[$i]['link'] = $child['link'] ?? '/';
-                /** @var array */
-                $items[$i]['linkAttributes'] = $child['linkAttributes'] ?? [];
-                /** @var string */
-                $items[$i]['icon'] = $child['icon'] ?? '';
-                /** @var array */
-                $items[$i]['iconAttributes'] = $child['iconAttributes'] ?? [];
-                /** @var string */
-                $items[$i]['iconClass'] = $child['iconClass'] ?? '';
-                /** @var array */
-                $items[$i]['iconContainerAttributes'] = $child['iconContainerAttributes'] ?? [];
-                /** @var bool */
-                $items[$i]['visible'] = $child['visible'] ?? true;
-                /** @var array */
-                $dropdown = $child['items'] ?? [];
-                /** @var array */
-                $items[$i]['itemsAttributes'] = $child['itemsAttributes'] ?? [];
-
-                if ($dropdown !== []) {
-                    $items[$i]['items'] = $this->normalizeItems($dropdown);
-                }
-            }
-        }
-
-        return $items;
     }
 
     private function renderDivider(): string
@@ -540,7 +480,7 @@ final class Dropdown extends Widget
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    private function renderDropdown(array $items, array $itemsAttributes = []): string
+    private function renderDropdown(array $items): string
     {
         return self::widget()
             ->container(false)
@@ -551,7 +491,7 @@ final class Dropdown extends Widget
             ->itemContainerAttributes($this->itemContainerAttributes)
             ->itemContainerTag($this->itemContainerTag)
             ->items($items)
-            ->itemsContainerAttributes(array_merge($this->itemsContainerAttributes, $itemsAttributes))
+            ->itemsContainerAttributes(array_merge($this->itemsContainerAttributes))
             ->itemTag($this->itemTag)
             ->toggleAttributes($this->toggleAttributes)
             ->toggleType($this->toggleType)
@@ -580,14 +520,19 @@ final class Dropdown extends Widget
      */
     private function renderItem(array $item): string
     {
+        if ($item['visible'] === false) {
+            return '';
+        }
+
         /** @var bool */
         $enclose = $item['enclose'] ?? true;
         /** @var array */
-        $headerAttributes = $item['headerAttributes'];
+        $headerAttributes = $item['headerAttributes'] ?? [];
         /** @var array */
         $items = $item['items'] ?? [];
         /** @var array */
-        $itemsAttributes = $item['itemsAttributes'] ?? [];
+        $itemContainerAttributes = $item['itemContainerAttributes'] ?? [];
+
         /**
          * @var string $item['label']
          * @var string $item['icon']
@@ -602,12 +547,13 @@ final class Dropdown extends Widget
             $item['iconAttributes'],
             $item['iconContainerAttributes'],
         );
+
         /** @var array */
         $lines = [];
         /** @var string */
         $link = $item['link'];
         /** @var array */
-        $linkAttributes = $item['linkAttributes'];
+        $linkAttributes = $item['linkAttributes'] ?? [];
         /** @var array */
         $toggleAttributes = $item['toggleAttributes'] ?? [];
 
@@ -625,9 +571,16 @@ final class Dropdown extends Widget
         }
 
         if ($items === []) {
-            $lines[] = $this->renderItemContent($label, $link, $enclose, $linkAttributes, $headerAttributes);
+            $lines[] = $this->renderItemContent(
+                $label,
+                $link,
+                $enclose,
+                $linkAttributes,
+                $headerAttributes,
+                $itemContainerAttributes,
+            );
         } else {
-            $itemContainer = $this->renderItemsContainer($this->renderDropdown($items, $itemsAttributes));
+            $itemContainer = $this->renderItemsContainer($this->renderDropdown($items));
             $toggle = $this->renderToggle($label, $link, $toggleAttributes);
             $toggleSplitButton = $this->renderToggleSplitButton($label);
 
@@ -644,13 +597,17 @@ final class Dropdown extends Widget
         return implode(PHP_EOL, $lines);
     }
 
-    private function renderItemContainer(string $content): string
+    private function renderItemContainer(string $content, array $itemContainerAttributes = []): string
     {
         if ($this->itemContainerTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
-        return Html::normalTag($this->itemContainerTag, $content, $this->itemContainerAttributes)
+        if ($itemContainerAttributes === []) {
+            $itemContainerAttributes = $this->itemContainerAttributes;
+        }
+
+        return Html::normalTag($this->itemContainerTag, $content, $itemContainerAttributes)
             ->encode(false)
             ->render();
     }
@@ -680,13 +637,14 @@ final class Dropdown extends Widget
         string $link,
         bool $enclose,
         array $linkAttributes = [],
-        array $headerAttributes = []
+        array $headerAttributes = [],
+        array $itemContainerAttributes = [],
     ): string {
         return match (true) {
             $label === '-' => $this->renderDivider(),
             $enclose === false => $label,
             $link === '' => $this->renderHeader($label, $headerAttributes),
-            default => $this->renderItemLink($label, $link, $linkAttributes),
+            default => $this->renderItemLink($label, $link, $linkAttributes, $itemContainerAttributes),
         };
     }
 
@@ -699,10 +657,14 @@ final class Dropdown extends Widget
 
         /** @var array|string $item */
         foreach ($items as $item) {
-            $lines[] = match (gettype($item)) {
+            $line = match (gettype($item)) {
                 'array' => $this->renderItem($item),
                 'string' => $this->renderDivider(),
             };
+
+            if ($line !== '') {
+                $lines[] = $line;
+            }
         }
 
         return PHP_EOL . implode(PHP_EOL, $lines);
@@ -721,7 +683,7 @@ final class Dropdown extends Widget
             Html::addCssClass($iconAttributes, $iconClass);
         }
 
-        if ($icon !== '' || $iconClass !== '') {
+        if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
             $i = I::tag()->addAttributes($iconAttributes)->content($icon)->encode(false)->render();
             $html = Span::tag()->addAttributes($iconContainerAttributes)->content($i)->encode(false)->render();
         }
@@ -739,7 +701,8 @@ final class Dropdown extends Widget
     private function renderItemLink(
         string $label,
         string $link,
-        array $linkAttributes = []
+        array $linkAttributes = [],
+        array $itemContainerAttributes = []
     ): string {
         $linkAttributes['href'] = $link;
 
@@ -750,7 +713,7 @@ final class Dropdown extends Widget
         $linkTag = Html::normalTag($this->itemTag, $label, $linkAttributes)->encode(false)->render();
 
         return match ($this->itemContainer) {
-            true => $this->renderItemContainer($linkTag),
+            true => $this->renderItemContainer($linkTag, $itemContainerAttributes),
             default => $linkTag,
         };
     }
