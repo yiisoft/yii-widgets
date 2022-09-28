@@ -169,15 +169,15 @@ final class DropdownTest extends TestCase
                         [
                             'label' => 'Another action',
                             'link' => '#',
-                            'itemContainerAttributes' => ['class' => 'test-class-2']
+                            'itemContainerAttributes' => ['class' => 'test-class-2'],
                         ],
                         ['label' => 'Something else here', 'link' => '#'],
                         '-',
                         [
                             'label' => 'Separated link',
                             'link' => '#', 'disabled' => true,
-                            'itemContainerAttributes' => ['class' => 'test-class-5']
-                        ]
+                            'itemContainerAttributes' => ['class' => 'test-class-5'],
+                        ],
                     ],
                 )
                 ->render(),
@@ -303,7 +303,7 @@ final class DropdownTest extends TestCase
                         'label' => 'Login',
                         'link' => '#',
                         'iconClass' => 'bi bi-lock',
-                        'iconContainerAttributes' => ['class' => 'test-class-1']
+                        'iconContainerAttributes' => ['class' => 'test-class-1'],
                     ],
                 ])
                 ->render(),

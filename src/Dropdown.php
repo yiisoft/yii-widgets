@@ -19,8 +19,6 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function gettype;
 use function implode;
-use function is_array;
-use function is_string;
 use function str_contains;
 use function trim;
 
