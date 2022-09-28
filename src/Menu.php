@@ -11,8 +11,6 @@ use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
 use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
-use Yiisoft\Html\Tag\I;
-use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
 use function array_merge;
@@ -585,6 +583,9 @@ final class Menu extends Widget
         /** @var array */
         $linkAttributes = $item['linkAttributes'] ?? [];
         $linkAttributes = array_merge($linkAttributes, $this->linkAttributes);
+        /** @var array */
+        $iconContainerAttributes = $item['iconContainerAttributes'] ?? $this->iconContainerAttributes;
+
 
         if ($this->linkClass !== '') {
             Html::addCssClass($linkAttributes, $this->linkClass);
@@ -606,16 +607,15 @@ final class Menu extends Widget
         /**
          * @var string $item['label']
          * @var string $item['icon']
-         * @var string $item['iconClass']
          * @var array $item['iconAttributes']
-         * @var array $item['iconContainerAttributes']
+         * @var string $item['iconClass']
          */
-        $label = $this->renderLabel(
+        $label = Helper\Normalize::renderLabel(
             $item['label'],
             $item['icon'],
-            $item['iconClass'],
             $item['iconAttributes'],
-            $item['iconContainerAttributes'],
+            $item['iconClass'],
+            $iconContainerAttributes,
         );
 
         if ($this->linkTag === '') {
@@ -712,31 +712,5 @@ final class Menu extends Widget
                 Html::normalTag($this->tagName, $content, $attributes)->encode(false) .
                 $afterContent,
         };
-    }
-
-    private function renderLabel(
-        string $label,
-        string $icon,
-        string $iconClass,
-        array $iconAttributes = [],
-        array $iconContainerAttributes = []
-    ): string {
-        $html = '';
-        $iconContainerAttributes = array_merge($this->iconContainerAttributes, $iconContainerAttributes);
-
-        if ($iconClass !== '') {
-            Html::addCssClass($iconAttributes, $iconClass);
-        }
-
-        if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
-            $i = I::tag()->addAttributes($iconAttributes)->content($icon)->encode(false)->render();
-            $html = Span::tag()->addAttributes($iconContainerAttributes)->content($i)->encode(false)->render();
-        }
-
-        if ($label !== '') {
-            $html .= $label;
-        }
-
-        return $html;
     }
 }

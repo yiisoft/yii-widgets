@@ -11,7 +11,6 @@ use Yiisoft\Definitions\Exception\NotInstantiableException;
 use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
 use Yiisoft\Html\Tag\A;
-use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
@@ -534,15 +533,15 @@ final class Dropdown extends Widget
         /**
          * @var string $item['label']
          * @var string $item['icon']
-         * @var string $item['iconClass']
          * @var array $item['iconAttributes']
+         * @var string $item['iconClass']
          * @var array $item['iconContainerAttributes']
          */
-        $label = $this->renderLabel(
+        $label = Helper\Normalize::renderLabel(
             $item['label'],
             $item['icon'],
-            $item['iconClass'],
             $item['iconAttributes'],
+            $item['iconClass'],
             $item['iconContainerAttributes'],
         );
 
@@ -666,31 +665,6 @@ final class Dropdown extends Widget
         }
 
         return PHP_EOL . implode(PHP_EOL, $lines);
-    }
-
-    private function renderLabel(
-        string $label,
-        string $icon,
-        string $iconClass,
-        array $iconAttributes = [],
-        array $iconContainerAttributes = []
-    ): string {
-        $html = '';
-
-        if ($iconClass !== '') {
-            Html::addCssClass($iconAttributes, $iconClass);
-        }
-
-        if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
-            $i = I::tag()->addAttributes($iconAttributes)->content($icon)->encode(false)->render();
-            $html = Span::tag()->addAttributes($iconContainerAttributes)->content($i)->encode(false)->render();
-        }
-
-        if ($label !== '') {
-            $html .= $label;
-        }
-
-        return $html;
     }
 
     /**

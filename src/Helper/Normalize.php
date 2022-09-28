@@ -6,6 +6,8 @@ namespace Yiisoft\Yii\Widgets\Helper;
 
 use InvalidArgumentException;
 use Yiisoft\Html\Html;
+use Yiisoft\Html\Tag\I;
+use Yiisoft\Html\Tag\Span;
 
 final class Normalize
 {
@@ -83,8 +85,6 @@ final class Normalize
                     $items[$i]['iconAttributes'] = $child['iconAttributes'] ?? [];
                     /** @var string */
                     $items[$i]['iconClass'] = $child['iconClass'] ?? '';
-                    /** @var array */
-                    $items[$i]['iconContainerAttributes'] = $child['iconContainerAttributes'] ?? [];
                     /** @var bool */
                     $items[$i]['visible'] = $child['visible'] ?? true;
                 }
@@ -92,6 +92,31 @@ final class Normalize
         }
 
         return $items;
+    }
+
+    public static function renderLabel(
+        string $label,
+        string $icon,
+        array $iconAttributes,
+        string $iconClass,
+        array $iconContainerAttributes
+    ): string {
+        $html = '';
+
+        if ($iconClass !== '') {
+            Html::addCssClass($iconAttributes, $iconClass);
+        }
+
+        if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
+            $i = I::tag()->addAttributes($iconAttributes)->content($icon);
+            $html = Span::tag()->addAttributes($iconContainerAttributes)->content($i)->encode(false)->render();
+        }
+
+        if ($label !== '') {
+            $html .= $label;
+        }
+
+        return $html;
     }
 
     /**
