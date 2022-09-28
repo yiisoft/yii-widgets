@@ -66,6 +66,7 @@ final class FragmentCache extends Widget
     {
         $new = clone $this;
         $new->id = $value;
+
         return $new;
     }
 
@@ -83,6 +84,7 @@ final class FragmentCache extends Widget
     {
         $new = clone $this;
         $new->dependency = $value;
+
         return $new;
     }
 
@@ -95,6 +97,7 @@ final class FragmentCache extends Widget
     {
         $new = clone $this;
         $new->ttl = $value;
+
         return $new;
     }
 
@@ -110,6 +113,7 @@ final class FragmentCache extends Widget
         foreach ($value as $dynamicContent) {
             $new->dynamicContents[$dynamicContent->id()] = $dynamicContent;
         }
+
         return $new;
     }
 
@@ -129,6 +133,7 @@ final class FragmentCache extends Widget
     {
         $new = clone $this;
         $new->variations = $value;
+
         return $new;
     }
 
@@ -138,9 +143,10 @@ final class FragmentCache extends Widget
     public function begin(): ?string
     {
         parent::begin();
+
         ob_start();
-        /** @psalm-suppress InvalidArgument */
-        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+        ob_implicit_flush(false);
+
         return null;
     }
 

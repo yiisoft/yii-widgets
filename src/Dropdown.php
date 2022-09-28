@@ -16,7 +16,12 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
+use function array_merge;
 use function gettype;
+use function implode;
+use function is_array;
+use function is_string;
+use function str_contains;
 
 final class Dropdown extends Widget
 {
@@ -357,6 +362,7 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->splitButtonAttributes = $values;
+
         return $new;
     }
 
@@ -638,9 +644,6 @@ final class Dropdown extends Widget
         return implode(PHP_EOL, $lines);
     }
 
-    /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
-     */
     private function renderItemContainer(string $content): string
     {
         if ($this->itemContainerTag === '') {
@@ -652,9 +655,6 @@ final class Dropdown extends Widget
             ->render();
     }
 
-    /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
-     */
     private function renderItemsContainer(string $content): string
     {
         $itemsContainerAttributes = $this->itemsContainerAttributes;
@@ -672,6 +672,9 @@ final class Dropdown extends Widget
             ->render();
     }
 
+    /**
+     * @throws InvalidConfigException|NotFoundException|NotInstantiableException|CircularReferenceException
+     */
     private function renderItemContent(
         string $label,
         string $link,
@@ -730,6 +733,9 @@ final class Dropdown extends Widget
         return $html;
     }
 
+    /**
+     * @throws InvalidConfigException|NotFoundException|NotInstantiableException|CircularReferenceException
+     */
     private function renderItemLink(
         string $label,
         string $link,

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets;
 
 use InvalidArgumentException;
-use JsonException;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
 use function array_key_exists;
 use function implode;
 use function is_array;
+use function is_string;
 use function strtr;
 
 /**
@@ -33,7 +33,7 @@ use function strtr;
  *             'url' => 'post-category/view?id=10',
  *             'template' => "<li><b>{link}</b></li>\n", // template for this link only
  *         ],
- *         ['label' => 'Sample Post', 'url' => 'post/edit?id=1',
+ *         ['label' => 'Sample Post', 'url' => 'post/edit?id=1'],
  *         'Edit',
  *     ];
  * ```
@@ -121,7 +121,7 @@ final class Breadcrumbs extends Widget
      * ]
      * ```
      *
-     * If a item is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
+     * If an item is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
      * simply use `$label`.
      *
      * Additional array elements for each item will be treated as the HTML attributes for the hyperlink tag.
@@ -182,8 +182,6 @@ final class Breadcrumbs extends Widget
     /**
      * Renders the widget.
      *
-     * @throws JsonException
-     *
      * @return string The result of widget execution to be outputted.
      */
     protected function run(): string
@@ -223,10 +221,10 @@ final class Breadcrumbs extends Widget
      * Renders a single breadcrumb item.
      *
      * @param array $item The item to be rendered. It must contain the "label" element. The "url" element is optional.
-     * @param string $template The template to be used to rendered the link. The token "{link}" will be replaced by the
+     * @param string $template The template to be used to render the link. The token "{link}" will be replaced by the
      * link.
      *
-     * @throws InvalidArgumentException|JsonException if `$item` does not have "label" element.
+     * @throws InvalidArgumentException if `$item` does not have "label" element.
      *
      * @return string The rendering result.
      */

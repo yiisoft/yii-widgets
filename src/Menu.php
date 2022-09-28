@@ -18,7 +18,9 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
+use function is_string;
 use function strtr;
+use function trim;
 
 /**
  * Menu displays a multi-level menu using nested HTML lists.

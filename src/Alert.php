@@ -11,6 +11,10 @@ use Yiisoft\Html\Tag\Div;
 use Yiisoft\Html\Tag\I;
 use Yiisoft\Widget\Widget;
 
+use function array_key_exists;
+use function strtr;
+use function trim;
+
 /**
  * Alert renders an alert component.
  *
