@@ -145,7 +145,7 @@ final class Normalize
             throw new InvalidArgumentException('The "label" option must be a string.');
         }
 
-        if ($item['label'] === '') {
+        if ($item['label'] === '' && !isset($item['icon'])) {
             throw new InvalidArgumentException('The "label" cannot be an empty string.');
         }
 

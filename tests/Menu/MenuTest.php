@@ -616,6 +616,33 @@ final class MenuTest extends TestCase
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
+    public function testItemsIconWithEmptyStringLabel(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a class="me-2" href="/active"><span class="me-2"><i>🏠</i></span></a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i>📧</i></span></a></li>
+            <li><a class="me-2" href="#"><span class="me-2"><i>🔑</i></span></a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->linkAttributes(['class' => 'me-2'])
+                ->items(
+                    [
+                        ['label' => '', 'link' => '/active', 'icon' => '🏠'],
+                        ['label' => '', 'link' => '#', 'icon' => '📧'],
+                        ['label' => '', 'link' => '#', 'icon' => '🔑'],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    /**
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
     public function testLastItemCssClass(): void
     {
         Assert::equalsWithoutLE(

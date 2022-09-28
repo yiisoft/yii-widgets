@@ -310,6 +310,29 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    public function testItemsIconWithEmptyStringLabel(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/active"><span><i>🏠</i></span></a></li>
+            <li><a href="#"><span><i>📧</i></span></a></li>
+            <li><a href="#"><span><i>🔑</i></span></a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items([
+                    ['label' => '', 'link' => '/active', 'icon' => '🏠'],
+                    ['label' => '', 'link' => '#', 'icon' => '📧'],
+                    ['label' => '', 'link' => '#', 'icon' => '🔑'],
+                ])
+                ->render(),
+        );
+    }
+
     public function testItemsLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
