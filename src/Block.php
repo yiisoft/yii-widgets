@@ -43,7 +43,7 @@ use function ob_start;
  */
 final class Block extends Widget
 {
-    private string|null $id = null;
+    private string $id = '';
     private bool $renderInPlace = false;
 
     public function __construct(private WebView $webView)
@@ -97,7 +97,7 @@ final class Block extends Widget
      */
     protected function run(): string
     {
-        if ($this->id === null) {
+        if ($this->id === '') {
             ob_end_clean();
             throw new RuntimeException('You must assign the "id" using the "id()" setter.');
         }

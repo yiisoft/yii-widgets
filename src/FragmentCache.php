@@ -42,8 +42,8 @@ use function ob_start;
  */
 final class FragmentCache extends Widget
 {
-    private string|null $id = null;
     private Dependency|null $dependency = null;
+    private string $id = '';
     private int $ttl = 60;
     /** @psalm-var string[] */
     private array $variations = [];
@@ -155,7 +155,7 @@ final class FragmentCache extends Widget
      */
     protected function run(): string
     {
-        if ($this->id === null) {
+        if ($this->id === '') {
             ob_end_clean();
             throw new RuntimeException('You must assign the "id" using the "id()" setter.');
         }
