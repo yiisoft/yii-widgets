@@ -673,7 +673,7 @@ final class Dropdown extends Widget
     }
 
     /**
-     * @throws InvalidConfigException|NotFoundException|NotInstantiableException|CircularReferenceException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     private function renderItemContent(
         string $label,
@@ -734,7 +734,7 @@ final class Dropdown extends Widget
     }
 
     /**
-     * @throws InvalidConfigException|NotFoundException|NotInstantiableException|CircularReferenceException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
     private function renderItemLink(
         string $label,
