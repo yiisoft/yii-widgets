@@ -32,23 +32,6 @@ final class Assert extends TestCase
     }
 
     /**
-     * Gets an inaccessible object property.
-     *
-     * @param object $object The object to get the property from.
-     * @param string $propertyName The name of the property to get.
-     */
-    public static function getInaccessibleProperty(object $object, string $propertyName): mixed
-    {
-        $class = new ReflectionClass($object);
-
-        $property = $class->getProperty($propertyName);
-        $property->setAccessible(true);
-
-        /** @var mixed $result */
-        return $property->getValue($object);
-    }
-
-    /**
      * Invokes an inaccessible method.
      *
      * @param object $object The object to invoke the method on.
