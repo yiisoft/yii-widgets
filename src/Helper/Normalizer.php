@@ -132,7 +132,7 @@ final class Normalizer
      */
     private static function isItemActive(string $link, string $currentPath, bool $activateItems): bool
     {
-        return ($link === $currentPath) && $activateItems;
+        return $link === $currentPath && $activateItems;
     }
 
     private static function label(array $item): string
