@@ -9,7 +9,7 @@ use Yiisoft\Html\Html;
 use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Span;
 
-final class Normalize
+final class Normalizer
 {
     public static function dropdown(array $items): array
     {

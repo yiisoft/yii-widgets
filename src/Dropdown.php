@@ -436,7 +436,7 @@ final class Dropdown extends Widget
     protected function run(): string
     {
         $containerAttributes = $this->containerAttributes;
-        $items = Helper\Normalize::dropdown($this->items);
+        $items = Helper\Normalizer::dropdown($this->items);
         $items = $this->renderItems($items) . PHP_EOL;
 
         if (trim($items) === '') {
@@ -537,7 +537,7 @@ final class Dropdown extends Widget
          * @var string $item['iconClass']
          * @var array $item['iconContainerAttributes']
          */
-        $label = Helper\Normalize::renderLabel(
+        $label = Helper\Normalizer::renderLabel(
             $item['label'],
             $item['icon'],
             $item['iconAttributes'],

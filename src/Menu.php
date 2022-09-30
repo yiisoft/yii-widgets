@@ -504,7 +504,7 @@ final class Menu extends Widget
      */
     protected function run(): string
     {
-        $items = Helper\Normalize::menu($this->items, $this->currentPath, $this->activateItems);
+        $items = Helper\Normalizer::menu($this->items, $this->currentPath, $this->activateItems);
 
         if ($items === []) {
             return '';
@@ -610,7 +610,7 @@ final class Menu extends Widget
          * @var array $item['iconAttributes']
          * @var string $item['iconClass']
          */
-        $label = Helper\Normalize::renderLabel(
+        $label = Helper\Normalizer::renderLabel(
             $item['label'],
             $item['icon'],
             $item['iconAttributes'],
