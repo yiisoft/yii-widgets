@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Support;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
 
