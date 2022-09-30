@@ -205,7 +205,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Returns a new instance with the onclick JavaScript for the button.
+     * Returns a new instance with the `onclick` JavaScript for the button.
      *
      * @param string $value The `onclick` JavaScript for the button.
      */
