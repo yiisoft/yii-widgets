@@ -101,12 +101,12 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified after container attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function afterAttributes(array $values): self
+    public function afterAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->afterAttributes = $values;
+        $new->afterAttributes = $valuesMap;
 
         return $new;
     }
@@ -153,12 +153,12 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the HTML attributes. The following special options are recognized.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function attributes(array $values): self
+    public function attributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->attributes = $values;
+        $new->attributes = $valuesMap;
 
         return $new;
     }
@@ -166,12 +166,12 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified before container attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function beforeAttributes(array $values): self
+    public function beforeAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->beforeAttributes = $values;
+        $new->beforeAttributes = $valuesMap;
 
         return $new;
     }
@@ -296,12 +296,12 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified dropdown definition widget.
      *
-     * @param array $values The dropdown definition widget.
+     * @param array $valuesMap The dropdown definition widget.
      */
-    public function dropdownDefinitions(array $values): self
+    public function dropdownDefinitions(array $valuesMap): self
     {
         $new = clone $this;
-        $new->dropdownDefinitions = $values;
+        $new->dropdownDefinitions = $valuesMap;
 
         return $new;
     }
@@ -322,12 +322,12 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified icon container attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function iconContainerAttributes(array $values): self
+    public function iconContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->iconContainerAttributes = $values;
+        $new->iconContainerAttributes = $valuesMap;
 
         return $new;
     }
@@ -354,12 +354,12 @@ final class Menu extends Widget
      *
      * If a menu item is a string, it will be rendered directly without HTML encoding.
      *
-     * @param array $values the list of items to be rendered.
+     * @param array $valuesMap the list of items to be rendered.
      */
-    public function items(array $values): self
+    public function items(array $valuesMap): self
     {
         $new = clone $this;
-        $new->items = $values;
+        $new->items = $valuesMap;
 
         return $new;
     }
@@ -380,12 +380,12 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified items' container attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function itemsContainerAttributes(array $values): self
+    public function itemsContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new-> itemsContainerAttributes = $values;
+        $new-> itemsContainerAttributes = $valuesMap;
 
         return $new;
     }
@@ -432,12 +432,12 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified link attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function linkAttributes(array $values): self
+    public function linkAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->linkAttributes = $values;
+        $new->linkAttributes = $valuesMap;
 
         return $new;
     }

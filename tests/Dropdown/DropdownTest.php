@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Definitions\Exception\CircularReferenceException;
+use Yiisoft\Definitions\Exception\InvalidConfigException;
+use Yiisoft\Definitions\Exception\NotInstantiableException;
+use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
@@ -24,6 +28,12 @@ final class DropdownTest extends TestCase
         ['label' => 'Separated link', 'link' => '#', 'disabled' => true],
     ];
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testActiveClass(): void
     {
         Assert::equalsWithoutLE(
@@ -40,6 +50,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -56,6 +72,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testContainerClass(): void
     {
         Assert::equalsWithoutLE(
@@ -72,6 +94,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testContainerTag(): void
     {
         Assert::equalsWithoutLE(
@@ -88,6 +116,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testDisabledClass(): void
     {
         Assert::equalsWithoutLE(
@@ -104,6 +138,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testDividerTag(): void
     {
         Assert::equalsWithoutLE(
@@ -120,6 +160,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -136,6 +182,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -184,6 +236,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemContainerClass(): void
     {
         Assert::equalsWithoutLE(
@@ -200,6 +258,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemsEncodeDefault(): void
     {
         Assert::equalsWithoutLE(
@@ -212,6 +276,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemsEncodeWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -224,6 +294,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemsIcon(): void
     {
         Assert::equalsWithoutLE(
@@ -244,6 +320,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemsIconAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -265,6 +347,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemsIconClass(): void
     {
         Assert::equalsWithoutLE(
@@ -285,6 +373,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemsIconContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -311,7 +405,10 @@ final class DropdownTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testItemsIconWithEmptyStringLabel(): void
     {
@@ -333,6 +430,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemsLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -347,6 +450,12 @@ final class DropdownTest extends TestCase
         );
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testItemsVisible(): void
     {
         $this->assertEmpty(

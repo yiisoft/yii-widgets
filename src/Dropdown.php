@@ -77,12 +77,12 @@ final class Dropdown extends Widget
     /**
      * Returns a new instance with the specified container HTML attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function containerAttributes(array $values): self
+    public function containerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->containerAttributes = $values;
+        $new->containerAttributes = $valuesMap;
 
         return $new;
     }
@@ -128,12 +128,12 @@ final class Dropdown extends Widget
     /**
      * Returns a new instance with the specified divider HTML attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function dividerAttributes(array $values): self
+    public function dividerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->dividerAttributes = $values;
+        $new->dividerAttributes = $valuesMap;
 
         return $new;
     }
@@ -232,12 +232,12 @@ final class Dropdown extends Widget
     /**
      * Returns a new instance with the specified item container HTML attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function itemContainerAttributes(array $values): self
+    public function itemContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->itemContainerAttributes = $values;
+        $new->itemContainerAttributes = $valuesMap;
 
         return $new;
     }
@@ -315,12 +315,12 @@ final class Dropdown extends Widget
     /**
      * Returns a new instance with the specified items container HTML attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function itemsContainerAttributes(array $values): self
+    public function itemsContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->itemsContainerAttributes = $values;
+        $new->itemsContainerAttributes = $valuesMap;
 
         return $new;
     }
@@ -354,12 +354,12 @@ final class Dropdown extends Widget
     /**
      * Returns a new instance with the specified split button attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function splitButtonAttributes(array $values): self
+    public function splitButtonAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->splitButtonAttributes = $values;
+        $new->splitButtonAttributes = $valuesMap;
 
         return $new;
     }
@@ -393,12 +393,12 @@ final class Dropdown extends Widget
     /**
      * Returns a new instance with the specified toggle HTML attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function toggleAttributes(array $values): self
+    public function toggleAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->toggleAttributes = $values;
+        $new->toggleAttributes = $valuesMap;
 
         return $new;
     }

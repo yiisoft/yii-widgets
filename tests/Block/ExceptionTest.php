@@ -22,7 +22,11 @@ final class ExceptionTest extends TestCase
     use TestTrait;
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     * @throws RuntimeException
      */
     public function testCacheFragmentThrowExceptionIfNotSetId(): void
     {
@@ -34,6 +38,13 @@ final class ExceptionTest extends TestCase
         Block::end();
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testGetBlockNotFound(): void
     {
         $this->expectException(InvalidArgumentException::class);

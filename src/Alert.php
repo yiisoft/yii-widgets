@@ -46,20 +46,20 @@ final class Alert extends Widget
     private string $layoutBody = '{body}{button}';
 
     /**
-     * Returns a new instance with the HTML attributes. The following special options are recognized.
+     * Returns a new instance with the HTML attributes.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function attributes(array $values): self
+    public function attributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->attributes = $values;
+        $new->attributes = $valuesMap;
 
         return $new;
     }
 
     /**
-     * Returns a new instance with the message body.
+     * Returns a new instance with changed message body.
      *
      * @param string $value The message body.
      */
@@ -74,14 +74,14 @@ final class Alert extends Widget
     /**
      * Returns a new instance with the HTML attributes for the message body tag.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function bodyAttributes(array $values): self
+    public function bodyAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->bodyAttributes = $values;
+        $new->bodyAttributes = $valuesMap;
 
         return $new;
     }
@@ -119,14 +119,14 @@ final class Alert extends Widget
     /**
      * Returns a new instance with the HTML attributes for rendering extra message wrapper.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function bodyContainerAttributes(array $values): self
+    public function bodyContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->bodyContainerAttributes = $values;
+        $new->bodyContainerAttributes = $valuesMap;
 
         return $new;
     }
@@ -147,7 +147,7 @@ final class Alert extends Widget
     /**
      * Returns a new instance specifying when allows you to add an extra wrapper for the panel body.
      *
-     * @param bool $value The value indicating whether to add an extra wrapper for the panel body.
+     * @param bool $value Whether to add an extra wrapper for the panel body.
      */
     public function bodyContainer(bool $value): self
     {
@@ -166,14 +166,14 @@ final class Alert extends Widget
      *
      * The rest of the options will be rendered as the HTML attributes of the button tag.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function buttonAttributes(array $values): self
+    public function buttonAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->buttonAttributes = $values;
+        $new->buttonAttributes = $valuesMap;
 
         return $new;
     }
@@ -207,7 +207,7 @@ final class Alert extends Widget
     /**
      * Returns a new instance with the onclick JavaScript for the button.
      *
-     * @param string $value The onclick JavaScript for the button.
+     * @param string $value The `onclick` JavaScript for the button.
      */
     public function buttonOnClick(string $value): self
     {
@@ -246,14 +246,14 @@ final class Alert extends Widget
     /**
      * Returns a new instance with the HTML attributes for rendering the header content.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function headerAttributes(array $values): self
+    public function headerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->headerAttributes = $values;
+        $new->headerAttributes = $valuesMap;
 
         return $new;
     }
@@ -287,14 +287,14 @@ final class Alert extends Widget
     /**
      * Returns a new instance with the HTML attributes for rendering the header.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function headerContainerAttributes(array $values): self
+    public function headerContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->headerContainerAttributes = $values;
+        $new->headerContainerAttributes = $valuesMap;
 
         return $new;
     }
@@ -334,14 +334,14 @@ final class Alert extends Widget
     /**
      * Returns a new instance with the HTML attributes for rendering the `<i>` tag for the icon.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function iconAttributes(array $values): self
+    public function iconAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->iconAttributes = $values;
+        $new->iconAttributes = $valuesMap;
 
         return $new;
     }
@@ -364,14 +364,14 @@ final class Alert extends Widget
      *
      * The rest of the options will be rendered as the HTML attributes of the icon container.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function iconContainerAttributes(array $values): self
+    public function iconContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->iconContainerAttributes = $values;
+        $new->iconContainerAttributes = $valuesMap;
 
         return $new;
     }

@@ -35,11 +35,6 @@ trait TestTrait
         $this->cache = $container->get(CacheInterface::class);
         $this->webView = $container->get(WebView::class);
     }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
 }
 
 namespace Yiisoft\Html;

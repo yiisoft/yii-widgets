@@ -23,7 +23,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.0/components/alerts/#additional-content
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testAdditionalContent(): void
     {
@@ -60,7 +63,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.0/components/alerts/#dismissing
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testDismissing(): void
     {
@@ -85,7 +91,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.0/components/alerts/#icons
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testIcon(): void
     {
@@ -117,7 +126,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.0/components/alerts/#link-color
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testLinkColor(): void
     {

@@ -26,7 +26,10 @@ final class FragmentCacheTest extends TestCase
     use TestTrait;
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testCacheFragment(): void
     {
@@ -38,7 +41,10 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testCacheFragmentWithEmptyContent(): void
     {
@@ -49,7 +55,10 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testSingleDynamicFragment(): void
     {
@@ -72,7 +81,10 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testMultipleDynamicFragments(): void
     {
@@ -110,7 +122,10 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testNestedDynamicFragments(): void
     {
@@ -159,7 +174,10 @@ final class FragmentCacheTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testVariations(): void
     {
@@ -200,20 +218,6 @@ final class FragmentCacheTest extends TestCase
         $content4 = FragmentCache::end();
 
         $this->assertSame('cached fragment', $content4);
-    }
-
-    /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
-     */
-    public function testImmutability(): void
-    {
-        $widget = FragmentCache::widget();
-
-        $this->assertNotSame($widget, $widget->id(''));
-        $this->assertNotSame($widget, $widget->ttl(3600));
-        $this->assertNotSame($widget, $widget->dependency(new TagDependency('test')));
-        $this->assertNotSame($widget, $widget->dynamicContents(new DynamicContent('test', fn (): string => 'test')));
-        $this->assertNotSame($widget, $widget->variations(''));
     }
 
     private function hasCache(string $id, string $variation = null): bool

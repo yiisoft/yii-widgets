@@ -23,7 +23,10 @@ final class TailwindTest extends TestCase
     /**
      * @link https://v1.tailwindcss.com/components/alerts#banner
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testBanner(): void
     {
@@ -51,7 +54,10 @@ final class TailwindTest extends TestCase
     /**
      * @link https://v1.tailwindcss.com/components/alerts#left-accent-border
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testLeftAccentBorder(): void
     {
@@ -76,7 +82,10 @@ final class TailwindTest extends TestCase
     /**
      * @link https://v1.tailwindcss.com/components/alerts#modern-with-badge
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testModernWithBadge(): void
     {
@@ -111,7 +120,10 @@ final class TailwindTest extends TestCase
     /**
      * @link https://v1.tailwindcss.com/components/alerts#solid
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testSolid(): void
     {
@@ -141,7 +153,10 @@ final class TailwindTest extends TestCase
     /**
      * @link https://v1.tailwindcss.com/components/alerts#traditional
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testTraditional(): void
     {
@@ -166,7 +181,10 @@ final class TailwindTest extends TestCase
     /**
      * @link https://v1.tailwindcss.com/components/alerts#titled
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testTitled(): void
     {
@@ -202,7 +220,10 @@ final class TailwindTest extends TestCase
     /**
      * @link https://v1.tailwindcss.com/components/alerts#top-accent-border
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testTopAccentBorder(): void
     {

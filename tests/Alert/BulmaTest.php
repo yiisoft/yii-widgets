@@ -23,7 +23,10 @@ final class BulmaTest extends TestCase
     /**
      * @link https://bulma.io/documentation/elements/notification/
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testNotification(): void
     {
@@ -45,7 +48,10 @@ final class BulmaTest extends TestCase
     }
 
     /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testNotificationWithIcon(): void
     {

@@ -74,12 +74,12 @@ final class Breadcrumbs extends Widget
     /**
      * Returns a new instance with the HTML attributes. The following special options are recognized.
      *
-     * @param array $values Attribute values indexed by attribute names.
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function attributes(array $values): self
+    public function attributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->attributes = $values;
+        $new->attributes = $valuesMap;
 
         return $new;
     }
@@ -135,7 +135,7 @@ final class Breadcrumbs extends Widget
      * ]
      * ```
      *
-     * Each individual item can override global {@see encodeLabels} param like the following:
+     * To disable encode for a specific item, you can set the encode option to false:
      *
      * ```php
      * [
@@ -238,7 +238,7 @@ final class Breadcrumbs extends Widget
             throw new InvalidArgumentException('The "label" element must be a string.');
         }
 
-        /** @var bool */
+        /** @var bool $encodeLabel */
         $encodeLabel = $item['encode'] ?? true;
         $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
 

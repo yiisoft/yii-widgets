@@ -25,7 +25,10 @@ final class Bootstrap5Test extends TestCase
      *
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#headers
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testHeaders(): void
     {
@@ -78,7 +81,10 @@ final class Bootstrap5Test extends TestCase
      *
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#split-button
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testSplit(): void
     {
@@ -133,7 +139,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#dropend
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testSplitDropend(): void
     {
@@ -188,7 +197,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#dropstart
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testSplitDropStart(): void
     {
@@ -243,7 +255,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#dropup
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testSplitDropup(): void
     {
@@ -298,7 +313,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#sizing
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testSplitSizingWithLargeButton(): void
     {
@@ -352,7 +370,10 @@ final class Bootstrap5Test extends TestCase
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#sizing
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testSplitSizingWithSmallButton(): void
     {

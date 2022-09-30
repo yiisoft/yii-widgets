@@ -21,9 +21,12 @@ final class ContentDecoratorTest extends TestCase
     use TestTrait;
 
     /**
-     * {@see https://github.com/yiisoft/yii2/issues/15536}
+     * @link https://github.com/yiisoft/yii2/issues/15536
      *
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
      */
     public function testContentDecorator(): void
     {
