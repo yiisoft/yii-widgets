@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Yii\Widgets\Tests;
+namespace Yiisoft\Yii\Widgets\Tests\FragmentCache;
 
-use RuntimeException;
+use PHPUnit\Framework\TestCase;
 use Yiisoft\Cache\CacheKeyNormalizer;
 use Yiisoft\Cache\Dependency\TagDependency;
+use Yiisoft\Definitions\Exception\CircularReferenceException;
+use Yiisoft\Definitions\Exception\InvalidConfigException;
+use Yiisoft\Definitions\Exception\NotInstantiableException;
+use Yiisoft\Factory\NotFoundException;
 use Yiisoft\View\Cache\CachedContent;
 use Yiisoft\View\Cache\DynamicContent;
 use Yiisoft\Yii\Widgets\FragmentCache;
+use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
 use function array_merge;
 use function md5;
@@ -18,44 +23,43 @@ use function sprintf;
 
 final class FragmentCacheTest extends TestCase
 {
+    use TestTrait;
+
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testCacheFragment(): void
     {
-        FragmentCache::widget()
-            ->id('test')
-            ->ttl(30)
-            ->dependency(new TagDependency('test'))
-            ->begin();
-
+        FragmentCache::widget()->dependency(new TagDependency('test'))->id('test')->ttl(30)->begin();
         echo 'cached fragment';
-
         $content = FragmentCache::end();
 
         $this->assertSame('cached fragment', $content);
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testCacheFragmentWithEmptyContent(): void
     {
-        FragmentCache::widget()
-            ->id('test')
-            ->ttl(30)
-            ->begin();
+        FragmentCache::widget()->id('test')->ttl(30)->begin();
         $content = FragmentCache::end();
 
-        $this->assertSame('', $content);
+        $this->assertEmpty($content);
     }
 
-    public function testCacheFragmentThrowExceptionIfNotSetId(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('You must assign the "id" using the "id()" setter.');
-
-        FragmentCache::widget()->begin();
-
-        echo 'cached fragment';
-
-        FragmentCache::end();
-    }
-
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testSingleDynamicFragment(): void
     {
         for ($counter = 0; $counter < 42; $counter++) {
@@ -65,14 +69,9 @@ final class FragmentCacheTest extends TestCase
                 ['counter' => $counter],
             );
 
-            FragmentCache::widget()
-                ->id('test')
-                ->dynamicContents($dynamicContent)
-                ->begin();
-
+            FragmentCache::widget()->dynamicContents($dynamicContent)->id('test')->begin();
             echo 'single dynamic cached fragment: ';
             echo $dynamicContent->placeholder();
-
             $content = FragmentCache::end();
 
             $expectedContent = sprintf('single dynamic cached fragment: %d', $counter);
@@ -81,6 +80,12 @@ final class FragmentCacheTest extends TestCase
         }
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testMultipleDynamicFragments(): void
     {
         for ($counter = 0; $counter < 42; $counter++) {
@@ -96,16 +101,14 @@ final class FragmentCacheTest extends TestCase
             );
 
             FragmentCache::widget()
-                ->id('test')
                 ->dynamicContents($dynamicContent1)
                 ->dynamicContents($dynamicContent2)
+                ->id('test')
                 ->begin()
             ;
-
             echo 'multiple dynamic cached fragments: ';
             echo $dynamicContent1->placeholder();
             echo $dynamicContent2->placeholder();
-
             $content = FragmentCache::end();
 
             $expectedContent = sprintf(
@@ -118,6 +121,12 @@ final class FragmentCacheTest extends TestCase
         }
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testNestedDynamicFragments(): void
     {
         for ($counter = 0; $counter < 42; $counter++) {
@@ -137,26 +146,19 @@ final class FragmentCacheTest extends TestCase
                 ['counter' => $counter],
             );
 
-            FragmentCache::widget()
-                ->id('test')
-                ->dynamicContents($dynamicContent1)
-                ->begin();
-
+            FragmentCache::widget()->dynamicContents($dynamicContent1)->id('test')->begin();
             echo 'nested dynamic cached fragments: ';
             echo $dynamicContent1->placeholder();
-
             $content = FragmentCache::end();
 
             FragmentCache::widget()
-                ->id('test-nested')
                 ->dynamicContents($dynamicContent2)
                 ->dynamicContents($dynamicContent3)
+                ->id('test-nested')
                 ->begin()
             ;
-
             echo $dynamicContent2->placeholder();
             echo $dynamicContent3->placeholder();
-
             $content .= FragmentCache::end();
 
             $expectedContent = sprintf(
@@ -171,15 +173,17 @@ final class FragmentCacheTest extends TestCase
         }
     }
 
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testVariations(): void
     {
         $this->setOutputCallback(static fn () => null);
 
-        FragmentCache::widget()
-            ->id($id = 'test')
-            ->variations($variation = 'ru')
-            ->begin();
-
+        FragmentCache::widget()->id($id = 'test')->variations($variation = 'ru')->begin();
         echo 'cached fragment';
 
         $this->assertFalse($this->hasCache($id, $variation), 'Cached fragment should not be exist');
@@ -188,10 +192,7 @@ final class FragmentCacheTest extends TestCase
 
         $this->assertSame('cached fragment', $content1);
 
-        FragmentCache::widget()
-            ->id($id = 'test')
-            ->variations($variation = 'ru')
-            ->begin();
+        FragmentCache::widget()->id($id = 'test')->variations($variation = 'ru')->begin();
 
         $this->assertTrue($this->hasCache($id, $variation), 'Cached fragment should be exist');
 
@@ -199,11 +200,7 @@ final class FragmentCacheTest extends TestCase
 
         $this->assertSame($content1, $content2);
 
-        FragmentCache::widget()
-            ->id($id = 'test')
-            ->variations($variation = 'en')
-            ->begin();
-
+        FragmentCache::widget()->id($id = 'test')->variations($variation = 'en')->begin();
         echo 'cached fragment';
 
         $this->assertFalse($this->hasCache($id, $variation), 'Cached fragment should not be exist');
@@ -213,10 +210,7 @@ final class FragmentCacheTest extends TestCase
         $this->assertTrue($this->hasCache($id, $variation), 'Cached fragment should not be exist');
 
         /** without variations */
-        FragmentCache::widget()
-            ->id($id = 'test')
-            ->begin();
-
+        FragmentCache::widget()->id($id = 'test')->begin();
         echo 'cached fragment';
 
         $this->assertFalse($this->hasCache($id), 'Cached fragment should not be exist');
@@ -226,25 +220,12 @@ final class FragmentCacheTest extends TestCase
         $this->assertSame('cached fragment', $content4);
     }
 
-    public function testImmutability(): void
-    {
-        $widget = FragmentCache::widget();
-
-        $this->assertNotSame($widget, $widget->id(''));
-        $this->assertNotSame($widget, $widget->ttl(3600));
-        $this->assertNotSame($widget, $widget->dependency(new TagDependency('test')));
-        $this->assertNotSame($widget, $widget->dynamicContents(new DynamicContent('test', fn (): string => 'test')));
-        $this->assertNotSame($widget, $widget->variations(''));
-    }
-
     private function hasCache(string $id, string $variation = null): bool
     {
-        $key = (new CacheKeyNormalizer())->normalize(array_merge(
-            [CachedContent::class, $id],
-            (array) ($variation ?? []),
-        ));
-        return $this->cache
-            ->psr()
-            ->has($key);
+        $key = (new CacheKeyNormalizer())->normalize(
+            array_merge([CachedContent::class, $id], (array) ($variation ?? []))
+        );
+
+        return $this->cache->psr()->has($key);
     }
 }

@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
-use Closure;
-use JsonException;
-use Yiisoft\Arrays\ArrayHelper;
+use InvalidArgumentException;
+use Stringable;
+use Yiisoft\Definitions\Exception\CircularReferenceException;
+use Yiisoft\Definitions\Exception\InvalidConfigException;
+use Yiisoft\Definitions\Exception\NotInstantiableException;
+use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
 use function array_merge;
-use function array_values;
 use function count;
 use function implode;
+use function is_string;
 use function strtr;
+use function trim;
 
 /**
  * Menu displays a multi-level menu using nested HTML lists.
@@ -30,58 +34,54 @@ use function strtr;
  * The following example shows how to use Menu:
  *
  * ```php
- * echo Menu::Widget()
+ * <?= Menu::Widget()
  *     ->items([
- *         ['label' => 'Login', 'url' => 'site/login', 'visible' => true],
+ *         ['label' => 'Login', 'link' => 'site/login', 'visible' => true],
  *     ]);
+ * ?>
  * ```
  */
 final class Menu extends Widget
 {
-    /**
-     * @var string The template used to render a list of sub-menus.
-     *
-     * In this template, the token `{items}` will be replaced with the rendered sub-menu items.
-     */
-    private string $submenuTemplate = "\n<ul>\n{items}\n</ul>\n";
-    private array $items = [];
-    private array $itemOptions = [];
-    private string $linkTemplate = '<a href="{url}">{label}</a>';
-    private string $labelTemplate = '{label}';
-    private bool $encodeLabels = true;
-    private string $activeCssClass = 'active';
+    private array $afterAttributes = [];
+    private string $afterContent = '';
+    private string $afterTag = 'span';
+    private string $activeClass = 'active';
     private bool $activateItems = true;
-    private bool $activateParents = false;
-    private ?string $currentPath = null;
-    private bool $showEmptyItems = false;
-    private array $options = [];
-    private ?string $firstItemCssClass = null;
-    private ?string $lastItemCssClass = null;
+    private array $attributes = [];
+    private array $beforeAttributes = [];
+    private string $beforeContent = '';
+    private string $beforeTag = 'span';
+    private bool $container = true;
+    private string $currentPath = '';
+    private string $disabledClass = 'disabled';
+    private bool $dropdownContainer = true;
+    private array $dropdownContainerAttributes = [];
+    private string $dropdownContainerTag = 'li';
+    private array $dropdownDefinitions = [];
+    private string $firstItemClass = '';
+    private array $iconContainerAttributes = [];
+    private array $items = [];
+    private bool $itemsContainer = true;
+    private array $itemsContainerAttributes = [];
+    private string $itemsTag = 'li';
+    private string $lastItemClass = '';
+    private array $linkAttributes = [];
+    private string $linkClass = '';
+    private string $linkTag = 'a';
+    private string $tagName = 'ul';
+    private string $template = '{items}';
 
     /**
-     * Disables active items according to their current path and returns a new instance.
+     * Return new instance with specified active or disable activate items.
      *
-     * @return self
+     * @param bool $value The value to be assigned to the activateItems property.
      */
-    public function deactivateItems(): self
+    public function activateItems(bool $value): self
     {
         $new = clone $this;
-        $new->activateItems = false;
-        return $new;
-    }
+        $new->activateItems = $value;
 
-    /**
-     * Returns a new instance with the activated parent items.
-     *
-     * Activates parent menu items when one of the corresponding child menu items is active.
-     * The activated parent menu items will also have its CSS classes appended with {@see activeCssClass()}.
-     *
-     * @return self
-     */
-    public function activateParents(): self
-    {
-        $new = clone $this;
-        $new->activateParents = true;
         return $new;
     }
 
@@ -89,39 +89,220 @@ final class Menu extends Widget
      * Returns a new instance with the specified active CSS class.
      *
      * @param string $value The CSS class to be appended to the active menu item.
-     *
-     * @return self
      */
-    public function activeCssClass(string $value): self
+    public function activeClass(string $value): self
     {
         $new = clone $this;
-        $new->activeCssClass = $value;
+        $new->activeClass = $value;
+
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified current path.
+     * Returns a new instance with the specified after container attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function afterAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->afterAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified after container class.
+     *
+     * @param string $value The class name.
+     */
+    public function afterClass(string $value): self
+    {
+        $new = clone $this;
+        Html::addCssClass($new->afterAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified after content.
+     *
+     * @param string|Stringable $content The content.
+     */
+    public function afterContent(string|Stringable $content): self
+    {
+        $new = clone $this;
+        $new->afterContent = (string) $content;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified after container tag.
+     *
+     * @param string $value The after container tag.
+     */
+    public function afterTag(string $value): self
+    {
+        $new = clone $this;
+        $new->afterTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the HTML attributes. The following special options are recognized.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function attributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->attributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified before container attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function beforeAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->beforeAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified before container class.
+     *
+     * @param string $value The before container class.
+     */
+    public function beforeClass(string $value): self
+    {
+        $new = clone $this;
+        Html::addCssClass($new->beforeAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified before content.
+     *
+     * @param string|Stringable $value The content.
+     */
+    public function beforeContent(string|Stringable $value): self
+    {
+        $new = clone $this;
+        $new->beforeContent = (string) $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified before container tag.
+     *
+     * @param string $value The before container tag.
+     */
+    public function beforeTag(string $value): self
+    {
+        $new = clone $this;
+        $new->beforeTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified the class `menu` widget.
+     *
+     * @param string $value The class `menu` widget.
+     */
+    public function class(string $value): self
+    {
+        $new = clone $this;
+        Html::addCssClass($new->attributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified enable or disable the container widget.
+     *
+     * @param bool $value The container widget enable or disable, for default is `true`.
+     */
+    public function container(bool $value): self
+    {
+        $new = clone $this;
+        $new->container = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified the current path.
      *
      * @param string $value The current path.
-     *
-     * @return self
      */
     public function currentPath(string $value): self
     {
         $new = clone $this;
         $new->currentPath = $value;
+
         return $new;
     }
 
     /**
-     * Disables encoding for labels and returns a new instance.
+     * Returns a new instance with the specified disabled CSS class.
      *
-     * @return self
+     * @param string $value The CSS class to be appended to the disabled menu item.
      */
-    public function withoutEncodeLabels(): self
+    public function disabledClass(string $value): self
     {
         $new = clone $this;
-        $new->encodeLabels = false;
+        $new->disabledClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified dropdown container class.
+     *
+     * @param string $value The dropdown container class.
+     */
+    public function dropdownContainerClass(string $value): self
+    {
+        $new = clone $this;
+        Html::addCssClass($new->dropdownContainerAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified dropdown container tag.
+     *
+     * @param string $value The dropdown container tag.
+     */
+    public function dropdownContainerTag(string $value): self
+    {
+        $new = clone $this;
+        $new->dropdownContainerTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified dropdown definition widget.
+     *
+     * @param array $valuesMap The dropdown definition widget.
+     */
+    public function dropdownDefinitions(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->dropdownDefinitions = $valuesMap;
+
         return $new;
     }
 
@@ -129,103 +310,109 @@ final class Menu extends Widget
      * Returns a new instance with the specified first item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the first item in the main menu or each submenu.
-     *
-     * @return self
      */
-    public function firstItemCssClass(string $value): self
+    public function firstItemClass(string $value): self
     {
         $new = clone $this;
-        $new->firstItemCssClass = $value;
+        $new->firstItemClass = $value;
+
         return $new;
     }
 
     /**
-     * Returns a new instance with the enable showing empty items.
+     * Returns a new instance with the specified icon container attributes.
      *
-     * Enables showing an empty menu item is one whose `url` option
-     * is not set and which has no visible child menu items.
-     *
-     * @return self
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function showEmptyItems(): self
+    public function iconContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->showEmptyItems = true;
+        $new->iconContainerAttributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified items.
+     * List of items in the nav widget. Each array element represents a single menu item which can be either a string or
+     * an array with the following structure:
      *
-     * @param array $value List of menu items. Each menu item should be an array of the following structure:
-     *
-     * - label: string, optional, specifies the menu item label. When {@see encodeLabels} is true, the label will be
-     *   HTML-encoded. If the label is not specified, an empty string will be used.
-     * - encode: bool, optional, whether this item`s label should be HTML-encoded. This param will override global
-     *   {@see encodeLabels} param.
-     * - url: string or array, optional, specifies the URL of the menu item. When this is set, the actual menu item
-     *   content will be generated using {@see linkTemplate}; otherwise, {@see labelTemplate} will be used.
+     * - label: string, required, the nav item label.
+     * - active: bool, whether the item should be on active state or not.
+     * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
+     * - encodeLabel: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
+     * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.
+     * - itemsContainerAttributes: array, optional, the HTML attributes for the item's submenu container.
+     * - link: string, the item's href. Defaults to "#". For default `link` is "#".
+     * - linkAttributes: array, the HTML attributes of the item's link. For default `linkAttributes` is `[]`.
+     * - icon: string, the item's icon. For default is ``.
+     * - iconAttributes: array, the HTML attributes of the item's icon. For default `iconAttributes` is `[]`.
+     * - iconClass: string, the item's icon CSS class. For default is ``.
+     * - liAttributes: array, optional, the HTML attributes of the item container.
      * - visible: bool, optional, whether this menu item is visible. Defaults to true.
-     * - items: array, optional, specifies the sub-menu items. Its format is the same as the parent items.
-     * - active: bool or Closure, optional, whether this menu item is in active state (currently selected). When
-     *   using a closure, its signature should be `function ($item, $hasActiveChild, $isItemActive, $Widget)`. Closure
-     *   must return `true` if item should be marked as `active`, otherwise - `false`. If a menu item is active, its CSS
-     *   class will be appended with {@see activeCssClass}. If this option is not set, the menu item will be set active
-     *   automatically when the current request is triggered by `url`. For more details, please refer to
-     *   {@see isItemActive()}.
-     * - template: string, optional, the template used to render the content of this menu item. The token `{url}` will
-     *   be replaced by the URL associated with this menu item, and the token `{label}` will be replaced by the label
-     *   of the menu item. If this option is not set, {@see linkTemplate} or {@see labelTemplate} will be used instead.
-     * - submenuTemplate: string, optional, the template used to render the list of sub-menus. The token `{items}` will
-     *   be replaced with the rendered sub-menu items. If this option is not set, {@see submenuTemplate} will be used
-     *   instead.
-     * - options: array, optional, the HTML attributes for the menu container tag.
+     * - dropdown: array, optional, the configuration array for creating dropdown submenu items. The array structure is
+     *   the same as the parent item configuration array.
      *
-     * @return self
+     * If a menu item is a string, it will be rendered directly without HTML encoding.
+     *
+     * @param array $valuesMap the list of items to be rendered.
      */
-    public function items(array $value): self
+    public function items(array $valuesMap): self
     {
         $new = clone $this;
-        $new->items = $value;
+        $new->items = $valuesMap;
+
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified item options.
+     * Returns a new instance with the specified if enabled or disabled the items' container.
      *
-     * @param array $value List of HTML attributes shared by all menu {@see items}. If any individual menu item
-     * specifies its `options`, it will be merged with this property before being used to generate the HTML attributes
-     * for the menu item tag. The following special options are recognized:
-     *
-     * - tag: string, defaults to "li", the tag name of the item container tags. Set to false to disable container tag.
-     *   See also {@see \Yiisoft\Html\Html::tag()}
-     *
-     * @return self
-     *
-     * {@see \Yiisoft\Html\Html::renderTagAttributes() for details on how attributes are being rendered}
+     * @param bool $value The items container enable or disable, for default is `true`.
      */
-    public function itemOptions(array $value): self
+    public function itemsContainer(bool $value): self
     {
         $new = clone $this;
-        $new->itemOptions = $value;
+        $new->itemsContainer = $value;
+
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified label template.
+     * Returns a new instance with the specified items' container attributes.
      *
-     * @param string $value The template used to render the body of a menu which is NOT a link.
-     *
-     * In this template, the token `{label}` will be replaced with the label of the menu item.
-     *
-     * This property will be overridden by the `template` option set in individual menu items via {@see items}.
-     *
-     * @return self
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function labelTemplate(string $value): self
+    public function itemsContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->labelTemplate = $value;
+        $new-> itemsContainerAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified items' container class.
+     *
+     * @param string $value The CSS class that will be assigned to the items' container.
+     */
+    public function itemsContainerClass(string $value): self
+    {
+        $new = clone $this;
+        Html::addCssClass($new->itemsContainerAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified items tag.
+     *
+     * @param string $value The tag that will be used to wrap the items.
+     */
+    public function itemsTag(string $value): self
+    {
+        $new = clone $this;
+        $new->itemsTag = $value;
+
         return $new;
     }
 
@@ -233,125 +420,152 @@ final class Menu extends Widget
      * Returns a new instance with the specified last item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the last item in the main menu or each submenu.
-     *
-     * @return self
      */
-    public function lastItemCssClass(string $value): self
+    public function lastItemClass(string $value): self
     {
         $new = clone $this;
-        $new->lastItemCssClass = $value;
+        $new->lastItemClass = $value;
+
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified link template.
+     * Returns a new instance with the specified link attributes.
      *
-     * @param string $value The template used to render the body of a menu which is a link. In this template, the token
-     * `{url}` will be replaced with the corresponding link URL; while `{label}` will be replaced with the link text.
-     *
-     * This property will be overridden by the `template` option set in individual menu items via {@see items}.
-     *
-     * @return self
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function linkTemplate(string $value): self
+    public function linkAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->linkTemplate = $value;
+        $new->linkAttributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified options.
+     * Returns a new instance with the specified link css class.
      *
-     * @param array $value The HTML attributes for the menu's container tag. The following special options are
-     * recognized:
-     *
-     * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
-     *   See also {@see \Yiisoft\Html\Html::tag()}.
-     *
-     * @return self
-     *
-     * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
+     * @param string $value The CSS class that will be assigned to the link.
      */
-    public function options(array $value): self
+    public function linkClass(string $value): self
     {
         $new = clone $this;
-        $new->options = $value;
+        $new->linkClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified link tag.
+     *
+     * @param string $value The tag that will be used to wrap the link.
+     */
+    public function linkTag(string $value): self
+    {
+        $new = clone $this;
+        $new->linkTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified tag for rendering the menu.
+     *
+     * @param string $value The tag for rendering the menu.
+     */
+    public function tagName(string $value): self
+    {
+        $new = clone $this;
+        $new->tagName = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified the template used to render the main menu.
+     *
+     * @param string $value The template used to render the main menu. In this template, the token `{items}` will be
+     * replaced.
+     */
+    public function template(string $value): self
+    {
+        $new = clone $this;
+        $new->template = $value;
+
         return $new;
     }
 
     /**
      * Renders the menu.
      *
-     * @throws JsonException
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      *
      * @return string The result of Widget execution to be outputted.
      */
     protected function run(): string
     {
-        $items = $this->normalizeItems($this->items, $hasActiveChild);
+        $items = Helper\Normalizer::menu($this->items, $this->currentPath, $this->activateItems);
 
-        if (empty($items)) {
+        if ($items === []) {
             return '';
         }
 
-        $options = $this->options;
-        $tag = ArrayHelper::remove($options, 'tag', 'ul');
+        return $this->renderMenu($items);
+    }
 
-        return empty($tag)
-            ? $this->renderItems($items)
-            : Html::tag($tag, $this->renderItems($items), $options)
+    private function renderAfterContent(): string
+    {
+        if ($this->afterTag === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
+        return PHP_EOL .
+            Html::normalTag($this->afterTag, $this->afterContent, $this->afterAttributes)
                 ->encode(false)
-                ->render()
-            ;
+                ->render();
+    }
+
+    private function renderBeforeContent(): string
+    {
+        if ($this->beforeTag === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
+        return Html::normalTag($this->beforeTag, $this->beforeContent, $this->beforeAttributes)
+            ->encode(false)
+            ->render();
     }
 
     /**
-     * Recursively renders the menu items (without the container tag).
-     *
-     * @param array $items The menu items to be rendered recursively.
-     *
-     * @throws JsonException
-     *
-     * @return string The rendering result.
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    private function renderItems(array $items): string
+    private function renderDropdown(array $items): string
     {
-        $n = count($items);
-        $lines = [];
+        $dropdownDefinitions = $this->dropdownDefinitions;
 
-        foreach ($items as $i => $item) {
-            $options = array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
-            $tag = ArrayHelper::remove($options, 'tag', 'li');
-            $class = [];
-
-            if ($item['active']) {
-                $class[] = $this->activeCssClass;
-            }
-
-            if ($i === 0 && $this->firstItemCssClass !== null) {
-                $class[] = $this->firstItemCssClass;
-            }
-
-            if ($i === $n - 1 && $this->lastItemCssClass !== null) {
-                $class[] = $this->lastItemCssClass;
-            }
-
-            Html::addCssClass($options, $class);
-
-            $menu = $this->renderItem($item);
-
-            if (!empty($item['items'])) {
-                $submenuTemplate = ArrayHelper::getValue($item, 'submenuTemplate', $this->submenuTemplate);
-                $menu .= strtr($submenuTemplate, [
-                    '{items}' => $this->renderItems($item['items']),
-                ]);
-            }
-
-            $lines[] = empty($tag) ? $menu : Html::tag($tag, $menu, $options)->encode(false);
+        if ($dropdownDefinitions === []) {
+            $dropdownDefinitions = [
+                'container()' => [false],
+                'dividerClass()' => ['dropdown-divider'],
+                'toggleAttributes()' => [
+                    ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
+                ],
+                'toggleType()' => ['link'],
+            ];
         }
 
-        return implode("\n", $lines);
+        $dropdown = Dropdown::widget($dropdownDefinitions)->items($items)->render();
+
+        if ($this->dropdownContainerTag === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
+        return match ($this->dropdownContainer) {
+            true => Html::normalTag($this->dropdownContainerTag, $dropdown, $this->dropdownContainerAttributes)
+                ->encode(false)
+                ->render(),
+            false => $dropdown,
+        };
     }
 
     /**
@@ -366,95 +580,137 @@ final class Menu extends Widget
      */
     private function renderItem(array $item): string
     {
-        if (isset($item['url'])) {
-            return strtr(ArrayHelper::getValue($item, 'template', $this->linkTemplate), [
-                '{url}' => Html::encode($item['url']),
-                '{label}' => $item['label'],
-            ]);
+        /** @var array */
+        $linkAttributes = $item['linkAttributes'] ?? [];
+        $linkAttributes = array_merge($linkAttributes, $this->linkAttributes);
+        /** @var array */
+        $iconContainerAttributes = $item['iconContainerAttributes'] ?? $this->iconContainerAttributes;
+
+
+        if ($this->linkClass !== '') {
+            Html::addCssClass($linkAttributes, $this->linkClass);
         }
 
-        return strtr(ArrayHelper::getValue($item, 'template', $this->labelTemplate), [
-            '{label}' => $item['label'],
-        ]);
+        if ($item['active']) {
+            $linkAttributes['aria-current'] = 'page';
+            Html::addCssClass($linkAttributes, $this->activeClass);
+        }
+
+        if ($item['disabled']) {
+            Html::addCssClass($linkAttributes, $this->disabledClass);
+        }
+
+        if (isset($item['link']) && is_string($item['link'])) {
+            $linkAttributes['href'] = $item['link'];
+        }
+
+        /**
+         * @var string $item['label']
+         * @var string $item['icon']
+         * @var array $item['iconAttributes']
+         * @var string $item['iconClass']
+         */
+        $label = Helper\Normalizer::renderLabel(
+            $item['label'],
+            $item['icon'],
+            $item['iconAttributes'],
+            $item['iconClass'],
+            $iconContainerAttributes,
+        );
+
+        if ($this->linkTag === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
+        return match (isset($linkAttributes['href'])) {
+            true => Html::normalTag($this->linkTag, $label, $linkAttributes)->encode(false)->render(),
+            false => $label,
+        };
     }
 
     /**
-     * Normalizes the {@see items} property to remove invisible items and activate certain items.
+     * Recursively renders the menu items (without the container tag).
      *
-     * @param array $items The items to be normalized.
-     * @param bool|null $active Whether there is an active child menu item.
+     * @param array $items The menu items to be rendered recursively.
      *
-     * @return array The normalized menu items.
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    private function normalizeItems(array $items, ?bool &$active): array
+    private function renderItems(array $items): string
     {
+        $lines = [];
+        $n = count($items);
+
+        /** @psalm-var array[] $items  */
         foreach ($items as $i => $item) {
-            if (isset($item['visible']) && !$item['visible']) {
-                unset($items[$i]);
-                continue;
-            }
-
-            if (!isset($item['label'])) {
-                $item['label'] = '';
-            }
-
-            $encodeLabel = $item['encode'] ?? $this->encodeLabels;
-            $items[$i]['label'] = $encodeLabel ? Html::encode($item['label']) : $item['label'];
-            $hasActiveChild = false;
-
             if (isset($item['items'])) {
-                $items[$i]['items'] = $this->normalizeItems($item['items'], $hasActiveChild);
-
-                if (empty($items[$i]['items']) && !$this->showEmptyItems) {
-                    unset($items[$i]['items']);
-
-                    if (!isset($item['url'])) {
-                        unset($items[$i]);
-                        continue;
-                    }
-                }
-            }
-
-            if (!isset($item['active'])) {
-                if (
-                    ($this->activateParents && $hasActiveChild)
-                    || ($this->activateItems && $this->isItemActive($item))
-                ) {
-                    $active = $items[$i]['active'] = true;
-                } else {
-                    $items[$i]['active'] = false;
-                }
-            } elseif ($item['active'] instanceof Closure) {
-                $active = $items[$i]['active'] = $item['active'](
-                    $item,
-                    $hasActiveChild,
-                    $this->isItemActive($item),
-                    $this,
+                /** @psalm-var array $item['items'] */
+                $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item])]);
+            } elseif ($item['visible']) {
+                /** @psalm-var array|null $item['itemsContainerAttributes'] */
+                $itemsContainerAttributes = array_merge(
+                    $this->itemsContainerAttributes,
+                    $item['itemsContainerAttributes'] ?? [],
                 );
-            } elseif ($item['active']) {
-                $active = true;
+
+                if ($i === 0 && $this->firstItemClass !== '') {
+                    Html::addCssClass($itemsContainerAttributes, $this->firstItemClass);
+                }
+
+                if ($i === $n - 1 && $this->lastItemClass !== '') {
+                    Html::addCssClass($itemsContainerAttributes, $this->lastItemClass);
+                }
+
+                $menu = $this->renderItem($item);
+
+                if ($this->itemsTag === '') {
+                    throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+                }
+
+                $lines[] = match ($this->itemsContainer) {
+                    false => $menu,
+                    default => strtr(
+                        $this->template,
+                        [
+                            '{items}' => Html::normalTag($this->itemsTag, $menu, $itemsContainerAttributes)
+                                ->encode(false)
+                                ->render(),
+                        ],
+                    ),
+                };
             }
         }
 
-        return array_values($items);
+        return PHP_EOL . implode(PHP_EOL, $lines);
     }
 
     /**
-     * Checks whether a menu item is active.
-     *
-     * This is done by checking match that specified in the `url` option of the menu item.
-     *
-     * @param array $item The menu item to be checked.
-     *
-     * @return bool Whether the menu item is active.
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    private function isItemActive(array $item): bool
+    private function renderMenu(array $items): string
     {
-        return
-            $this->activateItems
-            && $this->currentPath !== '/'
-            && isset($item['url'])
-            && $item['url'] === $this->currentPath
-            ;
+        $afterContent = '';
+        $attributes = $this->attributes;
+        $beforeContent = '';
+
+        $content = $this->renderItems($items) . PHP_EOL;
+
+        if ($this->beforeContent !== '') {
+            $beforeContent = $this->renderBeforeContent() . PHP_EOL;
+        }
+
+        if ($this->afterContent !== '') {
+            $afterContent = $this->renderAfterContent();
+        }
+
+        if ($this->tagName === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
+        return match ($this->container) {
+            false => $beforeContent . trim($content) . $afterContent,
+            default => $beforeContent .
+                Html::normalTag($this->tagName, $content, $attributes)->encode(false) .
+                $afterContent,
+        };
     }
 }

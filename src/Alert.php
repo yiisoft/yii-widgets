@@ -7,9 +7,13 @@ namespace Yiisoft\Yii\Widgets;
 use InvalidArgumentException;
 use Yiisoft\Html\Html;
 use Yiisoft\Html\Tag\Button;
-use Yiisoft\Html\Tag\CustomTag;
 use Yiisoft\Html\Tag\Div;
+use Yiisoft\Html\Tag\I;
 use Yiisoft\Widget\Widget;
+
+use function array_key_exists;
+use function strtr;
+use function trim;
 
 /**
  * Alert renders an alert component.
@@ -40,72 +44,65 @@ final class Alert extends Widget
     private string $iconText = '';
     private string $layoutHeader = '';
     private string $layoutBody = '{body}{button}';
-    private array $parts = [];
 
     /**
-     * The HTML attributes for the main widget tag.
+     * Returns a new instance with the HTML attributes.
      *
-     * @param array $value Array of attribute name => attribute value pairs.
-     *
-     * @return static
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function attributes(array $value): self
+    public function attributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->attributes = $value;
+        $new->attributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * The message body.
+     * Returns a new instance with changed message body.
      *
      * @param string $value The message body.
-     *
-     * @return static
      */
     public function body(string $value): self
     {
         $new = clone $this;
         $new->body = $value;
+
         return $new;
     }
 
     /**
-     * HTML attributes for the message body tag.
+     * Returns a new instance with the HTML attributes for the message body tag.
      *
-     * @param array $value Array of attribute name => attribute value pairs.
-     *
-     * @return static
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function bodyAttributes(array $value): self
+    public function bodyAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->bodyAttributes = $value;
+        $new->bodyAttributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * CSS class for the message body tag.
+     * Returns a new instance with CSS class for the message body tag.
      *
-     * @param string $value CSS class name.
-     *
-     * @return static
+     * @param string $value The CSS class name.
      */
     public function bodyClass(string $value): self
     {
         $new = clone $this;
         Html::addCssClass($new->bodyAttributes, $value);
+
         return $new;
     }
 
     /**
-     * Allows you to add an extra wrapper for the message body.
+     * Returns a new instance specifying when allows you to add an extra wrapper for the message body.
      *
-     * @param string|null $tag
-     *
-     * @return static
+     * @param string|null $tag The tag name.
      */
     public function bodyTag(?string $tag = null): self
     {
@@ -115,55 +112,53 @@ final class Alert extends Widget
 
         $new = clone $this;
         $new->bodyTag = $tag;
+
         return $new;
     }
 
     /**
-     * The attributes for rendering extra message wrapper.
+     * Returns a new instance with the HTML attributes for rendering extra message wrapper.
      *
-     * @param array $value
-     *
-     * @return static
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function bodyContainerAttributes(array $value): self
+    public function bodyContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->bodyContainerAttributes = $value;
+        $new->bodyContainerAttributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * The CSS class for extra message wrapper.
+     * Returns a new instance with the CSS class for extra message wrapper.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The CSS class name.
      */
     public function bodyContainerClass(string $value): self
     {
         $new = clone $this;
         Html::addCssClass($new->bodyContainerAttributes, $value);
+
         return $new;
     }
 
     /**
-     * Allows you to add an extra wrapper for the panel body.
+     * Returns a new instance specifying when allows you to add an extra wrapper for the panel body.
      *
-     * @param bool $value
-     *
-     * @return static
+     * @param bool $value Whether to add an extra wrapper for the panel body.
      */
     public function bodyContainer(bool $value): self
     {
         $new = clone $this;
         $new->bodyContainer = $value;
+
         return $new;
     }
 
     /**
-     * The attributes for rendering the button tag.
+     * Returns a new instance with the HTML the attributes for rendering the button tag.
      *
      * The button is displayed in the header of the modal window. Clicking on the button will hide the modal.
      *
@@ -171,178 +166,158 @@ final class Alert extends Widget
      *
      * The rest of the options will be rendered as the HTML attributes of the button tag.
      *
-     * @param array $value
-     *
-     * @return static
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function buttonAttributes(array $value): self
+    public function buttonAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->buttonAttributes = $value;
+        $new->buttonAttributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * The CSS class for the button.
+     * Returns a new instance with the CSS class for the button.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The CSS class name.
      */
     public function buttonClass(string $value): self
     {
         $new = clone $this;
         Html::addCssClass($new->buttonAttributes, $value);
+
         return $new;
     }
 
     /**
-     * The label for the button.
+     * Returns a new instance with the label for the button.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The label for the button.
      */
     public function buttonLabel(string $value = ''): self
     {
         $new = clone $this;
         $new->buttonLabel = $value;
+
         return $new;
     }
 
     /**
-     * The onclick JavaScript for the button.
+     * Returns a new instance with the `onclick` JavaScript for the button.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The `onclick` JavaScript for the button.
      */
     public function buttonOnClick(string $value): self
     {
         $new = clone $this;
         $new->buttonAttributes['onclick'] = $value;
+
         return $new;
     }
 
     /**
-     * Set attribute class for main widget tag.
+     * Returns a new instance with the CSS class for the widget.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The CSS class name.
      */
     public function class(string $value): self
     {
         $new = clone $this;
         Html::addCssClass($new->attributes, $value);
-        return $new;
-    }
 
-    public function id(?string $value): self
-    {
-        $new = clone $this;
-        $new->attributes['id'] = $value;
         return $new;
     }
 
     /**
-     * The header content.
+     * Returns a new instance with the header content.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The header content in the message.
      */
     public function header(string $value): self
     {
         $new = clone $this;
         $new->header = $value;
+
         return $new;
     }
 
     /**
-     * The attributes for rendering the header content.
+     * Returns a new instance with the HTML attributes for rendering the header content.
      *
-     * @param array $value
-     *
-     * @return static
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function headerAttributes(array $value): self
+    public function headerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->headerAttributes = $value;
+        $new->headerAttributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * The CSS class for the header.
+     * Returns a new instance with the CSS class for the header.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The CSS class name.
      */
     public function headerClass(string $value): self
     {
         $new = clone $this;
         Html::addCssClass($new->headerAttributes, $value);
+
         return $new;
     }
 
     /**
-     * Allows you to add a div tag to the header extra wrapper.
+     * Returns a new instance specifying when allows you to add a div tag to the header extra wrapper.
      *
-     * @param bool $value
-     *
-     * @return static
+     * @param bool $value The value indicating whether to add a div tag to the header extra wrapper.
      */
     public function headerContainer(bool $value = true): self
     {
         $new = clone $this;
         $new->headerContainer = $value;
+
         return $new;
     }
 
     /**
-     * The CSS class for the header extra wrapper.
+     * Returns a new instance with the HTML attributes for rendering the header.
      *
-     * @param string $value
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
-     * @return static
+     * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
+     */
+    public function headerContainerAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->headerContainerAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the CSS class for the header extra wrapper.
+     *
+     * @param string $value The CSS class name.
      */
     public function headerContainerClass(string $value): self
     {
         $new = clone $this;
         Html::addCssClass($new->headerContainerAttributes, $value);
+
         return $new;
     }
 
     /**
-     * The attributes for rendering the header.
+     * Returns a new instance with the tag name for the header.
      *
-     * @param array $value
-     *
-     * @return static
-     *
-     * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
-     */
-    public function headerContainerAttributes(array $value): self
-    {
-        $new = clone $this;
-        $new->headerContainerAttributes = $value;
-        return $new;
-    }
-
-    /**
-     * Set tag name for the header.
-     *
-     * @param string $value
+     * @param string $value The tag name for the header.
      *
      * @throws InvalidArgumentException
-     *
-     * @return static
      */
     public function headerTag(string $value): self
     {
@@ -352,144 +327,140 @@ final class Alert extends Widget
 
         $new = clone $this;
         $new->headerTag = $value;
+
         return $new;
     }
 
     /**
-     * The attributes for rendering the `<i>` tag for the icon.
+     * Returns a new instance with the HTML attributes for rendering the `<i>` tag for the icon.
      *
-     * @param array $value
-     *
-     * @return static
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function iconAttributes(array $value): self
+    public function iconAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->iconAttributes = $value;
+        $new->iconAttributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * Set icon CSS class.
+     * Returns a new instance with the icon CSS class.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The icon CSS class.
      */
     public function iconClass(string $value): self
     {
         $new = clone $this;
         Html::addCssClass($new->iconAttributes, $value);
+
         return $new;
     }
 
     /**
-     * The attributes for rendering icon container.
+     * Returns a new instance with the HTML attributes for rendering icon container.
      *
      * The rest of the options will be rendered as the HTML attributes of the icon container.
      *
-     * @param array $value
-     *
-     * @return static
+     * @param array $valuesMap Attribute values indexed by attribute names.
      *
      * {@see Html::renderTagAttributes()} for details on how attributes are being rendered.
      */
-    public function iconContainerAttributes(array $value): self
+    public function iconContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->iconContainerAttributes = $value;
+        $new->iconContainerAttributes = $valuesMap;
+
         return $new;
     }
 
     /**
-     * The CSS class for the icon container.
+     * Returns a new instance with the CSS class for the icon container.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The CSS class name.
      */
     public function iconContainerClass(string $value): self
     {
         $new = clone $this;
         Html::addCssClass($new->iconContainerAttributes, $value);
+
         return $new;
     }
 
     /**
-     * Set icon text.
+     * Returns a new instance with the icon text.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The icon text.
      */
     public function iconText(string $value): self
     {
         $new = clone $this;
         $new->iconText = $value;
+
         return $new;
     }
 
     /**
-     * Set layout body.
+     * Returns a new instance with the specified Widget ID.
      *
-     * @param string $value
+     * @param string $value The id of the widget.
+     */
+    public function id(string $value): self
+    {
+        $new = clone $this;
+        $new->attributes['id'] = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the config layout body.
      *
-     * @return static
+     * @param string $value The config layout body.
      */
     public function layoutBody(string $value): self
     {
         $new = clone $this;
         $new->layoutBody = $value;
+
         return $new;
     }
 
     /**
-     * Set layout header.
+     * Returns a new instance with the config layout header.
      *
-     * @param string $value
-     *
-     * @return static
+     * @param string $value The config layout header.
      */
     public function layoutHeader(string $value): self
     {
         $new = clone $this;
         $new->layoutHeader = $value;
+
         return $new;
     }
 
     protected function run(): string
     {
-        $new = clone $this;
         $div = Div::tag();
+        $parts = [];
 
         if (!array_key_exists('id', $this->attributes)) {
             $div = $div->id(Html::generateId('alert-'));
         }
 
-        if (!isset($new->parts['{button}'])) {
-            $new->renderButton($new);
-        }
+        $parts['{button}'] = $this->renderButton();
+        $parts['{icon}'] = $this->renderIcon();
+        $parts['{body}'] = $this->renderBody();
+        $parts['{header}'] = $this->renderHeader();
 
-        if (!isset($new->parts['{icon}'])) {
-            $new->renderIcon($new);
-        }
+        $contentAlert = $this->renderHeaderContainer($parts) . PHP_EOL . $this->renderBodyContainer($parts);
 
-        if (!isset($new->parts['{body}'])) {
-            $new->renderBody($new);
-        }
-
-        if (!isset($new->parts['{header}'])) {
-            $new->renderHeader($new);
-        }
-
-        $contentAlert = $new->renderHeaderContainer($new) . PHP_EOL . $new->renderBodyContainer($new);
-
-        return $new->body !== ''
+        return $this->body !== ''
             ? $div
                 ->attribute('role', 'alert')
-                ->attributes($new->attributes)
+                ->addAttributes($this->attributes)
                 ->content(PHP_EOL . trim($contentAlert) . PHP_EOL)
                 ->encode(false)
                 ->render()
@@ -499,12 +470,12 @@ final class Alert extends Widget
     /**
      * Renders close button.
      */
-    private function renderButton(self $new): void
+    private function renderButton(): string
     {
-        $new->parts['{button}'] = PHP_EOL .
+        return PHP_EOL .
             Button::tag()
-                ->attributes($new->buttonAttributes)
-                ->content($new->buttonLabel)
+                ->addAttributes($this->buttonAttributes)
+                ->content($this->buttonLabel)
                 ->encode(false)
                 ->type('button')
                 ->render();
@@ -513,82 +484,64 @@ final class Alert extends Widget
     /**
      * Render icon.
      */
-    private function renderIcon(self $new): void
+    private function renderIcon(): string
     {
-        $icon = CustomTag::name('i')
-            ->attributes($new->iconAttributes)
-            ->content($new->iconText)
-            ->render();
-
-        $new->parts['{icon}'] = PHP_EOL .
+        return PHP_EOL .
             Div::tag()
-                ->attributes($new->iconContainerAttributes)
-                ->content($icon)
+                ->addAttributes($this->iconContainerAttributes)
+                ->content(I::tag()->addAttributes($this->iconAttributes)->content($this->iconText)->render())
                 ->encode(false)
-                ->render() . PHP_EOL;
+                ->render() .
+            PHP_EOL;
     }
 
     /**
      * Render the alert message body.
      */
-    private function renderBody(self $new): void
+    private function renderBody(): string
     {
-        if ($new->bodyTag !== null) {
-            $new->parts['{body}'] = CustomTag::name($new->bodyTag)
-                ->attributes($new->bodyAttributes)
-                ->content($new->body)
-                ->encode(false)
-                ->render();
-        } else {
-            $new->parts['{body}'] = $new->body;
-        }
+        return $this->bodyTag !== null
+            ? Html::normalTag($this->bodyTag, $this->body, $this->bodyAttributes)->encode(false)->render()
+            : $this->body;
     }
 
     /**
      * Render the header.
      */
-    private function renderHeader(self $new): void
+    private function renderHeader(): string
     {
-        $new->parts['{header}'] = CustomTag::name($new->headerTag)
-            ->attributes($new->headerAttributes)
-            ->content($new->header)
-            ->encode(false)
-            ->render();
+        return Html::normalTag($this->headerTag, $this->header, $this->headerAttributes)->encode(false)->render();
     }
 
     /**
      * Render the header container.
      */
-    private function renderHeaderContainer(self $new): string
+    private function renderHeaderContainer(array $parts): string
     {
-        $headerHtml = trim(strtr($new->layoutHeader, $new->parts));
+        $headerHtml = trim(strtr($this->layoutHeader, $parts));
 
-        if ($new->headerContainer && $headerHtml !== '') {
-            $headerHtml = Div::tag()
-                ->attributes($new->headerContainerAttributes)
+        return $this->headerContainer && $headerHtml !== ''
+            ? Div::tag()
+                ->addAttributes($this->headerContainerAttributes)
                 ->content(PHP_EOL . $headerHtml . PHP_EOL)
                 ->encode(false)
-                ->render();
-        }
-
-        return $headerHtml;
+                ->render()
+            : $headerHtml;
     }
 
     /**
      * Render the panel body.
      */
-    private function renderBodyContainer(self $new): string
+    private function renderBodyContainer(array $parts): string
     {
-        $bodyHtml = trim(strtr($new->layoutBody, $new->parts));
+        $bodyHtml = trim(strtr($this->layoutBody, $parts));
 
-        if ($new->bodyContainer) {
-            $bodyHtml = Div::tag()
-                ->attributes($new->bodyContainerAttributes)
+        return $this->bodyContainer
+            ? Div::tag()
+                ->addAttributes($this->bodyContainerAttributes)
                 ->content(PHP_EOL . $bodyHtml . PHP_EOL)
                 ->encode(false)
-                ->render();
-        }
-
-        return $bodyHtml;
+                ->render()
+            : $bodyHtml;
     }
 }

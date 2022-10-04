@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets;
 
 use InvalidArgumentException;
-use JsonException;
-use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
 use function array_key_exists;
 use function implode;
 use function is_array;
+use function is_string;
 use function strtr;
 
 /**
@@ -34,7 +33,7 @@ use function strtr;
  *             'url' => 'post-category/view?id=10',
  *             'template' => "<li><b>{link}</b></li>\n", // template for this link only
  *         ],
- *         ['label' => 'Sample Post', 'url' => 'post/edit?id=1',
+ *         ['label' => 'Sample Post', 'url' => 'post/edit?id=1'],
  *         'Edit',
  *     ];
  * ```
@@ -51,37 +50,37 @@ use function strtr;
  */
 final class Breadcrumbs extends Widget
 {
-    private string $tag = 'ul';
-    private array $options = ['class' => 'breadcrumb'];
-    private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
+    private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
+    private array $attributes = ['class' => 'breadcrumb'];
+    private array|null $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
-    private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
-    private bool $encodeLabels = true;
+    private string $tag = 'ul';
 
     /**
-     * Returns a new instance with the specified tag.
+     * Returns a new instance with the specified active item template.
      *
-     * @param string $value The tag name.
-     *
-     * @return self
+     * @param string $value The template used to render each active item in the breadcrumbs.
+     * The token `{link}` will be replaced with the actual HTML link for each active item.
      */
-    public function tag(string $value): self
+    public function activeItemTemplate(string $value): self
     {
         $new = clone $this;
-        $new->tag = $value;
+        $new->activeItemTemplate = $value;
+
         return $new;
     }
 
     /**
-     * Disables encoding for labels and returns a new instance.
+     * Returns a new instance with the HTML attributes. The following special options are recognized.
      *
-     * @return self
+     * @param array $valuesMap Attribute values indexed by attribute names.
      */
-    public function withoutEncodeLabels(): self
+    public function attributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new->encodeLabels = false;
+        $new->attributes = $valuesMap;
+
         return $new;
     }
 
@@ -93,8 +92,6 @@ final class Breadcrumbs extends Widget
      * @param array|null $value Please refer to {@see items()} on the format.
      *
      * @throws InvalidArgumentException If an empty array is specified.
-     *
-     * @return self
      */
     public function homeItem(?array $value): self
     {
@@ -106,6 +103,7 @@ final class Breadcrumbs extends Widget
 
         $new = clone $this;
         $new->homeItem = $value;
+
         return $new;
     }
 
@@ -123,7 +121,7 @@ final class Breadcrumbs extends Widget
      * ]
      * ```
      *
-     * If a item is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
+     * If an item is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
      * simply use `$label`.
      *
      * Additional array elements for each item will be treated as the HTML attributes for the hyperlink tag.
@@ -137,7 +135,7 @@ final class Breadcrumbs extends Widget
      * ]
      * ```
      *
-     * Each individual item can override global {@see encodeLabels} param like the following:
+     * To disable encode for a specific item, you can set the encode option to false:
      *
      * ```php
      * [
@@ -145,33 +143,12 @@ final class Breadcrumbs extends Widget
      *     'encode' => false,
      * ]
      * ```
-     *
-     * @return self
      */
     public function items(array $value): self
     {
         $new = clone $this;
         $new->items = $value;
-        return $new;
-    }
 
-    /**
-     * Returns a new instance with the specified options.
-     *
-     * @param array $value The HTML attributes for the menu's container tag. The following special options are
-     * recognized:
-     *
-     * - tag: string, defaults to "ul", the tag name of the item container tags. Set to false to disable container tag.
-     *   See also {@see \Yiisoft\Html\Html::tag()}.
-     *
-     * {@see \Yiisoft\Html\Html::renderTagAttributes()} for details on how attributes are being rendered.
-     *
-     * @return self
-     */
-    public function options(array $value): self
-    {
-        $new = clone $this;
-        $new->options = $value;
         return $new;
     }
 
@@ -180,41 +157,36 @@ final class Breadcrumbs extends Widget
      *
      * @param string $value The template used to render each inactive item in the breadcrumbs.
      * The token `{link}` will be replaced with the actual HTML link for each inactive item.
-     *
-     * @return self
      */
     public function itemTemplate(string $value): self
     {
         $new = clone $this;
         $new->itemTemplate = $value;
+
         return $new;
     }
 
     /**
-     * Returns a new instance with the specified active item template.
+     * Returns a new instance with the specified tag.
      *
-     * @param string $value The template used to render each active item in the breadcrumbs.
-     * The token `{link}` will be replaced with the actual HTML link for each active item.
-     *
-     * @return self
+     * @param string $value The tag name.
      */
-    public function activeItemTemplate(string $value): self
+    public function tag(string $value): self
     {
         $new = clone $this;
-        $new->activeItemTemplate = $value;
+        $new->tag = $value;
+
         return $new;
     }
 
     /**
      * Renders the widget.
      *
-     * @throws JsonException
-     *
      * @return string The result of widget execution to be outputted.
      */
     protected function run(): string
     {
-        if (empty($this->items)) {
+        if ($this->items === []) {
             return '';
         }
 
@@ -224,12 +196,13 @@ final class Breadcrumbs extends Widget
             $items[] = $this->renderItem($this->homeItem, $this->itemTemplate);
         }
 
+        /** @var mixed $item */
         foreach ($this->items as $item) {
             if (!is_array($item)) {
                 $item = ['label' => $item];
             }
 
-            if (!empty($item)) {
+            if ($item !== []) {
                 $items[] = $this->renderItem(
                     $item,
                     isset($item['url']) ? $this->itemTemplate : $this->activeItemTemplate
@@ -241,20 +214,17 @@ final class Breadcrumbs extends Widget
 
         return empty($this->tag)
             ? $body
-            : Html::tag($this->tag, $body, $this->options)
-                ->encode(false)
-                ->render()
-            ;
+            : Html::normalTag($this->tag, PHP_EOL . $body, $this->attributes)->encode(false)->render();
     }
 
     /**
      * Renders a single breadcrumb item.
      *
      * @param array $item The item to be rendered. It must contain the "label" element. The "url" element is optional.
-     * @param string $template The template to be used to rendered the link. The token "{link}" will be replaced by the
+     * @param string $template The template to be used to render the link. The token "{link}" will be replaced by the
      * link.
      *
-     * @throws InvalidArgumentException|JsonException if `$item` does not have "label" element.
+     * @throws InvalidArgumentException if `$item` does not have "label" element.
      *
      * @return string The rendering result.
      */
@@ -264,14 +234,19 @@ final class Breadcrumbs extends Widget
             throw new InvalidArgumentException('The "label" element is required for each item.');
         }
 
-        $encodeLabel = ArrayHelper::remove($item, 'encode', $this->encodeLabels);
+        if (!is_string($item['label'])) {
+            throw new InvalidArgumentException('The "label" element must be a string.');
+        }
+
+        /** @var bool $encodeLabel */
+        $encodeLabel = $item['encode'] ?? true;
         $label = $encodeLabel ? Html::encode($item['label']) : $item['label'];
 
-        if (isset($item['template'])) {
+        if (isset($item['template']) && is_string($item['template'])) {
             $template = $item['template'];
         }
 
-        if (isset($item['url'])) {
+        if (isset($item['url']) && is_string($item['url'])) {
             $link = $item['url'];
             unset($item['template'], $item['label'], $item['url']);
             $link = Html::a($label, $link, $item);

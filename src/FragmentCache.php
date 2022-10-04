@@ -13,7 +13,6 @@ use Yiisoft\Widget\Widget;
 
 use function ob_end_clean;
 use function ob_get_clean;
-use function ob_implicit_flush;
 use function ob_start;
 
 /**
@@ -42,10 +41,10 @@ use function ob_start;
  */
 final class FragmentCache extends Widget
 {
-    private ?string $id = null;
-    private CacheInterface $cache;
-    private ?Dependency $dependency = null;
+    private Dependency|null $dependency = null;
+    private string $id = '';
     private int $ttl = 60;
+    /** @psalm-var string[] */
     private array $variations = [];
 
     /**
@@ -53,22 +52,20 @@ final class FragmentCache extends Widget
      */
     private array $dynamicContents = [];
 
-    public function __construct(CacheInterface $cache)
+    public function __construct(private CacheInterface $cache)
     {
-        $this->cache = $cache;
     }
 
     /**
      * Returns a new instance with the specified Widget ID.
      *
      * @param string $value The unique identifier of the cache fragment.
-     *
-     * @return self
      */
     public function id(string $value): self
     {
         $new = clone $this;
         $new->id = $value;
+
         return $new;
     }
 
@@ -81,13 +78,12 @@ final class FragmentCache extends Widget
      *
      * Would make the output cache depends on the last modified time of all posts. If any post has its modification time
      * changed, the cached content would be invalidated.
-     *
-     * @return self
      */
     public function dependency(Dependency $value): self
     {
         $new = clone $this;
         $new->dependency = $value;
+
         return $new;
     }
 
@@ -95,13 +91,12 @@ final class FragmentCache extends Widget
      * Returns a new instance with the specified TTL.
      *
      * @param int $value The number of seconds that the data can remain valid in cache.
-     *
-     * @return self
      */
     public function ttl(int $value): self
     {
         $new = clone $this;
         $new->ttl = $value;
+
         return $new;
     }
 
@@ -109,8 +104,6 @@ final class FragmentCache extends Widget
      * Returns a new instance with the specified dynamic contents.
      *
      * @param DynamicContent ...$value The dynamic content instances.
-     *
-     * @return self
      */
     public function dynamicContents(DynamicContent ...$value): self
     {
@@ -119,6 +112,7 @@ final class FragmentCache extends Widget
         foreach ($value as $dynamicContent) {
             $new->dynamicContents[$dynamicContent->id()] = $dynamicContent;
         }
+
         return $new;
     }
 
@@ -133,13 +127,12 @@ final class FragmentCache extends Widget
      * ```php
      * $fragmentCache->variations('en');
      * ```
-     *
-     * @return self
      */
     public function variations(string ...$value): self
     {
         $new = clone $this;
         $new->variations = $value;
+
         return $new;
     }
 
@@ -149,9 +142,9 @@ final class FragmentCache extends Widget
     public function begin(): ?string
     {
         parent::begin();
+
         ob_start();
-        /** @psalm-suppress InvalidArgument */
-        PHP_VERSION_ID >= 80000 ? ob_implicit_flush(false) : ob_implicit_flush(0);
+
         return null;
     }
 
@@ -166,7 +159,7 @@ final class FragmentCache extends Widget
      */
     protected function run(): string
     {
-        if ($this->id === null) {
+        if ($this->id === '') {
             ob_end_clean();
             throw new RuntimeException('You must assign the "id" using the "id()" setter.');
         }
