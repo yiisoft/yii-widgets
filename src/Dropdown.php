@@ -303,8 +303,6 @@ final class Dropdown extends Widget
      * To insert dropdown divider use `-`.
      *
      * @param array $value
-     *
-     * @return self
      */
     public function items(array $value): self
     {
