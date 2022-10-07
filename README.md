@@ -36,6 +36,7 @@ For a description of how to use it, see the documentation for each widget:
 - [Block](docs/block.md)
 - [Breadcrumbs](docs/breadcrumbs.md)
 - [ContentDecorator](docs/content-decorator.md)
+- [Dropdown](docs/dropdown.md)
 - [FragmentCache](docs/fragment-cache.md)
 - [Menu](docs/menu.md)
 
@@ -64,6 +65,15 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 
 ```shell
 ./vendor/bin/psalm
+```
+
+### Rector
+
+Use [Rector](https://github.com/rectorphp/rector) to make codebase follow some specific rules or 
+use either newest or any specific version of PHP: 
+
+```shell
+./vendor/bin/rector
 ```
 
 ## License

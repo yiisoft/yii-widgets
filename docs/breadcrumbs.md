@@ -28,8 +28,7 @@ echo Breadcrumbs::widget()
             'class' => 'item',
         ],
     ])
-    ->render()
-;
+    ->render();
 ```
 
 The code above generates the following HTML:
@@ -49,10 +48,9 @@ class with the specified value.
 
 Method | Description | Default
 -------|-------------|---------
-`tag(string $value)` | The container tag name. | `'ul'`
+`activeItemTemplate(string $value)`| Template used to render each active item in the breadcrumbs. | `"<li class=\"active\">{link}</li>\n"`
+`attributes(array $valuesMap)` | HTML attributes for the breadcrumbs container | `[]`
 `homeItem(?array $value)` | The first item in the breadcrumbs (called home link). | `['label' => 'Home', 'url' => '/']`
 `items(array $value)` | List of items to appear in the breadcrumbs. | `[]`
-`options(array $value)` | HTML attributes for the widget container tag. | `['label' => 'Home', 'url' => '/']`
 `itemTemplate(string $value)` | Template used to render each inactive item in the breadcrumbs. | `"<li>{link}</li>\n"`
-`activeItemTemplate(string $value)`| Template used to render each active item in the breadcrumbs. | `"<li class=\"active\">{link}</li>\n"`
-`withoutEncodeLabels()` | Disables encoding for labels. | `enabled`
+`tag(string $value)` | The container tag name. | `'ul'`

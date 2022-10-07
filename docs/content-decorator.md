@@ -12,8 +12,8 @@ For more information about view rendering,
 use Yiisoft\Yii\Widgets\ContentDecorator;
 
 ContentDecorator::widget()
-    ->viewFile('@app/views/layouts/main.php')
     ->parameters(['name' => 'value'])
+    ->viewFile('@app/views/layouts/main.php')
     ->begin();
 
 echo 'Some content here.';
