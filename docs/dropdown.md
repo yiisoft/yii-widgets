@@ -62,7 +62,7 @@ Method | Description | Default
 `headerTag(string $value)` | The tag name for the header tag. | `h6`
 `id(string $value)` | The ID of the widget. | `''`
 `itemClass(string $value)` | The CSS class for the item tag. | `dropdown-item`
-`itemContainer(string $value)` | Specified item container, if false, the item container will not be rendered. | `true`
+`itemContainer(string $value)` | Item container to use. If false, the item container will not be rendered. | `true`
 `itemContainerAttributes(array $valuesMap)` | The HTML attributes for the item container tag. | `[]`
 `itemContainerClass(string $value)` | The CSS class for the item container tag. | `dropdown-menu`
 `itemContainerTag(string $value)` | The tag name for the item container tag. | `ul`
