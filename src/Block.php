@@ -51,6 +51,18 @@ final class Block extends Widget
     }
 
     /**
+     * Starts recording a block.
+     */
+    public function begin(): string|null
+    {
+        parent::begin();
+
+        ob_start();
+
+        return null;
+    }
+
+    /**
      * Returns a new instance with the specified Widget ID.
      *
      * @param string $value The Widget ID.
@@ -74,18 +86,6 @@ final class Block extends Widget
         $new->renderInPlace = true;
 
         return $new;
-    }
-
-    /**
-     * Starts recording a block.
-     */
-    public function begin(): string|null
-    {
-        parent::begin();
-
-        ob_start();
-
-        return null;
     }
 
     /**

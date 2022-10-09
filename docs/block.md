@@ -48,5 +48,5 @@ All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\
 
 Method | Description | Default
 -------|-------------|---------
-`id(string $value)` | The unique identifier of the block. | `null`
-`renderInPlace()` | Enables in-place rendering of the block contents. | `disabled`
+`id(string $value)` | The unique identifier of the block. | `''`
+`renderInPlace()` | Enables in-place rendering of the block contents. | `false`

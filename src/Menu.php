@@ -73,7 +73,8 @@ final class Menu extends Widget
     private string $template = '{items}';
 
     /**
-     * Return new instance with specified active or disable activate items.
+     * Return new instance with specified whether to activate parent menu items when one of the corresponding child menu
+     * items is active.
      *
      * @param bool $value The value to be assigned to the activateItems property.
      */
@@ -339,7 +340,7 @@ final class Menu extends Widget
      * - label: string, required, the nav item label.
      * - active: bool, whether the item should be on active state or not.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
-     * - encodeLabel: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
+     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
      * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.
      * - itemsContainerAttributes: array, optional, the HTML attributes for the item's submenu container.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#".
@@ -347,10 +348,7 @@ final class Menu extends Widget
      * - icon: string, the item's icon. For default is ``.
      * - iconAttributes: array, the HTML attributes of the item's icon. For default `iconAttributes` is `[]`.
      * - iconClass: string, the item's icon CSS class. For default is ``.
-     * - liAttributes: array, optional, the HTML attributes of the item container.
      * - visible: bool, optional, whether this menu item is visible. Defaults to true.
-     * - dropdown: array, optional, the configuration array for creating dropdown submenu items. The array structure is
-     *   the same as the parent item configuration array.
      *
      * If a menu item is a string, it will be rendered directly without HTML encoding.
      *

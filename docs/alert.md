@@ -30,7 +30,7 @@ echo Alert::widget()
     ->iconClass('bi bi-exclamation-triangle-fill flex-shrink-0 me-2')
     ->id('w0-alert')
     ->layoutBody('{icon}{body}{button}')
-    ->render(),
+    ->render();
 ```
 
 The code above generates the following HTML:
@@ -55,7 +55,7 @@ echo Alert::widget()
     ->class('notification is-danger')
     ->id('w0-alert')
     ->layoutBody('{body}{button}')
-    ->render(),
+    ->render();
 ```
 
 The code above generates the following HTML:
@@ -79,7 +79,7 @@ echo Alert::widget()
     ->buttonOnClick('closeAlert()')
     ->class('bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative')
     ->id('w0-alert')
-    ->render(),
+    ->render();
 ```
 
 The code above generates the following HTML:
@@ -99,22 +99,30 @@ All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\
 
 Method | Description | Default
 -------|-------------|---------
-`attributes(array $value)` | HTML attributes for the alert container | `[]`
-`buttonAttributes(array $value)` | The attributes for rendering the button tag | `[]`
-`buttonLabel(string $value)` | The label for the button | `&times;`
+`attributes(array $valuesMap)` | HTML attributes for the alert container | `[]`
 `body(string $value)` | The message body. | `''`
-`bodyAttributes(array $value)` | HTML attributes for the message body tag | `[]`
-`bodyTag(string $value)` | The tag for the message body | `span`
+`bodyAttributes(array $valuesMap)` | HTML attributes for the message body tag | `[]`
+`bodyClass(string $value)` | CSS class for the message body tag | `''`
 `bodyContainer(bool $value)` | Allows you to add an extra wrapper for the body | `false`
-`bodyContainerAttributes(array $value)` | HTML attributes for extra wrapper for the body | `[]`
+`bodyContainerAttributes(array $valuesMap)` | HTML attributes for extra wrapper for the body | `[]`
+`bodyContainerClass(string $value)` | CSS class for extra wrapper for the body | `''`
+`bodyTag(string $value)` | The tag for the message body | `span`
+`buttonAttributes(array $valuesMap)` | The attributes for rendering the button tag | `[]`
+`buttonClass(string $value)` | The CSS class for the close button | `''`
+`buttonLabel(string $value)` | The label for the button | `&times;`
+`buttonOnClick(string $value)` | The JavaScript for the button's `onclick` event | `''`
+`class(string $value)` | The CSS class for the widget | `''`
 `header(string $value)` | The message header. | `''`
-`headerAttributes(array $value)` | HTML attributes for the message header | `[]`
+`headerAttributes(array $valuesMap)` | HTML attributes for the message header | `[]`
+`headerClass(string $value)` | CSS class for the message header tag | `''`
 `headerContainer(bool $value)` | Allows you to add an extra wrapper for the header | `false`
-`headerContainerAttributes(array $value)` | HTML attributes for extra wrapper for the header | `[]`
+`headerContainerAttributes(array $valuesMap)` | HTML attributes for extra wrapper for the header | `[]`
+`headerContainerClass(string $value)` | CSS class for extra wrapper for the header | `''`
 `headerTag(string $value)` | The tag for the message header | `<span>`
-`id(string $value)` | The unique identifier of the Alert. | `null`
-`iconAttributes(array $value)` | HTML attributes for the icon | `[]`
-`iconContainerAttributes(array $value)` | HTML attributes for the icon container | `[]`
+`iconAttributes(array $valuesMap)` | HTML attributes for the icon | `[]`
+`iconClass(string $value)` | CSS class for the icon | `''`
+`iconContainerAttributes(array $valuesMap)` | HTML attributes for the icon container | `[]`
 `iconText(string $value)` | The text for the icon | `''`
+`id(string $value)` | The unique identifier of the Alert. | `null`
 `layoutBody(string $value)` | The layout for the body. | `''`
 `layoutHeader(string $value)` | The layout for the header. | `''`

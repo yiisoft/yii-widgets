@@ -57,6 +57,22 @@ final class FragmentCache extends Widget
     }
 
     /**
+     * Returns a new instance with the specified dynamic contents.
+     *
+     * @param DynamicContent ...$value The dynamic content instances.
+     */
+    public function dynamicContents(DynamicContent ...$value): self
+    {
+        $new = clone $this;
+
+        foreach ($value as $dynamicContent) {
+            $new->dynamicContents[$dynamicContent->id()] = $dynamicContent;
+        }
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified Widget ID.
      *
      * @param string $value The unique identifier of the cache fragment.
@@ -96,22 +112,6 @@ final class FragmentCache extends Widget
     {
         $new = clone $this;
         $new->ttl = $value;
-
-        return $new;
-    }
-
-    /**
-     * Returns a new instance with the specified dynamic contents.
-     *
-     * @param DynamicContent ...$value The dynamic content instances.
-     */
-    public function dynamicContents(DynamicContent ...$value): self
-    {
-        $new = clone $this;
-
-        foreach ($value as $dynamicContent) {
-            $new->dynamicContents[$dynamicContent->id()] = $dynamicContent;
-        }
 
         return $new;
     }

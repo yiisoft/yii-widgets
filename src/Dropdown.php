@@ -289,7 +289,7 @@ final class Dropdown extends Widget
      * - active: bool, whether the item should be on active state or not.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
      * - enclose: bool, whether the item should be enclosed by a `<li>` tag or not. For default `enclose` is true.
-     * - encodeLabel: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
+     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
      * - headerAttributes: array, HTML attributes to be rendered in the item header.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#".
      * - linkAttributes: array, the HTML attributes of the item's link. For default `linkAttributes` is `[]`.
@@ -313,7 +313,7 @@ final class Dropdown extends Widget
     }
 
     /**
-     * Returns a new instance with the specified items container HTML attributes.
+     * Returns a new instance with the specified items' container HTML attributes.
      *
      * @param array $valuesMap Attribute values indexed by attribute names.
      */
@@ -339,9 +339,9 @@ final class Dropdown extends Widget
     }
 
     /**
-     * Returns a new instance with the specified items container tag.
+     * Returns a new instance with the specified items' container tag.
      *
-     * @param string $value The items container tag.
+     * @param string $value The items' container tag.
      */
     public function itemsContainerTag(string $value): self
     {
@@ -626,9 +626,6 @@ final class Dropdown extends Widget
             ->render();
     }
 
-    /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
-     */
     private function renderItemContent(
         string $label,
         string $link,
@@ -667,9 +664,6 @@ final class Dropdown extends Widget
         return PHP_EOL . implode(PHP_EOL, $lines);
     }
 
-    /**
-     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
-     */
     private function renderItemLink(
         string $label,
         string $link,

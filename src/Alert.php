@@ -100,18 +100,14 @@ final class Alert extends Widget
     }
 
     /**
-     * Returns a new instance specifying when allows you to add an extra wrapper for the message body.
+     * Returns a new instance specifying when allows you to add an extra wrapper for the panel body.
      *
-     * @param string|null $tag The tag name.
+     * @param bool $value Whether to add an extra wrapper for the panel body.
      */
-    public function bodyTag(?string $tag = null): self
+    public function bodyContainer(bool $value): self
     {
-        if ($tag === '') {
-            throw new InvalidArgumentException('Body tag must be a string and cannot be empty.');
-        }
-
         $new = clone $this;
-        $new->bodyTag = $tag;
+        $new->bodyContainer = $value;
 
         return $new;
     }
@@ -145,14 +141,18 @@ final class Alert extends Widget
     }
 
     /**
-     * Returns a new instance specifying when allows you to add an extra wrapper for the panel body.
+     * Returns a new instance specifying when allows you to add an extra wrapper for the message body.
      *
-     * @param bool $value Whether to add an extra wrapper for the panel body.
+     * @param string|null $tag The tag name.
      */
-    public function bodyContainer(bool $value): self
+    public function bodyTag(?string $tag = null): self
     {
+        if ($tag === '') {
+            throw new InvalidArgumentException('Body tag must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
-        $new->bodyContainer = $value;
+        $new->bodyTag = $tag;
 
         return $new;
     }
