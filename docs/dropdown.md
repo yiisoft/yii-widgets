@@ -50,7 +50,7 @@ All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\
 Method | Description | Default
 -------|-------------|---------
 `activeCssClass(string $value)` | The CSS class to be added to the active item. | `active`
-`container(bool $value)` | The specified if the container is enabled, or not. | `true`
+`container(bool $value)` | If the container is enabled, or not. | `true`
 `containerAttributes(array $valuesMap)` | The HTML attributes for the container tag. | `[]`
 `containerClass(string $value)` | The CSS class for the container tag. | `''`
 `containerTag(string $value)` | The tag name for the container tag. | `div`
