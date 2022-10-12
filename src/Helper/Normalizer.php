@@ -97,6 +97,31 @@ final class Normalizer
         return $items;
     }
 
+    public static function renderLabel(
+        string $label,
+        string $icon,
+        array $iconAttributes,
+        string $iconClass,
+        array $iconContainerAttributes
+    ): string {
+        $html = '';
+
+        if ($iconClass !== '') {
+            Html::addCssClass($iconAttributes, $iconClass);
+        }
+
+        if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
+            $i = I::tag()->addAttributes($iconAttributes)->content($icon);
+            $html = Span::tag()->addAttributes($iconContainerAttributes)->content($i)->encode(false)->render();
+        }
+
+        if ($label !== '') {
+            $html .= $label;
+        }
+
+        return $html;
+    }
+
     private static function active(array $item, string $link, string $currentPath, bool $activateItems): bool
     {
         if (!array_key_exists('active', $item)) {
@@ -196,31 +221,6 @@ final class Normalizer
     {
         return array_key_exists('linkAttributes', $item) && is_array($item['linkAttributes'])
             ? $item['linkAttributes'] : [];
-    }
-
-    private static function renderLabel(
-        string $label,
-        string $icon,
-        array $iconAttributes,
-        string $iconClass,
-        array $iconContainerAttributes
-    ): string {
-        $html = '';
-
-        if ($iconClass !== '') {
-            Html::addCssClass($iconAttributes, $iconClass);
-        }
-
-        if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
-            $i = I::tag()->addAttributes($iconAttributes)->content($icon);
-            $html = Span::tag()->addAttributes($iconContainerAttributes)->content($i)->encode(false)->render();
-        }
-
-        if ($label !== '') {
-            $html .= $label;
-        }
-
-        return $html;
     }
 
     private static function toggleAttributes(array $item): array
