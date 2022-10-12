@@ -301,8 +301,6 @@ final class Dropdown extends Widget
      * - itemsContainerAttributes: array, optional, the HTML attributes for tag `<li>`.
      *
      * To insert dropdown divider use `-`.
-     *
-     * @param array $value
      */
     public function items(array $value): self
     {
@@ -435,9 +433,30 @@ final class Dropdown extends Widget
      */
     protected function run(): string
     {
+        /**
+         * @psalm-var array<
+         *   array-key,
+         *   array{
+         *     label: string,
+         *     link: string,
+         *     linkAttributes: array,
+         *     items?: array,
+         *     active: bool,
+         *     disabled: bool,
+         *     enclose: bool,
+         *     headerAttributes: array,
+         *     itemContainerAttributes: array,
+         *     toggleAttributes: array,
+         *     visible: bool,
+         *     items: array,
+         *   }|string
+         * > $normalizedItems
+         */
+        $normalizedItems = Helper\Normalizer::dropdown($this->items);
+
         $containerAttributes = $this->containerAttributes;
-        $items = Helper\Normalizer::dropdown($this->items);
-        $items = $this->renderItems($items) . PHP_EOL;
+
+        $items = $this->renderItems($normalizedItems) . PHP_EOL;
 
         if (trim($items) === '') {
             return '';
@@ -514,6 +533,20 @@ final class Dropdown extends Widget
      * @param array $item The item to be rendered.
      *
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     *
+     * @psalm-param array{
+     *   label: string,
+     *   link: string,
+     *   linkAttributes: array,
+     *   active: bool,
+     *   disabled: bool,
+     *   enclose: bool,
+     *   headerAttributes: array,
+     *   itemContainerAttributes: array,
+     *   toggleAttributes: array,
+     *   visible: bool,
+     *   items: array,
+     * } $item
      */
     private function renderItem(array $item): string
     {
@@ -521,38 +554,8 @@ final class Dropdown extends Widget
             return '';
         }
 
-        /** @var bool */
-        $enclose = $item['enclose'] ?? true;
-        /** @var array */
-        $headerAttributes = $item['headerAttributes'] ?? [];
-        /** @var array */
-        $items = $item['items'] ?? [];
-        /** @var array */
-        $itemContainerAttributes = $item['itemContainerAttributes'] ?? [];
-
-        /**
-         * @var string $item['label']
-         * @var string $item['icon']
-         * @var array $item['iconAttributes']
-         * @var string $item['iconClass']
-         * @var array $item['iconContainerAttributes']
-         */
-        $label = Helper\Normalizer::renderLabel(
-            $item['label'],
-            $item['icon'],
-            $item['iconAttributes'],
-            $item['iconClass'],
-            $item['iconContainerAttributes'],
-        );
-
-        /** @var array */
         $lines = [];
-        /** @var string */
-        $link = $item['link'];
-        /** @var array */
-        $linkAttributes = $item['linkAttributes'] ?? [];
-        /** @var array */
-        $toggleAttributes = $item['toggleAttributes'] ?? [];
+        $linkAttributes = $item['linkAttributes'];
 
         if ($this->itemClass !== '') {
             Html::addCssClass($linkAttributes, $this->itemClass);
@@ -567,19 +570,19 @@ final class Dropdown extends Widget
             Html::addCssClass($linkAttributes, $this->disabledClass);
         }
 
-        if ($items === []) {
+        if ($item['items'] === []) {
             $lines[] = $this->renderItemContent(
-                $label,
-                $link,
-                $enclose,
+                $item['label'],
+                $item['link'],
+                $item['enclose'],
                 $linkAttributes,
-                $headerAttributes,
-                $itemContainerAttributes,
+                $item['headerAttributes'],
+                $item['itemContainerAttributes'],
             );
         } else {
-            $itemContainer = $this->renderItemsContainer($this->renderDropdown($items));
-            $toggle = $this->renderToggle($label, $link, $toggleAttributes);
-            $toggleSplitButton = $this->renderToggleSplitButton($label);
+            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']));
+            $toggle = $this->renderToggle($item['label'], $item['link'], $item['toggleAttributes']);
+            $toggleSplitButton = $this->renderToggleSplitButton($item['label']);
 
             if ($this->toggleType === 'split' && !str_contains($this->containerClass, 'dropstart')) {
                 $lines[] = $toggleSplitButton . PHP_EOL . $toggle . PHP_EOL . $itemContainer;
@@ -644,12 +647,28 @@ final class Dropdown extends Widget
 
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     *
+     * @psalm-param array<
+     *   array-key,
+     *   array{
+     *     label: string,
+     *     link: string,
+     *     linkAttributes: array,
+     *     active: bool,
+     *     disabled: bool,
+     *     enclose: bool,
+     *     headerAttributes: array,
+     *     itemContainerAttributes: array,
+     *     toggleAttributes: array,
+     *     visible: bool,
+     *     items: array,
+     *   }|string
+     * > $items
      */
     private function renderItems(array $items = []): string
     {
         $lines = [];
 
-        /** @var array|string $item */
         foreach ($items as $item) {
             $line = match (gettype($item)) {
                 'array' => $this->renderItem($item),
