@@ -11,6 +11,9 @@ use Yiisoft\Html\Tag\Span;
 
 final class Normalizer
 {
+    /**
+     * Normalize the given array of items for the dropdown.
+     */
     public static function dropdown(array $items): array
     {
         /**
@@ -19,26 +22,27 @@ final class Normalizer
          */
         foreach ($items as $i => $child) {
             if (is_array($child)) {
-                $items[$i]['label'] = self::label($child);
-                /** @var bool */
-                $items[$i]['active'] = $child['active'] ?? false;
-                /** @var bool */
-                $items[$i]['disabled'] = $child['disabled'] ?? false;
-                /** @var string */
-                $items[$i]['link'] = $child['link'] ?? '/';
-                /** @var string */
-                $items[$i]['icon'] = $child['icon'] ?? '';
-                /** @var array */
-                $items[$i]['iconAttributes'] = $child['iconAttributes'] ?? [];
-                /** @var string */
-                $items[$i]['iconClass'] = $child['iconClass'] ?? '';
-                /** @var array */
-                $items[$i]['iconContainerAttributes'] = $child['iconContainerAttributes'] ?? [];
-                /** @var bool */
-                $items[$i]['visible'] = $child['visible'] ?? true;
+                $items[$i]['label'] = self::renderLabel(
+                    self::label($child),
+                    self::icon($child),
+                    self::iconAttributes($child),
+                    self::iconClass($child),
+                    self::iconContainerAttributes($child),
+                );
+                $items[$i]['active'] = self::active($child, '', '', false);
+                $items[$i]['disabled'] = self::disabled($child);
+                $items[$i]['enclose'] = self::enclose($child);
+                $items[$i]['headerAttributes'] = self::headerAttributes($child);
+                $items[$i]['itemContainerAttributes'] = self::itemContainerAttributes($child);
+                $items[$i]['link'] = self::link($child, '/');
+                $items[$i]['linkAttributes'] = self::linkAttributes($child);
+                $items[$i]['toggleAttributes'] = self::toggleAttributes($child);
+                $items[$i]['visible'] = self::visible($child);
 
                 if (isset($child['items']) && is_array($child['items'])) {
                     $items[$i]['items'] = self::dropdown($child['items']);
+                } else {
+                    $items[$i]['items'] = [];
                 }
             }
         }
@@ -48,15 +52,13 @@ final class Normalizer
 
     /**
      * Normalize the given array of items for the menu.
-     *
-     * @param array $items The items to be normalized.
-     * @param string $currentPath The current path.
-     * @param bool $activateItems Whether to activate items.
-     *
-     * @return array The normalized array of items.
      */
-    public static function menu(array $items, string $currentPath, bool $activateItems): array
-    {
+    public static function menu(
+        array $items,
+        string $currentPath,
+        bool $activateItems,
+        array $iconContainerAttributes = []
+    ): array {
         /**
          * @psalm-var array[] $items
          * @psalm-suppress RedundantConditionGivenDocblockType
@@ -64,29 +66,30 @@ final class Normalizer
         foreach ($items as $i => $child) {
             if (is_array($child)) {
                 if (isset($child['items']) && is_array($child['items'])) {
-                    $items[$i]['items'] = self::menu($child['items'], $currentPath, $activateItems);
+                    $items[$i]['items'] = self::menu(
+                        $child['items'],
+                        $currentPath,
+                        $activateItems,
+                        $iconContainerAttributes,
+                    );
                 } else {
-                    $items[$i]['label'] = self::label($child);
-
-                    /** @var string */
-                    $link = $child['link'] ?? '/';
-                    /** @var bool */
-                    $active = $child['active'] ?? false;
-
-                    if ($active === false) {
-                        $items[$i]['active'] = self::isItemActive($link, $currentPath, $activateItems);
-                    }
-
-                    /** @var bool */
-                    $items[$i]['disabled'] = $child['disabled'] ?? false;
-                    /** @var string */
-                    $items[$i]['icon'] = $child['icon'] ?? '';
-                    /** @var array */
-                    $items[$i]['iconAttributes'] = $child['iconAttributes'] ?? [];
-                    /** @var string */
-                    $items[$i]['iconClass'] = $child['iconClass'] ?? '';
-                    /** @var bool */
-                    $items[$i]['visible'] = $child['visible'] ?? true;
+                    $items[$i]['link'] = self::link($child);
+                    $items[$i]['linkAttributes'] = self::linkAttributes($child);
+                    $items[$i]['active'] = self::active(
+                        $child,
+                        $items[$i]['link'],
+                        $currentPath,
+                        $activateItems
+                    );
+                    $items[$i]['disabled'] = self::disabled($child);
+                    $items[$i]['visible'] = self::visible($child);
+                    $items[$i]['label'] = self::renderLabel(
+                        self::label($child),
+                        self::icon($child),
+                        self::iconAttributes($child),
+                        self::iconClass($child),
+                        self::iconContainerAttributes($child, $iconContainerAttributes),
+                    );
                 }
             }
         }
@@ -119,6 +122,54 @@ final class Normalizer
         return $html;
     }
 
+    private static function active(array $item, string $link, string $currentPath, bool $activateItems): bool
+    {
+        if (!array_key_exists('active', $item)) {
+            return self::isItemActive($link, $currentPath, $activateItems);
+        }
+
+        return is_bool($item['active']) ? $item['active'] : false;
+    }
+
+    private static function disabled(array $item): bool
+    {
+        return array_key_exists('disabled', $item) && is_bool($item['disabled']) ? $item['disabled'] : false;
+    }
+
+    private static function enclose(array $item): bool
+    {
+        return array_key_exists('enclose', $item) && is_bool($item['enclose']) ? $item['enclose'] : true;
+    }
+
+    private static function headerAttributes(array $item): array
+    {
+        return array_key_exists('headerAttributes', $item) && is_array($item['headerAttributes'])
+            ? $item['headerAttributes']
+            : [];
+    }
+
+    private static function icon(array $item): string
+    {
+        return array_key_exists('icon', $item) && is_string($item['icon']) ? $item['icon'] : '';
+    }
+
+    private static function iconAttributes(array $item): array
+    {
+        return array_key_exists('iconAttributes', $item) && is_array($item['iconAttributes'])
+            ? $item['iconAttributes'] : [];
+    }
+
+    private static function iconClass(array $item): string
+    {
+        return array_key_exists('iconClass', $item) && is_string($item['iconClass']) ? $item['iconClass'] : '';
+    }
+
+    private static function iconContainerAttributes(array $item, array $iconContainerAttributes = []): array
+    {
+        return array_key_exists('iconContainerAttributes', $item) && is_array($item['iconContainerAttributes'])
+            ? $item['iconContainerAttributes'] : $iconContainerAttributes;
+    }
+
     /**
      * Checks whether a menu item is active.
      *
@@ -133,6 +184,12 @@ final class Normalizer
     private static function isItemActive(string $link, string $currentPath, bool $activateItems): bool
     {
         return $link === $currentPath && $activateItems;
+    }
+
+    private static function itemContainerAttributes(array $item): array
+    {
+        return array_key_exists('itemContainerAttributes', $item) && is_array($item['itemContainerAttributes'])
+            ? $item['itemContainerAttributes'] : [];
     }
 
     private static function label(array $item): string
@@ -153,5 +210,27 @@ final class Normalizer
         $encode = $item['encode'] ?? true;
 
         return $encode ? Html::encode($item['label']) : $item['label'];
+    }
+
+    private static function link(array $item, string $defaultValue = ''): string
+    {
+        return array_key_exists('link', $item) && is_string($item['link']) ? $item['link'] : $defaultValue;
+    }
+
+    private static function linkAttributes(array $item): array
+    {
+        return array_key_exists('linkAttributes', $item) && is_array($item['linkAttributes'])
+            ? $item['linkAttributes'] : [];
+    }
+
+    private static function toggleAttributes(array $item): array
+    {
+        return array_key_exists('toggleAttributes', $item) && is_array($item['toggleAttributes'])
+            ? $item['toggleAttributes'] : [];
+    }
+
+    private static function visible(array $item): bool
+    {
+        return array_key_exists('visible', $item) && is_bool($item['visible']) ? $item['visible'] : true;
     }
 }

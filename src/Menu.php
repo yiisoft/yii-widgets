@@ -502,11 +502,30 @@ final class Menu extends Widget
      */
     protected function run(): string
     {
-        $items = Helper\Normalizer::menu($this->items, $this->currentPath, $this->activateItems);
-
-        if ($items === []) {
+        if ($this->items === []) {
             return '';
         }
+
+        /**
+         * @psalm-var array<
+         *   array-key,
+         *   array{
+         *     label: string,
+         *     link: string,
+         *     linkAttributes: array,
+         *     active: bool,
+         *     disabled: bool,
+         *     visible: bool,
+         *     items?: array
+         *   }
+         * > $items
+         */
+        $items = Helper\Normalizer::menu(
+            $this->items,
+            $this->currentPath,
+            $this->activateItems,
+            $this->iconContainerAttributes,
+        );
 
         return $this->renderMenu($items);
     }
@@ -575,15 +594,21 @@ final class Menu extends Widget
      * item.
      *
      * @return string The rendering result.
+     *
+     * @psalm-param array{
+     *   label: string,
+     *   link: string,
+     *   linkAttributes:
+     *   array,
+     *   active: bool,
+     *   disabled: bool,
+     *   visible: bool,
+     *   items?: array
+     * } $item
      */
     private function renderItem(array $item): string
     {
-        /** @var array */
-        $linkAttributes = $item['linkAttributes'] ?? [];
-        $linkAttributes = array_merge($linkAttributes, $this->linkAttributes);
-        /** @var array */
-        $iconContainerAttributes = $item['iconContainerAttributes'] ?? $this->iconContainerAttributes;
-
+        $linkAttributes = array_merge($item['linkAttributes'], $this->linkAttributes);
 
         if ($this->linkClass !== '') {
             Html::addCssClass($linkAttributes, $this->linkClass);
@@ -598,31 +623,17 @@ final class Menu extends Widget
             Html::addCssClass($linkAttributes, $this->disabledClass);
         }
 
-        if (isset($item['link']) && is_string($item['link'])) {
+        if ($item['link'] !== '') {
             $linkAttributes['href'] = $item['link'];
         }
-
-        /**
-         * @var string $item['label']
-         * @var string $item['icon']
-         * @var array $item['iconAttributes']
-         * @var string $item['iconClass']
-         */
-        $label = Helper\Normalizer::renderLabel(
-            $item['label'],
-            $item['icon'],
-            $item['iconAttributes'],
-            $item['iconClass'],
-            $iconContainerAttributes,
-        );
 
         if ($this->linkTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
         return match (isset($linkAttributes['href'])) {
-            true => Html::normalTag($this->linkTag, $label, $linkAttributes)->encode(false)->render(),
-            false => $label,
+            true => Html::normalTag($this->linkTag, $item['label'], $linkAttributes)->encode(false)->render(),
+            false => $item['label'],
         };
     }
 
@@ -632,19 +643,29 @@ final class Menu extends Widget
      * @param array $items The menu items to be rendered recursively.
      *
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     *
+     * @psalm-param array<
+     *   array-key,
+     *   array{
+     *     label: string,
+     *     link: string,
+     *     linkAttributes: array,
+     *     active: bool,
+     *     disabled: bool,
+     *     visible: bool,
+     *     items?: array
+     *   }
+     * > $items
      */
     private function renderItems(array $items): string
     {
         $lines = [];
         $n = count($items);
 
-        /** @psalm-var array[] $items  */
         foreach ($items as $i => $item) {
             if (isset($item['items'])) {
-                /** @psalm-var array $item['items'] */
                 $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item])]);
             } elseif ($item['visible']) {
-                /** @psalm-var array|null $item['itemsContainerAttributes'] */
                 $itemsContainerAttributes = array_merge(
                     $this->itemsContainerAttributes,
                     $item['itemsContainerAttributes'] ?? [],
@@ -683,6 +704,19 @@ final class Menu extends Widget
 
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     *
+     * @psalm-param array<
+     *   array-key,
+     *   array{
+     *     label: string,
+     *     link: string,
+     *     linkAttributes: array,
+     *     active: bool,
+     *     disabled: bool,
+     *     visible: bool,
+     *     items?: array
+     *   }
+     * > $items
      */
     private function renderMenu(array $items): string
     {
