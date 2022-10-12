@@ -119,6 +119,27 @@ final class MenuTest extends TestCase
      * @throws NotFoundException
      * @throws NotInstantiableException
      */
+    public function testActiveWithNotBool(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+               ->currentPath('/path')
+               ->items([['label' => 'item', 'link' => '/path', 'active' => 'not-bool']])
+               ->render(),
+        );
+    }
+
+    /**
+     * @throws CircularReferenceException
+     * @throws InvalidConfigException
+     * @throws NotFoundException
+     * @throws NotInstantiableException
+     */
     public function testBefore(): void
     {
         Assert::equalsWithoutLE(
