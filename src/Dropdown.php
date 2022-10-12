@@ -301,8 +301,6 @@ final class Dropdown extends Widget
      * - itemsContainerAttributes: array, optional, the HTML attributes for tag `<li>`.
      *
      * To insert dropdown divider use `-`.
-     *
-     * @param array $value
      */
     public function items(array $value): self
     {
