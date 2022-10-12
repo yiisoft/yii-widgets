@@ -650,7 +650,6 @@ final class Dropdown extends Widget
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      *
-     *
      * @psalm-param array<
      *   array-key,
      *   array{

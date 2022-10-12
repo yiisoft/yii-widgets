@@ -16,7 +16,6 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
-use function is_string;
 use function strtr;
 use function trim;
 
