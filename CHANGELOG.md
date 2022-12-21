@@ -1,5 +1,9 @@
 # Yii Widgets Change Log
 
+## 1.1.1 under development
+
+- no changes in this release.
+
 ## 1.1.0 December 21, 2022
 
 - Enh #59: Fix phpdocs and check type for array normalized in `Dropdown::class`, `Menu::class` (@terabytesoftw)
