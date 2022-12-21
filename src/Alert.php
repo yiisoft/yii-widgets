@@ -474,7 +474,7 @@ final class Alert extends Widget
     {
         return PHP_EOL .
             Button::tag()
-                ->addAttributes($this->buttonAttributes)
+                ->attributes($this->buttonAttributes)
                 ->content($this->buttonLabel)
                 ->encode(false)
                 ->type('button')
@@ -488,8 +488,8 @@ final class Alert extends Widget
     {
         return PHP_EOL .
             Div::tag()
-                ->addAttributes($this->iconContainerAttributes)
-                ->content(I::tag()->addAttributes($this->iconAttributes)->content($this->iconText)->render())
+                ->attributes($this->iconContainerAttributes)
+                ->content(I::tag()->attributes($this->iconAttributes)->content($this->iconText)->render())
                 ->encode(false)
                 ->render() .
             PHP_EOL;
@@ -522,7 +522,7 @@ final class Alert extends Widget
 
         return $this->headerContainer && $headerHtml !== ''
             ? Div::tag()
-                ->addAttributes($this->headerContainerAttributes)
+                ->attributes($this->headerContainerAttributes)
                 ->content(PHP_EOL . $headerHtml . PHP_EOL)
                 ->encode(false)
                 ->render()
@@ -538,7 +538,7 @@ final class Alert extends Widget
 
         return $this->bodyContainer
             ? Div::tag()
-                ->addAttributes($this->bodyContainerAttributes)
+                ->attributes($this->bodyContainerAttributes)
                 ->content(PHP_EOL . $bodyHtml . PHP_EOL)
                 ->encode(false)
                 ->render()

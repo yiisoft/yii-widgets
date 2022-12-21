@@ -722,25 +722,25 @@ final class Dropdown extends Widget
 
     private function renderToggleButton(string $label, array $toggleAttributes = []): string
     {
-        return Button::tag()->addAttributes($toggleAttributes)->content($label)->type('button')->render();
+        return Button::tag()->attributes($toggleAttributes)->content($label)->type('button')->render();
     }
 
     private function renderToggleLink(string $label, string $link, array $toggleAttributes = []): string
     {
-        return A::tag()->addAttributes($toggleAttributes)->content($label)->href($link)->render();
+        return A::tag()->attributes($toggleAttributes)->content($label)->href($link)->render();
     }
 
     private function renderToggleSplit(string $label, array $toggleAttributes = []): string
     {
         return Button::tag()
-            ->addAttributes($toggleAttributes)
-            ->content(Span::tag()->addAttributes($this->splitButtonSpanAttributes)->content($label))
+            ->attributes($toggleAttributes)
+            ->content(Span::tag()->attributes($this->splitButtonSpanAttributes)->content($label))
             ->type('button')
             ->render();
     }
 
     private function renderToggleSplitButton(string $label): string
     {
-        return Button::tag()->addAttributes($this->splitButtonAttributes)->content($label)->type('button')->render();
+        return Button::tag()->attributes($this->splitButtonAttributes)->content($label)->type('button')->render();
     }
 }

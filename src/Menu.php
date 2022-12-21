@@ -597,12 +597,12 @@ final class Menu extends Widget
      * @psalm-param array{
      *   label: string,
      *   link: string,
-     *   linkAttributes:
-     *   array,
+     *   linkAttributes: array,
      *   active: bool,
      *   disabled: bool,
      *   visible: bool,
-     *   items?: array
+     *   items?: array,
+     *   itemsContainerAttributes?: array
      * } $item
      */
     private function renderItem(array $item): string
@@ -652,7 +652,8 @@ final class Menu extends Widget
      *     active: bool,
      *     disabled: bool,
      *     visible: bool,
-     *     items?: array
+     *     items?: array,
+     *     itemsContainerAttributes?: array
      *   }
      * > $items
      */
