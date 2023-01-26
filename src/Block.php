@@ -95,7 +95,7 @@ final class Block extends Widget
      *
      * @return string The result of widget execution to be outputted.
      */
-    protected function run(): string
+    public function render(): string
     {
         if ($this->id === '') {
             ob_end_clean();

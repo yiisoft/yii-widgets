@@ -87,7 +87,7 @@ final class ContentDecorator extends Widget
      *
      * @return string The result of widget execution to be outputted.
      */
-    protected function run(): string
+    public function render(): string
     {
         $parameters = $this->parameters;
         $parameters['content'] = ob_get_clean();

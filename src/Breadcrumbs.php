@@ -184,7 +184,7 @@ final class Breadcrumbs extends Widget
      *
      * @return string The result of widget execution to be outputted.
      */
-    protected function run(): string
+    public function render(): string
     {
         if ($this->items === []) {
             return '';

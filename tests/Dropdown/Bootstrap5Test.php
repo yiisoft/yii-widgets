@@ -53,7 +53,7 @@ final class Bootstrap5Test extends TestCase
             </ul>
             </div>
             HTML,
-            Dropdown::widget($definitions)
+            Dropdown::widget([], $definitions)
                 ->items(
                     [
                         [
@@ -113,7 +113,7 @@ final class Bootstrap5Test extends TestCase
             </ul>
             </div>
             HTML,
-            Dropdown::widget($definitions)
+            Dropdown::widget([], $definitions)
                 ->id('dropdown-example')
                 ->items(
                     [
@@ -171,7 +171,7 @@ final class Bootstrap5Test extends TestCase
             </ul>
             </div>
             HTML,
-            Dropdown::widget($definitions)
+            Dropdown::widget([], $definitions)
                 ->id('dropdown-example')
                 ->items(
                     [
@@ -229,7 +229,7 @@ final class Bootstrap5Test extends TestCase
             <button type="button" class="btn btn-secondary">Split dropstart</button>
             </div>
             HTML,
-            Dropdown::widget($definitions)
+            Dropdown::widget([], $definitions)
                 ->id('dropdown-example')
                 ->items(
                     [
@@ -287,7 +287,7 @@ final class Bootstrap5Test extends TestCase
             </ul>
             </div>
             HTML,
-            Dropdown::widget($definitions)
+            Dropdown::widget([], $definitions)
                 ->id('dropdown-example')
                 ->items(
                     [
@@ -345,7 +345,7 @@ final class Bootstrap5Test extends TestCase
             </ul>
             </div>
             HTML,
-            Dropdown::widget($definitions)
+            Dropdown::widget([], $definitions)
                 ->id('dropdown-example')
                 ->items(
                     [
@@ -402,7 +402,7 @@ final class Bootstrap5Test extends TestCase
             </ul>
             </div>
             HTML,
-            Dropdown::widget($definitions)
+            Dropdown::widget([], $definitions)
                 ->id('dropdown-example')
                 ->items(
                     [
