@@ -8,6 +8,6 @@ jobs:
     uses: yiisoft/actions/.github/workflows/bc.yml@master
     with:
       os: >-
-        ['ubuntu-latest]
+        ['ubuntu-latest']
       php: >-
         ['8.0']
