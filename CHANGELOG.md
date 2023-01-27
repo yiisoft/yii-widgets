@@ -1,8 +1,8 @@
 # Yii Widgets Change Log
 
-## 1.1.1 under development
+## 2.0.0 under development
 
-- no changes in this release.
+- Chg #67: Upgrade `yiisoft/widget` version to `^2.0` (@rustamwin)
 
 ## 1.1.0 December 21, 2022
 

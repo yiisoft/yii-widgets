@@ -32,7 +32,7 @@
         "yiisoft/cache": "^2.0",
         "yiisoft/html": "^2.5|^3.0",
         "yiisoft/view": "^6.0|^7.0",
-        "yiisoft/widget": "^1.0"
+        "yiisoft/widget": "^2.0"
     },
     "require-dev": {
         "maglnet/composer-require-checker": "^4.3",

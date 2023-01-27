@@ -499,7 +499,7 @@ final class Menu extends Widget
      *
      * @return string The result of Widget execution to be outputted.
      */
-    protected function run(): string
+    public function render(): string
     {
         if ($this->items === []) {
             return '';
@@ -570,7 +570,7 @@ final class Menu extends Widget
             ];
         }
 
-        $dropdown = Dropdown::widget($dropdownDefinitions)->items($items)->render();
+        $dropdown = Dropdown::widget([], $dropdownDefinitions)->items($items)->render();
 
         if ($this->dropdownContainerTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');

@@ -441,7 +441,7 @@ final class Alert extends Widget
         return $new;
     }
 
-    protected function run(): string
+    public function render(): string
     {
         $div = Div::tag();
         $parts = [];
