@@ -5,7 +5,6 @@ on:
 name: backwards compatibility
 jobs:
   roave_bc_check:
-    name: Roave BC Check
     uses: yiisoft/actions/.github/workflows/bc.yml@master
     with:
       os: >-
