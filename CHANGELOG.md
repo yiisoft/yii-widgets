@@ -1,8 +1,8 @@
 # Yii Widgets Change Log
 
-## 2.0.1 under development
+## 2.1.0 under development
 
-- no changes in this release.
+- Chg: #71: Update `yiisoft/aliases` version to `^3.0` and `yiisoft/view` version to `^8.0`
 
 ## 2.0.0 January 27, 2023
 
