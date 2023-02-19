@@ -440,7 +440,6 @@ final class Dropdown extends Widget
          *     label: string,
          *     link: string,
          *     linkAttributes: array,
-         *     items?: array,
          *     active: bool,
          *     disabled: bool,
          *     enclose: bool,
