@@ -196,7 +196,6 @@ final class Breadcrumbs extends Widget
             $items[] = $this->renderItem($this->homeItem, $this->itemTemplate);
         }
 
-        /** @var mixed $item */
         foreach ($this->items as $item) {
             if (!is_array($item)) {
                 $item = ['label' => $item];
