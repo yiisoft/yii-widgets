@@ -22,7 +22,7 @@ Collection of useful widgets for [Yii Framework](https://www.yiiframework.com/).
 The package could be installed via composer:
 
 ```shell
-composer require yiisoft/yii-widgets --prefer-dist
+composer require yiisoft/yii-widgets
 ```
 
 ## General usage

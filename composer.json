@@ -40,7 +40,7 @@
         "rector/rector": "^1.0.1",
         "roave/infection-static-analysis-plugin": "^1.25",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.30|^5.4",
+        "vimeo/psalm": "^4.30|^5.22",
         "yiisoft/psr-dummy-provider": "^1.0",
         "yiisoft/test-support": "^3.0"
     },
