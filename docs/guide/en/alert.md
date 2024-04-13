@@ -34,6 +34,7 @@ echo Alert::widget()
 ```
 
 The code above generates the following HTML:
+
 ```html
 <div id="w0-alert" class="alert alert-primary alert-dismissible fade show" role="alert">
     <div class="align-items-center d-flex">
@@ -44,7 +45,7 @@ The code above generates the following HTML:
 </div>
 ```
 
-Example for bulma:
+Example for Bulma:
 
 ```php
 use Yiisoft\Yii\Widgets\Alert;
@@ -67,7 +68,7 @@ The code above generates the following HTML:
 </div>
 ```
 
-Example for tailwind:
+Example for Tailwind:
 
 ```php
 use Yiisoft\Yii\Widgets\Alert;
@@ -91,7 +92,7 @@ The code above generates the following HTML:
 </div>
 ```
 
-For other examples of different Alert designs you can see [AlertTest](https://github.com/yiisoft/yii-widgets/blob/master/tests/AlertTest.php)
+For other examples of different Alert designs you can see [AlertTest](https://github.com/yiisoft/yii-widgets/blob/master/tests/Alert/AlertTest.php)
 
 ## Setters
 
@@ -100,7 +101,7 @@ All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\
 Method | Description | Default
 -------|-------------|---------
 `attributes(array $valuesMap)` | HTML attributes for the alert container | `[]`
-`body(string $value)` | The message body. | `''`
+`body(string $value)` | The message body | `''`
 `bodyAttributes(array $valuesMap)` | HTML attributes for the message body tag | `[]`
 `bodyClass(string $value)` | CSS class for the message body tag | `''`
 `bodyContainer(bool $value)` | Allows you to add an extra wrapper for the body | `false`
@@ -112,7 +113,7 @@ Method | Description | Default
 `buttonLabel(string $value)` | The label for the button | `&times;`
 `buttonOnClick(string $value)` | The JavaScript for the button's `onclick` event | `''`
 `class(string $value)` | The CSS class for the widget | `''`
-`header(string $value)` | The message header. | `''`
+`header(string $value)` | The message header | `''`
 `headerAttributes(array $valuesMap)` | HTML attributes for the message header | `[]`
 `headerClass(string $value)` | CSS class for the message header tag | `''`
 `headerContainer(bool $value)` | Allows you to add an extra wrapper for the header | `false`
@@ -123,6 +124,6 @@ Method | Description | Default
 `iconClass(string $value)` | CSS class for the icon | `''`
 `iconContainerAttributes(array $valuesMap)` | HTML attributes for the icon container | `[]`
 `iconText(string $value)` | The text for the icon | `''`
-`id(string $value)` | The unique identifier of the Alert. | `null`
-`layoutBody(string $value)` | The layout for the body. | `''`
-`layoutHeader(string $value)` | The layout for the header. | `''`
+`id(string $value)` | The unique identifier of the Alert | `null`
+`layoutBody(string $value)` | The layout for the body | `''`
+`layoutHeader(string $value)` | The layout for the header | `''`
