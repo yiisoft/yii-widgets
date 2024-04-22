@@ -5,19 +5,21 @@ declare(strict_types=1);
 /* @var $this Yiisoft\View\WebView */
 /* @var $content string */
 ?>
-<?php $this->beginPage(); ?>
-<!DOCTYPE html>
+<?php $this->beginPage(); ?><!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Test</title>
     <?php $this->head(); ?>
 </head>
+
 <body>
-<?php $this->beginBody(); ?>
+    <?php $this->beginBody(); ?>
 
-<?= $content ?>
+    <?= $content ?>
 
-<?php $this->endBody(); ?>
+    <?php $this->endBody(); ?>
 </body>
+
 </html>
 <?php $this->endPage(); ?>
