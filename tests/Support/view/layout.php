@@ -5,7 +5,8 @@ declare(strict_types=1);
 /* @var $this Yiisoft\View\WebView */
 /* @var $content string */
 ?>
-<?php $this->beginPage(); ?><!DOCTYPE html>
+<?php $this->beginPage(); ?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
