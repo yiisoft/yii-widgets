@@ -54,8 +54,7 @@ final class ContentDecoratorTest extends TestCase
             </div>
             <div class='right-column'>
             <p>This is a right bar!</p>
-            </div>
-            </body>
+            </div></body>
             </html>
 
             HTML,
