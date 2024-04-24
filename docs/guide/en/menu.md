@@ -80,37 +80,37 @@ All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\
 
 Method | Description | Default
 -------|-------------|---------
-`activateItems(bool $value)` | Whether to activate parent menu items when one of the corresponding child menu items is active. | `true`
-`activeClass(string $value)` | The CSS class to be appended to the active menu item. | `'active'`
-`afterAttributes(array $valuesMap`) | The HTML attributes for the after container | `[]`
+`activateItems(bool $value)` | Whether to activate parent menu items when one of the corresponding child menu items is active | `true`
+`activeClass(string $value)` | The CSS class to be appended to the active menu item | `'active'`
+`afterAttributes(array $valuesMap)` | The HTML attributes for the after container | `[]`
 `afterClass(string $value)` | The CSS class to be appended to the after container | `''`
-`afterContent(string $value)` | The content to be appended after the menu. | `''`
-`afterTag(string $value)` | The tag name for the after container. | `'span'`
+`afterContent(string $value)` | The content to be appended after the menu | `''`
+`afterTag(string $value)` | The tag name for the after container | `'span'`
 `attributes(array $valuesMap)` | HTML attributes for the menu container | `[]`
 `beforeAttributes(array $valuesMap)` | The HTML attributes for the before container | `[]`
 `beforeClass(string $value)` | The CSS class to be appended to the before container | `''`
-`beforeContent(string $value)` | The content to be prepended before the menu. | `''`
-`beforeTag(string $value)` | The tag name for the before container. | `'span'`
-`class(string $value)` | The CSS class to be appended to the menu container. | `''`
-`container(bool $value)` | Whether to render the menu container tag. | `true`
-`currentPath(string $value)` | Allows you to assign the current path. | `''`
-`disabledClass(string $value)` | The CSS class to be appended to the disabled menu item. | `'disabled'`
-`dropdownContainerClass(string $value)` | The CSS class to be appended to the dropdown container. | `'dropdown'`
-`dropdownContainerTag(string $value)` | The tag name for the dropdown container. | `'li'`
+`beforeContent(string $value)` | The content to be prepended before the menu | `''`
+`beforeTag(string $value)` | The tag name for the before container | `'span'`
+`class(string $value)` | The CSS class to be appended to the menu container | `''`
+`container(bool $value)` | Whether to render the menu container tag | `true`
+`currentPath(string $value)` | Allows you to assign the current path | `''`
+`disabledClass(string $value)` | The CSS class to be appended to the disabled menu item | `'disabled'`
+`dropdownContainerClass(string $value)` | The CSS class to be appended to the dropdown container | `'dropdown'`
+`dropdownContainerTag(string $value)` | The tag name for the dropdown container | `'li'`
 `dropdownDefinitions(array $valuesMap)` | The config for dropdown widget | `[]`
-`firstItemClass(string $value)` | The CSS class for the first item in the main menu or each submenu. | `null`
+`firstItemClass(string $value)` | The CSS class for the first item in the main menu or each submenu | `null`
 `iconContainerAttributes(array $valuesMap)` | The HTML attributes for the icon container | `[]`
-`items(array $value)` | List of menu items. | `[]`
-`itemsContainer(bool $value)` | Whether to render the items container tag. | `true`
+`items(array $value)` | List of menu items | `[]`
+`itemsContainer(bool $value)` | Whether to render the items container tag | `true`
 `itemsContainerAttributes(array $valuesMap)` | The HTML attributes for the items container | `[]`
-`itemsTag(string $value)` | The tag name for the items container. | `'li'`
-`lastItemClass(string $value)` | The CSS class for the last item in the main menu or each submenu. | `null`
-`linkAttributes(array $valuesMap)` | The HTML attributes for the link. | `[]`
-`linkClass(string $value)` | The CSS class to be appended to the link. | `''`
-`linkTag(string $value)` | The tag name for the link. | `'a'`
-`template(string $value)` | The template used to render the main menu. | `'{items}'`
+`itemsTag(string $value)` | The tag name for the items container | `'li'`
+`lastItemClass(string $value)` | The CSS class for the last item in the main menu or each submenu | `null`
+`linkAttributes(array $valuesMap)` | The HTML attributes for the link | `[]`
+`linkClass(string $value)` | The CSS class to be appended to the link | `''`
+`linkTag(string $value)` | The tag name for the link | `'a'`
+`template(string $value)` | The template used to render the main menu | `'{items}'`
 
-### Items structure is an array of the following structure:
+Items structure is an array of the following structure:
 
 ```php
 [
@@ -130,3 +130,4 @@ Method | Description | Default
         'visible' => true,
     ],
 ]
+```

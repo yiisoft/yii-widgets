@@ -17,6 +17,10 @@
 
 Collection of useful widgets for [Yii Framework](https://www.yiiframework.com/).
 
+## Requirements
+
+- PHP 8.0 or higher.
+
 ### Installation
 
 The package could be installed via composer:
@@ -30,58 +34,15 @@ composer require yiisoft/yii-widgets
 All widgets extend the abstract `Yiisoft\Widget\Widget` class from the
 [yiisoft/widget](https://github.com/yiisoft/widget) package.
 
-For a description of how to use it, see the documentation for each widget:
+## Documentation
 
-- [Alert](docs/alert.md)
-- [Block](docs/block.md)
-- [Breadcrumbs](docs/breadcrumbs.md)
-- [ContentDecorator](docs/content-decorator.md)
-- [Dropdown](docs/dropdown.md)
-- [FragmentCache](docs/fragment-cache.md)
-- [Menu](docs/menu.md)
+- [Guide](docs/guide/readme.md)
+- [Internals](docs/internals.md)
 
-## Testing
+## Support
 
-### Unit testing
-
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
-
-```shell
-./vendor/bin/phpunit
-```
-
-### Mutation testing
-
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework with
-[Infection Static Analysis Plugin](https://github.com/Roave/infection-static-analysis-plugin). To run it:
-
-```shell
-./vendor/bin/roave-infection-static-analysis-plugin
-```
-
-### Static analysis
-
-The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
-
-```shell
-./vendor/bin/psalm
-```
-
-### Rector
-
-Use [Rector](https://github.com/rectorphp/rector) to make codebase follow some specific rules or 
-use either newest or any specific version of PHP: 
-
-```shell
-./vendor/bin/rector
-```
-
-## License
-
-The Yii Widgets is free software. It is released under the terms of the BSD License.
-Please see [`LICENSE`](./LICENSE.md) for more information.
-
-Maintained by [Yii Software](https://www.yiiframework.com/).
+If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place for that.
+You may also check out other [Yii Community Resources](https://www.yiiframework.com/community).
 
 ## Support the project
 
@@ -94,3 +55,10 @@ Maintained by [Yii Software](https://www.yiiframework.com/).
 [![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
 [![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
 [![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
+
+## License
+
+The Yii Widgets is free software. It is released under the terms of the BSD License.
+Please see [`LICENSE`](./LICENSE.md) for more information.
+
+Maintained by [Yii Software](https://www.yiiframework.com/).

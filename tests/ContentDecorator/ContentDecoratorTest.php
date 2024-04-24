@@ -46,17 +46,15 @@ final class ContentDecoratorTest extends TestCase
             <!DOCTYPE html>
             <html lang="en">
             <head>
-                <title>Test</title>
-                </head>
+            <title>Test</title>
+            </head>
             <body>
-
             <div class='left-column'>
             <p>This is a left bar!</p>
             </div>
             <div class='right-column'>
             <p>This is a right bar!</p>
-            </div>
-            </body>
+            </div></body>
             </html>
 
             HTML,

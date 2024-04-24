@@ -4,8 +4,7 @@ In some cases, caching fragments of content can significantly improve performanc
 if a page displays a summary of yearly sales in a table, you can store this table in a cache to eliminate the time
 needed to generate this table for each request.
 
-For more information about content caching,
-[see here](https://github.com/yiisoft/view/blob/master/docs/basic-functionality.md#content-caching).
+For more information about content caching [see here](https://github.com/yiisoft/view/blob/master/docs/basic-functionality.md#content-caching).
 
 ## Usage
 
@@ -35,7 +34,7 @@ FragmentCache::end();
 
 The code above generates the following HTML:
 
-```
+```text
 Content to be cached ...
 STRING-A - STRING-B
 Content to be cached ...
@@ -48,7 +47,7 @@ class with the specified value.
 
 Method | Description | Default
 -------|-------------|---------
-`dynamicContents(DynamicContent ...$value)` | The dynamic content instances. | `null`
-`id(string $value)` | The unique identifier of the cache fragment. | `''`
-`ttl(int $value)` | The number of seconds that the data can remain valid in cache. | `60`
-`variations(string ...$value)` | The factors that would cause the variation of the content being cached. | `[]`
+`dynamicContents(DynamicContent ...$value)` | The dynamic content instances | `null`
+`id(string $value)` | The unique identifier of the cache fragment | `''`
+`ttl(int $value)` | The number of seconds that the data can remain valid in cache | `60`
+`variations(string ...$value)` | The factors that would cause the variation of the content being cached | `[]`

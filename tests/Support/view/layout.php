@@ -9,14 +9,12 @@ declare(strict_types=1);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Test</title>
-    <?php $this->head(); ?>
+<title>Test</title>
+<?php $this->head(); ?>
 </head>
 <body>
 <?php $this->beginBody(); ?>
-
 <?= $content ?>
-
 <?php $this->endBody(); ?>
 </body>
 </html>

@@ -32,5 +32,5 @@ class with the specified value.
 
 Method | Description | Default
 -------|-------------|---------
-`parameters(array $value)` | The parameters (name => value) to be extracted and made available in the decorative view. | `[]`
-`viewFile(string $value)` | The view file that will be used to decorate the content enclosed by this widget. | `''`
+`parameters(array $value)` | The parameters (name => value) to be extracted and made available in the decorative view | `[]`
+`viewFile(string $value)` | The view file that will be used to decorate the content enclosed by this widget | `''`
