@@ -110,7 +110,7 @@ Método | Descrição | Padrão
 `linkTag(string $value)` | O nome da tag do link | `'a'`
 `template(string $value)` | O modelo usado para renderizar o menu principal | `'{items}'`
 
-A estrutura de itens é um array com a seguinte estrutura:
+### A estrutura de itens é um array com a seguinte estrutura
 
 ```php
 [
