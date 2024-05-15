@@ -110,7 +110,7 @@ Method | Description | Default
 `linkTag(string $value)` | The tag name for the link | `'a'`
 `template(string $value)` | The template used to render the main menu | `'{items}'`
 
-Items structure is an array of the following structure:
+### Items structure is an array of the following structure
 
 ```php
 [
