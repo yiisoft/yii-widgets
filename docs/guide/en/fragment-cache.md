@@ -4,7 +4,7 @@ In some cases, caching fragments of content can significantly improve performanc
 if a page displays a summary of yearly sales in a table, you can store this table in a cache to eliminate the time
 needed to generate this table for each request.
 
-For more information about content caching [see here](https://github.com/yiisoft/view/blob/master/docs/basic-functionality.md#content-caching).
+For more information about content caching [see here](https://github.com/yiisoft/view/blob/master/docs/guide/en/basic-functionality.md#content-caching).
 
 ## Usage
 

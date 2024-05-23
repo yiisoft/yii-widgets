@@ -4,7 +4,7 @@ Este widget registra todas as saídas entre as chamadas `begin()` e `end()`, pas
 visualizador do arquivo como `$content` e então reproduz o resultado da renderização.
 
 Para obter mais informações sobre renderização da visualização
-[veja aqui](https://github.com/yiisoft/view/blob/master/docs/basic-functionality.md#rendering).
+[veja aqui](https://github.com/yiisoft/view/blob/master/docs/guide/en/basic-functionality.md#rendering).
 
 ## Uso
 

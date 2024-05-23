@@ -4,7 +4,7 @@ Em alguns casos, armazenar fragmentos de conteúdo em cache pode melhorar signif
 se uma página exibir um resumo das vendas anuais em uma tabela, você poderá armazenar essa tabela em um cache para eliminar o tempo
 necessário para gerar esta tabela para cada solicitação.
 
-Para obter mais informações sobre cache de conteúdo [veja aqui](https://github.com/yiisoft/view/blob/master/docs/basic-functionality.md#content-caching).
+Para obter mais informações sobre cache de conteúdo [veja aqui](https://github.com/yiisoft/view/blob/master/docs/guide/en/basic-functionality.md#content-caching).
 
 ## Uso
 

@@ -4,7 +4,7 @@ This widget records all output between the `begin()` and `end()` calls, passes t
 view file as `$content` and then reproduces the rendering result.
 
 For more information about view rendering,
-[see here](https://github.com/yiisoft/view/blob/master/docs/basic-functionality.md#rendering).
+[see here](https://github.com/yiisoft/view/blob/master/docs/guide/en/basic-functionality.md#rendering).
 
 ## Usage
 
