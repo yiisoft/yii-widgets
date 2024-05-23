@@ -4,7 +4,7 @@ Imagine that a certain part of layouts should change depending on the content of
 A "blocks" mechanism is provided for transmitting such chunks.
 
 For more information about sharing data among views,
-[see here](https://github.com/yiisoft/view/blob/master/docs/basic-functionality.md#sharing-data-among-views).
+[see here](https://github.com/yiisoft/view/blob/master/docs/guide/en/basic-functionality.md#sharing-data-among-views).
 
 ## Usage
 
