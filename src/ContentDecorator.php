@@ -93,6 +93,6 @@ final class ContentDecorator extends Widget
         $parameters['content'] = ob_get_clean();
 
         /** render under the existing context */
-        return $this->webView->renderFile($this->viewFile, $parameters);
+        return $this->webView->render($this->viewFile, $parameters);
     }
 }
