@@ -105,7 +105,6 @@ final class Normalizer
     ): string {
         $html = '';
 
-        /** @psalm-var non-empty-string $tagName */
         $tagName = self::iconTagName($iconAttributes);
 
         unset($iconAttributes['tagName']);
@@ -178,6 +177,9 @@ final class Normalizer
             ? $item['iconContainerAttributes'] : $iconContainerAttributes;
     }
 
+    /**
+     * @psalm-return non-empty-string
+     */
     private static function iconTagName(array $item): string
     {
         return array_key_exists('tagName', $item) && is_string($item['tagName']) && $item['tagName'] !== ''
