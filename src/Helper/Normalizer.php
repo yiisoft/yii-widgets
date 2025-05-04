@@ -6,7 +6,6 @@ namespace Yiisoft\Yii\Widgets\Helper;
 
 use InvalidArgumentException;
 use Yiisoft\Html\Html;
-use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Span;
 
 final class Normalizer
