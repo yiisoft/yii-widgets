@@ -105,6 +105,7 @@ final class Normalizer
     ): string {
         $html = '';
 
+        /** @psalm-var non-empty-string $tagName */
         $tagName = self::iconTagName($iconAttributes);
 
         unset($iconAttributes['tagName']);
