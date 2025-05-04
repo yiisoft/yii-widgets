@@ -105,14 +105,21 @@ final class Normalizer
         array $iconContainerAttributes
     ): string {
         $html = '';
+        $tagName = $iconAttributes['tagName'] ?? 'i';
+
+        unset($iconAttributes['tagName']);
 
         if ($iconClass !== '') {
             Html::addCssClass($iconAttributes, $iconClass);
         }
 
         if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
-            $i = I::tag()->attributes($iconAttributes)->content($icon);
-            $html = Span::tag()->attributes($iconContainerAttributes)->content($i)->encode(false)->render();
+            $tag = Html::tag($tagName)->attributes($iconAttributes)->content($icon);
+
+            $html = match ($tagName) {
+                'i' => Span::tag()->attributes($iconContainerAttributes)->content($tag)->encode(false)->render(),
+                default => $tag->render(),
+            };
         }
 
         if ($label !== '') {
