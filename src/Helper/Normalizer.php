@@ -105,7 +105,8 @@ final class Normalizer
         array $iconContainerAttributes
     ): string {
         $html = '';
-        $tagName = $iconAttributes['tagName'] ?? 'i';
+
+        $tagName = self::iconTagName($iconAttributes);
 
         unset($iconAttributes['tagName']);
 
@@ -175,6 +176,11 @@ final class Normalizer
     {
         return array_key_exists('iconContainerAttributes', $item) && is_array($item['iconContainerAttributes'])
             ? $item['iconContainerAttributes'] : $iconContainerAttributes;
+    }
+
+    private static function iconTagName(array $item): string
+    {
+        return array_key_exists('tagName', $item) && is_string($item['tagName']) ? $item['tagName'] : 'i';
     }
 
     /**
