@@ -179,7 +179,8 @@ final class Normalizer
 
     private static function iconTagName(array $item): string
     {
-        return array_key_exists('tagName', $item) && is_string($item['tagName']) ? $item['tagName'] : 'i';
+        return array_key_exists('tagName', $item) && is_string($item['tagName']) && $item['tagName'] !== ''
+            ? $item['tagName'] : 'i';
     }
 
     /**
