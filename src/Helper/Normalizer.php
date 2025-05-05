@@ -114,7 +114,7 @@ final class Normalizer
         }
 
         if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
-            $html = Html::tag($tagName)->attributes($iconAttributes)->content($icon);
+            $html = Html::tag($tagName)->attributes($iconAttributes)->content($icon)->render();
 
             if ($tagName === 'i') {
                 $html = Span::tag()->attributes($iconContainerAttributes)->content($html)->encode(false)->render();
