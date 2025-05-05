@@ -3,6 +3,7 @@
 ## 2.1.1 under development
 
 - Chg #86: Raise required `yiisoft/view` version to `^10.0` (@vjik)
+- Enh #94: Enhance icon rendering in `Menu` widget to support custom tag (@terabytesoftw)
 
 ## 2.1.0 February 19, 2023
 
