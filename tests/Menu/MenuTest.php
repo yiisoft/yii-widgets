@@ -643,7 +643,7 @@ final class MenuTest extends TestCase
                             'label' => 'Login',
                             'link' => '#',
                             'iconAttributes' => [
-                                'tagName' => 'img',
+                                'tag' => 'img',
                                 'src' => 'icon-url',
                                 'alt' => 'Dahsbaord',
                             ],
