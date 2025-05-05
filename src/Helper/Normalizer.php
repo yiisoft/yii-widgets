@@ -118,7 +118,7 @@ final class Normalizer
 
             if ($tagName === 'i') {
                 $html = Span::tag()->attributes($iconContainerAttributes)->content($html)->encode(false)->render();
-            };
+            }
         }
 
         if ($label !== '') {
