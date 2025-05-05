@@ -107,18 +107,17 @@ final class Normalizer
 
         $tagName = self::iconTagName($iconAttributes);
 
-        unset($iconAttributes['tagName']);
+        unset($iconAttributes['tag']);
 
         if ($iconClass !== '') {
             Html::addCssClass($iconAttributes, $iconClass);
         }
 
         if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
-            $tag = Html::tag($tagName)->attributes($iconAttributes)->content($icon);
+            $html = Html::tag($tagName)->attributes($iconAttributes)->content($icon);
 
-            $html = match ($tagName) {
-                'i' => Span::tag()->attributes($iconContainerAttributes)->content($tag)->encode(false)->render(),
-                default => $tag->render(),
+            if ($tagName === 'i') {
+                $html = Span::tag()->attributes($iconContainerAttributes)->content($html)->encode(false)->render();
             };
         }
 
@@ -182,8 +181,7 @@ final class Normalizer
      */
     private static function iconTagName(array $item): string
     {
-        return array_key_exists('tagName', $item) && is_string($item['tagName']) && $item['tagName'] !== ''
-            ? $item['tagName'] : 'i';
+        return array_key_exists('tag', $item) && is_string($item['tag']) && $item['tag'] !== '' ? $item['tag'] : 'i';
     }
 
     /**
