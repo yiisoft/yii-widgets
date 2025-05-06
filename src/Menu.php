@@ -346,7 +346,7 @@ final class Menu extends Widget
      * - linkAttributes: array, the HTML attributes of the item's link. For default `linkAttributes` is `[]`.
      * - icon: string, the item's icon. For default is ``.
      * - iconAttributes: array, the HTML attributes of the item's icon. For default `iconAttributes` is `[]`.
-     *   - tag: string, the item's icon tag. For default is `i`.
+     *   - tag: string, the item's icon tag. Default is `i`.
      * - iconClass: string, the item's icon CSS class. For default is ``.
      * - visible: bool, optional, whether this menu item is visible. Defaults to true.
      *
