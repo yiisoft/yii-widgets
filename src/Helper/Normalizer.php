@@ -6,7 +6,6 @@ namespace Yiisoft\Yii\Widgets\Helper;
 
 use InvalidArgumentException;
 use Yiisoft\Html\Html;
-use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Span;
 
 final class Normalizer
@@ -106,13 +105,20 @@ final class Normalizer
     ): string {
         $html = '';
 
+        $tagName = self::iconTagName($iconAttributes);
+
+        unset($iconAttributes['tag']);
+
         if ($iconClass !== '') {
             Html::addCssClass($iconAttributes, $iconClass);
         }
 
         if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
-            $i = I::tag()->attributes($iconAttributes)->content($icon);
-            $html = Span::tag()->attributes($iconContainerAttributes)->content($i)->encode(false)->render();
+            $html = Html::tag($tagName)->attributes($iconAttributes)->content($icon)->render();
+
+            if ($tagName === 'i') {
+                $html = Span::tag()->attributes($iconContainerAttributes)->content($html)->encode(false)->render();
+            }
         }
 
         if ($label !== '') {
@@ -168,6 +174,14 @@ final class Normalizer
     {
         return array_key_exists('iconContainerAttributes', $item) && is_array($item['iconContainerAttributes'])
             ? $item['iconContainerAttributes'] : $iconContainerAttributes;
+    }
+
+    /**
+     * @psalm-return non-empty-string
+     */
+    private static function iconTagName(array $item): string
+    {
+        return array_key_exists('tag', $item) && is_string($item['tag']) && $item['tag'] !== '' ? $item['tag'] : 'i';
     }
 
     /**

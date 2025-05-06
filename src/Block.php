@@ -102,7 +102,8 @@ final class Block extends Widget
             throw new RuntimeException('You must assign the "id" using the "id()" setter.');
         }
 
-        $block = ob_get_clean();
+        $content = ob_get_clean();
+        $block = $content === false ? '' : $content;
 
         if ($this->renderInPlace) {
             return $block;
