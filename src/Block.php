@@ -105,7 +105,7 @@ final class Block extends Widget
         $block = ob_get_clean();
 
         if ($this->renderInPlace) {
-            return $block;
+            return (string) $block;
         }
 
         if (!empty($block)) {

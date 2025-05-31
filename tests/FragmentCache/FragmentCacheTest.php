@@ -220,7 +220,7 @@ final class FragmentCacheTest extends TestCase
         $this->assertSame('cached fragment', $content4);
     }
 
-    private function hasCache(string $id, string $variation = null): bool
+    private function hasCache(string $id, ?string $variation = null): bool
     {
         $key = (new CacheKeyNormalizer())->normalize(
             array_merge([CachedContent::class, $id], (array) ($variation ?? []))
