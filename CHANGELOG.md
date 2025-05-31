@@ -2,7 +2,7 @@
 
 ## 2.1.1 under development
 
-- Chg #86: Raise required `yiisoft/view` version to `^10.0` (@vjik)
+- Chg #86, #95: Raise required `yiisoft/view` version to `10 - 12` (@vjik, @Tigrov)
 
 ## 2.1.0 February 19, 2023
 
