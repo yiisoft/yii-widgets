@@ -103,15 +103,15 @@ final class Block extends Widget
         }
 
         $block = ob_get_clean();
+        if ($block === false || $block === '') {
+            return '';
+        }
 
         if ($this->renderInPlace) {
-            return (string) $block;
+            return $block;
         }
 
-        if (!empty($block)) {
-            $this->webView->setBlock($this->id, $block);
-        }
-
+        $this->webView->setBlock($this->id, $block);
         return '';
     }
 }

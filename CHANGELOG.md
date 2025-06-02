@@ -3,6 +3,7 @@
 ## 2.1.1 under development
 
 - Chg #86, #95: Raise required `yiisoft/view` version to `10 - 12` (@vjik, @Tigrov)
+- Bug #97: Fix `Block` behavior when content is "0" (@vjik)
 
 ## 2.1.0 February 19, 2023
 
