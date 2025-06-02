@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Widgets\Block;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
+use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertSame;
 
 final class BlockTest extends TestCase
@@ -40,5 +41,14 @@ final class BlockTest extends TestCase
 
         assertSame('', $result);
         assertSame('0', $this->webView->getBlock('test'));
+    }
+
+    public function testEmptyContent(): void
+    {
+        Block::widget()->id('test')->begin();
+        $result = Block::end();
+
+        assertSame('', $result);
+        assertFalse($this->webView->hasBlock('test'));
     }
 }
