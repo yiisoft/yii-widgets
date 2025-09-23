@@ -1,6 +1,6 @@
 # Yii Widgets Change Log
 
-## 2.1.1 under development
+## 2.1.1 September 23, 2025
 
 - Chg #86, #95: Raise required `yiisoft/view` version to `10 - 12` (@vjik, @Tigrov)
 - Bug #97: Fix `Block` behavior when content is "0" (@vjik)
