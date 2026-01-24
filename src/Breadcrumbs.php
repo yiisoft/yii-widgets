@@ -14,6 +14,8 @@ use function is_array;
 use function is_string;
 use function strtr;
 
+use const PHP_EOL;
+
 /**
  * Breadcrumbs displays a list of items indicating the position of the current page in the whole site hierarchy.
  *
@@ -52,7 +54,7 @@ final class Breadcrumbs extends Widget
 {
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
     private array $attributes = ['class' => 'breadcrumb'];
-    private array|null $homeItem = ['label' => 'Home', 'url' => '/'];
+    private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
     private string $tag = 'ul';
@@ -204,7 +206,7 @@ final class Breadcrumbs extends Widget
             if ($item !== []) {
                 $items[] = $this->renderItem(
                     $item,
-                    isset($item['url']) ? $this->itemTemplate : $this->activeItemTemplate
+                    isset($item['url']) ? $this->itemTemplate : $this->activeItemTemplate,
                 );
             }
         }

@@ -39,8 +39,8 @@ final class TailwindTest extends TestCase
             HTML,
             Alert::widget()
                 ->body(
-                    '<p class="font-bold">Informational message</p>' .
-                    '<p class="text-sm">Some additional text to explain said message.</p>'
+                    '<p class="font-bold">Informational message</p>'
+                    . '<p class="text-sm">Some additional text to explain said message.</p>',
                 )
                 ->bodyClass('align-middle inline-block mr-8')
                 ->buttonClass('float-right px-4 py-3')
@@ -240,8 +240,8 @@ final class TailwindTest extends TestCase
             Alert::widget()
                 ->attributes(['id' => 'w0-alert'])
                 ->body(
-                    '<p class="font-bold">Our privacy policy has changed</p>' .
-                    '<p class="text-sm">Make sure you know how these changes affect you.</p>'
+                    '<p class="font-bold">Our privacy policy has changed</p>'
+                    . '<p class="text-sm">Make sure you know how these changes affect you.</p>',
                 )
                 ->bodyClass('align-middle inline-block flex-grow mr-8')
                 ->bodyContainer(true)

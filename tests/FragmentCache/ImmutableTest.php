@@ -33,7 +33,7 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($widget, $widget->id(''));
         $this->assertNotSame($widget, $widget->ttl(3600));
         $this->assertNotSame($widget, $widget->dependency(new TagDependency('test')));
-        $this->assertNotSame($widget, $widget->dynamicContents(new DynamicContent('test', fn (): string => 'test')));
+        $this->assertNotSame($widget, $widget->dynamicContents(new DynamicContent('test', fn(): string => 'test')));
         $this->assertNotSame($widget, $widget->variations(''));
     }
 }

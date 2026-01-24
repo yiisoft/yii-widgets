@@ -19,6 +19,8 @@ use function implode;
 use function strtr;
 use function trim;
 
+use const PHP_EOL;
+
 /**
  * Menu displays a multi-level menu using nested HTML lists.
  *
@@ -535,8 +537,8 @@ final class Menu extends Widget
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
-        return PHP_EOL .
-            Html::normalTag($this->afterTag, $this->afterContent, $this->afterAttributes)
+        return PHP_EOL
+            . Html::normalTag($this->afterTag, $this->afterContent, $this->afterAttributes)
                 ->encode(false)
                 ->render();
     }
@@ -740,9 +742,9 @@ final class Menu extends Widget
 
         return match ($this->container) {
             false => $beforeContent . trim($content) . $afterContent,
-            default => $beforeContent .
-                Html::normalTag($this->tagName, $content, $attributes)->encode(false) .
-                $afterContent,
+            default => $beforeContent
+                . Html::normalTag($this->tagName, $content, $attributes)->encode(false)
+                . $afterContent,
         };
     }
 }

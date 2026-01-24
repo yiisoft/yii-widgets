@@ -342,7 +342,7 @@ final class DropdownTest extends TestCase
                         ['label' => 'Home', 'link' => '/active', 'iconAttributes' => ['class' => 'bi bi-house']],
                         ['label' => 'Contact', 'link' => '#', 'iconAttributes' => ['class' => 'bi bi-envelope']],
                         ['label' => 'Login', 'link' => '#', 'iconAttributes' => ['class' => 'bi bi-lock']],
-                    ]
+                    ],
                 )->render(),
         );
     }
@@ -475,7 +475,7 @@ final class DropdownTest extends TestCase
                         ['label' => 'Black & White'],
                         ['label' => 'Red & Yellow', 'visible' => false],
                         ['label' => 'Green & Blue', 'visible' => true],
-                    ]
+                    ],
                 )
                 ->render(),
         );

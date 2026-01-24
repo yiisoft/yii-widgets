@@ -65,7 +65,7 @@ final class FragmentCacheTest extends TestCase
         for ($counter = 0; $counter < 42; $counter++) {
             $dynamicContent = new DynamicContent(
                 'dynamic-test',
-                static fn ($params) => (string) $params['counter'],
+                static fn($params) => (string) $params['counter'],
                 ['counter' => $counter],
             );
 
@@ -91,12 +91,12 @@ final class FragmentCacheTest extends TestCase
         for ($counter = 0; $counter < 42; $counter++) {
             $dynamicContent1 = new DynamicContent(
                 'dynamic-test-1',
-                static fn ($params) => md5((string) $params['counter']),
+                static fn($params) => md5((string) $params['counter']),
                 ['counter' => $counter],
             );
             $dynamicContent2 = new DynamicContent(
                 'dynamic-test-2',
-                static fn ($params) => (string) $params['counter'],
+                static fn($params) => (string) $params['counter'],
                 ['counter' => $counter],
             );
 
@@ -132,17 +132,17 @@ final class FragmentCacheTest extends TestCase
         for ($counter = 0; $counter < 42; $counter++) {
             $dynamicContent1 = new DynamicContent(
                 'dynamic-test-1',
-                static fn ($params) => md5((string) $params['counter']),
+                static fn($params) => md5((string) $params['counter']),
                 ['counter' => $counter],
             );
             $dynamicContent2 = new DynamicContent(
                 'dynamic-test-2',
-                static fn ($params) => sha1((string) $params['counter']),
+                static fn($params) => sha1((string) $params['counter']),
                 ['counter' => $counter],
             );
             $dynamicContent3 = new DynamicContent(
                 'dynamic-test-3',
-                static fn ($params) => (string) ($params['counter'] + 1),
+                static fn($params) => (string) ($params['counter'] + 1),
                 ['counter' => $counter],
             );
 
@@ -168,7 +168,6 @@ final class FragmentCacheTest extends TestCase
                 $counter + 1,
             );
 
-
             $this->assertSame($expectedContent, $content);
         }
     }
@@ -181,7 +180,7 @@ final class FragmentCacheTest extends TestCase
      */
     public function testVariations(): void
     {
-        $this->setOutputCallback(static fn () => null);
+        $this->setOutputCallback(static fn() => null);
 
         FragmentCache::widget()->id($id = 'test')->variations($variation = 'ru')->begin();
         echo 'cached fragment';
@@ -223,7 +222,7 @@ final class FragmentCacheTest extends TestCase
     private function hasCache(string $id, ?string $variation = null): bool
     {
         $key = (new CacheKeyNormalizer())->normalize(
-            array_merge([CachedContent::class, $id], (array) ($variation ?? []))
+            array_merge([CachedContent::class, $id], (array) ($variation ?? [])),
         );
 
         return $this->cache->psr()->has($key);

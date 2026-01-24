@@ -21,6 +21,8 @@ use function implode;
 use function str_contains;
 use function trim;
 
+use const PHP_EOL;
+
 final class Dropdown extends Widget
 {
     private string $activeClass = 'active';
@@ -686,7 +688,7 @@ final class Dropdown extends Widget
         string $label,
         string $link,
         array $linkAttributes = [],
-        array $itemContainerAttributes = []
+        array $itemContainerAttributes = [],
     ): string {
         $linkAttributes['href'] = $link;
 

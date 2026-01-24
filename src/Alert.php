@@ -15,6 +15,8 @@ use function array_key_exists;
 use function strtr;
 use function trim;
 
+use const PHP_EOL;
+
 /**
  * Alert renders an alert component.
  *
@@ -472,8 +474,8 @@ final class Alert extends Widget
      */
     private function renderButton(): string
     {
-        return PHP_EOL .
-            Button::tag()
+        return PHP_EOL
+            . Button::tag()
                 ->attributes($this->buttonAttributes)
                 ->content($this->buttonLabel)
                 ->encode(false)
@@ -486,13 +488,13 @@ final class Alert extends Widget
      */
     private function renderIcon(): string
     {
-        return PHP_EOL .
-            Div::tag()
+        return PHP_EOL
+            . Div::tag()
                 ->attributes($this->iconContainerAttributes)
                 ->content(I::tag()->attributes($this->iconAttributes)->content($this->iconText)->render())
                 ->encode(false)
-                ->render() .
-            PHP_EOL;
+                ->render()
+            . PHP_EOL;
     }
 
     /**

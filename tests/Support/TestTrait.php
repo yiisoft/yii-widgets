@@ -27,7 +27,7 @@ trait TestTrait
                 Aliases::class => new Aliases(['@public' => __DIR__]),
                 CacheInterface::class => new Cache(new MemorySimpleCache()),
                 WebView::class => new WebView(__DIR__ . '/public/view', new SimpleEventDispatcher()),
-            ]
+            ],
         );
 
         WidgetFactory::initialize($container, []);
@@ -39,6 +39,4 @@ trait TestTrait
 
 namespace Yiisoft\Html;
 
-function hrtime(bool $getAsNumber = false): void
-{
-}
+function hrtime(bool $getAsNumber = false): void {}

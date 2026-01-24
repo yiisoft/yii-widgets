@@ -283,7 +283,7 @@ final class MenuTest extends TestCase
                         ],
                         ['label' => 'Link', 'link' => '#'],
                         ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
-                    ]
+                    ],
                 )
                 ->render(),
         );
@@ -334,7 +334,7 @@ final class MenuTest extends TestCase
                         ],
                         ['label' => 'Link', 'link' => '#'],
                         ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
-                    ]
+                    ],
                 )
                 ->render(),
         );
@@ -384,7 +384,7 @@ final class MenuTest extends TestCase
                         ],
                         'toggleClass()' => ['dropdown-toggle'],
                         'toggleType()' => ['link'],
-                    ]
+                    ],
                 )
                 ->items(
                     [
@@ -402,7 +402,7 @@ final class MenuTest extends TestCase
                         ],
                         ['label' => 'Link', 'link' => '#'],
                         ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
-                    ]
+                    ],
                 )
                 ->render(),
         );

@@ -186,7 +186,7 @@ final class AlertTest extends TestCase
                 ->iconAttributes(['class' => 'tests-class'])
                 ->id('w0-alert')
                 ->layoutBody('{icon}{body}')
-                ->render()
+                ->render(),
         );
     }
 
