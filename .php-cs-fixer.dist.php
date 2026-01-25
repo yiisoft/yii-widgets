@@ -12,10 +12,10 @@ $finder = (new Finder())->in([
 ]);
 
 return ConfigBuilder::build()
-                    ->setRiskyAllowed(true)
-                    ->setParallelConfig(ParallelConfigFactory::detect())
-                    ->setRules([
-                        '@Yiisoft/Core' => true,
-                        '@Yiisoft/Core:risky' => true,
-                    ])
-                    ->setFinder($finder);
+    ->setRiskyAllowed(true)
+    ->setParallelConfig(ParallelConfigFactory::detect())
+    ->setRules([
+        '@Yiisoft/Core' => true,
+        '@Yiisoft/Core:risky' => true,
+    ])
+    ->setFinder($finder);
