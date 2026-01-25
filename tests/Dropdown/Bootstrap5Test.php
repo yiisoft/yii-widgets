@@ -65,9 +65,9 @@ final class Bootstrap5Test extends TestCase
                                 ['label' => 'Another action', 'link' => '#'],
                             ],
                         ],
-                    ]
+                    ],
                 )
-                ->render()
+                ->render(),
         );
     }
 
@@ -128,11 +128,11 @@ final class Bootstrap5Test extends TestCase
                                 ['label' => 'Separated link', 'link' => '#'],
                             ],
                         ],
-                    ]
+                    ],
                 )
                 ->toggleType('link')
                 ->toggleType('split')
-                ->render()
+                ->render(),
         );
     }
 
@@ -186,11 +186,11 @@ final class Bootstrap5Test extends TestCase
                                 ['label' => 'Separated link', 'link' => '#'],
                             ],
                         ],
-                    ]
+                    ],
                 )
                 ->toggleType('link')
                 ->toggleType('split')
-                ->render()
+                ->render(),
         );
     }
 
@@ -244,11 +244,11 @@ final class Bootstrap5Test extends TestCase
                                 ['label' => 'Separated link', 'link' => '#'],
                             ],
                         ],
-                    ]
+                    ],
                 )
                 ->toggleType('link')
                 ->toggleType('split')
-                ->render()
+                ->render(),
         );
     }
 
@@ -302,11 +302,11 @@ final class Bootstrap5Test extends TestCase
                                 ['label' => 'Separated link', 'link' => '#'],
                             ],
                         ],
-                    ]
+                    ],
                 )
                 ->toggleType('link')
                 ->toggleType('split')
-                ->render()
+                ->render(),
         );
     }
 
@@ -360,10 +360,10 @@ final class Bootstrap5Test extends TestCase
                                 ['label' => 'Separated link', 'link' => '#'],
                             ],
                         ],
-                    ]
+                    ],
                 )
                 ->toggleType('split')
-                ->render()
+                ->render(),
         );
     }
 
@@ -417,10 +417,10 @@ final class Bootstrap5Test extends TestCase
                                 ['label' => 'Separated link', 'link' => '#'],
                             ],
                         ],
-                    ]
+                    ],
                 )
                 ->toggleType('split')
-                ->render()
+                ->render(),
         );
     }
 }

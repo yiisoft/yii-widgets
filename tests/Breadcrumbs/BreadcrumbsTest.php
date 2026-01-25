@@ -39,7 +39,7 @@ final class BreadcrumbsTest extends TestCase
                 ->attributes(['class' => 'breadcrumb external'])
                 ->homeItem(null)
                 ->items(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
-                ->render()
+                ->render(),
         );
     }
 
@@ -120,7 +120,7 @@ final class BreadcrumbsTest extends TestCase
                     [
                         ['label' => 'Link', 'url' => 'https://my.example.com/yii/link/page'],
                         ['label' => 'Text', 'template' => "<span>{link}</span>\n"],
-                    ]
+                    ],
                 )
                 ->render(),
         );
@@ -141,7 +141,7 @@ final class BreadcrumbsTest extends TestCase
                 ->homeItem(null)
                 ->items([['label' => 'My-<br>Test-Label', 'encode' => false]]) // encode label false
                 ->tag('')
-                ->render()
+                ->render(),
         );
     }
 
@@ -160,7 +160,7 @@ final class BreadcrumbsTest extends TestCase
                 ->homeItem(null)
                 ->items(['label' => 'My-<br>Test-Label'])
                 ->tag('')
-                ->render()
+                ->render(),
         );
     }
 

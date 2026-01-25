@@ -41,7 +41,7 @@ use function ob_start;
  */
 final class FragmentCache extends Widget
 {
-    private Dependency|null $dependency = null;
+    private ?Dependency $dependency = null;
     private string $id = '';
     private int $ttl = 60;
     /** @psalm-var string[] */
@@ -52,9 +52,7 @@ final class FragmentCache extends Widget
      */
     private array $dynamicContents = [];
 
-    public function __construct(private CacheInterface $cache)
-    {
-    }
+    public function __construct(private CacheInterface $cache) {}
 
     /**
      * Returns a new instance with the specified dynamic contents.

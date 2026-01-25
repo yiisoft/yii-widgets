@@ -13,6 +13,8 @@ use Yiisoft\Yii\Widgets\Alert;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
+use const PHP_EOL;
+
 /**
  * @psalm-suppress PropertyNotSetInConstructor
  */
@@ -42,10 +44,10 @@ final class Bootstrap5Test extends TestCase
             HTML,
             Alert::widget()
                 ->body(
-                    '<p>Aww yeah, you successfully read this important alert message. This example text is going to run ' .
-                    'a bit longer so that you can see how spacing within an alert works with this kind of content.</p>' .
-                    PHP_EOL . '<hr>' . PHP_EOL .
-                    '<p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy</p>'
+                    '<p>Aww yeah, you successfully read this important alert message. This example text is going to run '
+                    . 'a bit longer so that you can see how spacing within an alert works with this kind of content.</p>'
+                    . PHP_EOL . '<hr>' . PHP_EOL
+                    . '<p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy</p>',
                 )
                 ->buttonAttributes(['data-bs-dismiss' => 'alert', 'aria-label' => 'Close'])
                 ->buttonClass('btn-close')
@@ -142,8 +144,8 @@ final class Bootstrap5Test extends TestCase
             HTML,
             Alert::widget()
                 ->body(
-                    'A simple primary alert with <a href="#" class="alert-link">an example link</a>.' .
-                    'Give it a click if you like.'
+                    'A simple primary alert with <a href="#" class="alert-link">an example link</a>.'
+                    . 'Give it a click if you like.',
                 )
                 ->buttonAttributes(['data-bs-dismiss' => 'alert', 'aria-label' => 'Close'])
                 ->buttonClass('float-right')

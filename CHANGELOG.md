@@ -2,7 +2,9 @@
 
 ## 2.1.2 under development
 
-- no changes in this release.
+- Enh #105: Explicitly import classes, functions, and constants in "use" section (@rustamwin)
+- Chg #105: Raise the minimum PHP version to `8.1` (@rustamwin)
+- Chg #105: Change PHP constraint in `composer.json` to `8.1 - 8.5` (@rustamwin)
 
 ## 2.1.1 September 23, 2025
 

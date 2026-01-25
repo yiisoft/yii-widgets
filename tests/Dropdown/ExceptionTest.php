@@ -58,7 +58,7 @@ final class ExceptionTest extends TestCase
                             ['label' => 'Another action', 'link' => '#'],
                         ],
                     ],
-                ]
+                ],
             )
             ->render();
     }
@@ -131,7 +131,7 @@ final class ExceptionTest extends TestCase
                             ['label' => 'Separated link', 'link' => '#'],
                         ],
                     ],
-                ]
+                ],
             )
             ->render();
     }

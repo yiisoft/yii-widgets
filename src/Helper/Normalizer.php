@@ -9,6 +9,11 @@ use Yiisoft\Html\Html;
 use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Span;
 
+use function array_key_exists;
+use function is_array;
+use function is_bool;
+use function is_string;
+
 final class Normalizer
 {
     /**
@@ -57,7 +62,7 @@ final class Normalizer
         array $items,
         string $currentPath,
         bool $activateItems,
-        array $iconContainerAttributes = []
+        array $iconContainerAttributes = [],
     ): array {
         /**
          * @psalm-var array[] $items
@@ -79,7 +84,7 @@ final class Normalizer
                         $child,
                         $items[$i]['link'],
                         $currentPath,
-                        $activateItems
+                        $activateItems,
                     );
                     $items[$i]['disabled'] = self::disabled($child);
                     $items[$i]['visible'] = self::visible($child);
@@ -102,7 +107,7 @@ final class Normalizer
         string $icon,
         array $iconAttributes,
         string $iconClass,
-        array $iconContainerAttributes
+        array $iconContainerAttributes,
     ): string {
         $html = '';
 

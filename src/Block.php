@@ -46,14 +46,12 @@ final class Block extends Widget
     private string $id = '';
     private bool $renderInPlace = false;
 
-    public function __construct(private WebView $webView)
-    {
-    }
+    public function __construct(private WebView $webView) {}
 
     /**
      * Starts recording a block.
      */
-    public function begin(): string|null
+    public function begin(): ?string
     {
         parent::begin();
 
