@@ -39,7 +39,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a class="test-active-class" href="#" aria-current="true">Action</a></li>
+            <li><a aria-current="true" class="test-active-class" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -61,7 +61,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="dropdown">
-            <li><a class="active" href="#" aria-current="true">Action</a></li>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -83,7 +83,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="dropdown">
-            <li><a class="active" href="#" aria-current="true">Action</a></li>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -105,7 +105,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <article>
-            <li><a class="active" href="#" aria-current="true">Action</a></li>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -127,7 +127,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a class="active" href="#" aria-current="true">Action</a></li>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -149,7 +149,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a class="active" href="#" aria-current="true">Action</a></li>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><span class="dropdown-divider"></span></li>
@@ -171,7 +171,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <a class="active" href="#" aria-current="true">Action</a>
+            <a aria-current="true" class="active" href="#">Action</a>
             <a href="#">Another action</a>
             <a href="#">Something else here</a>
             <li><hr class="dropdown-divider"></li>
@@ -193,7 +193,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li class="test-class"><a class="active" href="#" aria-current="true">Action</a></li>
+            <li class="test-class"><a aria-current="true" class="active" href="#">Action</a></li>
             <li class="test-class"><a href="#">Another action</a></li>
             <li class="test-class"><a href="#">Something else here</a></li>
             <li class="test-class"><hr class="dropdown-divider"></li>
@@ -206,7 +206,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li class="test-class"><a class="active" href="#" aria-current="true">Action</a></li>
+            <li class="test-class"><a aria-current="true" class="active" href="#">Action</a></li>
             <li class="test-class-2"><a href="#">Another action</a></li>
             <li class="test-class"><a href="#">Something else here</a></li>
             <li class="test-class"><hr class="dropdown-divider"></li>
@@ -247,7 +247,7 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li class="test-class"><a class="active" href="#" aria-current="true">Action</a></li>
+            <li class="test-class"><a aria-current="true" class="active" href="#">Action</a></li>
             <li class="test-class"><a href="#">Another action</a></li>
             <li class="test-class"><a href="#">Something else here</a></li>
             <li class="test-class"><hr class="dropdown-divider"></li>

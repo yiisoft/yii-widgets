@@ -77,7 +77,7 @@ final class MenuTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <ul>
-            <li><a class="active" href="/path" aria-current="page">item</a></li>
+            <li><a aria-current="page" class="active" href="/path">item</a></li>
             </ul>
             <a class="navbar-brand">Hidden brand</a>
             HTML,
@@ -93,9 +93,9 @@ final class MenuTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <ul>
-            <li><a class="active" href="/path" aria-current="page">item</a></li>
+            <li><a aria-current="page" class="active" href="/path">item</a></li>
             </ul>
-            <span class="d-flex" role="search"><input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <span role="search" class="d-flex"><input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button></span>
             HTML,
             Menu::widget()
@@ -146,7 +146,7 @@ final class MenuTest extends TestCase
             <<<HTML
             <a class="navbar-brand">Hidden brand</a>
             <ul>
-            <li><a class="active" href="/path" aria-current="page">item</a></li>
+            <li><a aria-current="page" class="active" href="/path">item</a></li>
             </ul>
             HTML,
             Menu::widget()
@@ -160,10 +160,10 @@ final class MenuTest extends TestCase
 
         Assert::equalsWithoutLE(
             <<<HTML
-            <span class="d-flex" role="search"><input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <span role="search" class="d-flex"><input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button></span>
             <ul>
-            <li><a class="active" href="/path" aria-current="page">item</a></li>
+            <li><a aria-current="page" class="active" href="/path">item</a></li>
             </ul>
             HTML,
             Menu::widget()
@@ -250,9 +250,9 @@ final class MenuTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <ul>
-            <li><a class="active" href="/active" aria-current="page">Active</a></li>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
             <li>
-            <a href="#" aria-expanded="false" data-bs-toggle="dropdown" role="button">Dropdown</a>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Dropdown</a>
             <ul>
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
@@ -300,9 +300,9 @@ final class MenuTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <ul>
-            <li><a class="active" href="/active" aria-current="page">Active</a></li>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
             <li class="nav-item dropdown">
-            <a href="#" aria-expanded="false" data-bs-toggle="dropdown" role="button">Dropdown</a>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Dropdown</a>
             <ul>
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
@@ -351,9 +351,9 @@ final class MenuTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <ul>
-            <li><a class="active" href="/active" aria-current="page">Active</a></li>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
             <li>
-            <a class="dropdown-toggle" href="#" aria-expanded="false" data-bs-toggle="dropdown" role="button">Dropdown</a>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle" href="#">Dropdown</a>
             <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -469,7 +469,7 @@ final class MenuTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <ul>
-            <li class="some-class"><a class="item-active" href="#" aria-current="page">item1</a></li>
+            <li class="some-class"><a aria-current="page" class="item-active" href="#">item1</a></li>
             <li class="another-class other--class two classes"><a href="#">item2</a></li>
             <li><a href="#">item3</a></li>
             <li class="some-other-class foo_bar_baz_class"><a href="#">item4</a></li>

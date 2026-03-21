@@ -30,7 +30,7 @@ final class AlertTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" role="alert">
+            <div role="alert" id="w0-alert">
             <span class="test-class">This is a test.</span>
             <button type="button">&times;</button>
             </div>
@@ -53,7 +53,7 @@ final class AlertTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" role="alert">
+            <div role="alert" id="w0-alert">
             <div class="test-class">
             <span>This is a test.</span>
             <button type="button">&times;</button>
@@ -79,7 +79,7 @@ final class AlertTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" role="alert">
+            <div role="alert" id="w0-alert">
             This is a test.
             <button type="button">&times;</button>
             </div>
@@ -121,7 +121,7 @@ final class AlertTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" role="alert">
+            <div role="alert" id="w0-alert">
             <span class="tests-class">Header title</span>
             <span>This is a test.</span>
             <button type="button">&times;</button>
@@ -147,7 +147,7 @@ final class AlertTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" role="alert">
+            <div role="alert" id="w0-alert">
             <div class="test-class">
             <span>Header title</span>
             </div>
@@ -176,7 +176,7 @@ final class AlertTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" role="alert">
+            <div role="alert" id="w0-alert">
             <div><i class="tests-class"></i></div>
             <span>This is a test.</span>
             </div>
@@ -200,7 +200,7 @@ final class AlertTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" role="alert">
+            <div role="alert" id="w0-alert">
             <div class="test-container-class"><i class="tests-class"></i></div>
             <span>This is a test.</span>
             </div>

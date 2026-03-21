@@ -34,12 +34,12 @@ final class Bootstrap5Test extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="alert alert-success alert-dismissible fade show" role="alert">
+            <div role="alert" class="alert alert-success alert-dismissible fade show" id="w0-alert">
             <h4 class="alert-heading">Well done!</h4>
             <span><p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
             <hr>
             <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy</p></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button data-bs-dismiss="alert" aria-label="Close" class="btn-close" type="button"></button>
             </div>
             HTML,
             Alert::widget()
@@ -74,9 +74,9 @@ final class Bootstrap5Test extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="alert alert-warning alert-dismissible fade show" role="alert">
+            <div role="alert" class="alert alert-warning alert-dismissible fade show" id="w0-alert">
             <span><strong>Holy guacamole!</strong> You should check in on some of those fields below.</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button data-bs-dismiss="alert" aria-label="Close" class="btn-close" type="button"></button>
             </div>
             HTML,
             Alert::widget()
@@ -102,11 +102,11 @@ final class Bootstrap5Test extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="alert alert-primary alert-dismissible fade show" role="alert">
+            <div role="alert" class="alert alert-primary alert-dismissible fade show" id="w0-alert">
             <div class="align-items-center d-flex">
             <div><i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i></div>
             <span>An example alert with an icon</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button data-bs-dismiss="alert" aria-label="Close" class="btn-close" type="button"></button>
             </div>
             </div>
             HTML,
@@ -137,9 +137,9 @@ final class Bootstrap5Test extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="alert alert-primary" role="alert">
+            <div role="alert" class="alert alert-primary" id="w0-alert">
             <span>A simple primary alert with <a href="#" class="alert-link">an example link</a>.Give it a click if you like.</span>
-            <button type="button" class="float-right" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button data-bs-dismiss="alert" aria-label="Close" class="float-right" type="button"></button>
             </div>
             HTML,
             Alert::widget()
