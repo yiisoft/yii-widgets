@@ -119,11 +119,12 @@ Method | Description | Default
 `headerContainer(bool $value)` | Allows you to add an extra wrapper for the header | `false`
 `headerContainerAttributes(array $valuesMap)` | HTML attributes for extra wrapper for the header | `[]`
 `headerContainerClass(string $value)` | CSS class for extra wrapper for the header | `''`
-`headerTag(string $value)` | The tag for the message header | `<span>`
+`headerTag(string $value)` | The tag for the message header | `span`
 `iconAttributes(array $valuesMap)` | HTML attributes for the icon | `[]`
 `iconClass(string $value)` | CSS class for the icon | `''`
 `iconContainerAttributes(array $valuesMap)` | HTML attributes for the icon container | `[]`
+`iconContainerClass(string $value)` | CSS class for the icon container | `''`
 `iconText(string $value)` | The text for the icon | `''`
 `id(string $value)` | The unique identifier of the Alert | `null`
-`layoutBody(string $value)` | The layout for the body | `''`
+`layoutBody(string $value)` | The layout for the body | `'{body}{button}'`
 `layoutHeader(string $value)` | The layout for the header | `''`
