@@ -445,7 +445,7 @@ final class Alert extends Widget
 
     public function render(): string
     {
-        $div = Div::tag();
+        $div = new Div();
         $parts = [];
 
         if (!array_key_exists('id', $this->attributes)) {
@@ -475,7 +475,7 @@ final class Alert extends Widget
     private function renderButton(): string
     {
         return PHP_EOL
-            . Button::tag()
+            . (new Button())
                 ->attributes($this->buttonAttributes)
                 ->content($this->buttonLabel)
                 ->encode(false)
@@ -489,9 +489,9 @@ final class Alert extends Widget
     private function renderIcon(): string
     {
         return PHP_EOL
-            . Div::tag()
+            . (new Div())
                 ->attributes($this->iconContainerAttributes)
-                ->content(I::tag()->attributes($this->iconAttributes)->content($this->iconText)->render())
+                ->content((new I())->attributes($this->iconAttributes)->content($this->iconText)->render())
                 ->encode(false)
                 ->render()
             . PHP_EOL;
@@ -523,7 +523,7 @@ final class Alert extends Widget
         $headerHtml = trim(strtr($this->layoutHeader, $parts));
 
         return $this->headerContainer && $headerHtml !== ''
-            ? Div::tag()
+            ? (new Div())
                 ->attributes($this->headerContainerAttributes)
                 ->content(PHP_EOL . $headerHtml . PHP_EOL)
                 ->encode(false)
@@ -539,7 +539,7 @@ final class Alert extends Widget
         $bodyHtml = trim(strtr($this->layoutBody, $parts));
 
         return $this->bodyContainer
-            ? Div::tag()
+            ? (new Div())
                 ->attributes($this->bodyContainerAttributes)
                 ->content(PHP_EOL . $bodyHtml . PHP_EOL)
                 ->encode(false)

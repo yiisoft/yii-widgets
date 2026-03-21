@@ -116,8 +116,8 @@ final class Normalizer
         }
 
         if ($icon !== '' || $iconAttributes !== [] || $iconClass !== '') {
-            $i = I::tag()->attributes($iconAttributes)->content($icon);
-            $html = Span::tag()->attributes($iconContainerAttributes)->content($i)->encode(false)->render();
+            $i = (new I())->attributes($iconAttributes)->content($icon);
+            $html = (new Span())->attributes($iconContainerAttributes)->content($i)->encode(false)->render();
         }
 
         if ($label !== '') {

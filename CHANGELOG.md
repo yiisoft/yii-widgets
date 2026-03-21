@@ -5,6 +5,7 @@
 - Enh #105: Explicitly import classes, functions, and constants in "use" section (@rustamwin)
 - Chg #105: Raise the minimum PHP version to `8.1` (@rustamwin)
 - Chg #105: Change PHP constraint in `composer.json` to `8.1 - 8.5` (@rustamwin)
+- Enh #108: Bump minimal `yiisoft/html` version to `3.13` and add support for `^4.0` (@vjik)
 
 ## 2.1.1 September 23, 2025
 

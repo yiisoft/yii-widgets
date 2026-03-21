@@ -45,7 +45,7 @@ final class Bootstrap5Test extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="btn-group">
-            <button type="button" class="btn btn-secondary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown">Dropdown</button>
+            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-secondary dropdown-toggle" type="button">Dropdown</button>
             <ul class="dropdown-menu">
             <li><h6 class="dropdown-header">Dropdown header</h6></li>
             <li><a class="dropdown-item" href="#">Action</a></li>
@@ -102,8 +102,8 @@ final class Bootstrap5Test extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="btn-group">
-            <button type="button" class="btn btn-danger">Action</button>
-            <button type="button" id="dropdown-example" class="btn btn-danger dropdown-toggle dropdown-toggle-split" aria-expanded="false" data-bs-toggle="dropdown"><span class="visually-hidden">Action</span></button>
+            <button class="btn btn-danger" type="button">Action</button>
+            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-danger dropdown-toggle dropdown-toggle-split" id="dropdown-example" type="button"><span class="visually-hidden">Action</span></button>
             <ul class="dropdown-menu" aria-labelledby="dropdown-example">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -160,8 +160,8 @@ final class Bootstrap5Test extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="btn-group dropend">
-            <button type="button" class="btn btn-secondary">Split dropend</button>
-            <button type="button" id="dropdown-example" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" aria-expanded="false" data-bs-toggle="dropdown"><span class="visually-hidden">Split dropend</span></button>
+            <button class="btn btn-secondary" type="button">Split dropend</button>
+            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdown-example" type="button"><span class="visually-hidden">Split dropend</span></button>
             <ul class="dropdown-menu" aria-labelledby="dropdown-example">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -218,7 +218,7 @@ final class Bootstrap5Test extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="btn-group dropstart">
-            <button type="button" id="dropdown-example" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" aria-expanded="false" data-bs-toggle="dropdown"><span class="visually-hidden">Split dropstart</span></button>
+            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdown-example" type="button"><span class="visually-hidden">Split dropstart</span></button>
             <ul class="dropdown-menu" aria-labelledby="dropdown-example">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -226,7 +226,7 @@ final class Bootstrap5Test extends TestCase
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Separated link</a></li>
             </ul>
-            <button type="button" class="btn btn-secondary">Split dropstart</button>
+            <button class="btn btn-secondary" type="button">Split dropstart</button>
             </div>
             HTML,
             Dropdown::widget([], $definitions)
@@ -276,8 +276,8 @@ final class Bootstrap5Test extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="btn-group dropup">
-            <button type="button" class="btn btn-secondary">Split dropup</button>
-            <button type="button" id="dropdown-example" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" aria-expanded="false" data-bs-toggle="dropdown"><span class="visually-hidden">Split dropup</span></button>
+            <button class="btn btn-secondary" type="button">Split dropup</button>
+            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdown-example" type="button"><span class="visually-hidden">Split dropup</span></button>
             <ul class="dropdown-menu" aria-labelledby="dropdown-example">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -334,8 +334,8 @@ final class Bootstrap5Test extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="btn-group">
-            <button type="button" class="btn btn-secondary btn-lg">Large split button</button>
-            <button type="button" id="dropdown-example" class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split" aria-expanded="false" data-bs-toggle="dropdown"><span class="visually-hidden">Large split button</span></button>
+            <button class="btn btn-secondary btn-lg" type="button">Large split button</button>
+            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdown-example" type="button"><span class="visually-hidden">Large split button</span></button>
             <ul class="dropdown-menu" aria-labelledby="dropdown-example">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -391,8 +391,8 @@ final class Bootstrap5Test extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="btn-group">
-            <button type="button" class="btn btn-secondary btn-sm">Large split button</button>
-            <button type="button" id="dropdown-example" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" aria-expanded="false" data-bs-toggle="dropdown"><span class="visually-hidden">Large split button</span></button>
+            <button class="btn btn-secondary btn-sm" type="button">Large split button</button>
+            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" id="dropdown-example" type="button"><span class="visually-hidden">Large split button</span></button>
             <ul class="dropdown-menu" aria-labelledby="dropdown-example">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>

@@ -32,9 +32,9 @@ final class TailwindTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="bg-blue-100 border-b border-blue-500 border-t px-4 py-3 text-blue-700" role="alert">
+            <div role="alert" class="bg-blue-100 border-b border-blue-500 border-t px-4 py-3 text-blue-700" id="w0-alert">
             <span class="align-middle inline-block mr-8"><p class="font-bold">Informational message</p><p class="text-sm">Some additional text to explain said message.</p></span>
-            <button type="button" class="float-right px-4 py-3" onclick="closeAlert()">&times;</button>
+            <button class="float-right px-4 py-3" onclick="closeAlert()" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -63,9 +63,9 @@ final class TailwindTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="bg-yellow-100 border-l-2 border-yellow-500 p-4 text-yellow-700" role="alert">
+            <div role="alert" class="bg-yellow-100 border-l-2 border-yellow-500 p-4 text-yellow-700" id="w0-alert">
             <span class="align-middle inline-block mr-8"><p><b>Be Warned</b></p> <p>Something not ideal might be happening.</p></span>
-            <button type="button" class="absolute bottom-0 px-4 py-3 right-0 top-0" onclick="closeAlert()">&times;</button>
+            <button class="absolute bottom-0 px-4 py-3 right-0 top-0" onclick="closeAlert()" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -91,8 +91,8 @@ final class TailwindTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="bg-gray-900 lg:px-4 py-4 text-center text-white" role="alert">
-            <button type="button" class="bottom-0 px-4 py-3 right-0 top-0" onclick="closeAlert()">&times;</button>
+            <div role="alert" class="bg-gray-900 lg:px-4 py-4 text-center text-white" id="w0-alert">
+            <button class="bottom-0 px-4 py-3 right-0 top-0" onclick="closeAlert()" type="button">&times;</button>
             <div class="bg-gray-800 p-2 flex items-center leading-none lg:inline-flex lg:rounded-full">
             <div class="bg-gray-500 flex font-bold ml-2 mr-3 px-2 py-1 rounded-full text-xs uppercase"><i class="not-italic">🔔 New </i></div>
             <span class="flex-auto font-semibold mr-2 text-left">Get the coolest t-shirts from our brand new store</span>
@@ -129,10 +129,10 @@ final class TailwindTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="bg-blue-500 flex font-bold items-center px-4 py-3 text-sm text-white" role="alert">
+            <div role="alert" class="bg-blue-500 flex font-bold items-center px-4 py-3 text-sm text-white" id="w0-alert">
             <div><i class="pr-2">i</i></div>
             <p class="align-middle flex-grow inline-block mr-8">Something happened that you should know about.</p>
-            <button type="button" class="float-right px-4 py-3" onclick="closeAlert()">&times;</button>
+            <button class="float-right px-4 py-3" onclick="closeAlert()" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -162,9 +162,9 @@ final class TailwindTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <div role="alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" id="w0-alert">
             <span class="align-middle inline-block mr-8"><b>Holy smokes!</b> Something seriously bad happened.</span>
-            <button type="button" class="absolute bottom-0 px-4 py-3 right-0 top-0" onclick="closeAlert()">&times;</button>
+            <button class="absolute bottom-0 px-4 py-3 right-0 top-0" onclick="closeAlert()" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -190,13 +190,13 @@ final class TailwindTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" role="alert">
+            <div role="alert" id="w0-alert">
             <div class="bg-red-500 font-bold px-4 py-2 rounded-t text-white">
             <span class="font-semibold">Danger</span>
             </div>
             <div class="bg-red-100 border border-red-400 border-t-0 rounded-b text-red-700">
             <span class="align-middle inline-block mr-8 px-4 py-3">Something not ideal might be happening.</span>
-            <button type="button" class="float-right px-4 py-3" onclick="closeAlert()">&times;</button>
+            <button class="float-right px-4 py-3" onclick="closeAlert()" type="button">&times;</button>
             </div>
             </div>
             HTML,
@@ -229,11 +229,11 @@ final class TailwindTest extends TestCase
     {
         Assert::equalsWithoutLE(
             <<<HTML
-            <div id="w0-alert" class="bg-green-100 border-t-4 border-green-500 px-4 py-3 rounded-b shadow-md text-green-900" role="alert">
+            <div role="alert" id="w0-alert" class="bg-green-100 border-t-4 border-green-500 px-4 py-3 rounded-b shadow-md text-green-900">
             <div class="flex">
             <div class="fill-current h-6 mr-4 py-1 text-green-500 w-6"><i class="not-italic">🛈</i></div>
             <span class="align-middle inline-block flex-grow mr-8"><p class="font-bold">Our privacy policy has changed</p><p class="text-sm">Make sure you know how these changes affect you.</p></span>
-            <button type="button" class="float-right px-4 py-3" onclick="closeAlert()">&times;</button>
+            <button class="float-right px-4 py-3" onclick="closeAlert()" type="button">&times;</button>
             </div>
             </div>
             HTML,
