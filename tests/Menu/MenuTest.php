@@ -817,8 +817,13 @@ final class MenuTest extends TestCase
             }
         };
 
-        $this->assertStringContainsString(
-            'Stringable content',
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            <span>Stringable content</span>
+            HTML,
             Menu::widget()
                 ->afterContent($stringable)
                 ->afterTag('span')
@@ -836,8 +841,13 @@ final class MenuTest extends TestCase
             }
         };
 
-        $this->assertStringContainsString(
-            'Before text',
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <span>Before text</span>
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
             Menu::widget()
                 ->beforeContent($stringable)
                 ->beforeTag('span')
