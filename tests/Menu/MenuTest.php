@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Menu;
 
 use PHPUnit\Framework\TestCase;
+use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
@@ -804,6 +805,77 @@ final class MenuTest extends TestCase
             </ul>
             HTML,
             Menu::widget()->items($this->itemsWithOptions)->template('<div class="test-class">{items}</div>')->render(),
+        );
+    }
+
+    public function testAfterContentWithStringable(): void
+    {
+        $stringable = new class implements Stringable {
+            public function __toString(): string
+            {
+                return 'Stringable content';
+            }
+        };
+
+        $this->assertStringContainsString(
+            'Stringable content',
+            Menu::widget()
+                ->afterContent($stringable)
+                ->afterTag('span')
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testBeforeContentWithStringable(): void
+    {
+        $stringable = new class implements Stringable {
+            public function __toString(): string
+            {
+                return 'Before text';
+            }
+        };
+
+        $this->assertStringContainsString(
+            'Before text',
+            Menu::widget()
+                ->beforeContent($stringable)
+                ->beforeTag('span')
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testContainerFalseWithBeforeAndAfter(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <span>Before</span>
+            <li><a href="/path">item</a></li>
+            <span>After</span>
+            HTML,
+            Menu::widget()
+                ->beforeContent('Before')
+                ->beforeTag('span')
+                ->afterContent('After')
+                ->afterTag('span')
+                ->container(false)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testItemLinkAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a data-custom="value" href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items([['label' => 'item', 'link' => '/path', 'linkAttributes' => ['data-custom' => 'value']]])
+                ->render(),
         );
     }
 }
