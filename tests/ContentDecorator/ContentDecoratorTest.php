@@ -9,6 +9,8 @@ use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
 use Yiisoft\Factory\NotFoundException;
+use Yiisoft\Test\Support\EventDispatcher\SimpleEventDispatcher;
+use Yiisoft\View\View;
 use Yiisoft\Yii\Widgets\ContentDecorator;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
@@ -60,5 +62,45 @@ final class ContentDecoratorTest extends TestCase
             HTML,
             $html,
         );
+    }
+
+    public function testViewWithViewFile(): void
+    {
+        $view = new View(__DIR__ . '/../Support/view', new SimpleEventDispatcher());
+        $view->setParameter('title', 'Hello');
+
+        ContentDecorator::widget()
+            ->view($view, '@public/view/layout-simple.php')
+            ->begin();
+        echo 'body';
+        $html = ContentDecorator::end();
+
+        $this->assertSame('<main>Hellobody</main>', trim($html));
+    }
+
+    public function testViewWithSeparateViewFile(): void
+    {
+        $view = new View(__DIR__ . '/../Support/view', new SimpleEventDispatcher());
+
+        ContentDecorator::widget()
+            ->view($view)
+            ->viewFile('@public/view/layout-simple.php')
+            ->begin();
+        echo 'world';
+        $html = ContentDecorator::end();
+
+        $this->assertSame('<main>world</main>', trim($html));
+    }
+
+    public function testViewWithWebView(): void
+    {
+        ContentDecorator::widget()
+            ->view($this->webView, '@public/view/layout.php')
+            ->begin();
+        echo 'content';
+        $html = ContentDecorator::end();
+
+        $this->assertStringContainsString('content', $html);
+        $this->assertStringContainsString('<title>Test</title>', $html);
     }
 }
