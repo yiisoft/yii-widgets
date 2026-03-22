@@ -34,7 +34,7 @@ echo Breadcrumbs::widget()
 The code above generates the following HTML:
 
 ```html
-<ul class="breadcrumbs">
+<ul class="breadcrumb">
     <li><a class="home" href="site/index">Home</a></li>
     <li><a class="category" href="site/category">Category</a></li>
     <li><a class="item" href="site/category/item">Item</a></li>
@@ -49,7 +49,7 @@ class with the specified value.
 Method | Description | Default
 -------|-------------|---------
 `activeItemTemplate(string $value)`| Template used to render each active item in the breadcrumbs | `"<li class=\"active\">{link}</li>\n"`
-`attributes(array $valuesMap)` | HTML attributes for the breadcrumbs container | `[]`
+`attributes(array $valuesMap)` | HTML attributes for the breadcrumbs container | `['class' => 'breadcrumb']`
 `homeItem(?array $value)` | The first item in the breadcrumbs (called home link) | `['label' => 'Home', 'url' => '/']`
 `items(array $value)` | List of items to appear in the breadcrumbs | `[]`
 `itemTemplate(string $value)` | Template used to render each inactive item in the breadcrumbs | `"<li>{link}</li>\n"`

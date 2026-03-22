@@ -5,28 +5,16 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Alert;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Alert;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class TailwindTest extends TestCase
 {
     use TestTrait;
 
     /**
      * @link https://v1.tailwindcss.com/components/alerts#banner
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testBanner(): void
     {
@@ -53,11 +41,6 @@ final class TailwindTest extends TestCase
 
     /**
      * @link https://v1.tailwindcss.com/components/alerts#left-accent-border
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testLeftAccentBorder(): void
     {
@@ -81,11 +64,6 @@ final class TailwindTest extends TestCase
 
     /**
      * @link https://v1.tailwindcss.com/components/alerts#modern-with-badge
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testModernWithBadge(): void
     {
@@ -119,11 +97,6 @@ final class TailwindTest extends TestCase
 
     /**
      * @link https://v1.tailwindcss.com/components/alerts#solid
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testSolid(): void
     {
@@ -152,11 +125,6 @@ final class TailwindTest extends TestCase
 
     /**
      * @link https://v1.tailwindcss.com/components/alerts#traditional
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testTraditional(): void
     {
@@ -180,11 +148,6 @@ final class TailwindTest extends TestCase
 
     /**
      * @link https://v1.tailwindcss.com/components/alerts#titled
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testTitled(): void
     {
@@ -219,11 +182,6 @@ final class TailwindTest extends TestCase
 
     /**
      * @link https://v1.tailwindcss.com/components/alerts#top-accent-border
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testTopAccentBorder(): void
     {

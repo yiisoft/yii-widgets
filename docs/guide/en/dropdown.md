@@ -45,11 +45,11 @@ The code above generates the following HTML:
 
 ## Setters
 
-All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\Menu` class with the specified value.
+All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\Dropdown` class with the specified value.
 
 Method | Description | Default
 -------|-------------|---------
-`activeCssClass(string $value)` | The CSS class to be added to the active item | `active`
+`activeClass(string $value)` | The CSS class to be added to the active item | `active`
 `container(bool $value)` | If the container is enabled, or not | `true`
 `containerAttributes(array $valuesMap)` | The HTML attributes for the container tag | `[]`
 `containerClass(string $value)` | The CSS class for the container tag | `''`
@@ -59,20 +59,21 @@ Method | Description | Default
 `dividerClass(string $value)` | The CSS class for the divider tag | `dropdown-divider`
 `dividerTag(string $value)` | The tag name for the divider tag | `hr`
 `headerClass(string $value)` | The CSS class for the header tag | `''`
-`headerTag(string $value)` | The tag name for the header tag | `h6`
+`headerTag(string $value)` | The tag name for the header tag | `span`
 `id(string $value)` | The ID of the widget | `''`
-`itemClass(string $value)` | The CSS class for the item tag | `dropdown-item`
-`itemContainer(string $value)` | Item container to use. If false, the item container will not be rendered | `true`
+`itemClass(string $value)` | The CSS class for the item tag | `''`
+`itemContainer(bool $value)` | Item container to use. If false, the item container will not be rendered | `true`
 `itemContainerAttributes(array $valuesMap)` | The HTML attributes for the item container tag | `[]`
-`itemContainerClass(string $value)` | The CSS class for the item container tag | `dropdown-menu`
-`itemContainerTag(string $value)` | The tag name for the item container tag | `ul`
+`itemContainerClass(string $value)` | The CSS class for the item container tag | `''`
+`itemContainerTag(string $value)` | The tag name for the item container tag | `li`
 `itemTag(string $value)` | The tag name for the item tag | `a`
 `items(array $value)` | List of menu items in the dropdown | `[]`
 `itemsContainerAttributes(array $valuesMap)` | The HTML attributes for the items container tag | `[]`
 `itemsContainerClass(string $value)` | The CSS class for the items container tag | `''`
-`itemsContainerTag(string $value)` | The tag name for the items container tag | `li`
+`itemsContainerTag(string $value)` | The tag name for the items container tag | `ul`
 `splitButtonAttributes(array $valuesMap)` | The HTML attributes for the split button tag | `[]`
 `splitButtonClass(string $value)` | The CSS class for the split button tag | `''`
+`splitButtonSpanClass(string $value)` | The CSS class for the split button span tag | `''`
 `toggleAttributes(array $valuesMap)` | The HTML attributes for the toggle tag | `[]`
 `toggleClass(string $value)` | The CSS class for the toggle tag | `''`
 `toggleType(string $value)` | The type of the toggle button | `button`
