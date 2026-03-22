@@ -5,30 +5,18 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Alert;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Alert;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
 use const PHP_EOL;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class Bootstrap5Test extends TestCase
 {
     use TestTrait;
 
     /**
      * @link https://getbootstrap.com/docs/5.0/components/alerts/#additional-content
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testAdditionalContent(): void
     {
@@ -64,11 +52,6 @@ final class Bootstrap5Test extends TestCase
 
     /**
      * @link https://getbootstrap.com/docs/5.0/components/alerts/#dismissing
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testDismissing(): void
     {
@@ -92,11 +75,6 @@ final class Bootstrap5Test extends TestCase
 
     /**
      * @link https://getbootstrap.com/docs/5.0/components/alerts/#icons
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testIcon(): void
     {
@@ -127,11 +105,6 @@ final class Bootstrap5Test extends TestCase
 
     /**
      * @link https://getbootstrap.com/docs/5.0/components/alerts/#link-color
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testLinkColor(): void
     {

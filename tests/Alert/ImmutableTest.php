@@ -5,26 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Alert;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Alert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ImmutableTest extends TestCase
 {
     use TestTrait;
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testImmutable(): void
     {
         $alert = Alert::widget();
@@ -34,6 +21,7 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($alert, $alert->bodyClass(''));
         $this->assertNotSame($alert, $alert->bodyTag());
         $this->assertNotSame($alert, $alert->bodyContainerAttributes([]));
+        $this->assertNotSame($alert, $alert->bodyContainerClass(''));
         $this->assertNotSame($alert, $alert->bodyContainer(false));
         $this->assertNotSame($alert, $alert->buttonAttributes([]));
         $this->assertNotSame($alert, $alert->buttonClass(''));

@@ -609,7 +609,7 @@ final class Menu extends Widget
      */
     private function renderItem(array $item): string
     {
-        $linkAttributes = array_merge($item['linkAttributes'], $this->linkAttributes);
+        $linkAttributes = array_merge($this->linkAttributes, $item['linkAttributes']);
 
         if ($this->linkClass !== '') {
             Html::addCssClass($linkAttributes, $this->linkClass);

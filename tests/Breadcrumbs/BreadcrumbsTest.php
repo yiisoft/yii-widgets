@@ -5,27 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Breadcrumbs;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Breadcrumbs;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class BreadcrumbsTest extends TestCase
 {
     use TestTrait;
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -43,23 +30,11 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testEmptyLinks(): void
     {
         $this->assertEmpty(Breadcrumbs::widget()->render());
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testHomeItem(): void
     {
         Assert::equalsWithoutLE(
@@ -77,12 +52,6 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItems(): void
     {
         Assert::equalsWithoutLE(
@@ -99,12 +68,6 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsWithTemplate(): void
     {
         Assert::equalsWithoutLE(
@@ -126,12 +89,6 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testRenderItemLabelOnlyEncodeLabelFalse(): void
     {
         $this->assertSame(
@@ -145,12 +102,6 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testRenderItemLabelOnlyEncodeLabelTrue(): void
     {
         $this->assertSame(
@@ -164,12 +115,6 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testTag(): void
     {
         Assert::equalsWithoutLE(
@@ -190,12 +135,6 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testWithoutHomeItem(): void
     {
         Assert::equalsWithoutLE(
