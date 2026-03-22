@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\ContentDecorator;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Test\Support\EventDispatcher\SimpleEventDispatcher;
 use Yiisoft\View\View;
 use Yiisoft\Yii\Widgets\ContentDecorator;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
@@ -54,7 +53,7 @@ final class ContentDecoratorTest extends TestCase
 
     public function testViewWithViewFile(): void
     {
-        $view = new View(__DIR__ . '/../Support/view', new SimpleEventDispatcher());
+        $view = new View(__DIR__ . '/../Support/view');
         $view->setParameter('title', 'Hello');
 
         ContentDecorator::widget()
@@ -68,7 +67,7 @@ final class ContentDecoratorTest extends TestCase
 
     public function testViewWithSeparateViewFile(): void
     {
-        $view = new View(__DIR__ . '/../Support/view', new SimpleEventDispatcher());
+        $view = new View(__DIR__ . '/../Support/view');
 
         ContentDecorator::widget()
             ->view($view)
