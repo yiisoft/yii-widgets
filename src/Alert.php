@@ -474,9 +474,15 @@ final class Alert extends Widget
      */
     private function renderButton(): string
     {
+        $buttonAttributes = $this->buttonAttributes;
+
+        if (!isset($buttonAttributes['aria-label'])) {
+            $buttonAttributes['aria-label'] = 'Close';
+        }
+
         return PHP_EOL
             . (new Button())
-                ->attributes($this->buttonAttributes)
+                ->attributes($buttonAttributes)
                 ->content($this->buttonLabel)
                 ->encode(false)
                 ->type('button')
