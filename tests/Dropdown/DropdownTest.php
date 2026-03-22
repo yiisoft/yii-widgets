@@ -5,17 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class DropdownTest extends TestCase
 {
     use TestTrait;
@@ -28,12 +21,6 @@ final class DropdownTest extends TestCase
         ['label' => 'Separated link', 'link' => '#', 'disabled' => true],
     ];
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testActiveClass(): void
     {
         Assert::equalsWithoutLE(
@@ -50,12 +37,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -72,12 +53,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testContainerClass(): void
     {
         Assert::equalsWithoutLE(
@@ -94,12 +69,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testContainerTag(): void
     {
         Assert::equalsWithoutLE(
@@ -116,12 +85,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testDisabledClass(): void
     {
         Assert::equalsWithoutLE(
@@ -138,12 +101,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testDividerTag(): void
     {
         Assert::equalsWithoutLE(
@@ -160,12 +117,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -182,12 +133,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -236,12 +181,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemContainerClass(): void
     {
         Assert::equalsWithoutLE(
@@ -258,12 +197,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsEncodeDefault(): void
     {
         Assert::equalsWithoutLE(
@@ -276,12 +209,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsEncodeWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -294,12 +221,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIcon(): void
     {
         Assert::equalsWithoutLE(
@@ -320,12 +241,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIconAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -347,12 +262,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIconClass(): void
     {
         Assert::equalsWithoutLE(
@@ -373,12 +282,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIconContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -405,12 +308,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIconWithEmptyStringLabel(): void
     {
         Assert::equalsWithoutLE(
@@ -431,12 +328,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -451,12 +342,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsVisible(): void
     {
         $this->assertEmpty(
@@ -480,5 +365,135 @@ final class DropdownTest extends TestCase
                 )
                 ->render(),
         );
+    }
+
+    public function testItemEnclose(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            raw content
+            <li><a href="#">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items(
+                    [
+                        ['label' => 'raw content', 'enclose' => false],
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testHeaderWithHtmlLabel(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><span><b>Bold</b></span></li>
+            <li><a href="#">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items(
+                    [
+                        ['label' => '<b>Bold</b>', 'link' => '', 'encode' => false],
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testNonSplitWithDropstart(): void
+    {
+        $html = Dropdown::widget()
+            ->containerClass('btn-group dropstart')
+            ->toggleClass('btn btn-secondary dropdown-toggle')
+            ->toggleAttributes(['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown'])
+            ->items(
+                [
+                    [
+                        'label' => 'Dropstart',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Action', 'link' => '#'],
+                        ],
+                    ],
+                ],
+            )
+            ->render();
+
+        $this->assertSame(1, substr_count($html, '<button'));
+    }
+
+    public function testItemHeaderAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><span class="custom-header">Section</span></li>
+            <li><a href="#">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items(
+                    [
+                        ['label' => 'Section', 'link' => '', 'headerAttributes' => ['class' => 'custom-header']],
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testDividerAsArrayItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">Action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a href="#">Other</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items(
+                    [
+                        ['label' => 'Action', 'link' => '#'],
+                        ['label' => '-'],
+                        ['label' => 'Other', 'link' => '#'],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testItemToggleAttributes(): void
+    {
+        $html = Dropdown::widget()
+            ->containerClass('btn-group')
+            ->toggleType('split')
+            ->splitButtonClass('btn')
+            ->splitButtonSpanClass('sr-only')
+            ->toggleClass('btn dropdown-toggle')
+            ->toggleAttributes(['data-bs-toggle' => 'dropdown'])
+            ->items(
+                [
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'toggleAttributes' => ['data-custom' => 'value'],
+                        'items' => [
+                            ['label' => 'Child', 'link' => '#'],
+                        ],
+                    ],
+                ],
+            )
+            ->render();
+
+        $this->assertStringContainsString('data-custom="value"', $html);
     }
 }

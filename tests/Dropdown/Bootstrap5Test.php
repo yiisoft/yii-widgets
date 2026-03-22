@@ -5,17 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class Bootstrap5Test extends TestCase
 {
     use TestTrait;
@@ -24,11 +17,6 @@ final class Bootstrap5Test extends TestCase
      * Add a header to label sections of actions in any dropdown menu.
      *
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#headers
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testHeaders(): void
     {
@@ -80,11 +68,6 @@ final class Bootstrap5Test extends TestCase
      * button and provide a more appropriately sized hit area next to the main button.
      *
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#split-button
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testSplit(): void
     {
@@ -138,11 +121,6 @@ final class Bootstrap5Test extends TestCase
 
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#dropend
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testSplitDropend(): void
     {
@@ -196,11 +174,6 @@ final class Bootstrap5Test extends TestCase
 
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#dropstart
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testSplitDropStart(): void
     {
@@ -254,11 +227,6 @@ final class Bootstrap5Test extends TestCase
 
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#dropup
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testSplitDropup(): void
     {
@@ -312,11 +280,6 @@ final class Bootstrap5Test extends TestCase
 
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#sizing
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testSplitSizingWithLargeButton(): void
     {
@@ -369,11 +332,6 @@ final class Bootstrap5Test extends TestCase
 
     /**
      * @link https://getbootstrap.com/docs/5.2/components/dropdowns/#sizing
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testSplitSizingWithSmallButton(): void
     {
