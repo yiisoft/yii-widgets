@@ -12,8 +12,12 @@ use function array_key_exists;
 use function implode;
 use function is_array;
 use function is_string;
+use function json_encode;
 use function strtr;
 
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 use const PHP_EOL;
 
 /**
@@ -54,9 +58,14 @@ final class Breadcrumbs extends Widget
 {
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
     private array $attributes = ['class' => 'breadcrumb'];
+    private bool $container = false;
+    private array $containerAttributes = [];
+    private string $containerClass = '';
+    private string $containerTag = 'nav';
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
+    private bool $jsonLd = false;
     private string $tag = 'ul';
 
     /**
@@ -82,6 +91,58 @@ final class Breadcrumbs extends Widget
     {
         $new = clone $this;
         $new->attributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified if the container is enabled, or not. Default is false.
+     *
+     * @param bool $value The container enabled.
+     */
+    public function container(bool $value): self
+    {
+        $new = clone $this;
+        $new->container = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified container HTML attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function containerAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->containerAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified container class.
+     *
+     * @param string $value The container class.
+     */
+    public function containerClass(string $value): self
+    {
+        $new = clone $this;
+        $new->containerClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified container tag.
+     *
+     * @param string $value The container tag.
+     */
+    public function containerTag(string $value): self
+    {
+        $new = clone $this;
+        $new->containerTag = $value;
 
         return $new;
     }
@@ -169,6 +230,22 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * Returns a new instance with JSON-LD structured data rendering enabled or disabled.
+     *
+     * When enabled, a `<script type="application/ld+json">` block with BreadcrumbList structured data
+     * is appended to the widget output.
+     *
+     * @param bool $value Whether to render JSON-LD structured data.
+     */
+    public function jsonLd(bool $value): self
+    {
+        $new = clone $this;
+        $new->jsonLd = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag.
      *
      * @param string $value The tag name.
@@ -213,9 +290,100 @@ final class Breadcrumbs extends Widget
 
         $body = implode('', $items);
 
-        return empty($this->tag)
+        $result = empty($this->tag)
             ? $body
             : Html::normalTag($this->tag, PHP_EOL . $body, $this->attributes)->encode(false)->render();
+
+        if ($this->container) {
+            if ($this->containerTag === '') {
+                throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+            }
+
+            $containerAttributes = $this->containerAttributes;
+
+            if ($this->containerClass !== '') {
+                Html::addCssClass($containerAttributes, $this->containerClass);
+            }
+
+            $result = Html::normalTag($this->containerTag, PHP_EOL . $result . PHP_EOL, $containerAttributes)
+                ->encode(false)
+                ->render();
+        }
+
+        if ($this->jsonLd) {
+            $result .= PHP_EOL . $this->renderJsonLd();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Renders JSON-LD structured data for the breadcrumbs.
+     *
+     * @return string The `<script type="application/ld+json">` block with BreadcrumbList structured data.
+     */
+    public function renderJsonLd(): string
+    {
+        $listElements = [];
+        $position = 1;
+
+        if ($this->homeItem !== null) {
+            $element = $this->buildJsonLdItem($this->homeItem, $position);
+            if ($element !== null) {
+                $listElements[] = $element;
+                $position++;
+            }
+        }
+
+        foreach ($this->items as $item) {
+            if (!is_array($item)) {
+                $item = ['label' => $item];
+            }
+
+            if ($item === []) {
+                continue;
+            }
+
+            $element = $this->buildJsonLdItem($item, $position);
+            if ($element !== null) {
+                $listElements[] = $element;
+                $position++;
+            }
+        }
+
+        $data = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $listElements,
+        ];
+
+        $json = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        return '<script type="application/ld+json">' . $json . '</script>';
+    }
+
+    /**
+     * Builds a single JSON-LD ListItem element.
+     *
+     * @return array|null The ListItem data, or null if the item has no label.
+     */
+    private function buildJsonLdItem(array $item, int $position): ?array
+    {
+        if (!isset($item['label']) || !is_string($item['label'])) {
+            return null;
+        }
+
+        $element = [
+            '@type' => 'ListItem',
+            'position' => $position,
+            'name' => $item['label'],
+        ];
+
+        if (isset($item['url']) && is_string($item['url'])) {
+            $element['item'] = $item['url'];
+        }
+
+        return $element;
     }
 
     /**
