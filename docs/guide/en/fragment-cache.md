@@ -47,6 +47,7 @@ class with the specified value.
 
 Method | Description | Default
 -------|-------------|---------
+`dependency(Dependency $value)` | The dependency that the cached content depends on | `null`
 `dynamicContents(DynamicContent ...$value)` | The dynamic content instances | `null`
 `id(string $value)` | The unique identifier of the cache fragment | `''`
 `ttl(int $value)` | The number of seconds that the data can remain valid in cache | `60`
