@@ -637,4 +637,21 @@ final class MenuTest extends TestCase
             Menu::widget()->items($this->itemsWithOptions)->template('<div class="test-class">{items}</div>')->render(),
         );
     }
+
+    public function testItemLinkAttributesOverrideWidgetLinkAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a class="item-class" href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->linkAttributes(['class' => 'widget-class'])
+                ->items([
+                    ['label' => 'item', 'link' => '/path', 'linkAttributes' => ['class' => 'item-class']],
+                ])
+                ->render(),
+        );
+    }
 }

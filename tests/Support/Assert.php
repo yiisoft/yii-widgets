@@ -43,7 +43,6 @@ final class Assert extends TestCase
     {
         $reflection = new ReflectionObject($object);
         $method = $reflection->getMethod($method);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $args);
     }
