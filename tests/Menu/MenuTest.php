@@ -5,17 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Menu;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class MenuTest extends TestCase
 {
     use TestTrait;
@@ -30,12 +23,6 @@ final class MenuTest extends TestCase
         ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
     ];
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -48,12 +35,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testActiveItemsWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -66,12 +47,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testAfter(): void
     {
         Assert::equalsWithoutLE(
@@ -113,12 +88,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testActiveWithNotBool(): void
     {
         Assert::equalsWithoutLE(
@@ -134,12 +103,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testBefore(): void
     {
         Assert::equalsWithoutLE(
@@ -181,12 +144,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testClass(): void
     {
         Assert::equalsWithoutLE(
@@ -199,12 +156,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -218,12 +169,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testDisabledClass(): void
     {
         Assert::equalsWithoutLE(
@@ -239,12 +184,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testDropdown(): void
     {
         Assert::equalsWithoutLE(
@@ -289,12 +228,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testDropdownContainerClass(): void
     {
         Assert::equalsWithoutLE(
@@ -340,12 +273,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testDropdownDefinitions(): void
     {
         Assert::equalsWithoutLE(
@@ -408,12 +335,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testFirstItemCssClass(): void
     {
         Assert::equalsWithoutLE(
@@ -429,12 +350,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsClassAsArray(): void
     {
         $items = [
@@ -479,12 +394,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -500,12 +409,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsContainerClass(): void
     {
         Assert::equalsWithoutLE(
@@ -521,12 +424,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -542,12 +439,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsEncodeDefault(): void
     {
         Assert::equalsWithoutLE(
@@ -560,12 +451,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsEncodeWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -578,12 +463,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIcon(): void
     {
         Assert::equalsWithoutLE(
@@ -608,12 +487,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIconAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -638,12 +511,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIconClass(): void
     {
         Assert::equalsWithoutLE(
@@ -668,12 +535,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIconContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -703,12 +564,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsIconWithEmptyStringLabel(): void
     {
         Assert::equalsWithoutLE(
@@ -733,12 +588,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testLastItemCssClass(): void
     {
         Assert::equalsWithoutLE(
@@ -754,12 +603,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testLinkClass(): void
     {
         Assert::equalsWithoutLE(
@@ -775,23 +618,11 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testRender(): void
     {
         $this->assertEmpty(Menu::widget()->render());
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testTemplate(): void
     {
         Assert::equalsWithoutLE(

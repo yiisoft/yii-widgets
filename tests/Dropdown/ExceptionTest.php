@@ -6,27 +6,13 @@ namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ExceptionTest extends TestCase
 {
     use TestTrait;
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testContainerTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -34,13 +20,6 @@ final class ExceptionTest extends TestCase
         Dropdown::widget()->containerTag('')->items([['label' => 'test']])->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testHeaderTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -63,13 +42,6 @@ final class ExceptionTest extends TestCase
             ->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemDividerTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -77,13 +49,6 @@ final class ExceptionTest extends TestCase
         Dropdown::widget()->dividerTag('')->items([['label' => 'test'], '-'])->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemContainerTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -91,13 +56,6 @@ final class ExceptionTest extends TestCase
         Dropdown::widget()->itemContainerTag('')->items([['label' => 'test']])->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -105,13 +63,6 @@ final class ExceptionTest extends TestCase
         Dropdown::widget()->itemTag('')->items([['label' => 'test']])->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemsContainerTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -136,13 +87,6 @@ final class ExceptionTest extends TestCase
             ->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testLabelExceptionEmpty(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -150,13 +94,6 @@ final class ExceptionTest extends TestCase
         Dropdown::widget()->items([['link' => '/home']])->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testLabelExceptionEmptyString(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -164,13 +101,6 @@ final class ExceptionTest extends TestCase
         Dropdown::widget()->items([['label' => '']])->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testLabelExceptionNotString(): void
     {
         $this->expectException(InvalidArgumentException::class);
