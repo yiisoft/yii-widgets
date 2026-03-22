@@ -52,7 +52,7 @@ final class FragmentCache extends Widget
      */
     private array $dynamicContents = [];
 
-    public function __construct(private CacheInterface $cache) {}
+    public function __construct(private readonly CacheInterface $cache) {}
 
     /**
      * Returns a new instance with the specified dynamic contents.

@@ -159,4 +159,60 @@ final class AlertTest extends TestCase
                 ->render(),
         );
     }
+
+    public function testHeaderWithHtmlContent(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span><b>Bold</b></span>
+            <span>Body</span>
+            <button type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body('Body')
+                ->header('<b>Bold</b>')
+                ->id('w0-alert')
+                ->layoutHeader('{header}')
+                ->render(),
+        );
+    }
+
+    public function testIconBeforeBodyNewline(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span>Body</span>
+            <div><i class="ic"></i></div>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body('Body')
+                ->iconAttributes(['class' => 'ic'])
+                ->id('w0-alert')
+                ->layoutBody('{body}{icon}')
+                ->render(),
+        );
+    }
+
+    public function testHeaderContainerTrimsWhitespace(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span>H</span>
+            <span>Body</span>
+            <button type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body('Body')
+                ->header('H')
+                ->id('w0-alert')
+                ->layoutHeader(' {header} ')
+                ->render(),
+        );
+    }
 }
