@@ -33,12 +33,10 @@ use function ob_start;
 final class ContentDecorator extends Widget
 {
     private array $parameters = [];
-    private ViewInterface $view;
     private string $viewFile = '';
 
-    public function __construct(private Aliases $aliases, WebView $webView)
+    public function __construct(private Aliases $aliases, private ViewInterface $view)
     {
-        $this->view = $webView;
     }
 
     /**
