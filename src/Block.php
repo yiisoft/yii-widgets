@@ -46,7 +46,7 @@ final class Block extends Widget
     private string $id = '';
     private bool $renderInPlace = false;
 
-    public function __construct(private WebView $webView) {}
+    public function __construct(private readonly WebView $webView) {}
 
     /**
      * Starts recording a block.

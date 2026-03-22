@@ -36,7 +36,7 @@ final class ContentDecorator extends Widget
     private ViewInterface $view;
     private string $viewFile = '';
 
-    public function __construct(private Aliases $aliases, WebView $webView)
+    public function __construct(private readonly Aliases $aliases, WebView $webView)
     {
         $this->view = $webView;
     }
