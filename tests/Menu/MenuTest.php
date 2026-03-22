@@ -638,12 +638,6 @@ final class MenuTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testItemLinkAttributesOverrideWidgetLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
