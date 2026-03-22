@@ -35,9 +35,7 @@ final class ContentDecorator extends Widget
     private array $parameters = [];
     private string $viewFile = '';
 
-    public function __construct(private Aliases $aliases, private ViewInterface $view)
-    {
-    }
+    public function __construct(private Aliases $aliases, private ViewInterface $view) {}
 
     /**
      * Returns a new instance with the specified parameters.
