@@ -612,7 +612,7 @@ final class MenuTest extends TestCase
             <li><a class="test-class" href="/active">Active</a></li>
             <li><a class="test-class" href="#">Much longer nav link</a></li>
             <li><a class="test-class" href="#">Link</a></li>
-            <li><a aria-disabled="true" class="test-class disabled" href="#">Disabled</a></li>
+            <li><a class="test-class disabled" aria-disabled="true" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()->linkClass('test-class')->items($this->itemsWithOptions)->render(),
