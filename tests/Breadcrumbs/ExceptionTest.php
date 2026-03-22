@@ -6,27 +6,13 @@ namespace Yiisoft\Yii\Widgets\Tests\Breadcrumbs;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Breadcrumbs;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ExceptionTest extends TestCase
 {
     use TestTrait;
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testHomeItemThrowExceptionForEmptyArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -36,13 +22,6 @@ final class ExceptionTest extends TestCase
         Breadcrumbs::widget()->homeItem([]);
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testLabelNotString(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -50,13 +29,6 @@ final class ExceptionTest extends TestCase
         Breadcrumbs::widget()->items([['label' => 1]])->render();
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testRenderItem(): void
     {
         $this->expectException(InvalidArgumentException::class);
