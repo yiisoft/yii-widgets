@@ -106,7 +106,7 @@ final class Alert extends Widget
      *
      * @param bool $value Whether to add an extra wrapper for the panel body.
      */
-    public function bodyContainer(bool $value): self
+    public function bodyContainer(bool $value = true): self
     {
         $new = clone $this;
         $new->bodyContainer = $value;
