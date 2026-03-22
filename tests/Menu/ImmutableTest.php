@@ -15,6 +15,7 @@ final class ImmutableTest extends TestCase
     public function testImmutable(): void
     {
         $menu = Menu::widget();
+        $this->assertNotSame($menu, $menu->activateItems(false));
         $this->assertNotSame($menu, $menu->afterAttributes([]));
         $this->assertNotSame($menu, $menu->afterClass(''));
         $this->assertNotSame($menu, $menu->afterContent(''));
@@ -30,10 +31,12 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($menu, $menu->currentPath(''));
         $this->assertNotSame($menu, $menu->disabledClass(''));
         $this->assertNotSame($menu, $menu->dropdownContainerClass(''));
+        $this->assertNotSame($menu, $menu->dropdownContainerTag('div'));
         $this->assertNotSame($menu, $menu->dropdownDefinitions([]));
         $this->assertNotSame($menu, $menu->firstItemClass(''));
         $this->assertNotSame($menu, $menu->iconContainerAttributes([]));
         $this->assertNotSame($menu, $menu->items([]));
+        $this->assertNotSame($menu, $menu->itemsContainer(false));
         $this->assertNotSame($menu, $menu->itemsContainerAttributes([]));
         $this->assertNotSame($menu, $menu->itemsContainerClass(''));
         $this->assertNotSame($menu, $menu->itemsTag(''));
