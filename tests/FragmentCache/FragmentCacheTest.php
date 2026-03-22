@@ -7,10 +7,6 @@ namespace Yiisoft\Yii\Widgets\Tests\FragmentCache;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Cache\CacheKeyNormalizer;
 use Yiisoft\Cache\Dependency\TagDependency;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\View\Cache\CachedContent;
 use Yiisoft\View\Cache\DynamicContent;
 use Yiisoft\Yii\Widgets\FragmentCache;
@@ -25,12 +21,6 @@ final class FragmentCacheTest extends TestCase
 {
     use TestTrait;
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testCacheFragment(): void
     {
         FragmentCache::widget()->dependency(new TagDependency('test'))->id('test')->ttl(30)->begin();
@@ -40,12 +30,6 @@ final class FragmentCacheTest extends TestCase
         $this->assertSame('cached fragment', $content);
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testCacheFragmentWithEmptyContent(): void
     {
         FragmentCache::widget()->id('test')->ttl(30)->begin();
@@ -54,12 +38,6 @@ final class FragmentCacheTest extends TestCase
         $this->assertEmpty($content);
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testSingleDynamicFragment(): void
     {
         for ($counter = 0; $counter < 42; $counter++) {
@@ -80,12 +58,6 @@ final class FragmentCacheTest extends TestCase
         }
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testMultipleDynamicFragments(): void
     {
         for ($counter = 0; $counter < 42; $counter++) {
@@ -121,12 +93,6 @@ final class FragmentCacheTest extends TestCase
         }
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testNestedDynamicFragments(): void
     {
         for ($counter = 0; $counter < 42; $counter++) {
@@ -172,16 +138,8 @@ final class FragmentCacheTest extends TestCase
         }
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testVariations(): void
     {
-        $this->setOutputCallback(static fn() => null);
-
         FragmentCache::widget()->id($id = 'test')->variations($variation = 'ru')->begin();
         echo 'cached fragment';
 
