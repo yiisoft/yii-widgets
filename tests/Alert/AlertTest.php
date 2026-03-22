@@ -5,27 +5,14 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Alert;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\Alert;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class AlertTest extends TestCase
 {
     use TestTrait;
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testBodyAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -43,12 +30,6 @@ final class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testBodyContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -69,12 +50,6 @@ final class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testBodyWithoutTag(): void
     {
         Assert::equalsWithoutLE(
@@ -92,12 +67,6 @@ final class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testGenerateId(): void
     {
         Assert::equalsWithoutLE(
@@ -111,12 +80,6 @@ final class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testHeaderAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -137,12 +100,6 @@ final class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testHeaderContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -166,12 +123,6 @@ final class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testIconAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -190,12 +141,6 @@ final class AlertTest extends TestCase
         );
     }
 
-    /**
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
-     */
     public function testIconContainerAttributes(): void
     {
         Assert::equalsWithoutLE(

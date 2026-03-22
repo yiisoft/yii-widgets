@@ -5,28 +5,16 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\ContentDecorator;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Definitions\Exception\CircularReferenceException;
-use Yiisoft\Definitions\Exception\InvalidConfigException;
-use Yiisoft\Definitions\Exception\NotInstantiableException;
-use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Yii\Widgets\ContentDecorator;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 final class ContentDecoratorTest extends TestCase
 {
     use TestTrait;
 
     /**
      * @link https://github.com/yiisoft/yii2/issues/15536
-     *
-     * @throws CircularReferenceException
-     * @throws InvalidConfigException
-     * @throws NotFoundException
-     * @throws NotInstantiableException
      */
     public function testContentDecorator(): void
     {
