@@ -164,6 +164,8 @@ final class Alert extends Widget
      *
      * The button is displayed in the alert. Clicking on the button will dismiss the alert.
      *
+     * If {@see buttonEnabled} is `false`, no button will be rendered.
+     *
      * The rest of the options will be rendered as the HTML attributes of the button tag.
      *
      * @param array $valuesMap Attribute values indexed by attribute names.
