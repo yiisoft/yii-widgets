@@ -321,6 +321,28 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
+    public function testRenderJsonLdSkipsEmptyItems(): void
+    {
+        $this->assertSame(
+            '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Page"}]}</script>',
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->items([[], 'Page'])
+                ->renderJsonLd(),
+        );
+    }
+
+    public function testRenderJsonLdSkipsItemsWithoutLabel(): void
+    {
+        $this->assertSame(
+            '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Page"}]}</script>',
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->items([['url' => '/no-label'], 'Page'])
+                ->renderJsonLd(),
+        );
+    }
+
     public function testContainerWithJsonLd(): void
     {
         Assert::equalsWithoutLE(
