@@ -13,6 +13,14 @@ final class ContentDecoratorTest extends TestCase
 {
     use TestTrait;
 
+    public function testEmptyContent(): void
+    {
+        ContentDecorator::widget()->viewFile('@public/view/layout.php')->begin();
+        $result = ContentDecorator::end();
+
+        $this->assertSame('', $result);
+    }
+
     /**
      * @link https://github.com/yiisoft/yii2/issues/15536
      */
