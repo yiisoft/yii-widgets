@@ -48,6 +48,73 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testActiveTrail(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><a class="active-trail" href="/products">Products</a></li>
+            <li><a class="active-trail" href="/products/electronics">Electronics</a></li>
+            <li><a aria-current="page" class="active" href="/products/electronics/phones">Phones</a></li>
+            <li><a href="/about">About</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeTrail(true)
+                ->currentPath('/products/electronics/phones')
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'Products', 'link' => '/products'],
+                    ['label' => 'Electronics', 'link' => '/products/electronics'],
+                    ['label' => 'Phones', 'link' => '/products/electronics/phones'],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testActiveTrailClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a class="trail" href="/products">Products</a></li>
+            <li><a aria-current="page" class="active" href="/products/phones">Phones</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeTrail(true)
+                ->activeTrailClass('trail')
+                ->currentPath('/products/phones')
+                ->items([
+                    ['label' => 'Products', 'link' => '/products'],
+                    ['label' => 'Phones', 'link' => '/products/phones'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testActiveTrailDoesNotMatchSubstring(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/prod">Prod</a></li>
+            <li><a aria-current="page" class="active" href="/products">Products</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeTrail(true)
+                ->currentPath('/products')
+                ->items([
+                    ['label' => 'Prod', 'link' => '/prod'],
+                    ['label' => 'Products', 'link' => '/products'],
+                ])
+                ->render(),
+        );
+    }
+
     public function testAfter(): void
     {
         Assert::equalsWithoutLE(
