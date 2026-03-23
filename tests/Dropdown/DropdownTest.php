@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
+use InvalidArgumentException;
 
 final class DropdownTest extends TestCase
 {
@@ -99,6 +100,37 @@ final class DropdownTest extends TestCase
             HTML,
             Dropdown::widget()->disabledClass('test-disabled-class')->items($this->items)->render(),
         );
+    }
+
+    public function testEmptyText(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li class="text-muted">No actions</li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->emptyText('No actions')
+                ->emptyTextAttributes(['class' => 'text-muted'])
+                ->items([
+                    ['label' => 'Hidden', 'link' => '#', 'visible' => false],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testEmptyTextTagEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Dropdown::widget()
+            ->emptyText('No actions')
+            ->emptyTextTag('')
+            ->items([
+                ['label' => 'Hidden', 'link' => '#', 'visible' => false],
+            ])
+            ->render();
     }
 
     public function testDividerTag(): void

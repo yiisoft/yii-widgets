@@ -185,6 +185,54 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testEmptyText(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li class="text-muted">No pages available</li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->emptyText('No pages available')
+                ->emptyTextAttributes(['class' => 'text-muted'])
+                ->items([])
+                ->render(),
+        );
+    }
+
+    public function testEmptyTextWithAllItemsInvisible(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>Empty</li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->emptyText('Empty')
+                ->items([
+                    ['label' => 'Hidden', 'link' => '#', 'visible' => false],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testEmptyTextNotShownWhenItemsExist(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->emptyText('Empty')
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
     public function testDropdown(): void
     {
         Assert::equalsWithoutLE(

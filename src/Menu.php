@@ -56,6 +56,9 @@ final class Menu extends Widget
     private bool $container = true;
     private string $currentPath = '';
     private string $disabledClass = 'disabled';
+    private string $emptyText = '';
+    private array $emptyTextAttributes = [];
+    private string $emptyTextTag = 'li';
     private bool $dropdownContainer = true;
     private array $dropdownContainerAttributes = [];
     private string $dropdownContainerTag = 'li';
@@ -265,6 +268,45 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->disabledClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified empty text.
+     *
+     * @param string $value The text to display when there are no visible items.
+     */
+    public function emptyText(string $value): self
+    {
+        $new = clone $this;
+        $new->emptyText = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified empty text HTML attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function emptyTextAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->emptyTextAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified empty text tag.
+     *
+     * @param string $value The tag for the empty text element.
+     */
+    public function emptyTextTag(string $value): self
+    {
+        $new = clone $this;
+        $new->emptyTextTag = $value;
 
         return $new;
     }
@@ -504,6 +546,10 @@ final class Menu extends Widget
     public function render(): string
     {
         if ($this->items === []) {
+            if ($this->emptyText !== '') {
+                return $this->renderMenu([]);
+            }
+
             return '';
         }
 
@@ -727,6 +773,14 @@ final class Menu extends Widget
         $beforeContent = '';
 
         $content = $this->renderItems($items) . PHP_EOL;
+
+        if (trim($content) === '' && $this->emptyText !== '' && $this->emptyTextTag !== '') {
+            $content = PHP_EOL
+                . Html::normalTag($this->emptyTextTag, $this->emptyText, $this->emptyTextAttributes)
+                    ->encode(false)
+                    ->render()
+                . PHP_EOL;
+        }
 
         if ($this->beforeContent !== '') {
             $beforeContent = $this->renderBeforeContent() . PHP_EOL;
