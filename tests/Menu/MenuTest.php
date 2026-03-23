@@ -9,6 +9,7 @@ use Stringable;
 use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
+use InvalidArgumentException;
 
 final class MenuTest extends TestCase
 {
@@ -622,6 +623,124 @@ final class MenuTest extends TestCase
     public function testRender(): void
     {
         $this->assertEmpty(Menu::widget()->render());
+    }
+
+    public function testSubmenu(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/products">Products</a>
+            <ul>
+            <li><a href="/products/electronics">Electronics</a></li>
+            <li><a href="/products/books">Books</a></li>
+            </ul></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->submenu(true)
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/products',
+                        'items' => [
+                            ['label' => 'Electronics', 'link' => '/products/electronics'],
+                            ['label' => 'Books', 'link' => '/products/books'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testSubmenuWithEmptyItemsTag(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Menu::widget()
+            ->submenu(true)
+            ->itemsTag('')
+            ->items([
+                [
+                    'label' => 'Products',
+                    'link' => '/products',
+                    'items' => [],
+                ],
+            ])
+            ->render();
+    }
+
+    public function testSubmenuWithEmptyTagName(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Menu::widget()
+            ->submenu(true)
+            ->tagName('')
+            ->items([
+                [
+                    'label' => 'Products',
+                    'link' => '/products',
+                    'items' => [['label' => 'A', 'link' => '/a']],
+                ],
+            ])
+            ->render();
+    }
+
+    public function testSubmenuWithItemsContainerFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <a href="/products">Products</a>
+            <ul>
+            <a href="/products/electronics">Electronics</a>
+            </ul>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->submenu(true)
+                ->itemsContainer(false)
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/products',
+                        'items' => [
+                            ['label' => 'Electronics', 'link' => '/products/electronics'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testSubmenuWithActiveItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/products">Products</a>
+            <ul>
+            <li><a aria-current="page" class="active" href="/products/electronics">Electronics</a></li>
+            <li><a href="/products/books">Books</a></li>
+            </ul></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->submenu(true)
+                ->currentPath('/products/electronics')
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/products',
+                        'items' => [
+                            ['label' => 'Electronics', 'link' => '/products/electronics'],
+                            ['label' => 'Books', 'link' => '/products/books'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
     }
 
     public function testTemplate(): void

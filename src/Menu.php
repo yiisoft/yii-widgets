@@ -70,6 +70,7 @@ final class Menu extends Widget
     private array $linkAttributes = [];
     private string $linkClass = '';
     private string $linkTag = 'a';
+    private bool $submenu = false;
     private string $tagName = 'ul';
     private string $template = '{items}';
 
@@ -468,6 +469,19 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with submenu rendering enabled or disabled.
+     *
+     * @param bool $value Whether to render sub-items as nested lists instead of Dropdown widgets.
+     */
+    public function submenu(bool $value): self
+    {
+        $new = clone $this;
+        $new->submenu = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag for rendering the menu.
      *
      * @param string $value The tag for rendering the menu.
@@ -526,6 +540,7 @@ final class Menu extends Widget
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
+            $this->submenu,
         );
 
         return $this->renderMenu($items);
@@ -665,8 +680,42 @@ final class Menu extends Widget
         $n = count($items);
 
         foreach ($items as $i => $item) {
-            if (isset($item['items'])) {
+            if (isset($item['items']) && !$this->submenu) {
                 $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item])]);
+            } elseif (isset($item['items'])) {
+                if ($item['visible']) {
+                    $parentLink = $this->renderItem($item);
+                    /** @psalm-suppress MixedArgumentTypeCoercion */
+                    $nestedItems = $this->renderItems($item['items']);
+
+                    if ($this->tagName === '') {
+                        throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+                    }
+
+                    $nestedList = Html::normalTag($this->tagName, $nestedItems . PHP_EOL, [])
+                        ->encode(false)
+                        ->render();
+
+                    if ($this->itemsTag === '') {
+                        throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+                    }
+
+                    $itemsContainerAttributes = array_merge(
+                        $this->itemsContainerAttributes,
+                        $item['itemsContainerAttributes'] ?? [],
+                    );
+
+                    $lines[] = match ($this->itemsContainer) {
+                        false => $parentLink . PHP_EOL . $nestedList,
+                        default => Html::normalTag(
+                            $this->itemsTag,
+                            $parentLink . PHP_EOL . $nestedList,
+                            $itemsContainerAttributes,
+                        )
+                            ->encode(false)
+                            ->render(),
+                    };
+                }
             } elseif ($item['visible']) {
                 $itemsContainerAttributes = array_merge(
                     $this->itemsContainerAttributes,
