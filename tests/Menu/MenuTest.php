@@ -206,6 +206,27 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testDividerWithItemsContainerFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <a href="/">Home</a>
+            <hr>
+            <a href="/settings">Settings</a>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->itemsContainer(false)
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    '-',
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
     public function testDividerClass(): void
     {
         Assert::equalsWithoutLE(
