@@ -115,6 +115,22 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
+    public function testSeparator(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+             / <li class="active">My Home Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->separator(' / ')
+                ->items(['My Home Page'])
+                ->render(),
+        );
+    }
+
     public function testTag(): void
     {
         Assert::equalsWithoutLE(
