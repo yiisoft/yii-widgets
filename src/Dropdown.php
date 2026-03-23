@@ -30,6 +30,9 @@ final class Dropdown extends Widget
     private string $containerClass = '';
     private string $containerTag = 'div';
     private string $disabledClass = 'disabled';
+    private string $emptyText = '';
+    private array $emptyTextAttributes = [];
+    private string $emptyTextTag = 'li';
     private array $dividerAttributes = [];
     private string $dividerClass = 'dropdown-divider';
     private string $dividerTag = 'hr';
@@ -122,6 +125,45 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->disabledClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified empty text.
+     *
+     * @param string $value The text to display when there are no visible items.
+     */
+    public function emptyText(string $value): self
+    {
+        $new = clone $this;
+        $new->emptyText = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified empty text HTML attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function emptyTextAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->emptyTextAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified empty text tag.
+     *
+     * @param string $value The tag for the empty text element.
+     */
+    public function emptyTextTag(string $value): self
+    {
+        $new = clone $this;
+        $new->emptyTextTag = $value;
 
         return $new;
     }
@@ -459,7 +501,19 @@ final class Dropdown extends Widget
         $items = $this->renderItems($normalizedItems) . PHP_EOL;
 
         if (trim($items) === '') {
-            return '';
+            if ($this->emptyText === '') {
+                return '';
+            }
+
+            if ($this->emptyTextTag === '') {
+                throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+            }
+
+            $items = PHP_EOL
+                . Html::normalTag($this->emptyTextTag, $this->emptyText, $this->emptyTextAttributes)
+                    ->encode(false)
+                    ->render()
+                . PHP_EOL;
         }
 
         if ($this->containerClass !== '') {
