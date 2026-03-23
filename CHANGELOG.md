@@ -8,6 +8,7 @@
 - Enh #108: Bump minimal `yiisoft/html` version to `3.13` and add support for `^4.0` (@vjik)
 - Bug #113: Fix `array_merge()` argument order in `Menu::renderItem()` so that item-level `linkAttributes` override widget-level ones (@WarLikeLaux)
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
+- Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
 - Bug #119: Add missing widget-level `iconContainerAttributes()` to `Dropdown` (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
