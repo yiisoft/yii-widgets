@@ -351,6 +351,18 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testId(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul id="my-menu">
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->id('my-menu')->items($this->items)->render(),
+        );
+    }
+
     public function testItemsClassAsArray(): void
     {
         $items = [

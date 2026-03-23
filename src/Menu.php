@@ -335,6 +335,19 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified Widget ID.
+     *
+     * @param string $value The id of the widget.
+     */
+    public function id(string $value): self
+    {
+        $new = clone $this;
+        $new->attributes['id'] = $value;
+
+        return $new;
+    }
+
+    /**
      * List of items in the nav widget. Each array element represents a single menu item which can be either a string or
      * an array with the following structure:
      *

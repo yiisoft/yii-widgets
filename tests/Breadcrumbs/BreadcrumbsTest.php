@@ -52,6 +52,22 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
+    public function testId(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb" id="my-breadcrumbs">
+            <li><a href="/">Home</a></li>
+            <li class="active">My Home Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->id('my-breadcrumbs')
+                ->items(['My Home Page'])
+                ->render(),
+        );
+    }
+
     public function testItems(): void
     {
         Assert::equalsWithoutLE(
