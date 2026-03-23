@@ -261,6 +261,16 @@ final class MenuTest extends TestCase
             ->render();
     }
 
+    public function testDividerWithEmptyItemsTag(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Menu::widget()
+            ->itemsTag('')
+            ->items(['-'])
+            ->render();
+    }
+
     public function testDropdown(): void
     {
         Assert::equalsWithoutLE(
