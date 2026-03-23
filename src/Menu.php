@@ -49,6 +49,8 @@ final class Menu extends Widget
     private string $afterTag = 'span';
     private string $activeClass = 'active';
     private bool $activateItems = true;
+    private bool $activeTrail = false;
+    private string $activeTrailClass = 'active-trail';
     private array $attributes = [];
     private array $beforeAttributes = [];
     private string $beforeContent = '';
@@ -96,6 +98,32 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->activeClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with active trail enabled or disabled.
+     *
+     * @param bool $value Whether to highlight ancestor items of the active item.
+     */
+    public function activeTrail(bool $value): self
+    {
+        $new = clone $this;
+        $new->activeTrail = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified active trail CSS class.
+     *
+     * @param string $value The CSS class to be appended to ancestor items of the active item.
+     */
+    public function activeTrailClass(string $value): self
+    {
+        $new = clone $this;
+        $new->activeTrailClass = $value;
 
         return $new;
     }
@@ -526,6 +554,7 @@ final class Menu extends Widget
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
+            $this->activeTrail,
         );
 
         return $this->renderMenu($items);
@@ -601,6 +630,7 @@ final class Menu extends Widget
      *   link: string,
      *   linkAttributes: array,
      *   active: bool,
+     *   activeTrail?: bool,
      *   disabled: bool,
      *   visible: bool,
      *   items?: array,
@@ -618,6 +648,10 @@ final class Menu extends Widget
         if ($item['active']) {
             $linkAttributes['aria-current'] = 'page';
             Html::addCssClass($linkAttributes, $this->activeClass);
+        }
+
+        if ($item['activeTrail'] ?? false) {
+            Html::addCssClass($linkAttributes, $this->activeTrailClass);
         }
 
         if ($item['disabled']) {
