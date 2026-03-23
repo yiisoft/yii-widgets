@@ -36,6 +36,42 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testBadge(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/inbox">Inbox <span class="badge">5</span></a></li>
+            <li><a href="/settings">Settings</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->badgeClass('badge')
+                ->items([
+                    ['label' => 'Inbox', 'link' => '/inbox', 'badge' => '5'],
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testBadgeWithItemAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/inbox">Inbox <span class="badge-custom badge-default">3</span></a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->badgeClass('badge-default')
+                ->items([
+                    ['label' => 'Inbox', 'link' => '/inbox', 'badge' => '3', 'badgeAttributes' => ['class' => 'badge-custom']],
+                ])
+                ->render(),
+        );
+    }
+
     public function testActiveItemsWithFalse(): void
     {
         Assert::equalsWithoutLE(

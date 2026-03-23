@@ -50,6 +50,9 @@ final class Menu extends Widget
     private string $activeClass = 'active';
     private bool $activateItems = true;
     private array $attributes = [];
+    private array $badgeAttributes = [];
+    private string $badgeClass = '';
+    private string $badgeTag = 'span';
     private array $beforeAttributes = [];
     private string $beforeContent = '';
     private string $beforeTag = 'span';
@@ -161,6 +164,45 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->attributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified badge HTML attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function badgeAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->badgeAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified badge CSS class.
+     *
+     * @param string $value The badge CSS class.
+     */
+    public function badgeClass(string $value): self
+    {
+        $new = clone $this;
+        $new->badgeClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified badge tag.
+     *
+     * @param string $value The badge tag.
+     */
+    public function badgeTag(string $value): self
+    {
+        $new = clone $this;
+        $new->badgeTag = $value;
 
         return $new;
     }
@@ -526,6 +568,9 @@ final class Menu extends Widget
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
+            $this->badgeAttributes,
+            $this->badgeClass,
+            $this->badgeTag,
         );
 
         return $this->renderMenu($items);
