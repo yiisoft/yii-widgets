@@ -57,6 +57,7 @@ final class Breadcrumbs extends Widget
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
+    private string $separator = '';
     private string $tag = 'ul';
 
     /**
@@ -169,6 +170,19 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * Returns a new instance with the specified separator between breadcrumb items.
+     *
+     * @param string $value The separator string.
+     */
+    public function separator(string $value): self
+    {
+        $new = clone $this;
+        $new->separator = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag.
      *
      * @param string $value The tag name.
@@ -211,7 +225,7 @@ final class Breadcrumbs extends Widget
             }
         }
 
-        $body = implode('', $items);
+        $body = implode($this->separator, $items);
 
         return empty($this->tag)
             ? $body
