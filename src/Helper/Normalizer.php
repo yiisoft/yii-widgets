@@ -63,6 +63,7 @@ final class Normalizer
         string $currentPath,
         bool $activateItems,
         array $iconContainerAttributes = [],
+        bool $submenu = false,
     ): array {
         /**
          * @psalm-var array[] $items
@@ -76,7 +77,28 @@ final class Normalizer
                         $currentPath,
                         $activateItems,
                         $iconContainerAttributes,
+                        $submenu,
                     );
+
+                    if ($submenu) {
+                        $items[$i]['link'] = self::link($child);
+                        $items[$i]['linkAttributes'] = self::linkAttributes($child);
+                        $items[$i]['active'] = self::active(
+                            $child,
+                            $items[$i]['link'],
+                            $currentPath,
+                            $activateItems,
+                        );
+                        $items[$i]['disabled'] = self::disabled($child);
+                        $items[$i]['visible'] = self::visible($child);
+                        $items[$i]['label'] = self::renderLabel(
+                            self::label($child),
+                            self::icon($child),
+                            self::iconAttributes($child),
+                            self::iconClass($child),
+                            self::iconContainerAttributes($child, $iconContainerAttributes),
+                        );
+                    }
                 } else {
                     $items[$i]['link'] = self::link($child);
                     $items[$i]['linkAttributes'] = self::linkAttributes($child);
