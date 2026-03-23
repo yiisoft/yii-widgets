@@ -19,7 +19,7 @@ final class Normalizer
     /**
      * Normalize the given array of items for the dropdown.
      */
-    public static function dropdown(array $items): array
+    public static function dropdown(array $items, array $iconContainerAttributes = []): array
     {
         /**
          * @psalm-var array[] $items
@@ -32,7 +32,7 @@ final class Normalizer
                     self::icon($child),
                     self::iconAttributes($child),
                     self::iconClass($child),
-                    self::iconContainerAttributes($child),
+                    self::iconContainerAttributes($child, $iconContainerAttributes),
                 );
                 $items[$i]['active'] = self::active($child, '', '', false);
                 $items[$i]['disabled'] = self::disabled($child);
@@ -45,7 +45,7 @@ final class Normalizer
                 $items[$i]['visible'] = self::visible($child);
 
                 if (isset($child['items']) && is_array($child['items'])) {
-                    $items[$i]['items'] = self::dropdown($child['items']);
+                    $items[$i]['items'] = self::dropdown($child['items'], $iconContainerAttributes);
                 } else {
                     $items[$i]['items'] = [];
                 }
