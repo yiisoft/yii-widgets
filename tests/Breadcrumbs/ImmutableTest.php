@@ -17,9 +17,12 @@ final class ImmutableTest extends TestCase
         $breadcrumbs = Breadcrumbs::widget();
         $this->assertNotSame($breadcrumbs, $breadcrumbs->activeItemTemplate(''));
         $this->assertNotSame($breadcrumbs, $breadcrumbs->attributes([]));
+        $this->assertNotSame($breadcrumbs, $breadcrumbs->ellipsis(''));
+        $this->assertNotSame($breadcrumbs, $breadcrumbs->ellipsisTemplate(''));
         $this->assertNotSame($breadcrumbs, $breadcrumbs->homeItem(null));
         $this->assertNotSame($breadcrumbs, $breadcrumbs->items(['label' => 'value']));
         $this->assertNotSame($breadcrumbs, $breadcrumbs->itemTemplate(''));
+        $this->assertNotSame($breadcrumbs, $breadcrumbs->maxItems(0));
         $this->assertNotSame($breadcrumbs, $breadcrumbs->tag('ul'));
     }
 }

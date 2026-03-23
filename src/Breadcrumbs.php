@@ -9,7 +9,10 @@ use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
 use function array_key_exists;
+use function array_slice;
+use function count;
 use function implode;
+use function intdiv;
 use function is_array;
 use function is_string;
 use function strtr;
@@ -54,9 +57,12 @@ final class Breadcrumbs extends Widget
 {
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
     private array $attributes = ['class' => 'breadcrumb'];
+    private string $ellipsis = "\xe2\x80\xa6";
+    private string $ellipsisTemplate = "<li>{ellipsis}</li>\n";
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
+    private int $maxItems = 0;
     private string $tag = 'ul';
 
     /**
@@ -82,6 +88,33 @@ final class Breadcrumbs extends Widget
     {
         $new = clone $this;
         $new->attributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified ellipsis text.
+     *
+     * @param string $value The ellipsis text used when items are truncated by {@see maxItems()}.
+     */
+    public function ellipsis(string $value): self
+    {
+        $new = clone $this;
+        $new->ellipsis = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified ellipsis template.
+     *
+     * @param string $value The template used to render the ellipsis item.
+     * The token `{ellipsis}` will be replaced with the ellipsis text.
+     */
+    public function ellipsisTemplate(string $value): self
+    {
+        $new = clone $this;
+        $new->ellipsisTemplate = $value;
 
         return $new;
     }
@@ -169,6 +202,19 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * Returns a new instance with the specified maximum number of items to display.
+     *
+     * @param int $value The maximum number of displayed items including the ellipsis. 0 means unlimited.
+     */
+    public function maxItems(int $value): self
+    {
+        $new = clone $this;
+        $new->maxItems = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag.
      *
      * @param string $value The tag name.
@@ -209,6 +255,17 @@ final class Breadcrumbs extends Widget
                     isset($item['url']) ? $this->itemTemplate : $this->activeItemTemplate,
                 );
             }
+        }
+
+        if ($this->maxItems > 0 && count($items) > $this->maxItems) {
+            $remaining = $this->maxItems - 1;
+            $headCount = intdiv($remaining, 2);
+            $tailCount = $remaining - $headCount;
+            $ellipsisItem = strtr($this->ellipsisTemplate, ['{ellipsis}' => $this->ellipsis]);
+
+            $head = array_slice($items, 0, $headCount);
+            $tail = $tailCount > 0 ? array_slice($items, -$tailCount) : [];
+            $items = [...$head, $ellipsisItem, ...$tail];
         }
 
         $body = implode('', $items);
