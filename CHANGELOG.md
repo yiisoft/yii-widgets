@@ -9,6 +9,7 @@
 - New #110: Allow to set `View` or `WebView` instance for `ContentDecorator` via `view()` method (@WarLikeLaux)
 - Bug #113: Fix `array_merge()` argument order in `Menu::renderItem()` so that item-level `linkAttributes` override widget-level ones (@WarLikeLaux)
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
+- Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
