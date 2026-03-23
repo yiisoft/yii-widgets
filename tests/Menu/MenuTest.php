@@ -9,6 +9,7 @@ use Stringable;
 use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
+use InvalidArgumentException;
 
 final class MenuTest extends TestCase
 {
@@ -183,6 +184,112 @@ final class MenuTest extends TestCase
             HTML,
             Menu::widget()->disabledClass('disabled-class')->items($this->itemsWithOptions)->render(),
         );
+    }
+
+    public function testDivider(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><hr></li>
+            <li><a href="/settings">Settings</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    '-',
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testDividerWithItemsContainerFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <a href="/">Home</a>
+            <hr>
+            <a href="/settings">Settings</a>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->itemsContainer(false)
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    '-',
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testDividerClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><hr class="my-divider"></li>
+            <li><a href="/settings">Settings</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->dividerClass('my-divider')
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    '-',
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testDividerTag(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><span></span></li>
+            <li><a href="/settings">Settings</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->dividerTag('span')
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    '-',
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testDividerTagEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Menu::widget()
+            ->dividerTag('')
+            ->items([
+                ['label' => 'Home', 'link' => '/'],
+                '-',
+            ])
+            ->render();
+    }
+
+    public function testDividerWithEmptyItemsTag(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Menu::widget()
+            ->itemsTag('')
+            ->items(['-'])
+            ->render();
     }
 
     public function testDropdown(): void
