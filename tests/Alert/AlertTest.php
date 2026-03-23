@@ -50,6 +50,14 @@ final class AlertTest extends TestCase
         );
     }
 
+    public function testBodyContainerDefaultValue(): void
+    {
+        $this->assertSame(
+            Alert::widget()->body('Test.')->bodyContainer(true)->id('w0-alert')->render(),
+            Alert::widget()->body('Test.')->bodyContainer()->id('w0-alert')->render(),
+        );
+    }
+
     public function testBodyWithoutTag(): void
     {
         Assert::equalsWithoutLE(

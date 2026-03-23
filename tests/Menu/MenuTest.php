@@ -687,6 +687,30 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testActivateItemsDefaultValue(): void
+    {
+        $this->assertSame(
+            Menu::widget()->activateItems(true)->currentPath('/path')->items($this->items)->render(),
+            Menu::widget()->activateItems()->currentPath('/path')->items($this->items)->render(),
+        );
+    }
+
+    public function testContainerDefaultValue(): void
+    {
+        $this->assertSame(
+            Menu::widget()->container(true)->items($this->items)->render(),
+            Menu::widget()->container()->items($this->items)->render(),
+        );
+    }
+
+    public function testItemsContainerDefaultValue(): void
+    {
+        $this->assertSame(
+            Menu::widget()->itemsContainer(true)->items($this->items)->render(),
+            Menu::widget()->itemsContainer()->items($this->items)->render(),
+        );
+    }
+
     public function testContainerFalseWithBeforeAndAfter(): void
     {
         Assert::equalsWithoutLE(
