@@ -687,6 +687,33 @@ final class MenuTest extends TestCase
             ->render();
     }
 
+    public function testSubmenuWithItemsContainerFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <a href="/products">Products</a>
+            <ul>
+            <a href="/products/electronics">Electronics</a>
+            </ul>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->submenu(true)
+                ->itemsContainer(false)
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/products',
+                        'items' => [
+                            ['label' => 'Electronics', 'link' => '/products/electronics'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testSubmenuWithActiveItems(): void
     {
         Assert::equalsWithoutLE(
