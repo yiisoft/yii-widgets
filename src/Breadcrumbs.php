@@ -9,9 +9,11 @@ use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
 use function array_key_exists;
+use function count;
 use function implode;
 use function is_array;
 use function is_string;
+use function preg_replace;
 use function strtr;
 
 use const PHP_EOL;
@@ -54,9 +56,11 @@ final class Breadcrumbs extends Widget
 {
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
     private array $attributes = ['class' => 'breadcrumb'];
+    private string $firstItemClass = '';
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
+    private string $lastItemClass = '';
     private string $tag = 'ul';
 
     /**
@@ -82,6 +86,19 @@ final class Breadcrumbs extends Widget
     {
         $new = clone $this;
         $new->attributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified first item CSS class.
+     *
+     * @param string $value The CSS class that will be assigned to the first item in the breadcrumbs.
+     */
+    public function firstItemClass(string $value): self
+    {
+        $new = clone $this;
+        $new->firstItemClass = $value;
 
         return $new;
     }
@@ -169,6 +186,19 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * Returns a new instance with the specified last item CSS class.
+     *
+     * @param string $value The CSS class that will be assigned to the last item in the breadcrumbs.
+     */
+    public function lastItemClass(string $value): self
+    {
+        $new = clone $this;
+        $new->lastItemClass = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag.
      *
      * @param string $value The tag name.
@@ -211,11 +241,46 @@ final class Breadcrumbs extends Widget
             }
         }
 
+        if ($items !== []) {
+            $n = count($items);
+
+            if ($this->firstItemClass !== '') {
+                $items[0] = $this->addCssClassToFirstTag($items[0], $this->firstItemClass);
+            }
+
+            if ($this->lastItemClass !== '') {
+                $items[$n - 1] = $this->addCssClassToFirstTag($items[$n - 1], $this->lastItemClass);
+            }
+        }
+
         $body = implode('', $items);
 
         return empty($this->tag)
             ? $body
             : Html::normalTag($this->tag, PHP_EOL . $body, $this->attributes)->encode(false)->render();
+    }
+
+    private function addCssClassToFirstTag(string $html, string $class): string
+    {
+        $count = 0;
+        $result = preg_replace(
+            '/^(\s*<[a-z][a-z0-9]*\s[^>]*?\bclass=")/i',
+            '$1' . $class . ' ',
+            $html,
+            1,
+            $count,
+        );
+
+        if ($count > 0) {
+            return $result ?? $html;
+        }
+
+        return preg_replace(
+            '/^(\s*<[a-z][a-z0-9]*)/i',
+            '$1 class="' . $class . '"',
+            $html,
+            1,
+        ) ?? $html;
     }
 
     /**
