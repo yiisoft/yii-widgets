@@ -35,6 +35,55 @@ final class BreadcrumbsTest extends TestCase
         $this->assertEmpty(Breadcrumbs::widget()->render());
     }
 
+    public function testFirstItemClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li class="first"><a href="/">Home</a></li>
+            <li class="active">My Home Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->firstItemClass('first')
+                ->items(['My Home Page'])
+                ->render(),
+        );
+    }
+
+    public function testFirstItemClassWithExistingClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li class="first active">My Home Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->firstItemClass('first')
+                ->homeItem(null)
+                ->items(['My Home Page'])
+                ->render(),
+        );
+    }
+
+    public function testFirstItemClassAndLastItemClassOnSingleItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li class="last first active">Only Item</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->firstItemClass('first')
+                ->homeItem(null)
+                ->lastItemClass('last')
+                ->items(['Only Item'])
+                ->render(),
+        );
+    }
+
     public function testHomeItem(): void
     {
         Assert::equalsWithoutLE(
@@ -85,6 +134,22 @@ final class BreadcrumbsTest extends TestCase
                         ['label' => 'Text', 'template' => "<span>{link}</span>\n"],
                     ],
                 )
+                ->render(),
+        );
+    }
+
+    public function testLastItemClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="last active">My Home Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->lastItemClass('last')
+                ->items(['My Home Page'])
                 ->render(),
         );
     }
