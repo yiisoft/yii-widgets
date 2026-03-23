@@ -25,6 +25,9 @@ use const PHP_EOL;
 final class Dropdown extends Widget
 {
     private string $activeClass = 'active';
+    private array $badgeAttributes = [];
+    private string $badgeClass = '';
+    private string $badgeTag = 'span';
     private bool $container = true;
     private array $containerAttributes = [];
     private string $containerClass = '';
@@ -58,6 +61,45 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->activeClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified badge HTML attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function badgeAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->badgeAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified badge CSS class.
+     *
+     * @param string $value The badge CSS class.
+     */
+    public function badgeClass(string $value): self
+    {
+        $new = clone $this;
+        $new->badgeClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified badge tag.
+     *
+     * @param string $value The badge tag.
+     */
+    public function badgeTag(string $value): self
+    {
+        $new = clone $this;
+        $new->badgeTag = $value;
 
         return $new;
     }
@@ -452,7 +494,12 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        $normalizedItems = Helper\Normalizer::dropdown($this->items);
+        $normalizedItems = Helper\Normalizer::dropdown(
+            $this->items,
+            $this->badgeAttributes,
+            $this->badgeClass,
+            $this->badgeTag,
+        );
 
         $containerAttributes = $this->containerAttributes;
 
@@ -499,6 +546,9 @@ final class Dropdown extends Widget
     private function renderDropdown(array $items): string
     {
         return self::widget()
+            ->badgeAttributes($this->badgeAttributes)
+            ->badgeClass($this->badgeClass)
+            ->badgeTag($this->badgeTag)
             ->container(false)
             ->dividerAttributes($this->dividerAttributes)
             ->headerClass($this->headerClass)

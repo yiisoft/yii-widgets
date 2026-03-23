@@ -37,6 +37,23 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testBadge(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">Inbox <span class="badge">5</span></a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->badgeClass('badge')
+                ->items([
+                    ['label' => 'Inbox', 'link' => '#', 'badge' => '5'],
+                ])
+                ->render(),
+        );
+    }
+
     public function testContainerAttributes(): void
     {
         Assert::equalsWithoutLE(

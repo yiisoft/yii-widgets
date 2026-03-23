@@ -19,8 +19,12 @@ final class Normalizer
     /**
      * Normalize the given array of items for the dropdown.
      */
-    public static function dropdown(array $items): array
-    {
+    public static function dropdown(
+        array $items,
+        array $badgeAttributes = [],
+        string $badgeClass = '',
+        string $badgeTag = 'span',
+    ): array {
         /**
          * @psalm-var array[] $items
          * @psalm-suppress RedundantConditionGivenDocblockType
@@ -33,6 +37,10 @@ final class Normalizer
                     self::iconAttributes($child),
                     self::iconClass($child),
                     self::iconContainerAttributes($child),
+                    self::badge($child),
+                    self::badgeAttributes($child, $badgeAttributes),
+                    $badgeClass,
+                    $badgeTag,
                 );
                 $items[$i]['active'] = self::active($child, '', '', false);
                 $items[$i]['disabled'] = self::disabled($child);
@@ -45,7 +53,7 @@ final class Normalizer
                 $items[$i]['visible'] = self::visible($child);
 
                 if (isset($child['items']) && is_array($child['items'])) {
-                    $items[$i]['items'] = self::dropdown($child['items']);
+                    $items[$i]['items'] = self::dropdown($child['items'], $badgeAttributes, $badgeClass, $badgeTag);
                 } else {
                     $items[$i]['items'] = [];
                 }
@@ -63,6 +71,9 @@ final class Normalizer
         string $currentPath,
         bool $activateItems,
         array $iconContainerAttributes = [],
+        array $badgeAttributes = [],
+        string $badgeClass = '',
+        string $badgeTag = 'span',
     ): array {
         /**
          * @psalm-var array[] $items
@@ -76,6 +87,9 @@ final class Normalizer
                         $currentPath,
                         $activateItems,
                         $iconContainerAttributes,
+                        $badgeAttributes,
+                        $badgeClass,
+                        $badgeTag,
                     );
                 } else {
                     $items[$i]['link'] = self::link($child);
@@ -94,6 +108,10 @@ final class Normalizer
                         self::iconAttributes($child),
                         self::iconClass($child),
                         self::iconContainerAttributes($child, $iconContainerAttributes),
+                        self::badge($child),
+                        self::badgeAttributes($child, $badgeAttributes),
+                        $badgeClass,
+                        $badgeTag,
                     );
                 }
             }
@@ -108,6 +126,10 @@ final class Normalizer
         array $iconAttributes,
         string $iconClass,
         array $iconContainerAttributes,
+        string $badge = '',
+        array $badgeAttributes = [],
+        string $badgeClass = '',
+        string $badgeTag = 'span',
     ): string {
         $html = '';
 
@@ -124,7 +146,26 @@ final class Normalizer
             $html .= $label;
         }
 
+        if ($badge !== '' && $badgeTag !== '') {
+            if ($badgeClass !== '') {
+                Html::addCssClass($badgeAttributes, $badgeClass);
+            }
+
+            $html .= ' ' . Html::normalTag($badgeTag, $badge, $badgeAttributes)->encode(false)->render();
+        }
+
         return $html;
+    }
+
+    private static function badge(array $item): string
+    {
+        return array_key_exists('badge', $item) && is_string($item['badge']) ? $item['badge'] : '';
+    }
+
+    private static function badgeAttributes(array $item, array $defaultAttributes = []): array
+    {
+        return array_key_exists('badgeAttributes', $item) && is_array($item['badgeAttributes'])
+            ? $item['badgeAttributes'] : $defaultAttributes;
     }
 
     private static function active(array $item, string $link, string $currentPath, bool $activateItems): bool
