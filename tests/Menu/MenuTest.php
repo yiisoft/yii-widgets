@@ -185,6 +185,81 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testDivider(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><hr></li>
+            <li><a href="/settings">Settings</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    '-',
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testDividerClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><hr class="my-divider"></li>
+            <li><a href="/settings">Settings</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->dividerClass('my-divider')
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    '-',
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testDividerTag(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><span></span></li>
+            <li><a href="/settings">Settings</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->dividerTag('span')
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    '-',
+                    ['label' => 'Settings', 'link' => '/settings'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testDividerTagEmpty(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        Menu::widget()
+            ->dividerTag('')
+            ->items([
+                ['label' => 'Home', 'link' => '/'],
+                '-',
+            ])
+            ->render();
+    }
+
     public function testDropdown(): void
     {
         Assert::equalsWithoutLE(

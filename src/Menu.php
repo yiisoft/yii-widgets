@@ -15,6 +15,7 @@ use Yiisoft\Widget\Widget;
 
 use function array_merge;
 use function count;
+use function gettype;
 use function implode;
 use function strtr;
 use function trim;
@@ -56,6 +57,9 @@ final class Menu extends Widget
     private bool $container = true;
     private string $currentPath = '';
     private string $disabledClass = 'disabled';
+    private array $dividerAttributes = [];
+    private string $dividerClass = '';
+    private string $dividerTag = 'hr';
     private bool $dropdownContainer = true;
     private array $dropdownContainerAttributes = [];
     private string $dropdownContainerTag = 'li';
@@ -265,6 +269,45 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->disabledClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified divider HTML attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function dividerAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->dividerAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified divider class.
+     *
+     * @param string $value The divider class.
+     */
+    public function dividerClass(string $value): self
+    {
+        $new = clone $this;
+        $new->dividerClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified divider tag.
+     *
+     * @param string $value The divider tag.
+     */
+    public function dividerTag(string $value): self
+    {
+        $new = clone $this;
+        $new->dividerTag = $value;
 
         return $new;
     }
@@ -554,6 +597,32 @@ final class Menu extends Widget
             ->render();
     }
 
+    private function renderDivider(): string
+    {
+        $dividerAttributes = $this->dividerAttributes;
+
+        if ($this->dividerClass !== '') {
+            Html::addCssClass($dividerAttributes, $this->dividerClass);
+        }
+
+        if ($this->dividerTag === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
+        $divider = Html::tag($this->dividerTag, '', $dividerAttributes)->encode(false)->render();
+
+        if ($this->itemsTag === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
+        return match ($this->itemsContainer) {
+            false => $divider,
+            default => Html::normalTag($this->itemsTag, $divider, [])
+                ->encode(false)
+                ->render(),
+        };
+    }
+
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
@@ -647,7 +716,7 @@ final class Menu extends Widget
      *
      * @psalm-param array<
      *   array-key,
-     *   array{
+     *   string|array{
      *     label: string,
      *     link: string,
      *     linkAttributes: array,
@@ -665,6 +734,12 @@ final class Menu extends Widget
         $n = count($items);
 
         foreach ($items as $i => $item) {
+            if (gettype($item) === 'string') {
+                $lines[] = $this->renderDivider();
+
+                continue;
+            }
+
             if (isset($item['items'])) {
                 $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item])]);
             } elseif ($item['visible']) {
