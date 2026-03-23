@@ -229,6 +229,39 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testDropdownContainerAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
+            <li data-test="value">
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Dropdown</a>
+            <ul>
+            <li><a href="#">Action</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/active')
+                ->dropdownContainerAttributes(['data-test' => 'value'])
+                ->items(
+                    [
+                        ['label' => 'Active', 'link' => '/active'],
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Action', 'link' => '#'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
     public function testDropdownContainerClass(): void
     {
         Assert::equalsWithoutLE(

@@ -270,6 +270,19 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified dropdown container attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function dropdownContainerAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->dropdownContainerAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified dropdown container class.
      *
      * @param string $value The dropdown container class.
