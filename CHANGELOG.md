@@ -9,6 +9,7 @@
 - Bug #113: Fix `array_merge()` argument order in `Menu::renderItem()` so that item-level `linkAttributes` override widget-level ones (@WarLikeLaux)
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
+- New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
 - New #117: Add container wrapper and JSON-LD structured data to `Breadcrumbs` widget (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
