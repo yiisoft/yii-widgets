@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
@@ -19,6 +20,7 @@ use function gettype;
 use function implode;
 use function str_contains;
 use function trim;
+use function usort;
 
 use const PHP_EOL;
 
@@ -44,6 +46,8 @@ final class Dropdown extends Widget
     private array $items = [];
     private array $itemsContainerAttributes = [];
     private string $itemsContainerTag = 'ul';
+    /** @psalm-var Closure(array, array): int|null */
+    private ?Closure $sortItems = null;
     private array $splitButtonAttributes = [];
     private array $splitButtonSpanAttributes = [];
     private array $toggleAttributes = [];
@@ -351,6 +355,22 @@ final class Dropdown extends Widget
     }
 
     /**
+     * Returns a new instance that sorts items using the specified callback before rendering.
+     *
+     * @param Closure $callback The comparison function for sorting. It should accept two items and return an integer
+     * less than, equal to, or greater than zero.
+     *
+     * @psalm-param Closure(array, array): int $callback
+     */
+    public function sortItems(Closure $callback): self
+    {
+        $new = clone $this;
+        $new->sortItems = $callback;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified split button attributes.
      *
      * @param array $valuesMap Attribute values indexed by attribute names.
@@ -434,6 +454,13 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
+        /** @psalm-var array[] $items */
+        $items = $this->items;
+
+        if ($this->sortItems !== null) {
+            usort($items, $this->sortItems);
+        }
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -452,7 +479,7 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        $normalizedItems = Helper\Normalizer::dropdown($this->items);
+        $normalizedItems = Helper\Normalizer::dropdown($items);
 
         $containerAttributes = $this->containerAttributes;
 

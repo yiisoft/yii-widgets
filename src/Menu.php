@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
@@ -18,6 +19,7 @@ use function count;
 use function implode;
 use function strtr;
 use function trim;
+use function usort;
 
 use const PHP_EOL;
 
@@ -70,6 +72,8 @@ final class Menu extends Widget
     private array $linkAttributes = [];
     private string $linkClass = '';
     private string $linkTag = 'a';
+    /** @psalm-var Closure(array, array): int|null */
+    private ?Closure $sortItems = null;
     private string $tagName = 'ul';
     private string $template = '{items}';
 
@@ -488,6 +492,22 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance that sorts items using the specified callback before rendering.
+     *
+     * @param Closure $callback The comparison function for sorting. It should accept two items and return an integer
+     * less than, equal to, or greater than zero.
+     *
+     * @psalm-param Closure(array, array): int $callback
+     */
+    public function sortItems(Closure $callback): self
+    {
+        $new = clone $this;
+        $new->sortItems = $callback;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag for rendering the menu.
      *
      * @param string $value The tag for rendering the menu.
@@ -523,8 +543,15 @@ final class Menu extends Widget
      */
     public function render(): string
     {
-        if ($this->items === []) {
+        /** @psalm-var array[] $items */
+        $items = $this->items;
+
+        if ($items === []) {
             return '';
+        }
+
+        if ($this->sortItems !== null) {
+            usort($items, $this->sortItems);
         }
 
         /**
@@ -539,16 +566,16 @@ final class Menu extends Widget
          *     visible: bool,
          *     items?: array
          *   }
-         * > $items
+         * > $normalizedItems
          */
-        $items = Helper\Normalizer::menu(
-            $this->items,
+        $normalizedItems = Helper\Normalizer::menu(
+            $items,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
         );
 
-        return $this->renderMenu($items);
+        return $this->renderMenu($normalizedItems);
     }
 
     private function renderAfterContent(): string

@@ -742,4 +742,25 @@ final class MenuTest extends TestCase
                 ->render(),
         );
     }
+
+    public function testSortItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/a">Alpha</a></li>
+            <li><a href="/b">Beta</a></li>
+            <li><a href="/g">Gamma</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items([
+                    ['label' => 'Gamma', 'link' => '/g'],
+                    ['label' => 'Alpha', 'link' => '/a'],
+                    ['label' => 'Beta', 'link' => '/b'],
+                ])
+                ->sortItems(fn(array $a, array $b): int => strcmp((string) $a['label'], (string) $b['label']))
+                ->render(),
+        );
+    }
 }

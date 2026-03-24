@@ -495,4 +495,25 @@ final class DropdownTest extends TestCase
 
         $this->assertStringContainsString('data-custom="value"', $html);
     }
+
+    public function testSortItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/a">Alpha</a></li>
+            <li><a href="/b">Beta</a></li>
+            <li><a href="/g">Gamma</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items([
+                    ['label' => 'Gamma', 'link' => '/g'],
+                    ['label' => 'Alpha', 'link' => '/a'],
+                    ['label' => 'Beta', 'link' => '/b'],
+                ])
+                ->sortItems(fn(array $a, array $b): int => strcmp((string) $a['label'], (string) $b['label']))
+                ->render(),
+        );
+    }
 }
