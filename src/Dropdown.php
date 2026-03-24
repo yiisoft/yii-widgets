@@ -15,6 +15,7 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
+use function array_unshift;
 use function gettype;
 use function implode;
 use function str_contains;
@@ -58,6 +59,21 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->activeClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified item appended to the list of items.
+     *
+     * Unlike {@see items()}, which replaces the entire list, this method adds a single item to the end.
+     *
+     * @param array $item The item to append.
+     */
+    public function addItem(array $item): self
+    {
+        $new = clone $this;
+        $new->items[] = $item;
 
         return $new;
     }
@@ -346,6 +362,21 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->itemsContainerTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified item prepended to the list of items.
+     *
+     * Unlike {@see items()}, which replaces the entire list, this method adds a single item to the beginning.
+     *
+     * @param array $item The item to prepend.
+     */
+    public function prependItem(array $item): self
+    {
+        $new = clone $this;
+        array_unshift($new->items, $item);
 
         return $new;
     }

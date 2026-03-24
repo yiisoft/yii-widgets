@@ -37,6 +37,40 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testAddItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="disabled" href="#">Separated link</a></li>
+            <li><a href="/new">New item</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items($this->items)
+                ->addItem(['label' => 'New item', 'link' => '/new'])
+                ->render(),
+        );
+    }
+
+    public function testAddItemToEmptyItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/path">item</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->addItem(['label' => 'item', 'link' => '/path'])
+                ->render(),
+        );
+    }
+
     public function testContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -426,6 +460,40 @@ final class DropdownTest extends TestCase
             ->render();
 
         $this->assertSame(1, substr_count($html, '<button'));
+    }
+
+    public function testPrependItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/new">New item</a></li>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items($this->items)
+                ->prependItem(['label' => 'New item', 'link' => '/new'])
+                ->render(),
+        );
+    }
+
+    public function testPrependItemToEmptyItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/path">item</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->prependItem(['label' => 'item', 'link' => '/path'])
+                ->render(),
+        );
     }
 
     public function testItemHeaderAttributes(): void

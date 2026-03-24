@@ -49,6 +49,36 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testAddItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            <li><a href="/other">other</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items($this->items)
+                ->addItem(['label' => 'other', 'link' => '/other'])
+                ->render(),
+        );
+    }
+
+    public function testAddItemToEmptyItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->addItem(['label' => 'item', 'link' => '/path'])
+                ->render(),
+        );
+    }
+
     public function testAfter(): void
     {
         Assert::equalsWithoutLE(
@@ -636,6 +666,36 @@ final class MenuTest extends TestCase
             </ul>
             HTML,
             Menu::widget()->linkClass('test-class')->items($this->itemsWithOptions)->render(),
+        );
+    }
+
+    public function testPrependItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/other">other</a></li>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items($this->items)
+                ->prependItem(['label' => 'other', 'link' => '/other'])
+                ->render(),
+        );
+    }
+
+    public function testPrependItemToEmptyItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->prependItem(['label' => 'item', 'link' => '/path'])
+                ->render(),
         );
     }
 
