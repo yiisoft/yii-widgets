@@ -52,6 +52,27 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
+    public function testItemsClosure(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">My Home Page</li>
+            <li class="active">https://my.example.com/yii/link/page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->items(fn() => ['label' => 'My Home Page', 'url' => 'https://my.example.com/yii/link/page'])
+                ->render(),
+        );
+    }
+
+    public function testItemsClosureWithEmptyArray(): void
+    {
+        $this->assertSame('', Breadcrumbs::widget()->items(fn() => [])->render());
+    }
+
     public function testItems(): void
     {
         Assert::equalsWithoutLE(

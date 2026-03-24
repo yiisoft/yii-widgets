@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
@@ -62,7 +63,7 @@ final class Menu extends Widget
     private array $dropdownDefinitions = [];
     private string $firstItemClass = '';
     private array $iconContainerAttributes = [];
-    private array $items = [];
+    private array|Closure $items = [];
     private bool $itemsContainer = true;
     private array $itemsContainerAttributes = [];
     private string $itemsTag = 'li';
@@ -353,9 +354,12 @@ final class Menu extends Widget
      *
      * If a menu item is a string, it will be rendered directly without HTML encoding.
      *
-     * @param array $valuesMap the list of items to be rendered.
+     * Alternatively, a Closure returning an array can be provided for lazy evaluation.
+     * The Closure will be called at render time, allowing deferred access to runtime data.
+     *
+     * @param array|Closure $valuesMap the list of items to be rendered or a Closure returning the list.
      */
-    public function items(array $valuesMap): self
+    public function items(array|Closure $valuesMap): self
     {
         $new = clone $this;
         $new->items = $valuesMap;
@@ -503,7 +507,10 @@ final class Menu extends Widget
      */
     public function render(): string
     {
-        if ($this->items === []) {
+        /** @var array $rawItems */
+        $rawItems = $this->items instanceof Closure ? ($this->items)() : $this->items;
+
+        if ($rawItems === []) {
             return '';
         }
 
@@ -522,7 +529,7 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $this->items,
+            $rawItems,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
