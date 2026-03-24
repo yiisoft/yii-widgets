@@ -87,6 +87,19 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * Creates a new Breadcrumbs instance from a Menu widget's active trail.
+     *
+     * Walks the menu items tree, finds the active item, and builds breadcrumbs
+     * from the chain of ancestors. The returned instance can be further configured.
+     *
+     * @param Menu $menu The menu widget to extract breadcrumbs from.
+     */
+    public static function fromMenu(Menu $menu): self
+    {
+        return self::widget()->items($menu->activeTrail());
+    }
+
+    /**
      * Returns a new instance with the specified first item in the breadcrumbs (called home link).
      *
      * If a null is specified, the home item will not be rendered.

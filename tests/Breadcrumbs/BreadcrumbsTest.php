@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Widgets\Tests\Breadcrumbs;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Widgets\Breadcrumbs;
+use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
@@ -33,6 +34,163 @@ final class BreadcrumbsTest extends TestCase
     public function testEmptyLinks(): void
     {
         $this->assertEmpty(Breadcrumbs::widget()->render());
+    }
+
+    public function testFromMenu(): void
+    {
+        $menu = Menu::widget()
+            ->items([
+                ['label' => 'Home', 'link' => '/'],
+                ['label' => 'About', 'link' => '/about'],
+            ])
+            ->currentPath('/about');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">About</li>
+            </ul>
+            HTML,
+            Breadcrumbs::fromMenu($menu)->render(),
+        );
+    }
+
+    public function testFromMenuChaining(): void
+    {
+        $menu = Menu::widget()
+            ->items([
+                ['label' => 'About', 'link' => '/about', 'active' => true],
+            ]);
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <nav class="custom">
+            <li class="active">About</li>
+            </nav>
+            HTML,
+            Breadcrumbs::fromMenu($menu)
+                ->homeItem(null)
+                ->attributes(['class' => 'custom'])
+                ->tag('nav')
+                ->render(),
+        );
+    }
+
+    public function testFromMenuWithDeepNesting(): void
+    {
+        $menu = Menu::widget()
+            ->items([
+                ['label' => 'Level 1', 'link' => '/l1', 'items' => [
+                    ['label' => 'Level 2', 'link' => '/l2', 'items' => [
+                        ['label' => 'Level 3', 'link' => '/l3'],
+                    ]],
+                ]],
+            ])
+            ->currentPath('/l3');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/l1">Level 1</a></li>
+            <li><a href="/l2">Level 2</a></li>
+            <li class="active">Level 3</li>
+            </ul>
+            HTML,
+            Breadcrumbs::fromMenu($menu)->render(),
+        );
+    }
+
+    public function testFromMenuWithEncodeFalse(): void
+    {
+        $menu = Menu::widget()
+            ->items([
+                ['label' => '<b>Bold</b>', 'link' => '/bold', 'encode' => false, 'active' => true],
+            ]);
+
+        $this->assertSame(
+            "<li class=\"active\"><b>Bold</b></li>\n",
+            Breadcrumbs::fromMenu($menu)->homeItem(null)->tag('')->render(),
+        );
+    }
+
+    public function testFromMenuWithExplicitActive(): void
+    {
+        $menu = Menu::widget()
+            ->items([
+                ['label' => 'Home', 'link' => '/'],
+                ['label' => 'About', 'link' => '/about', 'active' => true],
+            ]);
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">About</li>
+            </ul>
+            HTML,
+            Breadcrumbs::fromMenu($menu)->render(),
+        );
+    }
+
+    public function testFromMenuWithInvisibleItem(): void
+    {
+        $menu = Menu::widget()
+            ->items([
+                ['label' => 'Products', 'link' => '/products', 'items' => [
+                    ['label' => 'Hidden', 'link' => '/products/hidden', 'visible' => false],
+                    ['label' => 'Widgets', 'link' => '/products/widgets'],
+                ]],
+            ])
+            ->currentPath('/products/widgets');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/products">Products</a></li>
+            <li class="active">Widgets</li>
+            </ul>
+            HTML,
+            Breadcrumbs::fromMenu($menu)->render(),
+        );
+    }
+
+    public function testFromMenuWithNestedItems(): void
+    {
+        $menu = Menu::widget()
+            ->items([
+                ['label' => 'Home', 'link' => '/'],
+                ['label' => 'Products', 'link' => '/products', 'items' => [
+                    ['label' => 'Widgets', 'link' => '/products/widgets'],
+                    ['label' => 'Gadgets', 'link' => '/products/gadgets'],
+                ]],
+            ])
+            ->currentPath('/products/widgets');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/products">Products</a></li>
+            <li class="active">Widgets</li>
+            </ul>
+            HTML,
+            Breadcrumbs::fromMenu($menu)->render(),
+        );
+    }
+
+    public function testFromMenuWithNoActiveItem(): void
+    {
+        $menu = Menu::widget()
+            ->items([
+                ['label' => 'Home', 'link' => '/'],
+                ['label' => 'About', 'link' => '/about'],
+            ])
+            ->currentPath('/unknown');
+
+        $this->assertEmpty(Breadcrumbs::fromMenu($menu)->render());
     }
 
     public function testHomeItem(): void

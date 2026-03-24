@@ -495,6 +495,21 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns the active trail as an array of breadcrumb items.
+     *
+     * Walks the items tree, finds the active item by matching the current path,
+     * and returns the chain of ancestors as breadcrumb-compatible items.
+     *
+     * @return array The active trail. Each element is an array with 'label' and optionally 'url' and 'encode' keys.
+     *
+     * @see Breadcrumbs::fromMenu()
+     */
+    public function activeTrail(): array
+    {
+        return Helper\Normalizer::activeTrail($this->items, $this->currentPath, $this->activateItems);
+    }
+
+    /**
      * Renders the menu.
      *
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException

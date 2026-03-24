@@ -17,6 +17,45 @@ use function is_string;
 final class Normalizer
 {
     /**
+     * Finds the active trail in a menu items tree and returns it as breadcrumb items.
+     *
+     * Walks the tree recursively, finds the active item by matching the current path
+     * or explicit `active` flag, and returns the chain of ancestors as breadcrumb-compatible items.
+     *
+     * @return array The active trail. Each element is an array with 'label' and optionally 'url' and 'encode' keys.
+     */
+    public static function activeTrail(array $items, string $currentPath, bool $activateItems): array
+    {
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            if (isset($item['visible']) && $item['visible'] === false) {
+                continue;
+            }
+
+            if (isset($item['items']) && is_array($item['items'])) {
+                $trail = self::activeTrail($item['items'], $currentPath, $activateItems);
+
+                if ($trail !== []) {
+                    return [self::breadcrumbItem($item, false), ...$trail];
+                }
+
+                continue;
+            }
+
+            $link = self::link($item);
+
+            if (self::active($item, $link, $currentPath, $activateItems)) {
+                return [self::breadcrumbItem($item, true)];
+            }
+        }
+
+        return [];
+    }
+
+    /**
      * Normalize the given array of items for the dropdown.
      */
     public static function dropdown(array $items): array
@@ -134,6 +173,36 @@ final class Normalizer
         }
 
         return is_bool($item['active']) ? $item['active'] : false;
+    }
+
+    /**
+     * Converts a menu item to a breadcrumb item.
+     */
+    private static function breadcrumbItem(array $item, bool $isActive): array
+    {
+        if (!isset($item['label'])) {
+            throw new InvalidArgumentException('The "label" option is required.');
+        }
+
+        if (!is_string($item['label'])) {
+            throw new InvalidArgumentException('The "label" option must be a string.');
+        }
+
+        $result = ['label' => $item['label']];
+
+        if (!$isActive) {
+            $link = self::link($item);
+
+            if ($link !== '') {
+                $result['url'] = $link;
+            }
+        }
+
+        if (isset($item['encode']) && $item['encode'] === false) {
+            $result['encode'] = false;
+        }
+
+        return $result;
     }
 
     private static function disabled(array $item): bool
