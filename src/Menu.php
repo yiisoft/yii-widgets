@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
@@ -13,7 +14,9 @@ use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
+use function array_map;
 use function array_merge;
+use function is_array;
 use function count;
 use function implode;
 use function strtr;
@@ -70,6 +73,7 @@ final class Menu extends Widget
     private array $linkAttributes = [];
     private string $linkClass = '';
     private string $linkTag = 'a';
+    private ?Closure $map = null;
     private string $tagName = 'ul';
     private string $template = '{items}';
 
@@ -468,6 +472,22 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified per-item transform callback.
+     *
+     * The callback receives each raw item array and should return a modified item array.
+     * It is applied before the normalizer processes items.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable mapping.
+     */
+    public function map(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->map = $callback;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag for rendering the menu.
      *
      * @param string $value The tag for rendering the menu.
@@ -503,7 +523,17 @@ final class Menu extends Widget
      */
     public function render(): string
     {
-        if ($this->items === []) {
+        $rawItems = $this->items;
+
+        if ($this->map !== null) {
+            $map = $this->map;
+            $rawItems = array_map(
+                fn(mixed $item): mixed => is_array($item) ? $map($item) : $item,
+                $rawItems,
+            );
+        }
+
+        if ($rawItems === []) {
             return '';
         }
 
@@ -522,7 +552,7 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $this->items,
+            $rawItems,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,

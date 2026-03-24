@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
@@ -15,8 +16,10 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
+use function array_map;
 use function array_merge;
 use function gettype;
+use function is_array;
 use function implode;
 use function str_contains;
 use function trim;
@@ -45,6 +48,7 @@ final class Dropdown extends Widget
     private array $items = [];
     private array $itemsContainerAttributes = [];
     private string $itemsContainerTag = 'ul';
+    private ?Closure $map = null;
     private array $splitButtonAttributes = [];
     private array $splitButtonSpanAttributes = [];
     private array $toggleAttributes = [];
@@ -352,6 +356,22 @@ final class Dropdown extends Widget
     }
 
     /**
+     * Returns a new instance with the specified per-item transform callback.
+     *
+     * The callback receives each raw item array and should return a modified item array.
+     * It is applied before the normalizer processes items.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable mapping.
+     */
+    public function map(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->map = $callback;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified split button attributes.
      *
      * @param array $valuesMap Attribute values indexed by attribute names.
@@ -435,6 +455,16 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
+        $rawItems = $this->items;
+
+        if ($this->map !== null) {
+            $map = $this->map;
+            $rawItems = array_map(
+                fn(mixed $item): mixed => is_array($item) ? $map($item) : $item,
+                $rawItems,
+            );
+        }
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -453,7 +483,7 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        $normalizedItems = Helper\Normalizer::dropdown($this->items);
+        $normalizedItems = Helper\Normalizer::dropdown($rawItems);
 
         $containerAttributes = $this->containerAttributes;
 
