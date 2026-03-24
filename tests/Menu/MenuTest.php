@@ -186,6 +186,77 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testDepthOne(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
+            <li><a href="#">Dropdown</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a class="disabled" href="#">Disabled</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/active')
+                ->depth(1)
+                ->items(
+                    [
+                        ['label' => 'Active', 'link' => '/active'],
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Action', 'link' => '#'],
+                                ['label' => 'Another action', 'link' => '#'],
+                            ],
+                        ],
+                        ['label' => 'Link', 'link' => '#'],
+                        ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testDepthTwo(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Parent</a>
+            <ul>
+            <li><a href="#">Child</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->depth(2)
+                ->items(
+                    [
+                        ['label' => 'Home', 'link' => '/home'],
+                        [
+                            'label' => 'Parent',
+                            'link' => '#',
+                            'items' => [
+                                [
+                                    'label' => 'Child',
+                                    'link' => '#',
+                                    'items' => [
+                                        ['label' => 'Grandchild', 'link' => '#'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
     public function testDropdown(): void
     {
         Assert::equalsWithoutLE(

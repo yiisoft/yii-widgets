@@ -16,6 +16,7 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
+use function is_array;
 use function strtr;
 use function trim;
 
@@ -55,6 +56,7 @@ final class Menu extends Widget
     private string $beforeTag = 'span';
     private bool $container = true;
     private string $currentPath = '';
+    private int $depth = 0;
     private string $disabledClass = 'disabled';
     private bool $dropdownContainer = true;
     private array $dropdownContainerAttributes = [];
@@ -252,6 +254,22 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->currentPath = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified maximum depth of nested items to render.
+     *
+     * Items deeper than the specified level will be rendered as if they have no sub-items.
+     * `0` means no limit (default).
+     *
+     * @param int $value The maximum depth of nested items.
+     */
+    public function depth(int $value): self
+    {
+        $new = clone $this;
+        $new->depth = $value;
 
         return $new;
     }
@@ -527,6 +545,12 @@ final class Menu extends Widget
             return '';
         }
 
+        $items = $this->items;
+
+        if ($this->depth > 0) {
+            $items = self::limitDepth($items, $this->depth, 1);
+        }
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -542,13 +566,29 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $this->items,
+            $items,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
         );
 
         return $this->renderMenu($items);
+    }
+
+    private static function limitDepth(array $items, int $maxDepth, int $currentDepth): array
+    {
+        /** @psalm-var array[] $items */
+        foreach ($items as $i => $item) {
+            if (isset($item['items']) && is_array($item['items'])) {
+                if ($currentDepth >= $maxDepth) {
+                    unset($items[$i]['items']);
+                } else {
+                    $items[$i]['items'] = self::limitDepth($item['items'], $maxDepth, $currentDepth + 1);
+                }
+            }
+        }
+
+        return $items;
     }
 
     private function renderAfterContent(): string
