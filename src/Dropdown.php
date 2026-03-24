@@ -16,7 +16,9 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
+use function array_map;
 use function gettype;
+use function is_array;
 use function implode;
 use function str_contains;
 use function trim;
@@ -45,6 +47,7 @@ final class Dropdown extends Widget
     private array|Closure $items = [];
     private array $itemsContainerAttributes = [];
     private string $itemsContainerTag = 'ul';
+    private ?Closure $map = null;
     private array $splitButtonAttributes = [];
     private array $splitButtonSpanAttributes = [];
     private array $toggleAttributes = [];
@@ -357,6 +360,22 @@ final class Dropdown extends Widget
     }
 
     /**
+     * Returns a new instance with the specified per-item transform callback.
+     *
+     * The callback receives each raw item array and should return a modified item array.
+     * It is applied after resolving items from Closure and before the normalizer processes them.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable mapping.
+     */
+    public function map(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->map = $callback;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified split button attributes.
      *
      * @param array $valuesMap Attribute values indexed by attribute names.
@@ -442,6 +461,14 @@ final class Dropdown extends Widget
     {
         /** @var array $items */
         $items = $this->items instanceof Closure ? ($this->items)() : $this->items;
+
+        if ($this->map !== null) {
+            $map = $this->map;
+            $items = array_map(
+                fn(mixed $item): mixed => is_array($item) ? $map($item) : $item,
+                $items,
+            );
+        }
 
         /**
          * @psalm-var array<

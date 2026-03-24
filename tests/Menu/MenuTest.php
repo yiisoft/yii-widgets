@@ -656,6 +656,52 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testMap(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a data-turbo-frame="_top" href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->map(fn(array $item) => array_merge($item, ['linkAttributes' => ['data-turbo-frame' => '_top']]))
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testMapWithClosure(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a data-turbo-frame="_top" href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->map(fn(array $item) => array_merge($item, ['linkAttributes' => ['data-turbo-frame' => '_top']]))
+                ->items(fn() => $this->items)
+                ->render(),
+        );
+    }
+
+    public function testMapWithNull(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->map(fn(array $item) => $item)
+                ->map(null)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
     public function testRender(): void
     {
         $this->assertEmpty(Menu::widget()->render());
