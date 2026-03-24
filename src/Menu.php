@@ -16,6 +16,7 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
+use function is_array;
 use function strtr;
 use function trim;
 
@@ -53,6 +54,9 @@ final class Menu extends Widget
     private array $beforeAttributes = [];
     private string $beforeContent = '';
     private string $beforeTag = 'span';
+    private int $collapseAfter = 0;
+    private array $collapseDropdownDefinitions = [];
+    private string $collapseLabel = 'More';
     private bool $container = true;
     private string $currentPath = '';
     private string $disabledClass = 'disabled';
@@ -226,6 +230,47 @@ final class Menu extends Widget
     {
         $new = clone $this;
         Html::addCssClass($new->attributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified number of visible items before collapsing the rest into a dropdown.
+     *
+     * @param int $value The number of visible items to show. Items beyond this threshold are rendered inside a "More"
+     * dropdown. Default is `0` (no collapsing).
+     */
+    public function collapseAfter(int $value): self
+    {
+        $new = clone $this;
+        $new->collapseAfter = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified dropdown definitions for the collapse dropdown.
+     *
+     * @param array $valuesMap The dropdown definition widget for the collapse dropdown.
+     * When empty, falls back to {@see dropdownDefinitions()}.
+     */
+    public function collapseDropdownDefinitions(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->collapseDropdownDefinitions = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified label for the collapse dropdown toggle.
+     *
+     * @param string $value The label for the "More" dropdown. Default is `'More'`.
+     */
+    public function collapseLabel(string $value): self
+    {
+        $new = clone $this;
+        $new->collapseLabel = $value;
 
         return $new;
     }
@@ -507,6 +552,13 @@ final class Menu extends Widget
             return '';
         }
 
+        $rawItems = $this->items;
+        $hasCollapse = false;
+
+        if ($this->collapseAfter > 0) {
+            [$rawItems, $hasCollapse] = $this->collapseItems($rawItems);
+        }
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -522,13 +574,56 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $this->items,
+            $rawItems,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
         );
 
-        return $this->renderMenu($items);
+        return $this->renderMenu($items, $hasCollapse);
+    }
+
+    /**
+     * @return array{0: array, 1: bool}
+     */
+    private function collapseItems(array $items): array
+    {
+        $kept = [];
+        $overflow = [];
+        $visibleCount = 0;
+        $overflowing = false;
+
+        foreach ($items as $item) {
+            if ($overflowing) {
+                $overflow[] = $item;
+                continue;
+            }
+
+            $isVisible = !is_array($item) || !isset($item['visible']) || $item['visible'] !== false;
+
+            if ($isVisible) {
+                $visibleCount++;
+            }
+
+            if ($isVisible && $visibleCount > $this->collapseAfter) {
+                $overflowing = true;
+                $overflow[] = $item;
+            } else {
+                $kept[] = $item;
+            }
+        }
+
+        if ($overflow === []) {
+            return [$items, false];
+        }
+
+        $kept[] = [
+            'label' => $this->collapseLabel,
+            'link' => '#',
+            'items' => $overflow,
+        ];
+
+        return [$kept, true];
     }
 
     private function renderAfterContent(): string
@@ -557,9 +652,11 @@ final class Menu extends Widget
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    private function renderDropdown(array $items): string
+    private function renderDropdown(array $items, bool $isCollapse = false): string
     {
-        $dropdownDefinitions = $this->dropdownDefinitions;
+        $dropdownDefinitions = $isCollapse && $this->collapseDropdownDefinitions !== []
+            ? $this->collapseDropdownDefinitions
+            : $this->dropdownDefinitions;
 
         if ($dropdownDefinitions === []) {
             $dropdownDefinitions = [
@@ -659,14 +756,15 @@ final class Menu extends Widget
      *   }
      * > $items
      */
-    private function renderItems(array $items): string
+    private function renderItems(array $items, bool $hasCollapse = false): string
     {
         $lines = [];
         $n = count($items);
 
         foreach ($items as $i => $item) {
             if (isset($item['items'])) {
-                $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item])]);
+                $isCollapse = $hasCollapse && $i === $n - 1;
+                $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item], $isCollapse)]);
             } elseif ($item['visible']) {
                 $itemsContainerAttributes = array_merge(
                     $this->itemsContainerAttributes,
@@ -720,13 +818,13 @@ final class Menu extends Widget
      *   }
      * > $items
      */
-    private function renderMenu(array $items): string
+    private function renderMenu(array $items, bool $hasCollapse = false): string
     {
         $afterContent = '';
         $attributes = $this->attributes;
         $beforeContent = '';
 
-        $content = $this->renderItems($items) . PHP_EOL;
+        $content = $this->renderItems($items, $hasCollapse) . PHP_EOL;
 
         if ($this->beforeContent !== '') {
             $beforeContent = $this->renderBeforeContent() . PHP_EOL;

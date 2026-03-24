@@ -157,6 +157,173 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testCollapseAfter(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">More</a>
+            <ul>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/blog">Blog</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->collapseAfter(2)
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'About', 'link' => '/about'],
+                    ['label' => 'Contact', 'link' => '/contact'],
+                    ['label' => 'Blog', 'link' => '/blog'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testCollapseAfterNoOverflow(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->collapseAfter(5)
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testCollapseAfterWithExistingDropdown(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Dropdown</a>
+            <ul>
+            <li><a href="#">Sub1</a></li>
+            </ul>
+            </li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">More</a>
+            <ul>
+            <li><a href="/about">About</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->collapseAfter(2)
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'Dropdown', 'link' => '#', 'items' => [
+                        ['label' => 'Sub1', 'link' => '#'],
+                    ]],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testCollapseAfterWithInvisibleItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">More</a>
+            <ul>
+            <li><a href="/blog">Blog</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->collapseAfter(2)
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'Hidden', 'link' => '/hidden', 'visible' => false],
+                    ['label' => 'About', 'link' => '/about'],
+                    ['label' => 'Blog', 'link' => '/blog'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testCollapseDropdownDefinitions(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle" href="#">More</a>
+            <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/about">About</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->collapseAfter(1)
+                ->collapseDropdownDefinitions([
+                    'container()' => [false],
+                    'dividerClass()' => ['dropdown-divider'],
+                    'itemClass()' => ['dropdown-item'],
+                    'itemsContainerClass()' => ['dropdown-menu'],
+                    'toggleAttributes()' => [
+                        ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
+                    ],
+                    'toggleClass()' => ['dropdown-toggle'],
+                    'toggleType()' => ['link'],
+                ])
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testCollapseLabel(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Show more</a>
+            <ul>
+            <li><a href="/about">About</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->collapseAfter(1)
+                ->collapseLabel('Show more')
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->render(),
+        );
+    }
+
     public function testContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(
