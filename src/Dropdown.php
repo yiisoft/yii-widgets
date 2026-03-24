@@ -476,6 +476,20 @@ final class Dropdown extends Widget
         };
     }
 
+    /**
+     * Returns normalized dropdown items as a PHP array without rendering HTML.
+     *
+     * Each array item contains: label, link, linkAttributes, active, disabled, visible, icon, iconAttributes,
+     * iconClass, and items (sub-items, recursively normalized). String items (dividers) are kept as-is.
+     *
+     * Labels are returned without HTML encoding. Icon data is returned as separate fields instead of being rendered
+     * into HTML.
+     */
+    public function toArray(): array
+    {
+        return Helper\Normalizer::dropdownData($this->items);
+    }
+
     private function renderDivider(): string
     {
         $dividerAttributes = $this->dividerAttributes;

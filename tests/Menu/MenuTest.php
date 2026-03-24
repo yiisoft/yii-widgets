@@ -742,4 +742,141 @@ final class MenuTest extends TestCase
                 ->render(),
         );
     }
+
+    public function testToArray(): void
+    {
+        $result = Menu::widget()
+            ->currentPath('/active')
+            ->items([
+                ['label' => 'Active', 'link' => '/active'],
+                ['label' => 'Link', 'link' => '#'],
+                ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
+            ])
+            ->toArray();
+
+        $this->assertSame([
+            [
+                'label' => 'Active',
+                'link' => '/active',
+                'linkAttributes' => [],
+                'active' => true,
+                'disabled' => false,
+                'visible' => true,
+                'icon' => '',
+                'iconAttributes' => [],
+                'iconClass' => '',
+                'items' => [],
+            ],
+            [
+                'label' => 'Link',
+                'link' => '#',
+                'linkAttributes' => [],
+                'active' => false,
+                'disabled' => false,
+                'visible' => true,
+                'icon' => '',
+                'iconAttributes' => [],
+                'iconClass' => '',
+                'items' => [],
+            ],
+            [
+                'label' => 'Disabled',
+                'link' => '#',
+                'linkAttributes' => [],
+                'active' => false,
+                'disabled' => true,
+                'visible' => true,
+                'icon' => '',
+                'iconAttributes' => [],
+                'iconClass' => '',
+                'items' => [],
+            ],
+        ], $result);
+    }
+
+    public function testToArrayWithEmptyItems(): void
+    {
+        $this->assertSame([], Menu::widget()->toArray());
+    }
+
+    public function testToArrayWithIcons(): void
+    {
+        $result = Menu::widget()
+            ->items([
+                ['label' => 'Home', 'link' => '/', 'icon' => '🏠', 'iconClass' => 'bi bi-house'],
+            ])
+            ->toArray();
+
+        $this->assertSame('Home', $result[0]['label']);
+        $this->assertSame('🏠', $result[0]['icon']);
+        $this->assertSame('bi bi-house', $result[0]['iconClass']);
+    }
+
+    public function testToArrayWithSubItems(): void
+    {
+        $result = Menu::widget()
+            ->currentPath('/action')
+            ->items([
+                [
+                    'label' => 'Dropdown',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Action', 'link' => '/action'],
+                        ['label' => 'Other', 'link' => '/other'],
+                    ],
+                ],
+            ])
+            ->toArray();
+
+        $this->assertSame('Dropdown', $result[0]['label']);
+        $this->assertCount(2, $result[0]['items']);
+        $this->assertSame('Action', $result[0]['items'][0]['label']);
+        $this->assertTrue($result[0]['items'][0]['active']);
+        $this->assertFalse($result[0]['items'][1]['active']);
+    }
+
+    public function testToArrayLabelNotEncoded(): void
+    {
+        $result = Menu::widget()
+            ->items([['label' => 'Black & White', 'link' => '#']])
+            ->toArray();
+
+        $this->assertSame('Black & White', $result[0]['label']);
+    }
+
+    public function testToArrayVisibility(): void
+    {
+        $result = Menu::widget()
+            ->items([
+                ['label' => 'Visible', 'link' => '#'],
+                ['label' => 'Hidden', 'link' => '#', 'visible' => false],
+            ])
+            ->toArray();
+
+        $this->assertCount(2, $result);
+        $this->assertTrue($result[0]['visible']);
+        $this->assertFalse($result[1]['visible']);
+    }
+
+    public function testToArrayActivateItemsWithFalse(): void
+    {
+        $result = Menu::widget()
+            ->activateItems(false)
+            ->currentPath('/path')
+            ->items([['label' => 'item', 'link' => '/path']])
+            ->toArray();
+
+        $this->assertFalse($result[0]['active']);
+    }
+
+    public function testToArrayWithLinkAttributes(): void
+    {
+        $result = Menu::widget()
+            ->items([
+                ['label' => 'item', 'link' => '#', 'linkAttributes' => ['class' => 'custom']],
+            ])
+            ->toArray();
+
+        $this->assertSame(['class' => 'custom'], $result[0]['linkAttributes']);
+    }
 }

@@ -102,6 +102,73 @@ final class Normalizer
         return $items;
     }
 
+    /**
+     * Normalize the given array of items for the dropdown as raw data without rendering HTML.
+     */
+    public static function dropdownData(array $items): array
+    {
+        /**
+         * @psalm-var array[] $items
+         * @psalm-suppress RedundantConditionGivenDocblockType
+         */
+        foreach ($items as $i => $child) {
+            if (is_array($child)) {
+                $items[$i] = [
+                    'label' => self::rawLabel($child),
+                    'link' => self::link($child, '/'),
+                    'linkAttributes' => self::linkAttributes($child),
+                    'active' => self::active($child, '', '', false),
+                    'disabled' => self::disabled($child),
+                    'visible' => self::visible($child),
+                    'icon' => self::icon($child),
+                    'iconAttributes' => self::iconAttributes($child),
+                    'iconClass' => self::iconClass($child),
+                    'items' => isset($child['items']) && is_array($child['items'])
+                        ? self::dropdownData($child['items'])
+                        : [],
+                ];
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * Normalize the given array of items for the menu as raw data without rendering HTML.
+     */
+    public static function menuData(
+        array $items,
+        string $currentPath,
+        bool $activateItems,
+    ): array {
+        /**
+         * @psalm-var array[] $items
+         * @psalm-suppress RedundantConditionGivenDocblockType
+         */
+        foreach ($items as $i => $child) {
+            if (is_array($child)) {
+                $link = self::link($child);
+
+                $items[$i] = [
+                    'label' => self::rawLabel($child),
+                    'link' => $link,
+                    'linkAttributes' => self::linkAttributes($child),
+                    'active' => self::active($child, $link, $currentPath, $activateItems),
+                    'disabled' => self::disabled($child),
+                    'visible' => self::visible($child),
+                    'icon' => self::icon($child),
+                    'iconAttributes' => self::iconAttributes($child),
+                    'iconClass' => self::iconClass($child),
+                    'items' => isset($child['items']) && is_array($child['items'])
+                        ? self::menuData($child['items'], $currentPath, $activateItems)
+                        : [],
+                ];
+            }
+        }
+
+        return $items;
+    }
+
     public static function renderLabel(
         string $label,
         string $icon,
@@ -199,6 +266,27 @@ final class Normalizer
 
     private static function label(array $item): string
     {
+        $raw = self::rawLabel($item);
+
+        /** @var bool */
+        $encode = $item['encode'] ?? true;
+
+        return $encode ? Html::encode($raw) : $raw;
+    }
+
+    private static function link(array $item, string $defaultValue = ''): string
+    {
+        return array_key_exists('link', $item) && is_string($item['link']) ? $item['link'] : $defaultValue;
+    }
+
+    private static function linkAttributes(array $item): array
+    {
+        return array_key_exists('linkAttributes', $item) && is_array($item['linkAttributes'])
+            ? $item['linkAttributes'] : [];
+    }
+
+    private static function rawLabel(array $item): string
+    {
         if (!isset($item['label'])) {
             throw new InvalidArgumentException('The "label" option is required.');
         }
@@ -211,21 +299,7 @@ final class Normalizer
             throw new InvalidArgumentException('The "label" cannot be an empty string.');
         }
 
-        /** @var bool */
-        $encode = $item['encode'] ?? true;
-
-        return $encode ? Html::encode($item['label']) : $item['label'];
-    }
-
-    private static function link(array $item, string $defaultValue = ''): string
-    {
-        return array_key_exists('link', $item) && is_string($item['link']) ? $item['link'] : $defaultValue;
-    }
-
-    private static function linkAttributes(array $item): array
-    {
-        return array_key_exists('linkAttributes', $item) && is_array($item['linkAttributes'])
-            ? $item['linkAttributes'] : [];
+        return $item['label'];
     }
 
     private static function toggleAttributes(array $item): array

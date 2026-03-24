@@ -495,4 +495,132 @@ final class DropdownTest extends TestCase
 
         $this->assertStringContainsString('data-custom="value"', $html);
     }
+
+    public function testToArray(): void
+    {
+        $result = Dropdown::widget()
+            ->items([
+                ['label' => 'Action', 'link' => '#', 'active' => true],
+                ['label' => 'Other', 'link' => '#'],
+                '-',
+                ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
+            ])
+            ->toArray();
+
+        $this->assertSame([
+            [
+                'label' => 'Action',
+                'link' => '#',
+                'linkAttributes' => [],
+                'active' => true,
+                'disabled' => false,
+                'visible' => true,
+                'icon' => '',
+                'iconAttributes' => [],
+                'iconClass' => '',
+                'items' => [],
+            ],
+            [
+                'label' => 'Other',
+                'link' => '#',
+                'linkAttributes' => [],
+                'active' => false,
+                'disabled' => false,
+                'visible' => true,
+                'icon' => '',
+                'iconAttributes' => [],
+                'iconClass' => '',
+                'items' => [],
+            ],
+            '-',
+            [
+                'label' => 'Disabled',
+                'link' => '#',
+                'linkAttributes' => [],
+                'active' => false,
+                'disabled' => true,
+                'visible' => true,
+                'icon' => '',
+                'iconAttributes' => [],
+                'iconClass' => '',
+                'items' => [],
+            ],
+        ], $result);
+    }
+
+    public function testToArrayWithEmptyItems(): void
+    {
+        $this->assertSame([], Dropdown::widget()->toArray());
+    }
+
+    public function testToArrayLabelNotEncoded(): void
+    {
+        $result = Dropdown::widget()
+            ->items([['label' => 'Black & White', 'link' => '#']])
+            ->toArray();
+
+        $this->assertSame('Black & White', $result[0]['label']);
+    }
+
+    public function testToArrayDefaultLink(): void
+    {
+        $result = Dropdown::widget()
+            ->items([['label' => 'No link']])
+            ->toArray();
+
+        $this->assertSame('/', $result[0]['link']);
+    }
+
+    public function testToArrayWithIcons(): void
+    {
+        $result = Dropdown::widget()
+            ->items([
+                [
+                    'label' => 'Home',
+                    'link' => '#',
+                    'icon' => '🏠',
+                    'iconClass' => 'bi bi-house',
+                    'iconAttributes' => ['data-x' => '1'],
+                ],
+            ])
+            ->toArray();
+
+        $this->assertSame('🏠', $result[0]['icon']);
+        $this->assertSame('bi bi-house', $result[0]['iconClass']);
+        $this->assertSame(['data-x' => '1'], $result[0]['iconAttributes']);
+    }
+
+    public function testToArrayWithSubItems(): void
+    {
+        $result = Dropdown::widget()
+            ->items([
+                [
+                    'label' => 'Parent',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Child', 'link' => '/child'],
+                    ],
+                ],
+            ])
+            ->toArray();
+
+        $this->assertSame('Parent', $result[0]['label']);
+        $this->assertCount(1, $result[0]['items']);
+        $this->assertSame('Child', $result[0]['items'][0]['label']);
+        $this->assertSame('/child', $result[0]['items'][0]['link']);
+    }
+
+    public function testToArrayVisibility(): void
+    {
+        $result = Dropdown::widget()
+            ->items([
+                ['label' => 'Visible', 'link' => '#'],
+                ['label' => 'Hidden', 'link' => '#', 'visible' => false],
+            ])
+            ->toArray();
+
+        $this->assertCount(2, $result);
+        $this->assertTrue($result[0]['visible']);
+        $this->assertFalse($result[1]['visible']);
+    }
 }
