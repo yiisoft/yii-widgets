@@ -387,64 +387,6 @@ final class DropdownTest extends TestCase
         );
     }
 
-    public function testMap(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <li><a data-turbo-frame="_top" aria-current="true" class="active" href="#">Action</a></li>
-            <li><a data-turbo-frame="_top" href="#">Another action</a></li>
-            <li><a data-turbo-frame="_top" href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a data-turbo-frame="_top" class="disabled" href="#">Separated link</a></li>
-            </div>
-            HTML,
-            Dropdown::widget()
-                ->map(fn(array $item) => array_merge($item, ['linkAttributes' => ['data-turbo-frame' => '_top']]))
-                ->items($this->items)
-                ->render(),
-        );
-    }
-
-    public function testMapWithClosure(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <li><a data-turbo-frame="_top" aria-current="true" class="active" href="#">Action</a></li>
-            <li><a data-turbo-frame="_top" href="#">Another action</a></li>
-            <li><a data-turbo-frame="_top" href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a data-turbo-frame="_top" class="disabled" href="#">Separated link</a></li>
-            </div>
-            HTML,
-            Dropdown::widget()
-                ->map(fn(array $item) => array_merge($item, ['linkAttributes' => ['data-turbo-frame' => '_top']]))
-                ->items(fn() => $this->items)
-                ->render(),
-        );
-    }
-
-    public function testMapWithNull(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <li><a aria-current="true" class="active" href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="disabled" href="#">Separated link</a></li>
-            </div>
-            HTML,
-            Dropdown::widget()
-                ->map(fn(array $item) => $item)
-                ->map(null)
-                ->items($this->items)
-                ->render(),
-        );
-    }
-
     public function testItemEnclose(): void
     {
         Assert::equalsWithoutLE(

@@ -45,7 +45,6 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($menu, $menu->linkAttributes([]));
         $this->assertNotSame($menu, $menu->linkClass(''));
         $this->assertNotSame($menu, $menu->linkTag(''));
-        $this->assertNotSame($menu, $menu->map(fn(array $item) => $item));
         $this->assertNotSame($menu, $menu->tagName(''));
         $this->assertNotSame($menu, $menu->template(''));
     }

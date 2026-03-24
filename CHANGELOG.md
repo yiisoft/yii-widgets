@@ -11,7 +11,6 @@
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
 - New #XXX: Add `Closure` support to `items()` in `Breadcrumbs`, `Dropdown`, and `Menu` for lazy evaluation (@WarLikeLaux)
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
-- New #150: Add `map()` method to `Menu` and `Dropdown` for per-item transform before rendering (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
