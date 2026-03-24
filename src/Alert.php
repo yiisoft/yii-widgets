@@ -12,6 +12,7 @@ use Yiisoft\Html\Tag\I;
 use Yiisoft\Widget\Widget;
 
 use function array_key_exists;
+use function is_array;
 use function strtr;
 use function trim;
 
@@ -29,12 +30,18 @@ final class Alert extends Widget
     private array $attributes = [];
     private array $buttonAttributes = [];
     private string $buttonLabel = '&times;';
-    private string $body = '';
+    /** @psalm-var string|string[] */
+    private string|array $body = '';
     private array $bodyAttributes = [];
-    /** @psalm-var non-empty-string */
-    private ?string $bodyTag = 'span';
     private bool $bodyContainer = false;
     private array $bodyContainerAttributes = [];
+    private array $bodyListAttributes = [];
+    /** @psalm-var non-empty-string */
+    private string $bodyListItemTag = 'li';
+    /** @psalm-var non-empty-string */
+    private string $bodyListTag = 'ul';
+    /** @psalm-var non-empty-string */
+    private ?string $bodyTag = 'span';
     private string $header = '';
     private array $headerAttributes = [];
     private bool $headerContainer = false;
@@ -63,9 +70,9 @@ final class Alert extends Widget
     /**
      * Returns a new instance with changed message body.
      *
-     * @param string $value The message body.
+     * @param string|string[] $value The message body. When an array is given, it is rendered as a list.
      */
-    public function body(string $value): self
+    public function body(string|array $value): self
     {
         $new = clone $this;
         $new->body = $value;
@@ -138,6 +145,45 @@ final class Alert extends Widget
     {
         $new = clone $this;
         Html::addCssClass($new->bodyContainerAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the CSS class for the body list container.
+     *
+     * @param string $value The CSS class name.
+     */
+    public function bodyListClass(string $value): self
+    {
+        $new = clone $this;
+        Html::addCssClass($new->bodyListAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified tag for body list items.
+     *
+     * @psalm-param non-empty-string $value
+     */
+    public function bodyListItemTag(string $value): self
+    {
+        $new = clone $this;
+        $new->bodyListItemTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified tag for the body list container.
+     *
+     * @psalm-param non-empty-string $value
+     */
+    public function bodyListTag(string $value): self
+    {
+        $new = clone $this;
+        $new->bodyListTag = $value;
 
         return $new;
     }
@@ -459,7 +505,7 @@ final class Alert extends Widget
 
         $contentAlert = $this->renderHeaderContainer($parts) . PHP_EOL . $this->renderBodyContainer($parts);
 
-        return $this->body !== ''
+        return ($this->body !== '' && $this->body !== [])
             ? $div
                 ->attribute('role', 'alert')
                 ->addAttributes($this->attributes)
@@ -502,9 +548,25 @@ final class Alert extends Widget
      */
     private function renderBody(): string
     {
+        $body = is_array($this->body) ? $this->renderBodyList($this->body) : $this->body;
+
         return $this->bodyTag !== null
-            ? Html::normalTag($this->bodyTag, $this->body, $this->bodyAttributes)->encode(false)->render()
-            : $this->body;
+            ? Html::normalTag($this->bodyTag, $body, $this->bodyAttributes)->encode(false)->render()
+            : $body;
+    }
+
+    private function renderBodyList(array $items): string
+    {
+        $listItems = '';
+
+        /** @var string $item */
+        foreach ($items as $item) {
+            $listItems .= Html::normalTag($this->bodyListItemTag, $item)->render();
+        }
+
+        return Html::normalTag($this->bodyListTag, $listItems, $this->bodyListAttributes)
+            ->encode(false)
+            ->render();
     }
 
     /**

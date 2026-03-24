@@ -50,6 +50,67 @@ final class AlertTest extends TestCase
         );
     }
 
+    public function testBodyList(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span><ul><li>Error 1</li><li>Error 2</li></ul></span>
+            <button type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body(['Error 1', 'Error 2'])
+                ->id('w0-alert')
+                ->render(),
+        );
+    }
+
+    public function testBodyListClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span><ul class="error-list"><li>Error 1</li></ul></span>
+            <button type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body(['Error 1'])
+                ->bodyListClass('error-list')
+                ->id('w0-alert')
+                ->render(),
+        );
+    }
+
+    public function testBodyListCustomTags(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span><ol><p>Error 1</p><p>Error 2</p></ol></span>
+            <button type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body(['Error 1', 'Error 2'])
+                ->bodyListTag('ol')
+                ->bodyListItemTag('p')
+                ->id('w0-alert')
+                ->render(),
+        );
+    }
+
+    public function testBodyListEmpty(): void
+    {
+        $this->assertEmpty(
+            Alert::widget()
+                ->body([])
+                ->id('w0-alert')
+                ->render(),
+        );
+    }
+
     public function testBodyWithoutTag(): void
     {
         Assert::equalsWithoutLE(
