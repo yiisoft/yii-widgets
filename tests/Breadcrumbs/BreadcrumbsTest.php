@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Widgets\Breadcrumbs;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
+use InvalidArgumentException;
 
 final class BreadcrumbsTest extends TestCase
 {
@@ -50,6 +51,13 @@ final class BreadcrumbsTest extends TestCase
                 ->items(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
                 ->render(),
         );
+    }
+
+    public function testIdEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Breadcrumbs::widget()->id('');
     }
 
     public function testId(): void

@@ -9,6 +9,7 @@ use Stringable;
 use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
+use InvalidArgumentException;
 
 final class MenuTest extends TestCase
 {
@@ -361,6 +362,13 @@ final class MenuTest extends TestCase
             HTML,
             Menu::widget()->id('my-menu')->items($this->items)->render(),
         );
+    }
+
+    public function testIdEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Menu::widget()->id('');
     }
 
     public function testItemsClassAsArray(): void
