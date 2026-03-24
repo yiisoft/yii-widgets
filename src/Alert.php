@@ -26,6 +26,8 @@ use const PHP_EOL;
  */
 final class Alert extends Widget
 {
+    use WhenTrait;
+
     private array $attributes = [];
     private array $buttonAttributes = [];
     private string $buttonLabel = '&times;';
