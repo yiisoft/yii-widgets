@@ -111,6 +111,26 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * Returns a new instance with the specified Widget ID.
+     *
+     * @param string|null $value The id of the widget.
+     *
+     * @psalm-param non-empty-string|null $value
+     */
+    public function id(?string $value): self
+    {
+        /** @psalm-suppress TypeDoesNotContainType */
+        if ($value === '') {
+            throw new InvalidArgumentException('The id cannot be an empty string.');
+        }
+
+        $new = clone $this;
+        $new->attributes['id'] = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified list of items.
      *
      * @param array|Closure $value List of items to appear in the breadcrumbs, or a Closure returning the list for lazy

@@ -10,6 +10,7 @@
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
 - New #XXX: Add `Closure` support to `items()` in `Breadcrumbs`, `Dropdown`, and `Menu` for lazy evaluation (@WarLikeLaux)
+- New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
