@@ -17,5 +17,6 @@ final class ImmutableTest extends TestCase
         $contentDecorator = ContentDecorator::widget();
         $this->assertNotSame($contentDecorator, $contentDecorator->parameters([]));
         $this->assertNotSame($contentDecorator, $contentDecorator->viewFile(''));
+        $this->assertNotSame($contentDecorator, $contentDecorator->pipe(static fn(ContentDecorator $c) => $c->viewFile('test')));
     }
 }

@@ -52,6 +52,8 @@ use const PHP_EOL;
  */
 final class Breadcrumbs extends Widget
 {
+    use PipeTrait;
+
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
     private array $attributes = ['class' => 'breadcrumb'];
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
