@@ -36,6 +36,22 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testActiveClassWithConditionalArray(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="current highlight" href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeClass(['current' => true, 'highlight' => true, 'hidden' => false])
+                ->currentPath('/path')
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
     public function testActiveItemsWithFalse(): void
     {
         Assert::equalsWithoutLE(
@@ -154,6 +170,21 @@ final class MenuTest extends TestCase
             </ul>
             HTML,
             Menu::widget()->class('test-class')->items($this->items)->render(),
+        );
+    }
+
+    public function testClassWithConditionalArray(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="nav visible">
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->class(['nav' => true, 'visible' => true, 'dark' => false])
+                ->items($this->items)
+                ->render(),
         );
     }
 

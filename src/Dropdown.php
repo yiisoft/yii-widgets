@@ -54,10 +54,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The active class.
      */
-    public function activeClass(string $value): self
+    public function activeClass(string|array $value): self
     {
         $new = clone $this;
-        $new->activeClass = $value;
+        $new->activeClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -93,10 +93,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The container class.
      */
-    public function containerClass(string $value): self
+    public function containerClass(string|array $value): self
     {
         $new = clone $this;
-        $new->containerClass = $value;
+        $new->containerClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -118,10 +118,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The disabled class.
      */
-    public function disabledClass(string $value): self
+    public function disabledClass(string|array $value): self
     {
         $new = clone $this;
-        $new->disabledClass = $value;
+        $new->disabledClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -144,10 +144,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The divider class.
      */
-    public function dividerClass(string $value): self
+    public function dividerClass(string|array $value): self
     {
         $new = clone $this;
-        $new->dividerClass = $value;
+        $new->dividerClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -170,10 +170,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The header class.
      */
-    public function headerClass(string $value): self
+    public function headerClass(string|array $value): self
     {
         $new = clone $this;
-        $new->headerClass = $value;
+        $new->headerClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -209,10 +209,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The item class.
      */
-    public function itemClass(string $value): self
+    public function itemClass(string|array $value): self
     {
         $new = clone $this;
-        $new->itemClass = $value;
+        $new->itemClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -248,10 +248,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The item container class.
      */
-    public function itemContainerClass(string $value): self
+    public function itemContainerClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->itemContainerAttributes, $value);
+        Html::addCssClass($new->itemContainerAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -329,10 +329,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The item container class.
      */
-    public function itemsContainerClass(string $value): self
+    public function itemsContainerClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->itemsContainerAttributes, $value);
+        Html::addCssClass($new->itemsContainerAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -368,10 +368,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The split button class.
      */
-    public function splitButtonClass(string $value): self
+    public function splitButtonClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->splitButtonAttributes, $value);
+        Html::addCssClass($new->splitButtonAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -381,10 +381,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The split button span class.
      */
-    public function splitButtonSpanClass(string $value): self
+    public function splitButtonSpanClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->splitButtonSpanAttributes, $value);
+        Html::addCssClass($new->splitButtonSpanAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -407,10 +407,10 @@ final class Dropdown extends Widget
      *
      * @param string $value The toggle class.
      */
-    public function toggleClass(string $value): self
+    public function toggleClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->toggleAttributes, $value);
+        Html::addCssClass($new->toggleAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
