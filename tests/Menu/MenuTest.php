@@ -89,6 +89,82 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testActiveTrail(): void
+    {
+        $this->assertSame(
+            [
+                ['label' => 'Products', 'url' => '/products'],
+                ['label' => 'Widgets'],
+            ],
+            Menu::widget()
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'Products', 'link' => '/products', 'items' => [
+                        ['label' => 'Widgets', 'link' => '/products/widgets'],
+                    ]],
+                ])
+                ->currentPath('/products/widgets')
+                ->activeTrail(),
+        );
+    }
+
+    public function testActiveTrailActiveAfterInactiveSubItems(): void
+    {
+        $this->assertSame(
+            [['label' => 'About']],
+            Menu::widget()
+                ->items([
+                    ['label' => 'Products', 'link' => '/products', 'items' => [
+                        ['label' => 'Widgets', 'link' => '/products/widgets'],
+                    ]],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->currentPath('/about')
+                ->activeTrail(),
+        );
+    }
+
+    public function testActiveTrailEmpty(): void
+    {
+        $this->assertSame(
+            [],
+            Menu::widget()
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                ])
+                ->currentPath('/unknown')
+                ->activeTrail(),
+        );
+    }
+
+    public function testActiveTrailWithNonArrayItem(): void
+    {
+        $this->assertSame(
+            [['label' => 'About']],
+            Menu::widget()
+                ->items([
+                    '-',
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->currentPath('/about')
+                ->activeTrail(),
+        );
+    }
+
+    public function testActiveTrailWithActivateItemsFalse(): void
+    {
+        $this->assertSame(
+            [],
+            Menu::widget()
+                ->items([
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->currentPath('/about')
+                ->activateItems(false)
+                ->activeTrail(),
+        );
+    }
+
     public function testActiveWithNotBool(): void
     {
         Assert::equalsWithoutLE(
