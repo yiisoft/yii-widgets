@@ -17,7 +17,6 @@ use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
 use function array_map;
-use function array_merge;
 use function gettype;
 use function is_array;
 use function implode;
@@ -538,7 +537,7 @@ final class Dropdown extends Widget
             ->itemContainerAttributes($this->itemContainerAttributes)
             ->itemContainerTag($this->itemContainerTag)
             ->items($items)
-            ->itemsContainerAttributes(array_merge($this->itemsContainerAttributes))
+            ->itemsContainerAttributes($this->itemsContainerAttributes)
             ->itemTag($this->itemTag)
             ->toggleAttributes($this->toggleAttributes)
             ->toggleType($this->toggleType)

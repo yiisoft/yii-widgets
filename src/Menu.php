@@ -339,6 +339,26 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified Widget ID.
+     *
+     * @param string|null $value The id of the widget.
+     *
+     * @psalm-param non-empty-string|null $value
+     */
+    public function id(?string $value): self
+    {
+        /** @psalm-suppress TypeDoesNotContainType */
+        if ($value === '') {
+            throw new InvalidArgumentException('The id cannot be an empty string.');
+        }
+
+        $new = clone $this;
+        $new->attributes['id'] = $value;
+
+        return $new;
+    }
+
+    /**
      * List of items in the nav widget. Each array element represents a single menu item which can be either a string or
      * an array with the following structure:
      *
