@@ -340,6 +340,8 @@ final class Menu extends Widget
      *
      * - label: string, required, the nav item label.
      * - active: bool, whether the item should be on active state or not.
+     * - activePattern: string, optional, a glob pattern to match against the current path for active state detection.
+     *   For example, `'/products/*'` will activate the item for any path starting with `/products/`.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
      * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
      * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.
