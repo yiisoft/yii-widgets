@@ -31,6 +31,8 @@ use function ob_start;
  */
 final class ContentDecorator extends Widget
 {
+    use WhenTrait;
+
     private array $parameters = [];
     private string $viewFile = '';
 

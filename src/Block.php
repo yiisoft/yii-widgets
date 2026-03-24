@@ -43,6 +43,8 @@ use function ob_start;
  */
 final class Block extends Widget
 {
+    use WhenTrait;
+
     private string $id = '';
     private bool $renderInPlace = false;
 

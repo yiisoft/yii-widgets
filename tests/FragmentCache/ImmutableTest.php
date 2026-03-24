@@ -22,5 +22,6 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($widget, $widget->dependency(new TagDependency('test')));
         $this->assertNotSame($widget, $widget->dynamicContents(new DynamicContent('test', fn(): string => 'test')));
         $this->assertNotSame($widget, $widget->variations(''));
+        $this->assertNotSame($widget, $widget->when(true, static fn(FragmentCache $w) => $w->id('test')));
     }
 }

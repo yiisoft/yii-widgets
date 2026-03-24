@@ -639,6 +639,27 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testWhenConditionFalse(): void
+    {
+        $menu = Menu::widget()->items($this->items);
+        $this->assertSame($menu, $menu->when(false, static fn(Menu $m) => $m->class('ignored')));
+    }
+
+    public function testWhenConditionTrue(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="applied">
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items($this->items)
+                ->when(true, static fn(Menu $m) => $m->class('applied'))
+                ->render(),
+        );
+    }
+
     public function testAfterContentWithStringable(): void
     {
         $stringable = new class implements Stringable {
