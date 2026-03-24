@@ -36,6 +36,62 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testActivePattern(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/products">Products</a></li>
+            <li><a href="/about">About</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/products/electronics/phones')
+                ->items([
+                    ['label' => 'Products', 'link' => '/products', 'activePattern' => '/products/*'],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testActivePatternNoMatch(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/about">About</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/blog/post-1')
+                ->items([
+                    ['label' => 'Products', 'link' => '/products', 'activePattern' => '/products/*'],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testActivePatternWithActivateItemsFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/products">Products</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activateItems(false)
+                ->currentPath('/products/electronics')
+                ->items([
+                    ['label' => 'Products', 'link' => '/products', 'activePattern' => '/products/*'],
+                ])
+                ->render(),
+        );
+    }
+
     public function testActiveItemsWithFalse(): void
     {
         Assert::equalsWithoutLE(

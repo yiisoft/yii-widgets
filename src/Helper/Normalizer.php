@@ -10,6 +10,7 @@ use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Span;
 
 use function array_key_exists;
+use function fnmatch;
 use function is_array;
 use function is_bool;
 use function is_string;
@@ -130,6 +131,10 @@ final class Normalizer
     private static function active(array $item, string $link, string $currentPath, bool $activateItems): bool
     {
         if (!array_key_exists('active', $item)) {
+            if (isset($item['activePattern']) && is_string($item['activePattern'])) {
+                return $activateItems && fnmatch($item['activePattern'], $currentPath);
+            }
+
             return self::isItemActive($link, $currentPath, $activateItems);
         }
 
