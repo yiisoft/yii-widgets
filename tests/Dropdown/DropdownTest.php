@@ -117,6 +117,25 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testGenerateId(): void
+    {
+        $result = Dropdown::widget()
+            ->items([
+                [
+                    'label' => 'Toggle',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertMatchesRegularExpression('/id="(dropdown-\d+)"/', $result);
+        preg_match('/id="(dropdown-\d+)"/', $result, $matches);
+        $this->assertStringContainsString('aria-labelledby="' . $matches[1] . '"', $result);
+    }
+
     public function testItemContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(

@@ -455,8 +455,13 @@ final class Dropdown extends Widget
         $normalizedItems = Helper\Normalizer::dropdown($this->items);
 
         $containerAttributes = $this->containerAttributes;
+        $id = match (true) {
+            $this->id !== '' => $this->id,
+            $this->container => Html::generateId('dropdown-'),
+            default => '',
+        };
 
-        $items = $this->renderItems($normalizedItems) . PHP_EOL;
+        $items = $this->renderItems($normalizedItems, $id) . PHP_EOL;
 
         if (trim($items) === '') {
             return '';
@@ -548,7 +553,7 @@ final class Dropdown extends Widget
      *   items: array,
      * } $item
      */
-    private function renderItem(array $item): string
+    private function renderItem(array $item, string $id): string
     {
         if ($item['visible'] === false) {
             return '';
@@ -580,8 +585,8 @@ final class Dropdown extends Widget
                 $item['itemContainerAttributes'],
             );
         } else {
-            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']));
-            $toggle = $this->renderToggle($item['label'], $item['link'], $item['toggleAttributes']);
+            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']), $id);
+            $toggle = $this->renderToggle($item['label'], $item['link'], $id, $item['toggleAttributes']);
             $toggleSplitButton = $this->renderToggleSplitButton($item['label']);
 
             if ($this->toggleType === 'split' && !str_contains($this->containerClass, 'dropstart')) {
@@ -612,12 +617,12 @@ final class Dropdown extends Widget
             ->render();
     }
 
-    private function renderItemsContainer(string $content): string
+    private function renderItemsContainer(string $content, string $id): string
     {
         $itemsContainerAttributes = $this->itemsContainerAttributes;
 
-        if ($this->id !== '') {
-            $itemsContainerAttributes['aria-labelledby'] = $this->id;
+        if ($id !== '') {
+            $itemsContainerAttributes['aria-labelledby'] = $id;
         }
 
         if ($this->itemsContainerTag === '') {
@@ -665,13 +670,13 @@ final class Dropdown extends Widget
      *   }|string
      * > $items
      */
-    private function renderItems(array $items = []): string
+    private function renderItems(array $items, string $id): string
     {
         $lines = [];
 
         foreach ($items as $item) {
             $line = match (gettype($item)) {
-                'array' => $this->renderItem($item),
+                'array' => $this->renderItem($item, $id),
                 'string' => $this->renderDivider(),
             };
 
@@ -703,14 +708,14 @@ final class Dropdown extends Widget
         };
     }
 
-    private function renderToggle(string $label, string $link, array $toggleAttributes = []): string
+    private function renderToggle(string $label, string $link, string $id, array $toggleAttributes = []): string
     {
         if ($toggleAttributes === []) {
             $toggleAttributes = $this->toggleAttributes;
         }
 
-        if ($this->id !== '') {
-            $toggleAttributes['id'] = $this->id;
+        if ($id !== '') {
+            $toggleAttributes['id'] = $id;
         }
 
         return match ($this->toggleType) {
