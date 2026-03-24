@@ -726,6 +726,30 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testUrlAsLinkAlias(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'item', 'url' => '/path']])->render(),
+        );
+    }
+
+    public function testLinkTakesPriorityOverUrl(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/link">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'item', 'link' => '/link', 'url' => '/url']])->render(),
+        );
+    }
+
     public function testItemLinkAttributesOverrideWidgetLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
