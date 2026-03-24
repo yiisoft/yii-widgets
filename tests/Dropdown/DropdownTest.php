@@ -117,6 +117,44 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testFilter(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array $item) => ($item['label'] ?? '') !== 'Another action')
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testFilterWithNull(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array $item) => false)
+                ->filter(null)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
     public function testItemContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(

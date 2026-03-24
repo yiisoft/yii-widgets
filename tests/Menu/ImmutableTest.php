@@ -33,6 +33,7 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($menu, $menu->dropdownContainerClass(''));
         $this->assertNotSame($menu, $menu->dropdownContainerTag('div'));
         $this->assertNotSame($menu, $menu->dropdownDefinitions([]));
+        $this->assertNotSame($menu, $menu->filter(fn(array $item) => true));
         $this->assertNotSame($menu, $menu->firstItemClass(''));
         $this->assertNotSame($menu, $menu->iconContainerAttributes([]));
         $this->assertNotSame($menu, $menu->id('test'));

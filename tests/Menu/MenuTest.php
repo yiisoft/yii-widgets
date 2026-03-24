@@ -337,6 +337,49 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testFilter(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/active">Active</a></li>
+            <li><a href="#">Link</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->filter(fn(array $item) => ($item['link'] ?? '') !== '#' || ($item['label'] ?? '') === 'Link')
+                ->items($this->itemsWithOptions)
+                ->render(),
+        );
+    }
+
+    public function testFilterRemovesAllItems(): void
+    {
+        $this->assertSame(
+            '',
+            Menu::widget()
+                ->filter(fn(array $item) => false)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testFilterWithNull(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->filter(fn(array $item) => false)
+                ->filter(null)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
     public function testFirstItemCssClass(): void
     {
         Assert::equalsWithoutLE(
