@@ -28,6 +28,7 @@ final class Alert extends Widget
 {
     private array $attributes = [];
     private array $buttonAttributes = [];
+    private bool $buttonEnabled = true;
     private string $buttonLabel = '&times;';
     private string $body = '';
     private array $bodyAttributes = [];
@@ -189,6 +190,19 @@ final class Alert extends Widget
     {
         $new = clone $this;
         Html::addCssClass($new->buttonAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the button enabled or disabled.
+     *
+     * @param bool $value Whether the close button is enabled.
+     */
+    public function buttonEnabled(bool $value): self
+    {
+        $new = clone $this;
+        $new->buttonEnabled = $value;
 
         return $new;
     }
@@ -474,6 +488,10 @@ final class Alert extends Widget
      */
     private function renderButton(): string
     {
+        if (!$this->buttonEnabled) {
+            return '';
+        }
+
         return PHP_EOL
             . (new Button())
                 ->attributes($this->buttonAttributes)

@@ -13,6 +13,22 @@ final class AlertTest extends TestCase
 {
     use TestTrait;
 
+    public function testButtonDisabled(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span>This is a test.</span>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body('This is a test.')
+                ->buttonEnabled(false)
+                ->id('w0-alert')
+                ->render(),
+        );
+    }
+
     public function testBodyAttributes(): void
     {
         Assert::equalsWithoutLE(
