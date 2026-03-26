@@ -104,9 +104,9 @@ final class Alert extends Widget
     }
 
     /**
-     * Returns a new instance specifying when allows you to add an extra wrapper for the panel body.
+     * Returns a new instance specifying when allows you to add an extra wrapper for the body.
      *
-     * @param bool $value Whether to add an extra wrapper for the panel body.
+     * @param bool $value Whether to add an extra wrapper for the body.
      */
     public function bodyContainer(bool $value): self
     {
@@ -164,7 +164,7 @@ final class Alert extends Widget
     /**
      * Returns a new instance with the HTML the attributes for rendering the button tag.
      *
-     * The button is displayed in the header of the modal window. Clicking on the button will hide the modal.
+     * The button is displayed in the alert. Clicking on the button will dismiss the alert.
      *
      * If {@see buttonEnabled} is `false`, no button will be rendered.
      *
@@ -534,7 +534,7 @@ final class Alert extends Widget
     }
 
     /**
-     * Render the panel body.
+     * Render the body container.
      */
     private function renderBodyContainer(array $parts): string
     {
