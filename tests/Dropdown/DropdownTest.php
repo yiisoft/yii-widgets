@@ -136,6 +136,45 @@ final class DropdownTest extends TestCase
         $this->assertStringContainsString('aria-labelledby="' . $matches[1] . '"', $result);
     }
 
+    public function testCustomToggleIdIsRespected(): void
+    {
+        $result = Dropdown::widget()
+            ->items([
+                [
+                    'label' => 'Toggle',
+                    'link' => '#',
+                    'toggleAttributes' => ['id' => 'custom-toggle'],
+                    'items' => [
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('id="custom-toggle"', $result);
+        $this->assertStringContainsString('aria-labelledby="custom-toggle"', $result);
+        $this->assertStringNotContainsString('id="dropdown-', $result);
+    }
+
+    public function testContainerFalseDoesNotGenerateId(): void
+    {
+        $result = Dropdown::widget()
+            ->container(false)
+            ->items([
+                [
+                    'label' => 'Toggle',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringNotContainsString('id="dropdown-', $result);
+        $this->assertStringNotContainsString('aria-labelledby', $result);
+    }
+
     public function testItemContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(

@@ -15,6 +15,7 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
+use function array_key_exists;
 use function gettype;
 use function implode;
 use function str_contains;
@@ -455,13 +456,8 @@ final class Dropdown extends Widget
         $normalizedItems = Helper\Normalizer::dropdown($this->items);
 
         $containerAttributes = $this->containerAttributes;
-        $id = match (true) {
-            $this->id !== '' => $this->id,
-            $this->container => Html::generateId('dropdown-'),
-            default => '',
-        };
 
-        $items = $this->renderItems($normalizedItems, $id) . PHP_EOL;
+        $items = $this->renderItems($normalizedItems) . PHP_EOL;
 
         if (trim($items) === '') {
             return '';
@@ -553,7 +549,7 @@ final class Dropdown extends Widget
      *   items: array,
      * } $item
      */
-    private function renderItem(array $item, string $id): string
+    private function renderItem(array $item): string
     {
         if ($item['visible'] === false) {
             return '';
@@ -585,6 +581,17 @@ final class Dropdown extends Widget
                 $item['itemContainerAttributes'],
             );
         } else {
+            $effectiveToggleAttributes = $item['toggleAttributes'] !== []
+                ? $item['toggleAttributes']
+                : $this->toggleAttributes;
+
+            $id = match (true) {
+                array_key_exists('id', $effectiveToggleAttributes) => (string) $effectiveToggleAttributes['id'],
+                $this->id !== '' => $this->id,
+                $this->container => Html::generateId('dropdown-'),
+                default => '',
+            };
+
             $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']), $id);
             $toggle = $this->renderToggle($item['label'], $item['link'], $id, $item['toggleAttributes']);
             $toggleSplitButton = $this->renderToggleSplitButton($item['label']);
@@ -621,7 +628,7 @@ final class Dropdown extends Widget
     {
         $itemsContainerAttributes = $this->itemsContainerAttributes;
 
-        if ($id !== '') {
+        if ($id !== '' && !array_key_exists('aria-labelledby', $itemsContainerAttributes)) {
             $itemsContainerAttributes['aria-labelledby'] = $id;
         }
 
@@ -670,13 +677,13 @@ final class Dropdown extends Widget
      *   }|string
      * > $items
      */
-    private function renderItems(array $items, string $id): string
+    private function renderItems(array $items): string
     {
         $lines = [];
 
         foreach ($items as $item) {
             $line = match (gettype($item)) {
-                'array' => $this->renderItem($item, $id),
+                'array' => $this->renderItem($item),
                 'string' => $this->renderDivider(),
             };
 
@@ -714,7 +721,7 @@ final class Dropdown extends Widget
             $toggleAttributes = $this->toggleAttributes;
         }
 
-        if ($id !== '') {
+        if ($id !== '' && !array_key_exists('id', $toggleAttributes)) {
             $toggleAttributes['id'] = $id;
         }
 
