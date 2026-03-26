@@ -659,6 +659,23 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testPipe(): void
+    {
+        $addNavClass = static fn(Menu $m) => $m->class('nav');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="nav">
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items($this->items)
+                ->pipe($addNavClass)
+                ->render(),
+        );
+    }
+
     public function testAfterContentWithStringable(): void
     {
         $stringable = new class implements Stringable {

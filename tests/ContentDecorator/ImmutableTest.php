@@ -19,5 +19,6 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($contentDecorator, $contentDecorator->parameters([]));
         $this->assertNotSame($contentDecorator, $contentDecorator->view(new View()));
         $this->assertNotSame($contentDecorator, $contentDecorator->viewFile(''));
+        $this->assertNotSame($contentDecorator, $contentDecorator->pipe(static fn(ContentDecorator $c) => $c->viewFile('test')));
     }
 }
