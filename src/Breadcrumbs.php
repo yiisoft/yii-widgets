@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
@@ -55,7 +56,7 @@ final class Breadcrumbs extends Widget
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
     private array $attributes = ['class' => 'breadcrumb'];
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
-    private array $items = [];
+    private array|Closure $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
     private string $tag = 'ul';
 
@@ -132,8 +133,9 @@ final class Breadcrumbs extends Widget
     /**
      * Returns a new instance with the specified list of items.
      *
-     * @param array $value List of items to appear in the breadcrumbs. If this property is empty, the widget will not
-     * render anything. Each array element represents a single item in the breadcrumbs with the following structure:
+     * @param array|Closure $value List of items to appear in the breadcrumbs, or a Closure returning the list for lazy
+     * evaluation. If this property is empty, the widget will not render anything. Each array element represents a single
+     * item in the breadcrumbs with the following structure:
      *
      * ```php
      * [
@@ -165,8 +167,11 @@ final class Breadcrumbs extends Widget
      *     'encode' => false,
      * ]
      * ```
+     *
+     * Alternatively, a Closure returning an array can be provided for lazy evaluation.
+     * The Closure will be called at render time, allowing deferred access to runtime data.
      */
-    public function items(array $value): self
+    public function items(array|Closure $value): self
     {
         $new = clone $this;
         $new->items = $value;
@@ -208,7 +213,10 @@ final class Breadcrumbs extends Widget
      */
     public function render(): string
     {
-        if ($this->items === []) {
+        /** @var array $rawItems */
+        $rawItems = $this->items instanceof Closure ? ($this->items)() : $this->items;
+
+        if ($rawItems === []) {
             return '';
         }
 
@@ -218,7 +226,7 @@ final class Breadcrumbs extends Widget
             $items[] = $this->renderItem($this->homeItem, $this->itemTemplate);
         }
 
-        foreach ($this->items as $item) {
+        foreach ($rawItems as $item) {
             if (!is_array($item)) {
                 $item = ['label' => $item];
             }

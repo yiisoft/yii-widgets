@@ -197,6 +197,27 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testItemsClosure(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items(fn() => $this->items)->render(),
+        );
+    }
+
+    public function testItemsClosureWithEmptyArray(): void
+    {
+        $this->assertSame('', Dropdown::widget()->items(fn() => [])->render());
+    }
+
     public function testItemsEncodeDefault(): void
     {
         Assert::equalsWithoutLE(

@@ -43,6 +43,28 @@ The code above generates the following HTML:
 </div>
 ```
 
+## Lazy evaluation
+
+The `items()` method accepts a `Closure` in addition to an array. The Closure is called once
+when `render()` runs, deferring item resolution until render time.
+
+This can be useful when the widget instance is created and configured before the data for items
+is available. For example, if a preconfigured widget is passed to a layout and the actual items
+are determined later during request handling:
+
+```php
+// Widget is configured early
+$dropdown = Dropdown::widget()
+    ->containerClass('dropdown')
+    ->items(fn() => $menuService->getDropdownItems($currentUser));
+
+// Items are resolved only when render() is called
+echo $dropdown->render();
+```
+
+The Closure must return an array in the same format as the regular `items()` parameter.
+Array input works exactly as before.
+
 ## Setters
 
 All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\Dropdown` class with the specified value.
@@ -67,7 +89,7 @@ Method | Description | Default
 `itemContainerClass(string $value)` | The CSS class for the item container tag | `''`
 `itemContainerTag(string $value)` | The tag name for the item container tag | `li`
 `itemTag(string $value)` | The tag name for the item tag | `a`
-`items(array $value)` | List of menu items in the dropdown | `[]`
+`items(array\|Closure $value)` | List of menu items, or a Closure returning the list for lazy evaluation | `[]`
 `itemsContainerAttributes(array $valuesMap)` | The HTML attributes for the items container tag | `[]`
 `itemsContainerClass(string $value)` | The CSS class for the items container tag | `''`
 `itemsContainerTag(string $value)` | The tag name for the items container tag | `ul`

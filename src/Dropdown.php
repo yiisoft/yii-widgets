@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
@@ -41,7 +42,7 @@ final class Dropdown extends Widget
     private bool $itemContainer = true;
     private array $itemContainerAttributes = [];
     private string $itemContainerTag = 'li';
-    private array $items = [];
+    private array|Closure $items = [];
     private array $itemsContainerAttributes = [];
     private string $itemsContainerTag = 'ul';
     private array $splitButtonAttributes = [];
@@ -302,8 +303,13 @@ final class Dropdown extends Widget
      * - itemsContainerAttributes: array, optional, the HTML attributes for tag `<li>`.
      *
      * To insert dropdown divider use `-`.
+     *
+     * Alternatively, a Closure returning an array can be provided for lazy evaluation.
+     * The Closure will be called at render time, allowing deferred access to runtime data.
+     *
+     * @param array|Closure $value the list of items to be rendered or a Closure returning the list.
      */
-    public function items(array $value): self
+    public function items(array|Closure $value): self
     {
         $new = clone $this;
         $new->items = $value;
@@ -434,6 +440,9 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
+        /** @var array $items */
+        $items = $this->items instanceof Closure ? ($this->items)() : $this->items;
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -452,7 +461,7 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        $normalizedItems = Helper\Normalizer::dropdown($this->items);
+        $normalizedItems = Helper\Normalizer::dropdown($items);
 
         $containerAttributes = $this->containerAttributes;
 

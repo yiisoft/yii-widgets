@@ -415,6 +415,23 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testItemsClosure(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->items(fn() => $this->items)->render(),
+        );
+    }
+
+    public function testItemsClosureWithEmptyArray(): void
+    {
+        $this->assertSame('', Menu::widget()->items(fn() => [])->render());
+    }
+
     public function testItemsContainerAttributes(): void
     {
         Assert::equalsWithoutLE(
