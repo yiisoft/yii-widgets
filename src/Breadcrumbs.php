@@ -256,6 +256,8 @@ final class Breadcrumbs extends Widget
      * is appended to the widget output.
      *
      * @param bool $value Whether to render JSON-LD structured data.
+     *
+     * @link https://schema.org/BreadcrumbList
      */
     public function jsonLd(bool $value): self
     {
