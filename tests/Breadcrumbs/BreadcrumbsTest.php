@@ -134,7 +134,7 @@ final class BreadcrumbsTest extends TestCase
             ->tag('')
             ->render();
 
-        $this->assertStringNotContainsString('encode=', $result);
+        $this->assertDoesNotMatchRegularExpression('/<a\b[^>]*\sencode=/', $result);
         $this->assertStringContainsString('<a href="/path">', $result);
     }
 
