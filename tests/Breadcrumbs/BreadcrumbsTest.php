@@ -177,4 +177,218 @@ final class BreadcrumbsTest extends TestCase
                 ->render(),
         );
     }
+
+    public function testContainer(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <nav>
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            </nav>
+            HTML,
+            Breadcrumbs::widget()
+                ->container(true)
+                ->items(['Current Page'])
+                ->render(),
+        );
+    }
+
+    public function testContainerDisabled(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->container(false)
+                ->items(['Current Page'])
+                ->render(),
+        );
+    }
+
+    public function testContainerAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <nav aria-label="Breadcrumb">
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            </nav>
+            HTML,
+            Breadcrumbs::widget()
+                ->container(true)
+                ->containerAttributes(['aria-label' => 'Breadcrumb'])
+                ->items(['Current Page'])
+                ->render(),
+        );
+    }
+
+    public function testContainerClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <nav class="breadcrumb-nav">
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            </nav>
+            HTML,
+            Breadcrumbs::widget()
+                ->container(true)
+                ->containerClass('breadcrumb-nav')
+                ->items(['Current Page'])
+                ->render(),
+        );
+    }
+
+    public function testContainerClassMergesWithAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <nav class="base breadcrumb-nav" aria-label="Breadcrumb">
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            </nav>
+            HTML,
+            Breadcrumbs::widget()
+                ->container(true)
+                ->containerAttributes(['class' => 'base', 'aria-label' => 'Breadcrumb'])
+                ->containerClass('breadcrumb-nav')
+                ->items(['Current Page'])
+                ->render(),
+        );
+    }
+
+    public function testContainerTag(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            </div>
+            HTML,
+            Breadcrumbs::widget()
+                ->container(true)
+                ->containerTag('div')
+                ->items(['Current Page'])
+                ->render(),
+        );
+    }
+
+    public function testJsonLd(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="https://example.com/category">Category</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"/"},{"@type":"ListItem","position":2,"name":"Category","item":"https://example.com/category"},{"@type":"ListItem","position":3,"name":"Current Page"}]}</script>
+            HTML,
+            Breadcrumbs::widget()
+                ->jsonLd(true)
+                ->items([
+                    ['label' => 'Category', 'url' => 'https://example.com/category'],
+                    'Current Page',
+                ])
+                ->render(),
+        );
+    }
+
+    public function testJsonLdWithoutHomeItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="https://example.com/category">Category</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Category","item":"https://example.com/category"},{"@type":"ListItem","position":2,"name":"Current Page"}]}</script>
+            HTML,
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->jsonLd(true)
+                ->items([
+                    ['label' => 'Category', 'url' => 'https://example.com/category'],
+                    'Current Page',
+                ])
+                ->render(),
+        );
+    }
+
+    public function testRenderJsonLd(): void
+    {
+        $this->assertSame(
+            '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Category","item":"https://example.com/category"},{"@type":"ListItem","position":2,"name":"Current Page"}]}</script>',
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->items([
+                    ['label' => 'Category', 'url' => 'https://example.com/category'],
+                    'Current Page',
+                ])
+                ->renderJsonLd(),
+        );
+    }
+
+    public function testRenderJsonLdSkipsEmptyItems(): void
+    {
+        $this->assertSame(
+            '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Page"}]}</script>',
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->items([[], 'Page'])
+                ->renderJsonLd(),
+        );
+    }
+
+    public function testRenderJsonLdSkipsItemsWithoutLabel(): void
+    {
+        $this->assertSame(
+            '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Page"}]}</script>',
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->items([['url' => '/no-label'], 'Page'])
+                ->renderJsonLd(),
+        );
+    }
+
+    public function testContainerWithJsonLd(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <nav aria-label="Breadcrumb">
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="https://example.com/category">Category</a></li>
+            <li class="active">Current Page</li>
+            </ul>
+            </nav>
+            <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"/"},{"@type":"ListItem","position":2,"name":"Category","item":"https://example.com/category"},{"@type":"ListItem","position":3,"name":"Current Page"}]}</script>
+            HTML,
+            Breadcrumbs::widget()
+                ->container(true)
+                ->containerAttributes(['aria-label' => 'Breadcrumb'])
+                ->jsonLd(true)
+                ->items([
+                    ['label' => 'Category', 'url' => 'https://example.com/category'],
+                    'Current Page',
+                ])
+                ->render(),
+        );
+    }
 }
