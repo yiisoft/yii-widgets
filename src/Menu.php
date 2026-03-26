@@ -364,7 +364,8 @@ final class Menu extends Widget
      * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
      * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.
      * - itemsContainerAttributes: array, optional, the HTML attributes for the item's submenu container.
-     * - link: string, the item's href. Defaults to "#". For default `link` is "#".
+     * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
+     *   alias when `link` is not set.
      * - linkAttributes: array, the HTML attributes of the item's link. For default `linkAttributes` is `[]`.
      * - icon: string, the item's icon. For default is ``.
      * - iconAttributes: array, the HTML attributes of the item's icon. For default `iconAttributes` is `[]`.
