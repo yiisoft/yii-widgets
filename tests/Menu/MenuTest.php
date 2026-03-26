@@ -165,7 +165,7 @@ final class MenuTest extends TestCase
             <li><a href="/active">Active</a></li>
             <li><a href="#">Much longer nav link</a></li>
             <li><a href="#">Link</a></li>
-            <li><a class="disabled" href="#">Disabled</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             HTML,
             Menu::widget()->container(false)->items($this->itemsWithOptions)->render(),
         );
@@ -179,7 +179,7 @@ final class MenuTest extends TestCase
             <li><a href="/active">Active</a></li>
             <li><a href="#">Much longer nav link</a></li>
             <li><a href="#">Link</a></li>
-            <li><a class="disabled-class" href="#">Disabled</a></li>
+            <li><a aria-disabled="true" class="disabled-class" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()->disabledClass('disabled-class')->items($this->itemsWithOptions)->render(),
@@ -203,7 +203,7 @@ final class MenuTest extends TestCase
             </ul>
             </li>
             <li><a href="#">Link</a></li>
-            <li><a class="disabled" href="#">Disabled</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()
@@ -247,7 +247,7 @@ final class MenuTest extends TestCase
             </ul>
             </li>
             <li><a href="#">Link</a></li>
-            <li><a class="disabled" href="#">Disabled</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()
@@ -292,7 +292,7 @@ final class MenuTest extends TestCase
             </ul>
             </li>
             <li><a href="#">Link</a></li>
-            <li><a class="disabled" href="#">Disabled</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()
@@ -345,7 +345,7 @@ final class MenuTest extends TestCase
             <li class="first-item-class"><a href="/active">Active</a></li>
             <li><a href="#">Much longer nav link</a></li>
             <li><a href="#">Link</a></li>
-            <li><a class="disabled" href="#">Disabled</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()->firstItemClass('first-item-class')->items($this->itemsWithOptions)->render(),
@@ -423,7 +423,7 @@ final class MenuTest extends TestCase
             <li class="nav-item"><a href="/active">Active</a></li>
             <li class="nav-item"><a href="#">Much longer nav link</a></li>
             <li class="nav-item"><a href="#">Link</a></li>
-            <li class="nav-item"><a class="disabled" href="#">Disabled</a></li>
+            <li class="nav-item"><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()->itemsContainerAttributes(['class' => 'nav-item'])->items($this->itemsWithOptions)->render(),
@@ -438,7 +438,7 @@ final class MenuTest extends TestCase
             <li class="nav-item"><a href="/active">Active</a></li>
             <li class="nav-item"><a href="#">Much longer nav link</a></li>
             <li class="nav-item"><a href="#">Link</a></li>
-            <li class="nav-item"><a class="disabled" href="#">Disabled</a></li>
+            <li class="nav-item"><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()->itemsContainerClass('nav-item')->items($this->itemsWithOptions)->render(),
@@ -453,7 +453,7 @@ final class MenuTest extends TestCase
             <a href="/active">Active</a>
             <a href="#">Much longer nav link</a>
             <a href="#">Link</a>
-            <a class="disabled" href="#">Disabled</a>
+            <a aria-disabled="true" class="disabled" href="#">Disabled</a>
             </ul>
             HTML,
             Menu::widget()->itemsContainer(false)->items($this->itemsWithOptions)->render(),
@@ -617,7 +617,7 @@ final class MenuTest extends TestCase
             <li><a href="/active">Active</a></li>
             <li><a href="#">Much longer nav link</a></li>
             <li><a href="#">Link</a></li>
-            <li class="last-item-class"><a class="disabled" href="#">Disabled</a></li>
+            <li class="last-item-class"><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()->lastItemClass('last-item-class')->items($this->itemsWithOptions)->render(),
@@ -632,7 +632,7 @@ final class MenuTest extends TestCase
             <li><a class="test-class" href="/active">Active</a></li>
             <li><a class="test-class" href="#">Much longer nav link</a></li>
             <li><a class="test-class" href="#">Link</a></li>
-            <li><a class="test-class disabled" href="#">Disabled</a></li>
+            <li><a class="test-class disabled" aria-disabled="true" href="#">Disabled</a></li>
             </ul>
             HTML,
             Menu::widget()->linkClass('test-class')->items($this->itemsWithOptions)->render(),
@@ -652,7 +652,7 @@ final class MenuTest extends TestCase
             <div class="test-class"><li><a href="/active">Active</a></li></div>
             <div class="test-class"><li><a href="#">Much longer nav link</a></li></div>
             <div class="test-class"><li><a href="#">Link</a></li></div>
-            <div class="test-class"><li><a class="disabled" href="#">Disabled</a></li></div>
+            <div class="test-class"><li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li></div>
             </ul>
             HTML,
             Menu::widget()->items($this->itemsWithOptions)->template('<div class="test-class">{items}</div>')->render(),

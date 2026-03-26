@@ -562,11 +562,12 @@ final class Dropdown extends Widget
         }
 
         if ($item['active']) {
-            $linkAttributes['aria-current'] = 'true';
+            $linkAttributes['aria-current'] = 'page';
             Html::addCssClass($linkAttributes, [$this->activeClass]);
         }
 
         if ($item['disabled']) {
+            $linkAttributes['aria-disabled'] = 'true';
             Html::addCssClass($linkAttributes, $this->disabledClass);
         }
 

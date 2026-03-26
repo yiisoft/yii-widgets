@@ -641,6 +641,7 @@ final class Menu extends Widget
         }
 
         if ($item['disabled']) {
+            $linkAttributes['aria-disabled'] = 'true';
             Html::addCssClass($linkAttributes, $this->disabledClass);
         }
 
