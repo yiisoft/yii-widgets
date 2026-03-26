@@ -408,7 +408,7 @@ final class Menu extends Widget
     public function itemsContainerAttributes(array $valuesMap): self
     {
         $new = clone $this;
-        $new-> itemsContainerAttributes = $valuesMap;
+        $new->itemsContainerAttributes = $valuesMap;
 
         return $new;
     }
