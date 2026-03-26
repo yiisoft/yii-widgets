@@ -476,7 +476,7 @@ final class Alert extends Widget
     {
         $buttonAttributes = $this->buttonAttributes;
 
-        if (!isset($buttonAttributes['aria-label'])) {
+        if (!array_key_exists('aria-label', $buttonAttributes)) {
             $buttonAttributes['aria-label'] = 'Close';
         }
 
