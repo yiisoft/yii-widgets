@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Html\Tag\Span;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
@@ -494,5 +495,57 @@ final class DropdownTest extends TestCase
             ->render();
 
         $this->assertStringContainsString('data-custom="value"', $html);
+    }
+
+    public function testToggleContent(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button type="button">Custom toggle</button>
+            <ul>
+            <li><a href="#">Action</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->toggleContent('Custom toggle')
+                ->items([
+                    [
+                        'label' => 'Dropdown',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Action', 'link' => '#'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testToggleContentWithStringable(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button type="button"><span>🔔</span></button>
+            <ul>
+            <li><a href="#">Action</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->toggleContent((new Span())->content('🔔'))
+                ->items([
+                    [
+                        'label' => 'Dropdown',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Action', 'link' => '#'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
     }
 }

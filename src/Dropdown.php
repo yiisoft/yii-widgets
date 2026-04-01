@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets;
 
 use InvalidArgumentException;
+use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
@@ -47,6 +48,7 @@ final class Dropdown extends Widget
     private array $splitButtonAttributes = [];
     private array $splitButtonSpanAttributes = [];
     private array $toggleAttributes = [];
+    private string|Stringable $toggleContent = '';
     private string $toggleType = 'button';
 
     /**
@@ -416,6 +418,22 @@ final class Dropdown extends Widget
     }
 
     /**
+     * Returns a new instance with the specified toggle content.
+     *
+     * If set, the toggle button will render this content instead of the item label.
+     * This is useful when the toggle should display an icon, avatar, or any other custom HTML.
+     *
+     * @param string|Stringable $value The toggle content.
+     */
+    public function toggleContent(string|Stringable $value): self
+    {
+        $new = clone $this;
+        $new->toggleContent = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified toggle type, if `button` the toggle will be a button, otherwise a
      * `a` tag will be used.
      *
@@ -713,24 +731,26 @@ final class Dropdown extends Widget
             $toggleAttributes['id'] = $this->id;
         }
 
+        $content = (string) $this->toggleContent !== '' ? $this->toggleContent : $label;
+
         return match ($this->toggleType) {
-            'link' => $this->renderToggleLink($label, $link, $toggleAttributes),
-            'split' => $this->renderToggleSplit($label, $toggleAttributes),
-            default => $this->renderToggleButton($label, $toggleAttributes),
+            'link' => $this->renderToggleLink($content, $link, $toggleAttributes),
+            'split' => $this->renderToggleSplit($content, $toggleAttributes),
+            default => $this->renderToggleButton($content, $toggleAttributes),
         };
     }
 
-    private function renderToggleButton(string $label, array $toggleAttributes = []): string
+    private function renderToggleButton(string|Stringable $label, array $toggleAttributes = []): string
     {
         return (new Button())->attributes($toggleAttributes)->content($label)->type('button')->render();
     }
 
-    private function renderToggleLink(string $label, string $link, array $toggleAttributes = []): string
+    private function renderToggleLink(string|Stringable $label, string $link, array $toggleAttributes = []): string
     {
         return (new A())->attributes($toggleAttributes)->content($label)->href($link)->render();
     }
 
-    private function renderToggleSplit(string $label, array $toggleAttributes = []): string
+    private function renderToggleSplit(string|Stringable $label, array $toggleAttributes = []): string
     {
         return (new Button())
             ->attributes($toggleAttributes)
