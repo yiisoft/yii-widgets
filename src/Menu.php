@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
@@ -13,9 +14,12 @@ use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
+use function array_filter;
 use function array_merge;
+use function array_values;
 use function count;
 use function implode;
+use function is_array;
 use function strtr;
 use function trim;
 
@@ -60,6 +64,7 @@ final class Menu extends Widget
     private array $dropdownContainerAttributes = [];
     private string $dropdownContainerTag = 'li';
     private array $dropdownDefinitions = [];
+    private ?Closure $filter = null;
     private string $firstItemClass = '';
     private array $iconContainerAttributes = [];
     private array $items = [];
@@ -309,6 +314,22 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified per-item filter callback.
+     *
+     * The callback receives each raw item array and should return true to keep the item or false to remove it.
+     * It is applied before the normalizer processes items.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
+     */
+    public function filter(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->filter = $callback;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified first item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the first item in the main menu or each submenu.
@@ -523,7 +544,17 @@ final class Menu extends Widget
      */
     public function render(): string
     {
-        if ($this->items === []) {
+        $rawItems = $this->items;
+
+        if ($this->filter !== null) {
+            $filter = $this->filter;
+            $rawItems = array_values(array_filter(
+                $rawItems,
+                fn(mixed $item): bool => !is_array($item) || $filter($item),
+            ));
+        }
+
+        if ($rawItems === []) {
             return '';
         }
 
@@ -542,7 +573,7 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $this->items,
+            $rawItems,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
