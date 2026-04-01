@@ -12,6 +12,7 @@
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
 - Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
+- Enh #146: Add auto-generated ID to `Dropdown` for ARIA toggle-menu linkage (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 

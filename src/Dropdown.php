@@ -15,6 +15,7 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
+use function array_key_exists;
 use function gettype;
 use function implode;
 use function str_contains;
@@ -580,8 +581,19 @@ final class Dropdown extends Widget
                 $item['itemContainerAttributes'],
             );
         } else {
-            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']));
-            $toggle = $this->renderToggle($item['label'], $item['link'], $item['toggleAttributes']);
+            $effectiveToggleAttributes = $item['toggleAttributes'] !== []
+                ? $item['toggleAttributes']
+                : $this->toggleAttributes;
+
+            $id = match (true) {
+                array_key_exists('id', $effectiveToggleAttributes) => (string) $effectiveToggleAttributes['id'],
+                $this->id !== '' => $this->id,
+                $this->container => Html::generateId('dropdown-'),
+                default => '',
+            };
+
+            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']), $id);
+            $toggle = $this->renderToggle($item['label'], $item['link'], $id, $item['toggleAttributes']);
             $toggleSplitButton = $this->renderToggleSplitButton($item['label']);
 
             if ($this->toggleType === 'split' && !str_contains($this->containerClass, 'dropstart')) {
@@ -612,12 +624,12 @@ final class Dropdown extends Widget
             ->render();
     }
 
-    private function renderItemsContainer(string $content): string
+    private function renderItemsContainer(string $content, string $id): string
     {
         $itemsContainerAttributes = $this->itemsContainerAttributes;
 
-        if ($this->id !== '') {
-            $itemsContainerAttributes['aria-labelledby'] = $this->id;
+        if ($id !== '' && !array_key_exists('aria-labelledby', $itemsContainerAttributes)) {
+            $itemsContainerAttributes['aria-labelledby'] = $id;
         }
 
         if ($this->itemsContainerTag === '') {
@@ -665,7 +677,7 @@ final class Dropdown extends Widget
      *   }|string
      * > $items
      */
-    private function renderItems(array $items = []): string
+    private function renderItems(array $items): string
     {
         $lines = [];
 
@@ -703,14 +715,14 @@ final class Dropdown extends Widget
         };
     }
 
-    private function renderToggle(string $label, string $link, array $toggleAttributes = []): string
+    private function renderToggle(string $label, string $link, string $id, array $toggleAttributes = []): string
     {
         if ($toggleAttributes === []) {
             $toggleAttributes = $this->toggleAttributes;
         }
 
-        if ($this->id !== '') {
-            $toggleAttributes['id'] = $this->id;
+        if ($id !== '' && !array_key_exists('id', $toggleAttributes)) {
+            $toggleAttributes['id'] = $id;
         }
 
         return match ($this->toggleType) {
