@@ -12,6 +12,7 @@
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
 - Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
+- New #147: Add `pipe()` method for composable widget theming to all widgets (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 

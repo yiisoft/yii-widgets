@@ -43,6 +43,8 @@ use function ob_start;
  */
 final class Block extends Widget
 {
+    use PipeTrait;
+
     private string $id = '';
     private bool $renderInPlace = false;
 

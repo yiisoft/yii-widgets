@@ -17,5 +17,6 @@ final class ImmutableTest extends TestCase
         $block = Block::widget();
         $this->assertNotSame($block, $block->id(Block::class));
         $this->assertNotSame($block, $block->renderInPlace());
+        $this->assertNotSame($block, $block->pipe(static fn(Block $b) => $b->id('test')));
     }
 }

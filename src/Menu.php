@@ -44,6 +44,8 @@ use const PHP_EOL;
  */
 final class Menu extends Widget
 {
+    use PipeTrait;
+
     private array $afterAttributes = [];
     private string $afterContent = '';
     private string $afterTag = 'span';
