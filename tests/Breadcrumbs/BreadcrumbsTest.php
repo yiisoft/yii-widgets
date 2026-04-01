@@ -126,6 +126,18 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
+    public function testRenderItemEncodeKeyDoesNotLeakToAttributes(): void
+    {
+        $result = Breadcrumbs::widget()
+            ->homeItem(null)
+            ->items([['label' => 'Label', 'url' => '/path', 'encode' => false]])
+            ->tag('')
+            ->render();
+
+        $this->assertDoesNotMatchRegularExpression('/<a\b[^>]*\sencode=/', $result);
+        $this->assertStringContainsString('<a href="/path">', $result);
+    }
+
     public function testRenderItemLabelOnlyEncodeLabelTrue(): void
     {
         $this->assertSame(
