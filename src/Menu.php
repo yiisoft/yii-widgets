@@ -14,6 +14,7 @@ use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
 use function array_merge;
+use function array_unshift;
 use function count;
 use function implode;
 use function strtr;
@@ -96,6 +97,21 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->activeClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified item appended to the list of items.
+     *
+     * Unlike {@see items()}, which replaces the entire list, this method adds a single item to the end.
+     *
+     * @param array $item The item to append.
+     */
+    public function addItem(array $item): self
+    {
+        $new = clone $this;
+        $new->items[] = $item;
 
         return $new;
     }
@@ -483,6 +499,21 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->linkTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified item prepended to the list of items.
+     *
+     * Unlike {@see items()}, which replaces the entire list, this method adds a single item to the beginning.
+     *
+     * @param array $item The item to prepend.
+     */
+    public function prependItem(array $item): self
+    {
+        $new = clone $this;
+        array_unshift($new->items, $item);
 
         return $new;
     }
