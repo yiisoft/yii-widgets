@@ -6,10 +6,15 @@
 - Chg #105: Raise the minimum PHP version to `8.1` (@rustamwin)
 - Chg #105: Change PHP constraint in `composer.json` to `8.1 - 8.5` (@rustamwin)
 - Enh #108: Bump minimal `yiisoft/html` version to `3.13` and add support for `^4.0` (@vjik)
+- New #110: Allow to set `View` or `WebView` instance for `ContentDecorator` via `view()` method (@WarLikeLaux)
 - Bug #113: Fix `array_merge()` argument order in `Menu::renderItem()` so that item-level `linkAttributes` override widget-level ones (@WarLikeLaux)
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
 - New #136: Add active trail support to `Menu` widget (@WarLikeLaux)
+- New #126: Add `Menu::dropdownContainerAttributes()` method (@WarLikeLaux)
+- Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
+- New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
+- Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
