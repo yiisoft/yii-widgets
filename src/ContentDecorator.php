@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Widgets;
 use Throwable;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\View\Exception\ViewNotFoundException;
+use Yiisoft\View\ViewInterface;
 use Yiisoft\View\WebView;
 use Yiisoft\Widget\Widget;
 
@@ -32,9 +33,13 @@ use function ob_start;
 final class ContentDecorator extends Widget
 {
     private array $parameters = [];
+    private ViewInterface $view;
     private string $viewFile = '';
 
-    public function __construct(private readonly Aliases $aliases, private readonly WebView $webView) {}
+    public function __construct(private readonly Aliases $aliases, ViewInterface $webView)
+    {
+        $this->view = $webView;
+    }
 
     /**
      * Returns a new instance with the specified parameters.
@@ -45,6 +50,28 @@ final class ContentDecorator extends Widget
     {
         $new = clone $this;
         $new->parameters = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified view instance.
+     *
+     * Passing the view instance is needed to use current state (e.g., parameters) in the decorator view file.
+     *
+     * @param ViewInterface $view The view instance ({@see View} or {@see WebView}) to use for rendering.
+     * @param string $viewFile The view file that will be used to decorate the content enclosed by this widget.
+     * This can be specified as either the view file path or alias path. If empty, the view file
+     * set via {@see viewFile()} will be used.
+     */
+    public function view(ViewInterface $view, string $viewFile = ''): self
+    {
+        $new = clone $this;
+        $new->view = $view;
+
+        if ($viewFile !== '') {
+            $new->viewFile = $this->aliases->get($viewFile);
+        }
 
         return $new;
     }
@@ -96,7 +123,6 @@ final class ContentDecorator extends Widget
         $parameters = $this->parameters;
         $parameters['content'] = $content;
 
-        /** render under the existing context */
-        return $this->webView->render($this->viewFile, $parameters);
+        return $this->view->render($this->viewFile, $parameters);
     }
 }
