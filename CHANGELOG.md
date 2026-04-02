@@ -10,10 +10,14 @@
 - Bug #113: Fix `array_merge()` argument order in `Menu::renderItem()` so that item-level `linkAttributes` override widget-level ones (@WarLikeLaux)
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
+<<<<<<< fix-dropdown-icon-container-attributes
+- Bug #119: Add missing widget-level `iconContainerAttributes()` to `Dropdown` (@WarLikeLaux)
+=======
 - New #126: Add `Menu::dropdownContainerAttributes()` method (@WarLikeLaux)
 - Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
+>>>>>>> master
 
 ## 2.1.1 September 23, 2025
 
