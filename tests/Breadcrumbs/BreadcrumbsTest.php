@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Yii\Widgets\Breadcrumbs;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
+use InvalidArgumentException;
 
 final class BreadcrumbsTest extends TestCase
 {
@@ -48,6 +49,29 @@ final class BreadcrumbsTest extends TestCase
             Breadcrumbs::widget()
                 ->homeItem(['label' => 'home-link'])
                 ->items(['label' => 'My Home Page', 'url' => 'http://my.example.com/yii2/link/page'])
+                ->render(),
+        );
+    }
+
+    public function testIdEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Breadcrumbs::widget()->id('');
+    }
+
+    public function testId(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb" id="my-breadcrumbs">
+            <li><a href="/">Home</a></li>
+            <li class="active">My Home Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->id('my-breadcrumbs')
+                ->items(['My Home Page'])
                 ->render(),
         );
     }
@@ -100,6 +124,18 @@ final class BreadcrumbsTest extends TestCase
                 ->tag('')
                 ->render(),
         );
+    }
+
+    public function testRenderItemEncodeKeyDoesNotLeakToAttributes(): void
+    {
+        $result = Breadcrumbs::widget()
+            ->homeItem(null)
+            ->items([['label' => 'Label', 'url' => '/path', 'encode' => false]])
+            ->tag('')
+            ->render();
+
+        $this->assertDoesNotMatchRegularExpression('/<a\b[^>]*\sencode=/', $result);
+        $this->assertStringContainsString('<a href="/path">', $result);
     }
 
     public function testRenderItemLabelOnlyEncodeLabelTrue(): void
