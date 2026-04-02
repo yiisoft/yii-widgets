@@ -495,4 +495,28 @@ final class DropdownTest extends TestCase
 
         $this->assertStringContainsString('data-custom="value"', $html);
     }
+
+    public function testUrlAsLinkAlias(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Action', 'url' => '#']])->render(),
+        );
+    }
+
+    public function testLinkTakesPriorityOverUrl(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/link">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Action', 'link' => '/link', 'url' => '/url']])->render(),
+        );
+    }
 }

@@ -9,6 +9,7 @@ use Stringable;
 use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
+use InvalidArgumentException;
 
 final class MenuTest extends TestCase
 {
@@ -384,6 +385,25 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testId(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul id="my-menu">
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->id('my-menu')->items($this->items)->render(),
+        );
+    }
+
+    public function testIdEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Menu::widget()->id('');
+    }
+
     public function testItemsClassAsArray(): void
     {
         $items = [
@@ -736,6 +756,30 @@ final class MenuTest extends TestCase
                 ->container(false)
                 ->items($this->items)
                 ->render(),
+        );
+    }
+
+    public function testUrlAsLinkAlias(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'item', 'url' => '/path']])->render(),
+        );
+    }
+
+    public function testLinkTakesPriorityOverUrl(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/link">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'item', 'link' => '/link', 'url' => '/url']])->render(),
         );
     }
 
