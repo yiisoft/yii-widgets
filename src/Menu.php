@@ -270,6 +270,19 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified dropdown container attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function dropdownContainerAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->dropdownContainerAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified dropdown container class.
      *
      * @param string $value The dropdown container class.
@@ -364,7 +377,8 @@ final class Menu extends Widget
      * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
      * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.
      * - itemsContainerAttributes: array, optional, the HTML attributes for the item's submenu container.
-     * - link: string, the item's href. Defaults to "#". For default `link` is "#".
+     * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
+     *   alias when `link` is not set.
      * - linkAttributes: array, the HTML attributes of the item's link. For default `linkAttributes` is `[]`.
      * - icon: string, the item's icon. For default is ``.
      * - iconAttributes: array, the HTML attributes of the item's icon. For default `iconAttributes` is `[]`.

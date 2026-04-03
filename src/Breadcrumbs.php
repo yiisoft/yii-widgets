@@ -439,7 +439,7 @@ final class Breadcrumbs extends Widget
 
         if (isset($item['url']) && is_string($item['url'])) {
             $link = $item['url'];
-            unset($item['template'], $item['label'], $item['url']);
+            unset($item['template'], $item['label'], $item['url'], $item['encode']);
             $link = Html::a($label, $link, $item);
         } else {
             $link = $label;
