@@ -9,6 +9,7 @@ use Stringable;
 use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
+use InvalidArgumentException;
 
 final class MenuTest extends TestCase
 {
@@ -229,6 +230,39 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testDropdownContainerAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
+            <li data-test="value">
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Dropdown</a>
+            <ul>
+            <li><a href="#">Action</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/active')
+                ->dropdownContainerAttributes(['data-test' => 'value'])
+                ->items(
+                    [
+                        ['label' => 'Active', 'link' => '/active'],
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Action', 'link' => '#'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
     public function testDropdownContainerClass(): void
     {
         Assert::equalsWithoutLE(
@@ -349,6 +383,25 @@ final class MenuTest extends TestCase
             HTML,
             Menu::widget()->firstItemClass('first-item-class')->items($this->itemsWithOptions)->render(),
         );
+    }
+
+    public function testId(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul id="my-menu">
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->id('my-menu')->items($this->items)->render(),
+        );
+    }
+
+    public function testIdEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Menu::widget()->id('');
     }
 
     public function testItemsClassAsArray(): void
@@ -703,6 +756,30 @@ final class MenuTest extends TestCase
                 ->container(false)
                 ->items($this->items)
                 ->render(),
+        );
+    }
+
+    public function testUrlAsLinkAlias(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'item', 'url' => '/path']])->render(),
+        );
+    }
+
+    public function testLinkTakesPriorityOverUrl(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/link">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'item', 'link' => '/link', 'url' => '/url']])->render(),
         );
     }
 
