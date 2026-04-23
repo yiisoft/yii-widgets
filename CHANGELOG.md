@@ -13,7 +13,7 @@
 - New #126: Add `Menu::dropdownContainerAttributes()` method (@WarLikeLaux)
 - Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
-- New #117: Add container wrapper and JSON-LD structured data to `Breadcrumbs` widget (@WarLikeLaux)
+- New #117: Add container wrapper and JSON-LD structured data to `Breadcrumbs` widget (@WarLikeLaux, @vjik)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025

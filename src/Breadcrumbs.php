@@ -61,6 +61,7 @@ final class Breadcrumbs extends Widget
     private bool $container = false;
     private array $containerAttributes = [];
     private string $containerClass = '';
+    /** @psalm-var non-empty-string */
     private string $containerTag = 'nav';
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
@@ -138,12 +139,21 @@ final class Breadcrumbs extends Widget
      * Returns a new instance with the specified container tag.
      *
      * @param string $value The container tag.
+     *
+     * @psalm-param non-empty-string $value
      */
     public function containerTag(string $value): self
     {
+        /**
+         * @psalm-suppress TypeDoesNotContainType This check is necessary to ensure that an empty string is
+         * not accepted, as the type declaration alone cannot enforce non-empty strings.
+         */
+        if ($this->containerTag === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->containerTag = $value;
-
         return $new;
     }
 
@@ -317,10 +327,6 @@ final class Breadcrumbs extends Widget
             : Html::normalTag($this->tag, PHP_EOL . $body, $this->attributes)->encode(false)->render();
 
         if ($this->container) {
-            if ($this->containerTag === '') {
-                throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-            }
-
             $containerAttributes = $this->containerAttributes;
 
             if ($this->containerClass !== '') {
