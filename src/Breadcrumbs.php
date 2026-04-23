@@ -16,7 +16,6 @@ use function json_encode;
 use function strtr;
 
 use const JSON_THROW_ON_ERROR;
-use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 use const PHP_EOL;
 
@@ -385,7 +384,7 @@ final class Breadcrumbs extends Widget
             'itemListElement' => $listElements,
         ];
 
-        $json = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $json = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
 
         return '<script type="application/ld+json">' . $json . '</script>';
     }

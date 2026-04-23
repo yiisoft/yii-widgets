@@ -310,7 +310,7 @@ final class BreadcrumbsTest extends TestCase
             <li><a href="https://example.com/category">Category</a></li>
             <li class="active">Current Page</li>
             </ul>
-            <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"/"},{"@type":"ListItem","position":2,"name":"Category","item":"https://example.com/category"},{"@type":"ListItem","position":3,"name":"Current Page"}]}</script>
+            <script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"\/"},{"@type":"ListItem","position":2,"name":"Category","item":"https:\/\/example.com\/category"},{"@type":"ListItem","position":3,"name":"Current Page"}]}</script>
             HTML,
             Breadcrumbs::widget()
                 ->jsonLd(true)
@@ -330,7 +330,7 @@ final class BreadcrumbsTest extends TestCase
             <li><a href="https://example.com/category">Category</a></li>
             <li class="active">Current Page</li>
             </ul>
-            <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Category","item":"https://example.com/category"},{"@type":"ListItem","position":2,"name":"Current Page"}]}</script>
+            <script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Category","item":"https:\/\/example.com\/category"},{"@type":"ListItem","position":2,"name":"Current Page"}]}</script>
             HTML,
             Breadcrumbs::widget()
                 ->homeItem(null)
@@ -346,7 +346,7 @@ final class BreadcrumbsTest extends TestCase
     public function testRenderJsonLd(): void
     {
         $this->assertSame(
-            '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Category","item":"https://example.com/category"},{"@type":"ListItem","position":2,"name":"Current Page"}]}</script>',
+            '<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Category","item":"https:\/\/example.com\/category"},{"@type":"ListItem","position":2,"name":"Current Page"}]}</script>',
             Breadcrumbs::widget()
                 ->homeItem(null)
                 ->items([
@@ -360,7 +360,7 @@ final class BreadcrumbsTest extends TestCase
     public function testRenderJsonLdSkipsEmptyItems(): void
     {
         $this->assertSame(
-            '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Page"}]}</script>',
+            '<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Page"}]}</script>',
             Breadcrumbs::widget()
                 ->homeItem(null)
                 ->items([[], 'Page'])
@@ -371,7 +371,7 @@ final class BreadcrumbsTest extends TestCase
     public function testRenderJsonLdSkipsItemsWithoutLabel(): void
     {
         $this->assertSame(
-            '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Page"}]}</script>',
+            '<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Page"}]}</script>',
             Breadcrumbs::widget()
                 ->homeItem(null)
                 ->items([['url' => '/no-label'], 'Page'])
@@ -390,7 +390,7 @@ final class BreadcrumbsTest extends TestCase
             <li class="active">Current Page</li>
             </ul>
             </nav>
-            <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"/"},{"@type":"ListItem","position":2,"name":"Category","item":"https://example.com/category"},{"@type":"ListItem","position":3,"name":"Current Page"}]}</script>
+            <script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"\/"},{"@type":"ListItem","position":2,"name":"Category","item":"https:\/\/example.com\/category"},{"@type":"ListItem","position":3,"name":"Current Page"}]}</script>
             HTML,
             Breadcrumbs::widget()
                 ->container(true)
