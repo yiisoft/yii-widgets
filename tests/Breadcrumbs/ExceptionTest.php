@@ -31,9 +31,11 @@ final class ExceptionTest extends TestCase
 
     public function testContainerTag(): void
     {
+        $widget = Breadcrumbs::widget();
+
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Breadcrumbs::widget()->container(true)->containerTag('')->items(['test'])->render();
+        $widget->containerTag('');
     }
 
     public function testRenderItem(): void

@@ -148,7 +148,7 @@ final class Breadcrumbs extends Widget
          * @psalm-suppress TypeDoesNotContainType This check is necessary to ensure that an empty string is
          * not accepted, as the type declaration alone cannot enforce non-empty strings.
          */
-        if ($this->containerTag === '') {
+        if ($value === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
