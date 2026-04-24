@@ -96,9 +96,9 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * Returns a new instance with the specified if the container is enabled, or not. Default is false.
+     * Returns a new instance with whether the container is enabled. Default is false.
      *
-     * @param bool $value The container enabled.
+     * @param bool $value Whether the container is enabled.
      */
     public function container(bool $value): self
     {
