@@ -292,7 +292,8 @@ final class Dropdown extends Widget
      * - enclose: bool, whether the item should be enclosed by a `<li>` tag or not. For default `enclose` is true.
      * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
      * - headerAttributes: array, HTML attributes to be rendered in the item header.
-     * - link: string, the item's href. Defaults to "#". For default `link` is "#".
+     * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
+     *   alias when `link` is not set.
      * - linkAttributes: array, the HTML attributes of the item's link. For default `linkAttributes` is `[]`.
      * - icon: string, the item's icon. For default `icon` is ``.
      * - iconAttributes: array, the HTML attributes of the item's icon. For default `iconAttributes` is `[]`.
