@@ -241,7 +241,15 @@ final class Normalizer
 
     private static function link(array $item, string $defaultValue = ''): string
     {
-        return array_key_exists('link', $item) && is_string($item['link']) ? $item['link'] : $defaultValue;
+        if (array_key_exists('link', $item) && is_string($item['link'])) {
+            return $item['link'];
+        }
+
+        if (array_key_exists('url', $item) && is_string($item['url'])) {
+            return $item['url'];
+        }
+
+        return $defaultValue;
     }
 
     private static function linkAttributes(array $item): array
