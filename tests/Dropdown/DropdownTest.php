@@ -496,6 +496,123 @@ final class DropdownTest extends TestCase
         $this->assertStringContainsString('data-custom="value"', $html);
     }
 
+    public function testSubDropdownInheritsActiveClass(): void
+    {
+        $html = Dropdown::widget()
+            ->activeClass('custom-active')
+            ->items([
+                [
+                    'label' => 'Parent',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Child', 'link' => '#', 'active' => true],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('class="custom-active"', $html);
+    }
+
+    public function testSubDropdownInheritsDisabledClass(): void
+    {
+        $html = Dropdown::widget()
+            ->disabledClass('custom-disabled')
+            ->items([
+                [
+                    'label' => 'Parent',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Child', 'link' => '#', 'disabled' => true],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('class="custom-disabled"', $html);
+    }
+
+    public function testSubDropdownInheritsDividerClass(): void
+    {
+        $html = Dropdown::widget()
+            ->dividerClass('custom-divider')
+            ->items([
+                [
+                    'label' => 'Parent',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Child', 'link' => '#'],
+                        '-',
+                        ['label' => 'Other', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('class="custom-divider"', $html);
+    }
+
+    public function testSubDropdownInheritsDividerTag(): void
+    {
+        $html = Dropdown::widget()
+            ->dividerTag('span')
+            ->items([
+                [
+                    'label' => 'Parent',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Child', 'link' => '#'],
+                        '-',
+                        ['label' => 'Other', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('<span class="dropdown-divider"></span>', $html);
+    }
+
+    public function testSubDropdownInheritsItemContainer(): void
+    {
+        $html = Dropdown::widget()
+            ->itemContainer(false)
+            ->items([
+                [
+                    'label' => 'Parent',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Child', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringNotContainsString('<li><a href="#">Child</a></li>', $html);
+        $this->assertStringContainsString('<a href="#">Child</a>', $html);
+    }
+
+    public function testSubDropdownInheritsItemsContainerTag(): void
+    {
+        $html = Dropdown::widget()
+            ->itemsContainerTag('ol')
+            ->items([
+                [
+                    'label' => 'Level 1',
+                    'link' => '#',
+                    'items' => [
+                        [
+                            'label' => 'Level 2',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Level 3', 'link' => '#'],
+                            ],
+                        ],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertSame(2, substr_count($html, '<ol>'));
     public function testUrlAsLinkAlias(): void
     {
         Assert::equalsWithoutLE(
