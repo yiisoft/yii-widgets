@@ -10,6 +10,7 @@
 - Bug #113: Fix `array_merge()` argument order in `Menu::renderItem()` so that item-level `linkAttributes` override widget-level ones (@WarLikeLaux)
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
+- New #137: Add `submenu()` method to `Menu` widget for rendering nested items as plain lists (@WarLikeLaux)
 - New #126: Add `Menu::dropdownContainerAttributes()` method (@WarLikeLaux)
 - Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
