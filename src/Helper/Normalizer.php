@@ -13,6 +13,7 @@ use function array_key_exists;
 use function is_array;
 use function is_bool;
 use function is_string;
+use function str_starts_with;
 
 final class Normalizer
 {
@@ -63,6 +64,7 @@ final class Normalizer
         string $currentPath,
         bool $activateItems,
         array $iconContainerAttributes = [],
+        bool $activeTrail = false,
     ): array {
         /**
          * @psalm-var array[] $items
@@ -86,6 +88,8 @@ final class Normalizer
                         $currentPath,
                         $activateItems,
                     );
+                    $items[$i]['activeTrail'] = !$items[$i]['active']
+                        && self::isItemInActiveTrail($items[$i]['link'], $currentPath, $activeTrail);
                     $items[$i]['disabled'] = self::disabled($child);
                     $items[$i]['visible'] = self::visible($child);
                     $items[$i]['label'] = self::renderLabel(
@@ -173,6 +177,11 @@ final class Normalizer
     {
         return array_key_exists('iconContainerAttributes', $item) && is_array($item['iconContainerAttributes'])
             ? $item['iconContainerAttributes'] : $iconContainerAttributes;
+    }
+
+    private static function isItemInActiveTrail(string $link, string $currentPath, bool $activeTrail): bool
+    {
+        return $activeTrail && $link !== '' && str_starts_with($currentPath, $link . '/');
     }
 
     /**
