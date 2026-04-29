@@ -445,6 +445,10 @@ final class Alert extends Widget
 
     public function render(): string
     {
+        if ($this->body === '' && $this->header === '') {
+            return '';
+        }
+
         $div = new Div();
         $parts = [];
 
@@ -459,14 +463,12 @@ final class Alert extends Widget
 
         $contentAlert = $this->renderHeaderContainer($parts) . PHP_EOL . $this->renderBodyContainer($parts);
 
-        return $this->body !== ''
-            ? $div
-                ->attribute('role', 'alert')
-                ->addAttributes($this->attributes)
-                ->content(PHP_EOL . trim($contentAlert) . PHP_EOL)
-                ->encode(false)
-                ->render()
-            : '';
+        return $div
+            ->attribute('role', 'alert')
+            ->addAttributes($this->attributes)
+            ->content(PHP_EOL . trim($contentAlert) . PHP_EOL)
+            ->encode(false)
+            ->render();
     }
 
     /**
@@ -508,6 +510,10 @@ final class Alert extends Widget
      */
     private function renderBody(): string
     {
+        if ($this->body === '') {
+            return '';
+        }
+
         return $this->bodyTag !== null
             ? Html::normalTag($this->bodyTag, $this->body, $this->bodyAttributes)->encode(false)->render()
             : $this->body;
