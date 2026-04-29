@@ -134,7 +134,7 @@ final class AlertTest extends TestCase
             <<<HTML
             <div role="alert" id="w0-alert">
             <span>Header title</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
