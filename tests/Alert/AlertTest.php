@@ -19,7 +19,7 @@ final class AlertTest extends TestCase
             <<<HTML
             <div role="alert" id="w0-alert">
             <span class="test-class">This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -37,7 +37,7 @@ final class AlertTest extends TestCase
             <div role="alert" id="w0-alert">
             <div class="test-class">
             <span>This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             </div>
             HTML,
@@ -56,7 +56,7 @@ final class AlertTest extends TestCase
             <<<HTML
             <div role="alert" id="w0-alert">
             This is a test.
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -78,7 +78,7 @@ final class AlertTest extends TestCase
             <<<HTML
             <div id="alert-1" role="alert">
             <span>This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()->body('This is a test.')->render(),
@@ -92,7 +92,7 @@ final class AlertTest extends TestCase
             <div role="alert" id="w0-alert">
             <span class="tests-class">Header title</span>
             <span>This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -114,7 +114,7 @@ final class AlertTest extends TestCase
             <span>Header title</span>
             </div>
             <span>This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -189,7 +189,7 @@ final class AlertTest extends TestCase
             <div role="alert" id="w0-alert">
             <span><b>Bold</b></span>
             <span>Body</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -226,7 +226,7 @@ final class AlertTest extends TestCase
             <div role="alert" id="w0-alert">
             <span>H</span>
             <span>Body</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
