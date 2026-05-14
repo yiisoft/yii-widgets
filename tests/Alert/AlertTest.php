@@ -67,6 +67,11 @@ final class AlertTest extends TestCase
         );
     }
 
+    public function testEmptyBodyAndHeader(): void
+    {
+        $this->assertSame('', Alert::widget()->render());
+    }
+
     public function testGenerateId(): void
     {
         Assert::equalsWithoutLE(
@@ -117,6 +122,23 @@ final class AlertTest extends TestCase
                 ->header('Header title')
                 ->headerContainer()
                 ->headerContainerAttributes(['class' => 'test-class'])
+                ->id('w0-alert')
+                ->layoutHeader('{header}')
+                ->render(),
+        );
+    }
+
+    public function testHeaderWithoutBody(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span>Header title</span>
+            <button aria-label="Close" type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->header('Header title')
                 ->id('w0-alert')
                 ->layoutHeader('{header}')
                 ->render(),
