@@ -138,7 +138,7 @@ final class Breadcrumbs extends Widget
      * Returns a new instance with the specified list of items.
      *
      * @param array $value List of items to appear in the breadcrumbs. If this property is empty, the widget will not
-     * render anything. Each element represents one breadcrumb item and may be configured using the following structure:
+     * render anything. Each array element represents a single item in the breadcrumbs with the following structure:
      *
      * ```php
      * [
