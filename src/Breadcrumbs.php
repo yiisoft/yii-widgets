@@ -199,8 +199,8 @@ final class Breadcrumbs extends Widget
     /**
      * Returns a new instance with the specified tag.
      *
-     * @param string $value The container tag name. If an empty string is provided, only breadcrumb item markup is
-     * returned, without a wrapping container tag.
+     * @param string $value The container tag name. If an empty string is provided, the widget will not render
+     * a wrapping container tag.
      */
     public function tag(string $value): self
     {
@@ -252,8 +252,8 @@ final class Breadcrumbs extends Widget
     /**
      * Renders a single breadcrumb item.
      *
-     * @param array $item The item to be rendered. It must contain the "label" element. Optional keys are "url",
-     * "template", and "encode". Any additional keys are used as HTML attributes for the generated link.
+     * @param array $item The item to be rendered. It must contain the "label" element. The "url", "template",
+     * and "encode" are optional elements. Any additional elements are used as HTML attributes for the generated link.
      * @param string $template The template to be used to render the link. The token "{link}" will be replaced by the
      * link.
      *
