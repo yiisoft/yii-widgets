@@ -16,6 +16,7 @@
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
+- Enh #157: Improve psalm type annotations (@Tigrov)
 
 ## 2.1.1 September 23, 2025
 
