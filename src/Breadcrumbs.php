@@ -7,6 +7,7 @@ namespace Yiisoft\Yii\Widgets;
 use InvalidArgumentException;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
+use Yiisoft\View\ViewInterface;
 
 use function array_key_exists;
 use function implode;
@@ -20,19 +21,18 @@ use const JSON_UNESCAPED_UNICODE;
 use const PHP_EOL;
 
 /**
- * Breadcrumbs displays a list of items indicating the position of the current page in the whole site hierarchy.
+ * Breadcrumbs displays a list of items indicating the position of the current page in the site hierarchy.
  *
- * For example, breadcrumbs like "Home / Sample Post / Edit" means the user is viewing an edit page for the
+ * For example, breadcrumbs like "Home / Sample Post / Edit" mean the user is viewing an edit page for the
  * "Sample Post". He can click on "Sample Post" to view that page, or he can click on "Home" to return to the homepage.
  *
  * To use Breadcrumbs, you need to configure its {@see Breadcrumbs::items()} method,
  * which specifies the items to be displayed. For example:
  *
  * ```php
- * // $this is the view object currently being used
  * echo Breadcrumbs::widget()
- *     -> itemTemplate() => "<li><i>{link}</i></li>\n", // template for all links
- *     -> items() => [
+ *     ->itemTemplate("<li><i>{link}</i></li>\n") // template for all links
+ *     ->items([
  *         [
  *             'label' => 'Post Category',
  *             'url' => 'post-category/view?id=10',
@@ -40,18 +40,20 @@ use const PHP_EOL;
  *         ],
  *         ['label' => 'Sample Post', 'url' => 'post/edit?id=1'],
  *         'Edit',
- *     ];
+ *     ]);
  * ```
  *
- * Because breadcrumbs usually appears in nearly every page of a website, you may consider placing it in a layout view.
- * You can use a view common parameter (e.g. `$this->getCommonParameter('breadcrumbs')`) to configure the items in
- * different views. In the layout view, you assign this view parameter to the {@see Breadcrumbs::items()} method
- * like the following:
+ * Because breadcrumbs usually appear on nearly every page of a website, you may consider placing this widget
+ * in a layout view. You can use a view parameter (e.g. `$this->setParameter('breadcrumbs', [...])`) to configure
+ * the items in different views.
+ *
+ * In the layout view, assign this view parameter to the {@see Breadcrumbs::items()} method like the following:
  *
  * ```php
- * // $this is the view object currently being used
- * echo Breadcrumbs::widget()->items($this->getCommonParameter('breadcrumbs', []));
+ * echo Breadcrumbs::widget()->items($this->getParameter('breadcrumbs', []));
  * ```
+ *
+ * In the examples above, `$this` is an instance of {@see ViewInterface} and refers to the current view.
  */
 final class Breadcrumbs extends Widget
 {
@@ -83,7 +85,7 @@ final class Breadcrumbs extends Widget
     }
 
     /**
-     * Returns a new instance with the HTML attributes. The following special options are recognized.
+     * Returns a new instance with the HTML attributes for the breadcrumbs container tag.
      *
      * @param array $valuesMap Attribute values indexed by attribute names.
      */
@@ -159,14 +161,17 @@ final class Breadcrumbs extends Widget
     /**
      * Returns a new instance with the specified first item in the breadcrumbs (called home link).
      *
-     * If a null is specified, the home item will not be rendered.
+     * If `null` is specified, the home item will not be rendered.
      *
-     * @param array|null $value Please refer to {@see items()} on the format.
+     * @param ?array $value Home item configuration. The format is the same as an item in {@see items()}.
+     *
+     * @psalm-param ?array{label: string, url?: string, template?: string, encode?: bool, ...} $value
      *
      * @throws InvalidArgumentException If an empty array is specified.
      */
     public function homeItem(?array $value): self
     {
+        /** @psalm-suppress TypeDoesNotContainType */
         if ($value === []) {
             throw new InvalidArgumentException(
                 'The home item cannot be an empty array. To disable rendering of the home item, specify null.',
@@ -182,9 +187,9 @@ final class Breadcrumbs extends Widget
     /**
      * Returns a new instance with the specified Widget ID.
      *
-     * @param string|null $value The id of the widget.
+     * @param ?string $value The id of the widget.
      *
-     * @psalm-param non-empty-string|null $value
+     * @psalm-param ?non-empty-string $value
      */
     public function id(?string $value): self
     {
@@ -210,13 +215,14 @@ final class Breadcrumbs extends Widget
      *     'label' => 'label of the item',  // required
      *     'url' => 'url of the item',      // optional
      *     'template' => 'own template of the item', // optional, if not set $this->itemTemplate will be used
+     *     'encode' => true, // optional, whether to HTML-encode the label, defaults to true
      * ]
      * ```
      *
      * If an item is active, you only need to specify its "label", and instead of writing `['label' => $label]`, you may
      * simply use `$label`.
      *
-     * Additional array elements for each item will be treated as the HTML attributes for the hyperlink tag.
+     * Additional array elements will be treated as HTML attributes for the hyperlink tag.
      * For example, the following item specification will generate a hyperlink with CSS class `external`:
      *
      * ```php
@@ -235,6 +241,8 @@ final class Breadcrumbs extends Widget
      *     'encode' => false,
      * ]
      * ```
+     *
+     * @psalm-param list<array{label: string, url?: string, template?: string, encode?: bool, ...}|string> $value
      */
     public function items(array $value): self
     {
@@ -279,7 +287,8 @@ final class Breadcrumbs extends Widget
     /**
      * Returns a new instance with the specified tag.
      *
-     * @param string $value The tag name.
+     * @param string $value The container tag name. If an empty string is provided, the widget will not render
+     * a wrapping container tag.
      */
     public function tag(string $value): self
     {
@@ -291,6 +300,8 @@ final class Breadcrumbs extends Widget
 
     /**
      * Renders the widget.
+     *
+     * @throws InvalidArgumentException If an item has an invalid format.
      *
      * @return string The result of widget execution to be outputted.
      */
@@ -416,7 +427,8 @@ final class Breadcrumbs extends Widget
     /**
      * Renders a single breadcrumb item.
      *
-     * @param array $item The item to be rendered. It must contain the "label" element. The "url" element is optional.
+     * @param array $item The item to be rendered. It must contain the "label" element. The "url", "template",
+     * and "encode" are optional elements. Any additional elements are used as HTML attributes for the generated link.
      * @param string $template The template to be used to render the link. The token "{link}" will be replaced by the
      * link.
      *
