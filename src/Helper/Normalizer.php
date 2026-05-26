@@ -34,6 +34,15 @@ final class Normalizer
                     self::iconClass($child),
                     self::iconContainerAttributes($child),
                 );
+
+                unset(
+                    $items[$i]['encode'],
+                    $items[$i]['icon'],
+                    $items[$i]['iconAttributes'],
+                    $items[$i]['iconClass'],
+                    $items[$i]['iconContainerAttributes'],
+                );
+
                 $items[$i]['active'] = self::active($child, '', '', false);
                 $items[$i]['disabled'] = self::disabled($child);
                 $items[$i]['enclose'] = self::enclose($child);
@@ -94,6 +103,14 @@ final class Normalizer
                         self::iconAttributes($child),
                         self::iconClass($child),
                         self::iconContainerAttributes($child, $iconContainerAttributes),
+                    );
+
+                    unset(
+                        $items[$i]['encode'],
+                        $items[$i]['icon'],
+                        $items[$i]['iconAttributes'],
+                        $items[$i]['iconClass'],
+                        $items[$i]['iconContainerAttributes'],
                     );
                 }
             }
