@@ -11,6 +11,7 @@
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
 - New #137: Add `submenu()` method to `Menu` widget for rendering nested items as plain lists (@WarLikeLaux)
+- Enh #132: Remove raw keys from normalized items in `Normalizer::dropdown()` and `Normalizer::menu()` (@WarLikeLaux)
 - Bug #133: Fix `Alert::render()` returning empty string when body is empty but header is set (@WarLikeLaux)
 - New #126: Add `Menu::dropdownContainerAttributes()` method (@WarLikeLaux)
 - Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
