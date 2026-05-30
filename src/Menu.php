@@ -16,6 +16,7 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
+use function is_string;
 use function strtr;
 use function trim;
 
@@ -697,7 +698,7 @@ final class Menu extends Widget
      *
      * @psalm-param array<
      *   array-key,
-     *   array{
+     *   string|array{
      *     label: string,
      *     link: string,
      *     linkAttributes: array,
@@ -715,6 +716,12 @@ final class Menu extends Widget
         $n = count($items);
 
         foreach ($items as $i => $item) {
+            if (is_string($item)) {
+                $lines[] = $item;
+
+                continue;
+            }
+
             if (isset($item['items']) && !$this->submenu) {
                 $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item])]);
             } elseif (isset($item['items'])) {

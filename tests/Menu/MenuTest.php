@@ -852,6 +852,36 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testSubmenuWithStringItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/products">Products</a>
+            <ul>
+            <li><a href="/products/electronics">Electronics</a></li>
+            -
+            <li><a href="/products/books">Books</a></li>
+            </ul></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->submenu(true)
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/products',
+                        'items' => [
+                            ['label' => 'Electronics', 'link' => '/products/electronics'],
+                            '-',
+                            ['label' => 'Books', 'link' => '/products/books'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testTemplate(): void
     {
         Assert::equalsWithoutLE(
