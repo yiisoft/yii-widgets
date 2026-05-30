@@ -590,8 +590,7 @@ final class Dropdown extends Widget
             $id = match (true) {
                 array_key_exists('id', $effectiveToggleAttributes) => (string) $effectiveToggleAttributes['id'],
                 $this->id !== '' => $this->id,
-                $this->container => Html::generateId('dropdown-'),
-                default => '',
+                default => Html::generateId('dropdown-'),
             };
 
             $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']), $id);

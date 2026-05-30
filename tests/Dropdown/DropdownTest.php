@@ -156,7 +156,7 @@ final class DropdownTest extends TestCase
         $this->assertStringNotContainsString('id="dropdown-', $result);
     }
 
-    public function testContainerFalseDoesNotGenerateId(): void
+    public function testContainerFalseStillGeneratesIdForToggleMenuPair(): void
     {
         $result = Dropdown::widget()
             ->container(false)
@@ -171,8 +171,9 @@ final class DropdownTest extends TestCase
             ])
             ->render();
 
-        $this->assertStringNotContainsString('id="dropdown-', $result);
-        $this->assertStringNotContainsString('aria-labelledby', $result);
+        $this->assertMatchesRegularExpression('/id="(dropdown-\d+)"/', $result);
+        preg_match('/id="(dropdown-\d+)"/', $result, $matches);
+        $this->assertStringContainsString('aria-labelledby="' . $matches[1] . '"', $result);
     }
 
     public function testItemContainerWithFalse(): void
