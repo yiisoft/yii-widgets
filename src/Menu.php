@@ -741,14 +741,19 @@ final class Menu extends Widget
                     );
 
                     $lines[] = match ($this->itemsContainer) {
-                        false => $parentLink . PHP_EOL . $nestedList,
-                        default => Html::normalTag(
-                            $this->itemsTag,
-                            $parentLink . PHP_EOL . $nestedList,
-                            $itemsContainerAttributes,
-                        )
-                            ->encode(false)
-                            ->render(),
+                        false => strtr($this->template, ['{items}' => $parentLink . PHP_EOL . $nestedList]),
+                        default => strtr(
+                            $this->template,
+                            [
+                                '{items}' => Html::normalTag(
+                                    $this->itemsTag,
+                                    $parentLink . PHP_EOL . $nestedList,
+                                    $itemsContainerAttributes,
+                                )
+                                    ->encode(false)
+                                    ->render(),
+                            ],
+                        ),
                     };
                 }
             } elseif ($item['visible']) {

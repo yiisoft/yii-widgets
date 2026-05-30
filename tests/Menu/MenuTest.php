@@ -795,6 +795,63 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testSubmenuWithTemplate(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <div class="test-class"><li><a href="/products">Products</a>
+            <ul>
+            <div class="test-class"><li><a href="/products/electronics">Electronics</a></li></div>
+            <div class="test-class"><li><a href="/products/books">Books</a></li></div>
+            </ul></li></div>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->submenu(true)
+                ->template('<div class="test-class">{items}</div>')
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/products',
+                        'items' => [
+                            ['label' => 'Electronics', 'link' => '/products/electronics'],
+                            ['label' => 'Books', 'link' => '/products/books'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testSubmenuWithTemplateAndItemsContainerFalse(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <div class="test-class"><a href="/products">Products</a>
+            <ul>
+            <a href="/products/electronics">Electronics</a>
+            </ul></div>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->submenu(true)
+                ->itemsContainer(false)
+                ->template('<div class="test-class">{items}</div>')
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/products',
+                        'items' => [
+                            ['label' => 'Electronics', 'link' => '/products/electronics'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testTemplate(): void
     {
         Assert::equalsWithoutLE(

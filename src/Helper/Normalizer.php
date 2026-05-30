@@ -107,6 +107,14 @@ final class Normalizer
                             self::iconClass($child),
                             self::iconContainerAttributes($child, $iconContainerAttributes),
                         );
+
+                        unset(
+                            $items[$i]['encode'],
+                            $items[$i]['icon'],
+                            $items[$i]['iconAttributes'],
+                            $items[$i]['iconClass'],
+                            $items[$i]['iconContainerAttributes'],
+                        );
                     }
                 } else {
                     $items[$i]['link'] = self::link($child);

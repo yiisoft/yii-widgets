@@ -58,6 +58,36 @@ final class NormalizerTest extends TestCase
         $this->assertArrayNotHasKey('iconContainerAttributes', $items[0]);
     }
 
+    public function testMenuRemovesRawKeysFromSubmenuParent(): void
+    {
+        $items = Normalizer::menu(
+            [
+                [
+                    'label' => 'Parent',
+                    'link' => '#',
+                    'encode' => false,
+                    'icon' => 'home',
+                    'iconAttributes' => ['class' => 'bi'],
+                    'iconClass' => 'bi-home',
+                    'iconContainerAttributes' => ['class' => 'icon'],
+                    'items' => [
+                        ['label' => 'Child', 'link' => '#child'],
+                    ],
+                ],
+            ],
+            '',
+            false,
+            [],
+            true,
+        );
+
+        $this->assertArrayNotHasKey('encode', $items[0]);
+        $this->assertArrayNotHasKey('icon', $items[0]);
+        $this->assertArrayNotHasKey('iconAttributes', $items[0]);
+        $this->assertArrayNotHasKey('iconClass', $items[0]);
+        $this->assertArrayNotHasKey('iconContainerAttributes', $items[0]);
+    }
+
     public function testRenderLabel(): void
     {
         $this->assertSame('test', Normalizer::renderLabel('test', '', [], '', []));
