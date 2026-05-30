@@ -176,6 +176,25 @@ final class DropdownTest extends TestCase
         $this->assertStringContainsString('aria-labelledby="' . $matches[1] . '"', $result);
     }
 
+    public function testPreserveExplicitAriaLabelledByOnSubmenuContainer(): void
+    {
+        $result = Dropdown::widget()
+            ->itemsContainerAttributes(['aria-labelledby' => 'explicit-submenu'])
+            ->items([
+                [
+                    'label' => 'Toggle',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('aria-labelledby="explicit-submenu"', $result);
+        $this->assertStringNotContainsString('aria-labelledby="dropdown-', $result);
+    }
+
     public function testItemContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(
