@@ -19,6 +19,8 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
+- New #137: Add `submenu()` method to `Menu` widget for rendering nested items as plain lists (@WarLikeLaux)
+- Bug #137: Render raw string items in `Menu` instead of throwing `TypeError` (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
