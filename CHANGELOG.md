@@ -16,6 +16,7 @@
 - New #126: Add `Menu::dropdownContainerAttributes()` method (@WarLikeLaux)
 - Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
+- New #115: Add container wrapper and JSON-LD structured data to `Breadcrumbs` widget (@WarLikeLaux, @vjik)
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
