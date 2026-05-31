@@ -239,7 +239,9 @@ final class Menu extends Widget
      * Returns a new instance with the specified number of visible items before collapsing the rest into a dropdown.
      *
      * @param int $value The number of visible items to show. Items beyond this threshold are rendered inside a "More"
-     * dropdown. Default is `0` (no collapsing).
+     * dropdown. Default is `null` (no collapsing).
+     *
+     * @psalm-param positive-int $value
      */
     public function collapseAfter(int $value): self
     {
@@ -634,7 +636,7 @@ final class Menu extends Widget
                 continue;
             }
 
-            $isVisible = !is_array($item) || !isset($item['visible']) || $item['visible'] !== false;
+            $isVisible = !is_array($item) || Helper\Normalizer::visible($item);
 
             if ($isVisible) {
                 $visibleCount++;
@@ -689,7 +691,7 @@ final class Menu extends Widget
      */
     private function renderDropdown(array $items, bool $isCollapse): string
     {
-        $dropdownDefinitions = $isCollapse && $this->collapseDropdownDefinitions !== []
+        $dropdownDefinitions = $isCollapse && $this->collapseDropdownDefinitions !== null
             ? $this->collapseDropdownDefinitions
             : $this->dropdownDefinitions;
 
