@@ -117,6 +117,22 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testContainerDefaultValue(): void
+    {
+        $this->assertSame(
+            Dropdown::widget()->container(true)->items($this->items)->render(),
+            Dropdown::widget()->container()->items($this->items)->render(),
+        );
+    }
+
+    public function testItemContainerDefaultValue(): void
+    {
+        $this->assertSame(
+            Dropdown::widget()->itemContainer(true)->items($this->items)->render(),
+            Dropdown::widget()->itemContainer()->items($this->items)->render(),
+        );
+    }
+
     public function testItemContainerWithFalse(): void
     {
         Assert::equalsWithoutLE(

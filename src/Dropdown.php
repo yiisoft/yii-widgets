@@ -67,7 +67,7 @@ final class Dropdown extends Widget
      *
      * @param bool $value The container enabled.
      */
-    public function container(bool $value): self
+    public function container(bool $value = true): self
     {
         $new = clone $this;
         $new->container = $value;
@@ -222,7 +222,7 @@ final class Dropdown extends Widget
      *
      * @param bool $value The item container.
      */
-    public function itemContainer(bool $value): self
+    public function itemContainer(bool $value = true): self
     {
         $new = clone $this;
         $new->itemContainer = $value;
