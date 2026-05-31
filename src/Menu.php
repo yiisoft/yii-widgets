@@ -853,7 +853,7 @@ final class Menu extends Widget
      *   }
      * > $items
      */
-    private function renderMenu(array $items, bool $hasCollapse = false): string
+    private function renderMenu(array $items, bool $hasCollapse): string
     {
         $afterContent = '';
         $attributes = $this->attributes;
