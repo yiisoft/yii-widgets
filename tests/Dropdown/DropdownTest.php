@@ -26,11 +26,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a aria-current="true" class="test-active-class" href="#">Action</a></li>
+            <li><a aria-current="page" class="test-active-class" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="disabled" href="#">Separated link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()->activeClass('test-active-class')->items($this->items)->render(),
@@ -42,11 +42,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="dropdown">
-            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="disabled" href="#">Separated link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()->containerAttributes(['class' => 'dropdown'])->items($this->items)->render(),
@@ -58,11 +58,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="dropdown">
-            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="disabled" href="#">Separated link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()->containerClass('dropdown')->items($this->items)->render(),
@@ -74,11 +74,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <article>
-            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="disabled" href="#">Separated link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </article>
             HTML,
             Dropdown::widget()->containerTag('article')->items($this->items)->render(),
@@ -90,11 +90,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="test-disabled-class" href="#">Separated link</a></li>
+            <li><a aria-disabled="true" class="test-disabled-class" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()->disabledClass('test-disabled-class')->items($this->items)->render(),
@@ -106,11 +106,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><span class="dropdown-divider"></span></li>
-            <li><a class="disabled" href="#">Separated link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()->dividerTag('span')->items($this->items)->render(),
@@ -160,11 +160,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <a aria-current="true" class="active" href="#">Action</a>
+            <a aria-current="page" class="active" href="#">Action</a>
             <a href="#">Another action</a>
             <a href="#">Something else here</a>
             <li><hr class="dropdown-divider"></li>
-            <a class="disabled" href="#">Separated link</a>
+            <a aria-disabled="true" class="disabled" href="#">Separated link</a>
             </div>
             HTML,
             Dropdown::widget()->itemContainer(false)->items($this->items)->render(),
@@ -176,11 +176,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li class="test-class"><a aria-current="true" class="active" href="#">Action</a></li>
+            <li class="test-class"><a aria-current="page" class="active" href="#">Action</a></li>
             <li class="test-class"><a href="#">Another action</a></li>
             <li class="test-class"><a href="#">Something else here</a></li>
             <li class="test-class"><hr class="dropdown-divider"></li>
-            <li class="test-class"><a class="disabled" href="#">Separated link</a></li>
+            <li class="test-class"><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()->itemContainerAttributes(['class' => 'test-class'])->items($this->items)->render(),
@@ -189,11 +189,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li class="test-class"><a aria-current="true" class="active" href="#">Action</a></li>
+            <li class="test-class"><a aria-current="page" class="active" href="#">Action</a></li>
             <li class="test-class-2"><a href="#">Another action</a></li>
             <li class="test-class"><a href="#">Something else here</a></li>
             <li class="test-class"><hr class="dropdown-divider"></li>
-            <li class="test-class-5"><a class="disabled" href="#">Separated link</a></li>
+            <li class="test-class-5"><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()
@@ -224,11 +224,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li class="test-class"><a aria-current="true" class="active" href="#">Action</a></li>
+            <li class="test-class"><a aria-current="page" class="active" href="#">Action</a></li>
             <li class="test-class"><a href="#">Another action</a></li>
             <li class="test-class"><a href="#">Something else here</a></li>
             <li class="test-class"><hr class="dropdown-divider"></li>
-            <li class="test-class"><a class="disabled" href="#">Separated link</a></li>
+            <li class="test-class"><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()->itemContainerClass('test-class')->items($this->items)->render(),
@@ -532,5 +532,29 @@ final class DropdownTest extends TestCase
             ->render();
 
         $this->assertStringContainsString('data-custom="value"', $html);
+    }
+
+    public function testUrlAsLinkAlias(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Action', 'url' => '#']])->render(),
+        );
+    }
+
+    public function testLinkTakesPriorityOverUrl(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/link">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Action', 'link' => '/link', 'url' => '/url']])->render(),
+        );
     }
 }
