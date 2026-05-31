@@ -613,6 +613,8 @@ final class DropdownTest extends TestCase
             ->render();
 
         $this->assertSame(2, substr_count($html, '<ol>'));
+    }
+
     public function testUrlAsLinkAlias(): void
     {
         Assert::equalsWithoutLE(
