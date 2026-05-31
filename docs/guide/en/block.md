@@ -32,7 +32,7 @@ Block::widget()
 Block::end();
 ```
 
-In the subspecies, show the block:
+In the subviews, show the block:
 
 ```php
 /**
