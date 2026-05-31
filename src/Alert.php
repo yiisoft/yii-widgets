@@ -323,7 +323,7 @@ final class Alert extends Widget
      */
     public function headerTag(string $value): self
     {
-        if (empty($value)) {
+        if ($value === '') {
             throw new InvalidArgumentException('Header tag must be a string and cannot be empty.');
         }
 

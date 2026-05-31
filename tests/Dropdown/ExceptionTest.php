@@ -17,74 +17,42 @@ final class ExceptionTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Dropdown::widget()->containerTag('')->items([['label' => 'test']])->render();
+        Dropdown::widget()->containerTag('');
     }
 
     public function testHeaderTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Dropdown::widget()
-            ->headerTag('')
-            ->items(
-                [
-                    [
-                        'label' => 'Dropdown',
-                        'link' => '#',
-                        'items' => [
-                            ['label' => 'Dropdown header', 'link' => ''],
-                            ['label' => 'Action', 'link' => '#'],
-                            ['label' => 'Another action', 'link' => '#'],
-                        ],
-                    ],
-                ],
-            )
-            ->render();
+        Dropdown::widget()->headerTag('');
     }
 
     public function testItemDividerTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Dropdown::widget()->dividerTag('')->items([['label' => 'test'], '-'])->render();
+        Dropdown::widget()->dividerTag('');
     }
 
     public function testItemContainerTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Dropdown::widget()->itemContainerTag('')->items([['label' => 'test']])->render();
+        Dropdown::widget()->itemContainerTag('');
     }
 
     public function testItemTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Dropdown::widget()->itemTag('')->items([['label' => 'test']])->render();
+        Dropdown::widget()->itemTag('');
     }
 
     public function testItemsContainerTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Dropdown::widget()
-            ->itemsContainerTag('')
-            ->items(
-                [
-                    [
-                        'label' => 'Dropdown',
-                        'link' => '#',
-                        'items' => [
-                            ['label' => 'Action', 'link' => '#'],
-                            ['label' => 'Another action', 'link' => '#'],
-                            ['label' => 'Something else here', 'link' => '#'],
-                            '-',
-                            ['label' => 'Separated link', 'link' => '#'],
-                        ],
-                    ],
-                ],
-            )
-            ->render();
+        Dropdown::widget()->itemsContainerTag('');
     }
 
     public function testLabelExceptionEmpty(): void

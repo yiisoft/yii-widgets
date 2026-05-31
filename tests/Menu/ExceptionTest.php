@@ -17,43 +17,28 @@ final class ExceptionTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Menu::widget()->afterTag('')->afterContent('tests')->items([['label' => 'Item 1']])->render();
+        Menu::widget()->afterTag('');
     }
 
     public function testBeforeTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Menu::widget()->beforeTag('')->beforeContent('tests')->items([['label' => 'Item 1']])->render();
+        Menu::widget()->beforeTag('');
     }
 
     public function testDropdownContainerTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Menu::widget()
-            ->dropdownContainerTag('')
-            ->items([
-                [
-                    'label' => 'Dropdown',
-                    'link' => '#',
-                    'items' => [
-                        ['label' => 'Action', 'link' => '#'],
-                        ['label' => 'Another action', 'link' => '#'],
-                        ['label' => 'Something else here', 'link' => '#'],
-                        '-',
-                        ['label' => 'Separated link', 'link' => '#'],
-                    ],
-                ],
-            ])
-            ->render();
+        Menu::widget()->dropdownContainerTag('');
     }
 
     public function testItemsTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Menu::widget()->items([['label' => 'Item 1']])->itemsTag('')->render();
+        Menu::widget()->itemsTag('');
     }
 
     public function testLabelExceptionEmpty(): void
@@ -81,13 +66,13 @@ final class ExceptionTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Menu::widget()->items([['label' => 'Item 1']])->linkTag('')->render();
+        Menu::widget()->linkTag('');
     }
 
     public function testTagName(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
-        Menu::widget()->items([['label' => 'Item 1']])->tagName('')->render();
+        Menu::widget()->tagName('');
     }
 }
