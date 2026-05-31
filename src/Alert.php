@@ -93,10 +93,10 @@ final class Alert extends Widget
      *
      * @param string $value The CSS class name.
      */
-    public function bodyClass(string $value): self
+    public function bodyClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->bodyAttributes, $value);
+        Html::addCssClass($new->bodyAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -134,10 +134,10 @@ final class Alert extends Widget
      *
      * @param string $value The CSS class name.
      */
-    public function bodyContainerClass(string $value): self
+    public function bodyContainerClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->bodyContainerAttributes, $value);
+        Html::addCssClass($new->bodyContainerAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -185,10 +185,10 @@ final class Alert extends Widget
      *
      * @param string $value The CSS class name.
      */
-    public function buttonClass(string $value): self
+    public function buttonClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->buttonAttributes, $value);
+        Html::addCssClass($new->buttonAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -224,10 +224,10 @@ final class Alert extends Widget
      *
      * @param string $value The CSS class name.
      */
-    public function class(string $value): self
+    public function class(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->attributes, $value);
+        Html::addCssClass($new->attributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -265,10 +265,10 @@ final class Alert extends Widget
      *
      * @param string $value The CSS class name.
      */
-    public function headerClass(string $value): self
+    public function headerClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->headerAttributes, $value);
+        Html::addCssClass($new->headerAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -306,10 +306,10 @@ final class Alert extends Widget
      *
      * @param string $value The CSS class name.
      */
-    public function headerContainerClass(string $value): self
+    public function headerContainerClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->headerContainerAttributes, $value);
+        Html::addCssClass($new->headerContainerAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -353,10 +353,10 @@ final class Alert extends Widget
      *
      * @param string $value The icon CSS class.
      */
-    public function iconClass(string $value): self
+    public function iconClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->iconAttributes, $value);
+        Html::addCssClass($new->iconAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -383,10 +383,10 @@ final class Alert extends Widget
      *
      * @param string $value The CSS class name.
      */
-    public function iconContainerClass(string $value): self
+    public function iconContainerClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->iconContainerAttributes, $value);
+        Html::addCssClass($new->iconContainerAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }

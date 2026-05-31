@@ -92,10 +92,10 @@ final class Menu extends Widget
      *
      * @param string $value The CSS class to be appended to the active menu item.
      */
-    public function activeClass(string $value): self
+    public function activeClass(string|array $value): self
     {
         $new = clone $this;
-        $new->activeClass = $value;
+        $new->activeClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -118,10 +118,10 @@ final class Menu extends Widget
      *
      * @param string $value The class name.
      */
-    public function afterClass(string $value): self
+    public function afterClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->afterAttributes, $value);
+        Html::addCssClass($new->afterAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -183,10 +183,10 @@ final class Menu extends Widget
      *
      * @param string $value The before container class.
      */
-    public function beforeClass(string $value): self
+    public function beforeClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->beforeAttributes, $value);
+        Html::addCssClass($new->beforeAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -222,10 +222,10 @@ final class Menu extends Widget
      *
      * @param string $value The class `menu` widget.
      */
-    public function class(string $value): self
+    public function class(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->attributes, $value);
+        Html::addCssClass($new->attributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -261,10 +261,10 @@ final class Menu extends Widget
      *
      * @param string $value The CSS class to be appended to the disabled menu item.
      */
-    public function disabledClass(string $value): self
+    public function disabledClass(string|array $value): self
     {
         $new = clone $this;
-        $new->disabledClass = $value;
+        $new->disabledClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -287,10 +287,10 @@ final class Menu extends Widget
      *
      * @param string $value The dropdown container class.
      */
-    public function dropdownContainerClass(string $value): self
+    public function dropdownContainerClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->dropdownContainerAttributes, $value);
+        Html::addCssClass($new->dropdownContainerAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -326,10 +326,10 @@ final class Menu extends Widget
      *
      * @param string $value The CSS class that will be assigned to the first item in the main menu or each submenu.
      */
-    public function firstItemClass(string $value): self
+    public function firstItemClass(string|array $value): self
     {
         $new = clone $this;
-        $new->firstItemClass = $value;
+        $new->firstItemClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -428,10 +428,10 @@ final class Menu extends Widget
      *
      * @param string $value The CSS class that will be assigned to the items' container.
      */
-    public function itemsContainerClass(string $value): self
+    public function itemsContainerClass(string|array $value): self
     {
         $new = clone $this;
-        Html::addCssClass($new->itemsContainerAttributes, $value);
+        Html::addCssClass($new->itemsContainerAttributes, Helper\Normalizer::cssClasses($value));
 
         return $new;
     }
@@ -454,10 +454,10 @@ final class Menu extends Widget
      *
      * @param string $value The CSS class that will be assigned to the last item in the main menu or each submenu.
      */
-    public function lastItemClass(string $value): self
+    public function lastItemClass(string|array $value): self
     {
         $new = clone $this;
-        $new->lastItemClass = $value;
+        $new->lastItemClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }
@@ -480,10 +480,10 @@ final class Menu extends Widget
      *
      * @param string $value The CSS class that will be assigned to the link.
      */
-    public function linkClass(string $value): self
+    public function linkClass(string|array $value): self
     {
         $new = clone $this;
-        $new->linkClass = $value;
+        $new->linkClass = Helper\Normalizer::cssClasses($value);
 
         return $new;
     }

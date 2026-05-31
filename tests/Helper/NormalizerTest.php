@@ -12,6 +12,15 @@ use Yiisoft\Yii\Widgets\Helper\Normalizer;
  */
 final class NormalizerTest extends TestCase
 {
+    public function testCssClasses(): void
+    {
+        $this->assertSame('nav active', Normalizer::cssClasses('nav active'));
+        $this->assertSame('nav active', Normalizer::cssClasses(['nav', 'active']));
+        $this->assertSame('nav', Normalizer::cssClasses(['nav' => true, 'active' => false]));
+        $this->assertSame('nav active', Normalizer::cssClasses(['nav', 'active' => true, 'dark' => false]));
+        $this->assertSame('', Normalizer::cssClasses([]));
+    }
+
     public function testDropdownRemovesRawKeys(): void
     {
         $items = Normalizer::dropdown([

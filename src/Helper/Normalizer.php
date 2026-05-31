@@ -10,12 +10,42 @@ use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Span;
 
 use function array_key_exists;
+use function implode;
 use function is_array;
 use function is_bool;
+use function is_int;
 use function is_string;
 
 final class Normalizer
 {
+    /**
+     * Resolves conditional CSS classes to a string.
+     *
+     * Accepts a string (returned as-is), a list of class names, or an associative array where keys are class names
+     * and boolean values determine whether the class is included.
+     *
+     * @param string|array<array-key, string|bool> $value
+     */
+    public static function cssClasses(string|array $value): string
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+
+        $classes = [];
+
+        foreach ($value as $class => $condition) {
+            if (is_int($class)) {
+                /** @var string $condition */
+                $classes[] = $condition;
+            } elseif ($condition) {
+                $classes[] = $class;
+            }
+        }
+
+        return implode(' ', $classes);
+    }
+
     /**
      * Normalize the given array of items for the dropdown.
      */
