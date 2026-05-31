@@ -615,6 +615,33 @@ final class DropdownTest extends TestCase
         $this->assertSame(2, substr_count($html, '<ol>'));
     }
 
+    public function testSubDropdownInheritsSplitButtonAttributes(): void
+    {
+        $html = Dropdown::widget()
+            ->toggleType('split')
+            ->splitButtonAttributes(['class' => 'split-btn'])
+            ->splitButtonSpanAttributes(['class' => 'split-span'])
+            ->items([
+                [
+                    'label' => 'Level 1',
+                    'link' => '#',
+                    'items' => [
+                        [
+                            'label' => 'Level 2',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Level 3', 'link' => '#'],
+                            ],
+                        ],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertSame(2, substr_count($html, 'split-btn'));
+        $this->assertSame(2, substr_count($html, 'split-span'));
+    }
+
     public function testUrlAsLinkAlias(): void
     {
         Assert::equalsWithoutLE(
