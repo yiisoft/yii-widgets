@@ -55,7 +55,7 @@ final class Menu extends Widget
     private string $beforeContent = '';
     private string $beforeTag = 'span';
     private int $collapseAfter = 0;
-    private array $collapseDropdownDefinitions = [];
+    private ?array $collapseDropdownDefinitions = null;
     private string $collapseLabel = 'More';
     private bool $container = true;
     private string $currentPath = '';
