@@ -7,7 +7,7 @@ A menu item can contain sub-items which specify the sub-menu under that menu ite
 
 Menu checks the current path to toggle certain menu items with active state.
 
-Note that widget only renders the HTML tags about the menu. It does do any styling.
+Note that widget only renders the HTML tags about the menu. It does not do any styling.
 You are responsible to provide CSS styles to make it look like a real menu.
 
 ## Usage
@@ -132,3 +132,5 @@ Method | Description | Default
     ],
 ]
 ```
+
+> `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority.

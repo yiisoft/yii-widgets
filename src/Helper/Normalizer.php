@@ -35,6 +35,15 @@ final class Normalizer
                     self::iconClass($child),
                     self::iconContainerAttributes($child),
                 );
+
+                unset(
+                    $items[$i]['encode'],
+                    $items[$i]['icon'],
+                    $items[$i]['iconAttributes'],
+                    $items[$i]['iconClass'],
+                    $items[$i]['iconContainerAttributes'],
+                );
+
                 $items[$i]['active'] = self::active($child, '', '', false);
                 $items[$i]['disabled'] = self::disabled($child);
                 $items[$i]['enclose'] = self::enclose($child);
@@ -95,6 +104,14 @@ final class Normalizer
                         self::iconAttributes($child),
                         self::iconClass($child),
                         self::iconContainerAttributes($child, $iconContainerAttributes),
+                    );
+
+                    unset(
+                        $items[$i]['encode'],
+                        $items[$i]['icon'],
+                        $items[$i]['iconAttributes'],
+                        $items[$i]['iconClass'],
+                        $items[$i]['iconContainerAttributes'],
                     );
                 }
             }
@@ -224,7 +241,15 @@ final class Normalizer
 
     private static function link(array $item, string $defaultValue = ''): string
     {
-        return array_key_exists('link', $item) && is_string($item['link']) ? $item['link'] : $defaultValue;
+        if (array_key_exists('link', $item) && is_string($item['link'])) {
+            return $item['link'];
+        }
+
+        if (array_key_exists('url', $item) && is_string($item['url'])) {
+            return $item['url'];
+        }
+
+        return $defaultValue;
     }
 
     private static function linkAttributes(array $item): array
