@@ -19,7 +19,7 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
-- New #141: Add `Menu::collapseAfter()` to collapse overflow items into a "More" dropdown (@WarLikeLaux)
+- New #141: Add `Menu::collapseAfter()`, `collapseDropdownDefinitions()`, and `collapseLabel()` to collapse overflow items into a "More" dropdown (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
