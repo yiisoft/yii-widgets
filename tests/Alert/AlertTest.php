@@ -19,7 +19,7 @@ final class AlertTest extends TestCase
             <<<HTML
             <div role="alert" id="w0-alert">
             <span class="test-class">This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -37,7 +37,7 @@ final class AlertTest extends TestCase
             <div role="alert" id="w0-alert">
             <div class="test-class">
             <span>This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             </div>
             HTML,
@@ -64,7 +64,7 @@ final class AlertTest extends TestCase
             <<<HTML
             <div role="alert" id="w0-alert">
             This is a test.
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -75,13 +75,18 @@ final class AlertTest extends TestCase
         );
     }
 
+    public function testEmptyBodyAndHeader(): void
+    {
+        $this->assertSame('', Alert::widget()->render());
+    }
+
     public function testGenerateId(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
             <div id="alert-1" role="alert">
             <span>This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()->body('This is a test.')->render(),
@@ -95,7 +100,7 @@ final class AlertTest extends TestCase
             <div role="alert" id="w0-alert">
             <span class="tests-class">Header title</span>
             <span>This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -117,7 +122,7 @@ final class AlertTest extends TestCase
             <span>Header title</span>
             </div>
             <span>This is a test.</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -125,6 +130,23 @@ final class AlertTest extends TestCase
                 ->header('Header title')
                 ->headerContainer()
                 ->headerContainerAttributes(['class' => 'test-class'])
+                ->id('w0-alert')
+                ->layoutHeader('{header}')
+                ->render(),
+        );
+    }
+
+    public function testHeaderWithoutBody(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span>Header title</span>
+            <button aria-label="Close" type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->header('Header title')
                 ->id('w0-alert')
                 ->layoutHeader('{header}')
                 ->render(),
@@ -175,7 +197,7 @@ final class AlertTest extends TestCase
             <div role="alert" id="w0-alert">
             <span><b>Bold</b></span>
             <span>Body</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
@@ -212,7 +234,7 @@ final class AlertTest extends TestCase
             <div role="alert" id="w0-alert">
             <span>H</span>
             <span>Body</span>
-            <button type="button">&times;</button>
+            <button aria-label="Close" type="button">&times;</button>
             </div>
             HTML,
             Alert::widget()
