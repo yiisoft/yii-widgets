@@ -10,8 +10,6 @@
 - Bug #113: Fix `array_merge()` argument order in `Menu::renderItem()` so that item-level `linkAttributes` override widget-level ones (@WarLikeLaux)
 - Enh #114: Add `readonly` to constructor-promoted properties in `Block`, `ContentDecorator`, and `FragmentCache` (@WarLikeLaux)
 - Enh #123: Remove redundant `array_merge()` call with single argument in `Dropdown` (@WarLikeLaux)
-- Bug #128: Fix `Dropdown` sub-dropdown not inheriting `activeClass`, `disabledClass`, `dividerClass`, `dividerTag`, `itemContainer`, `itemsContainerTag`, `splitButtonAttributes`, and `splitButtonSpanAttributes` (@WarLikeLaux)
-- New #128: Add `Dropdown::splitButtonSpanAttributes()` method (@WarLikeLaux)
 - Enh #132: Remove raw keys from normalized items in `Normalizer::dropdown()` and `Normalizer::menu()` (@WarLikeLaux)
 - Bug #133: Fix `Alert::render()` returning empty string when body is empty but header is set (@WarLikeLaux)
 - New #126: Add `Menu::dropdownContainerAttributes()` method (@WarLikeLaux)
@@ -21,6 +19,8 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
+- Bug #128: Fix `Dropdown` sub-dropdown not inheriting `activeClass`, `disabledClass`, `dividerClass`, `dividerTag`, `itemContainer`, `itemsContainerTag`, `splitButtonAttributes`, and `splitButtonSpanAttributes` (@WarLikeLaux)
+- New #128: Add `Dropdown::splitButtonSpanAttributes()` method (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
