@@ -58,7 +58,7 @@
     },
     "scripts": {
         "cs-fix": "php-cs-fixer fix",
-        "test": "phpunit --testdox --no-interaction",
+        "test": "phpunit --testdox",
         "test-watch": "phpunit-watcher watch"
     },
     "config": {
