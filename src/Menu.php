@@ -54,7 +54,8 @@ final class Menu extends Widget
     private array $beforeAttributes = [];
     private string $beforeContent = '';
     private string $beforeTag = 'span';
-    private int $collapseAfter = 0;
+    /** @psalm-var positive-int|null */
+    private ?int $collapseAfter = null;
     private ?array $collapseDropdownDefinitions = null;
     private string $collapseLabel = 'More';
     private bool $container = true;
