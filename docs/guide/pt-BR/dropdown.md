@@ -58,6 +58,7 @@ Método | Descrição | Padrão
 `dividerAttributes(array $valuesMap)` | Os atributos HTML da tag divisor | `[]`
 `dividerClass(string $value)` | A classe CSS para a tag divisor | `dropdown-divider`
 `dividerTag(string $value)` | O nome da tag do divisor | `hr`
+`filter(?Closure $callback)` | O retorno de chamada de filtro por item, ou `null` para desabilitar a filtragem | `null`
 `headerClass(string $value)` | A classe CSS para a tag de cabeçalho | `''`
 `headerTag(string $value)` | O nome da tag de cabeçalho | `h6`
 `id(string $value)` | O ID do widget | `''`
