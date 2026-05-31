@@ -13,6 +13,26 @@ final class ExceptionTest extends TestCase
 {
     use TestTrait;
 
+    public function testActiveTrailLabelNotString(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "label" option must be a string.');
+        Menu::widget()
+            ->items([['label' => 1, 'link' => '/test']])
+            ->currentPath('/test')
+            ->activeTrail();
+    }
+
+    public function testActiveTrailLabelRequired(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "label" option is required.');
+        Menu::widget()
+            ->items([['link' => '/test']])
+            ->currentPath('/test')
+            ->activeTrail();
+    }
+
     public function testAfterTag(): void
     {
         $this->expectException(InvalidArgumentException::class);
