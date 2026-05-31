@@ -791,7 +791,7 @@ final class Menu extends Widget
      *   }
      * > $items
      */
-    private function renderItems(array $items, bool $hasCollapse = false): string
+    private function renderItems(array $items, bool $hasCollapse): string
     {
         $lines = [];
         $n = count($items);
