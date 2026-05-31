@@ -19,6 +19,7 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
+- Bug #158: Validate empty tag name in setters across `Alert`, `Dropdown`, and `Menu` (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
