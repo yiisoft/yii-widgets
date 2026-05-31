@@ -24,6 +24,8 @@ use const PHP_EOL;
 
 final class Dropdown extends Widget
 {
+    use WhenTrait;
+
     private string $activeClass = 'active';
     private bool $container = true;
     private array $containerAttributes = [];

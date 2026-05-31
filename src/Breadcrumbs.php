@@ -57,6 +57,8 @@ use const PHP_EOL;
  */
 final class Breadcrumbs extends Widget
 {
+    use WhenTrait;
+
     private string $activeItemTemplate = "<li class=\"active\">{link}</li>\n";
     private array $attributes = ['class' => 'breadcrumb'];
     private bool $container = false;

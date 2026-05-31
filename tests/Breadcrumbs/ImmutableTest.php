@@ -27,5 +27,6 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($breadcrumbs, $breadcrumbs->itemTemplate(''));
         $this->assertNotSame($breadcrumbs, $breadcrumbs->jsonLd(true));
         $this->assertNotSame($breadcrumbs, $breadcrumbs->tag('ul'));
+        $this->assertNotSame($breadcrumbs, $breadcrumbs->when(true, static fn(Breadcrumbs $b) => $b->tag('div')));
     }
 }

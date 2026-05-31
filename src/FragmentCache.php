@@ -41,6 +41,8 @@ use function ob_start;
  */
 final class FragmentCache extends Widget
 {
+    use WhenTrait;
+
     private ?Dependency $dependency = null;
     private string $id = '';
     private int $ttl = 60;
