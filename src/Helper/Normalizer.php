@@ -54,7 +54,7 @@ final class Normalizer
                 $items[$i]['visible'] = self::visible($child);
 
                 if (isset($child['items']) && is_array($child['items'])) {
-                    $items[$i]['items'] = self::dropdown($child['items'], $iconContainerAttributes);
+                    $items[$i]['items'] = $child['items'];
                 } else {
                     $items[$i]['items'] = [];
                 }

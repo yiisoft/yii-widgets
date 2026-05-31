@@ -20,6 +20,7 @@
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
 - Bug #119: Add missing widget-level `iconContainerAttributes()` to `Dropdown` (@WarLikeLaux)
+- Bug #119: Fix icons double-encoded in nested `Dropdown` items (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 

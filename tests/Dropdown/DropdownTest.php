@@ -328,6 +328,31 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testSubDropdownItemIconIsNotDoubleEncoded(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button type="button">Parent</button>
+            <ul>
+            <li><a href="#"><span><i class="bi bi-house">house</i></span>Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Child', 'link' => '#', 'icon' => 'house', 'iconClass' => 'bi bi-house'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testItemsLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
