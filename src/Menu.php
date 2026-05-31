@@ -686,7 +686,7 @@ final class Menu extends Widget
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    private function renderDropdown(array $items, bool $isCollapse = false): string
+    private function renderDropdown(array $items, bool $isCollapse): string
     {
         $dropdownDefinitions = $isCollapse && $this->collapseDropdownDefinitions !== []
             ? $this->collapseDropdownDefinitions
