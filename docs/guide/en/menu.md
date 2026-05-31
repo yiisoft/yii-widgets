@@ -132,3 +132,5 @@ Method | Description | Default
     ],
 ]
 ```
+
+> `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority.
