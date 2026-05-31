@@ -122,10 +122,10 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="disabled" href="#">Separated link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()
@@ -140,11 +140,11 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a aria-current="true" class="active" href="#">Action</a></li>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="disabled" href="#">Separated link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
             </div>
             HTML,
             Dropdown::widget()
