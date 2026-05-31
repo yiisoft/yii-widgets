@@ -16,8 +16,6 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
-use function array_filter;
-use function array_values;
 use function gettype;
 use function implode;
 use function is_array;
@@ -37,6 +35,7 @@ final class Dropdown extends Widget
     private array $dividerAttributes = [];
     private string $dividerClass = 'dropdown-divider';
     private string $dividerTag = 'hr';
+    /** @psalm-var (Closure(array): bool)|null */
     private ?Closure $filter = null;
     private string $headerClass = '';
     private string $headerTag = 'span';
@@ -177,6 +176,8 @@ final class Dropdown extends Widget
      * It is applied before the normalizer processes items.
      *
      * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
+     *
+     * @psalm-param (Closure(array): bool)|null $callback
      */
     public function filter(?Closure $callback): self
     {
@@ -459,11 +460,15 @@ final class Dropdown extends Widget
         $rawItems = $this->items;
 
         if ($this->filter !== null) {
-            $filter = $this->filter;
-            $rawItems = array_values(array_filter(
-                $rawItems,
-                fn(mixed $item): bool => !is_array($item) || $filter($item),
-            ));
+            $filtered = [];
+
+            foreach ($rawItems as $item) {
+                if (!is_array($item) || ($this->filter)($item)) {
+                    $filtered[] = $item;
+                }
+            }
+
+            $rawItems = $filtered;
         }
 
         /**

@@ -14,9 +14,7 @@ use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
 use Yiisoft\Widget\Widget;
 
-use function array_filter;
 use function array_merge;
-use function array_values;
 use function count;
 use function implode;
 use function is_array;
@@ -64,6 +62,7 @@ final class Menu extends Widget
     private array $dropdownContainerAttributes = [];
     private string $dropdownContainerTag = 'li';
     private array $dropdownDefinitions = [];
+    /** @psalm-var (Closure(array): bool)|null */
     private ?Closure $filter = null;
     private string $firstItemClass = '';
     private array $iconContainerAttributes = [];
@@ -333,6 +332,8 @@ final class Menu extends Widget
      * It is applied before the normalizer processes items.
      *
      * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
+     *
+     * @psalm-param (Closure(array): bool)|null $callback
      */
     public function filter(?Closure $callback): self
     {
@@ -561,11 +562,15 @@ final class Menu extends Widget
         $rawItems = $this->items;
 
         if ($this->filter !== null) {
-            $filter = $this->filter;
-            $rawItems = array_values(array_filter(
-                $rawItems,
-                fn(mixed $item): bool => !is_array($item) || $filter($item),
-            ));
+            $filtered = [];
+
+            foreach ($rawItems as $item) {
+                if (!is_array($item) || ($this->filter)($item)) {
+                    $filtered[] = $item;
+                }
+            }
+
+            $rawItems = $filtered;
         }
 
         if ($rawItems === []) {

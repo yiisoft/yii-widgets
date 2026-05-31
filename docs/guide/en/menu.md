@@ -98,6 +98,7 @@ Method | Description | Default
 `dropdownContainerClass(string $value)` | The CSS class to be appended to the dropdown container | `'dropdown'`
 `dropdownContainerTag(string $value)` | The tag name for the dropdown container | `'li'`
 `dropdownDefinitions(array $valuesMap)` | The config for dropdown widget | `[]`
+`filter(?Closure $callback)` | The per-item filter callback, or `null` to disable filtering | `null`
 `firstItemClass(string $value)` | The CSS class for the first item in the main menu or each submenu | `''`
 `iconContainerAttributes(array $valuesMap)` | The HTML attributes for the icon container | `[]`
 `items(array $value)` | List of menu items | `[]`
