@@ -18,7 +18,6 @@ use Yiisoft\Widget\Widget;
 
 use function gettype;
 use function implode;
-use function is_array;
 use function str_contains;
 use function trim;
 
@@ -35,7 +34,7 @@ final class Dropdown extends Widget
     private array $dividerAttributes = [];
     private string $dividerClass = 'dropdown-divider';
     private string $dividerTag = 'hr';
-    /** @psalm-var (Closure(array): bool)|null */
+    /** @psalm-var (Closure(array|string): bool)|null */
     private ?Closure $filter = null;
     private string $headerClass = '';
     private string $headerTag = 'span';
@@ -172,12 +171,12 @@ final class Dropdown extends Widget
     /**
      * Returns a new instance with the specified per-item filter callback.
      *
-     * The callback receives each raw item array and should return true to keep the item or false to remove it.
-     * It is applied before the normalizer processes items.
+     * The callback receives each normalized item (an array, or the string `'-'` for a divider) and should return
+     * true to keep the item or false to remove it. It is applied after the items are normalized.
      *
      * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
      *
-     * @psalm-param (Closure(array): bool)|null $callback
+     * @psalm-param (Closure(array|string): bool)|null $callback
      */
     public function filter(?Closure $callback): self
     {
@@ -457,20 +456,6 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
-        $rawItems = $this->items;
-
-        if ($this->filter !== null) {
-            $filtered = [];
-
-            foreach ($rawItems as $item) {
-                if (!is_array($item) || ($this->filter)($item)) {
-                    $filtered[] = $item;
-                }
-            }
-
-            $rawItems = $filtered;
-        }
-
         /**
          * @psalm-var array<
          *   array-key,
@@ -489,7 +474,19 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        $normalizedItems = Helper\Normalizer::dropdown($rawItems);
+        $normalizedItems = Helper\Normalizer::dropdown($this->items);
+
+        if ($this->filter !== null) {
+            $filtered = [];
+
+            foreach ($normalizedItems as $item) {
+                if (($this->filter)($item)) {
+                    $filtered[] = $item;
+                }
+            }
+
+            $normalizedItems = $filtered;
+        }
 
         $containerAttributes = $this->containerAttributes;
 

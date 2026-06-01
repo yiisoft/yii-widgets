@@ -17,7 +17,6 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
-use function is_array;
 use function strtr;
 use function trim;
 
@@ -328,8 +327,8 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified per-item filter callback.
      *
-     * The callback receives each raw item array and should return true to keep the item or false to remove it.
-     * It is applied before the normalizer processes items.
+     * The callback receives each normalized item array and should return true to keep the item or false to
+     * remove it. It is applied after the items are normalized.
      *
      * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
      *
@@ -559,24 +558,6 @@ final class Menu extends Widget
      */
     public function render(): string
     {
-        $rawItems = $this->items;
-
-        if ($this->filter !== null) {
-            $filtered = [];
-
-            foreach ($rawItems as $item) {
-                if (!is_array($item) || ($this->filter)($item)) {
-                    $filtered[] = $item;
-                }
-            }
-
-            $rawItems = $filtered;
-        }
-
-        if ($rawItems === []) {
-            return '';
-        }
-
         /**
          * @psalm-var array<
          *   array-key,
@@ -592,11 +573,27 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $rawItems,
+            $this->items,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
         );
+
+        if ($this->filter !== null) {
+            $filtered = [];
+
+            foreach ($items as $item) {
+                if (($this->filter)($item)) {
+                    $filtered[] = $item;
+                }
+            }
+
+            $items = $filtered;
+        }
+
+        if ($items === []) {
+            return '';
+        }
 
         return $this->renderMenu($items);
     }

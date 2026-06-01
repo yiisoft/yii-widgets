@@ -9,6 +9,8 @@ use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
+use function is_array;
+
 final class DropdownTest extends TestCase
 {
     use TestTrait;
@@ -129,7 +131,7 @@ final class DropdownTest extends TestCase
             </div>
             HTML,
             Dropdown::widget()
-                ->filter(fn(array $item) => ($item['label'] ?? '') !== 'Another action')
+                ->filter(fn(array|string $item) => !is_array($item) || $item['label'] !== 'Another action')
                 ->items($this->items)
                 ->render(),
         );
@@ -148,8 +150,26 @@ final class DropdownTest extends TestCase
             </div>
             HTML,
             Dropdown::widget()
-                ->filter(fn(array $item) => false)
+                ->filter(fn(array|string $item) => false)
                 ->filter(null)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testFilterRemovesStringItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array|string $item) => is_array($item))
                 ->items($this->items)
                 ->render(),
         );
