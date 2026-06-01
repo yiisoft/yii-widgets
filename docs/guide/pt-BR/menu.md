@@ -98,6 +98,7 @@ Método | Descrição | Padrão
 `dropdownContainerClass(string $value)` | A classe CSS a ser anexada ao contêiner suspenso | `'dropdown'`
 `dropdownContainerTag(string $value)` | O nome da tag para o contêiner suspenso | `'li'`
 `dropdownDefinitions(array $valuesMap)` | A configuração do widget suspenso | `[]`
+`filter(?Closure $callback)` | O retorno de chamada de filtro por item, ou `null` para desabilitar a filtragem | `null`
 `firstItemClass(string $value)` | A classe CSS do primeiro item do menu principal ou de cada submenu | `null`
 `iconContainerAttributes(array $valuesMap)` | Os atributos HTML para o contêiner de ícones | `[]`
 `items(array $value)` | Lista de itens do menu | `[]`

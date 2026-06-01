@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
@@ -33,6 +34,8 @@ final class Dropdown extends Widget
     private array $dividerAttributes = [];
     private string $dividerClass = 'dropdown-divider';
     private string $dividerTag = 'hr';
+    /** @psalm-var (Closure(array|string): bool)|null */
+    private ?Closure $filter = null;
     private string $headerClass = '';
     private string $headerTag = 'span';
     private string $id = '';
@@ -161,6 +164,24 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->dividerTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified per-item filter callback.
+     *
+     * The callback receives each normalized item (an array, or the string `'-'` for a divider) and should return
+     * true to keep the item or false to remove it. It is applied after the items are normalized.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
+     *
+     * @psalm-param (Closure(array|string): bool)|null $callback
+     */
+    public function filter(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->filter = $callback;
 
         return $new;
     }
@@ -454,6 +475,18 @@ final class Dropdown extends Widget
          * > $normalizedItems
          */
         $normalizedItems = Helper\Normalizer::dropdown($this->items);
+
+        if ($this->filter !== null) {
+            $filtered = [];
+
+            foreach ($normalizedItems as $item) {
+                if (($this->filter)($item)) {
+                    $filtered[] = $item;
+                }
+            }
+
+            $normalizedItems = $filtered;
+        }
 
         $containerAttributes = $this->containerAttributes;
 

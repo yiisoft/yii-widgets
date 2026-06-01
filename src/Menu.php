@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
@@ -60,6 +61,8 @@ final class Menu extends Widget
     private array $dropdownContainerAttributes = [];
     private string $dropdownContainerTag = 'li';
     private array $dropdownDefinitions = [];
+    /** @psalm-var (Closure(array): bool)|null */
+    private ?Closure $filter = null;
     private string $firstItemClass = '';
     private array $iconContainerAttributes = [];
     private array $items = [];
@@ -322,6 +325,24 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified per-item filter callback.
+     *
+     * The callback receives each normalized item array and should return true to keep the item or false to
+     * remove it. It is applied after the items are normalized.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
+     *
+     * @psalm-param (Closure(array): bool)|null $callback
+     */
+    public function filter(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->filter = $callback;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified first item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the first item in the main menu or each submenu.
@@ -537,10 +558,6 @@ final class Menu extends Widget
      */
     public function render(): string
     {
-        if ($this->items === []) {
-            return '';
-        }
-
         /**
          * @psalm-var array<
          *   array-key,
@@ -561,6 +578,22 @@ final class Menu extends Widget
             $this->activateItems,
             $this->iconContainerAttributes,
         );
+
+        if ($this->filter !== null) {
+            $filtered = [];
+
+            foreach ($items as $item) {
+                if (($this->filter)($item)) {
+                    $filtered[] = $item;
+                }
+            }
+
+            $items = $filtered;
+        }
+
+        if ($items === []) {
+            return '';
+        }
 
         return $this->renderMenu($items);
     }

@@ -58,6 +58,7 @@ Method | Description | Default
 `dividerAttributes(array $valuesMap)` | The HTML attributes for the divider tag | `[]`
 `dividerClass(string $value)` | The CSS class for the divider tag | `dropdown-divider`
 `dividerTag(string $value)` | The tag name for the divider tag | `hr`
+`filter(?Closure $callback)` | The per-item filter callback, or `null` to disable filtering | `null`
 `headerClass(string $value)` | The CSS class for the header tag | `''`
 `headerTag(string $value)` | The tag name for the header tag | `span`
 `id(string $value)` | The ID of the widget | `''`
