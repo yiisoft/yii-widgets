@@ -435,6 +435,19 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
+        return $this->renderToContainer(Helper\Normalizer::dropdown($this->items));
+    }
+
+    /**
+     * Renders already normalized items into the container. Sub-dropdowns reuse this directly so the items are
+     * normalized once, by the top-level {@see render()}, and not again per nesting level.
+     *
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    private function renderToContainer(array $normalizedItems): string
+    {
+        $containerAttributes = $this->containerAttributes;
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -453,10 +466,6 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        $normalizedItems = Helper\Normalizer::dropdown($this->items);
-
-        $containerAttributes = $this->containerAttributes;
-
         $items = $this->renderItems($normalizedItems) . PHP_EOL;
 
         if (trim($items) === '') {
@@ -507,12 +516,11 @@ final class Dropdown extends Widget
             ->itemClass($this->itemClass)
             ->itemContainerAttributes($this->itemContainerAttributes)
             ->itemContainerTag($this->itemContainerTag)
-            ->items($items)
             ->itemsContainerAttributes($this->itemsContainerAttributes)
             ->itemTag($this->itemTag)
             ->toggleAttributes($this->toggleAttributes)
             ->toggleType($this->toggleType)
-            ->render();
+            ->renderToContainer($items);
     }
 
     private function renderHeader(string $label, array $headerAttributes = []): string
