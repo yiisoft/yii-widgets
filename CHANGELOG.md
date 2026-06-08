@@ -19,7 +19,7 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
-- Bug #119: Add missing widget-level `iconContainerAttributes()` to `Dropdown` (@WarLikeLaux)
+- New #119: Add `iconContainerAttributes()` method to `Dropdown` widget (@WarLikeLaux)
 - Bug #159: Fix double-encoding of toggle and nested item labels in `Dropdown` (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
