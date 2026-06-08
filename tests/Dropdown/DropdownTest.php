@@ -328,6 +328,86 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testSubDropdownIconsAreNotDoubleEncoded(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button type="button"><span><i class="bi bi-star">star</i></span>Parent</button>
+            <ul>
+            <li><a href="#"><span><i class="bi bi-house">house</i></span>Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'icon' => 'star',
+                        'iconClass' => 'bi bi-star',
+                        'items' => [
+                            ['label' => 'Child', 'link' => '#', 'icon' => 'house', 'iconClass' => 'bi bi-house'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testToggleLinkIconIsNotDoubleEncoded(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <a href="#"><span><i class="bi bi-star">star</i></span>Parent</a>
+            <ul>
+            <li><a href="#">Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->toggleType('link')
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'icon' => 'star',
+                        'iconClass' => 'bi bi-star',
+                        'items' => [['label' => 'Child', 'link' => '#']],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testToggleSplitIconIsNotDoubleEncoded(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button type="button"><span><i class="bi bi-star">star</i></span>Parent</button>
+            <button type="button"><span><span><i class="bi bi-star">star</i></span>Parent</span></button>
+            <ul>
+            <li><a href="#">Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->toggleType('split')
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'icon' => 'star',
+                        'iconClass' => 'bi bi-star',
+                        'items' => [['label' => 'Child', 'link' => '#']],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testItemsLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
