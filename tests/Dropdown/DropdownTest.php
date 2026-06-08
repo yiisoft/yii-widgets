@@ -308,6 +308,32 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testItemsIconContainerAttributesAppliedToSubItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button type="button">Parent</button>
+            <ul>
+            <li><a href="#"><span class="me-2"><i class="bi bi-house"></i></span>Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Child', 'link' => '#', 'iconClass' => 'bi bi-house'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testItemsIconWithEmptyStringLabel(): void
     {
         Assert::equalsWithoutLE(
