@@ -37,7 +37,7 @@ final class MenuTest extends TestCase
         );
     }
 
-    public function testActivePattern(): void
+    public function testActiveStringPattern(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
@@ -49,14 +49,14 @@ final class MenuTest extends TestCase
             Menu::widget()
                 ->currentPath('/products/electronics/phones')
                 ->items([
-                    ['label' => 'Products', 'link' => '/products', 'activePattern' => '/products/*'],
+                    ['label' => 'Products', 'link' => '/products', 'active' => '/products/*'],
                     ['label' => 'About', 'link' => '/about'],
                 ])
                 ->render(),
         );
     }
 
-    public function testActivePatternNoMatch(): void
+    public function testActiveStringPatternNoMatch(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
@@ -68,14 +68,14 @@ final class MenuTest extends TestCase
             Menu::widget()
                 ->currentPath('/blog/post-1')
                 ->items([
-                    ['label' => 'Products', 'link' => '/products', 'activePattern' => '/products/*'],
+                    ['label' => 'Products', 'link' => '/products', 'active' => '/products/*'],
                     ['label' => 'About', 'link' => '/about'],
                 ])
                 ->render(),
         );
     }
 
-    public function testActivePatternWithActivateItemsFalse(): void
+    public function testActiveStringPatternWithActivateItemsFalse(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
@@ -87,7 +87,7 @@ final class MenuTest extends TestCase
                 ->activateItems(false)
                 ->currentPath('/products/electronics')
                 ->items([
-                    ['label' => 'Products', 'link' => '/products', 'activePattern' => '/products/*'],
+                    ['label' => 'Products', 'link' => '/products', 'active' => '/products/*'],
                 ])
                 ->render(),
         );

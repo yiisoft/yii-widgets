@@ -148,11 +148,11 @@ final class Normalizer
     private static function active(array $item, string $link, string $currentPath, bool $activateItems): bool
     {
         if (!array_key_exists('active', $item)) {
-            if (isset($item['activePattern']) && is_string($item['activePattern'])) {
-                return $activateItems && fnmatch($item['activePattern'], $currentPath);
-            }
-
             return self::isItemActive($link, $currentPath, $activateItems);
+        }
+
+        if (is_string($item['active'])) {
+            return $activateItems && fnmatch($item['active'], $currentPath);
         }
 
         return is_bool($item['active']) ? $item['active'] : false;
