@@ -287,12 +287,13 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <li><a href="/active"><span><i class="bi bi-house"></i></span>Home</a></li>
-            <li><a href="#"><span><i class="bi bi-envelope"></i></span>Contact</a></li>
+            <li><a href="/active"><span class="me-2"><i class="bi bi-house"></i></span>Home</a></li>
+            <li><a href="#"><span class="me-2"><i class="bi bi-envelope"></i></span>Contact</a></li>
             <li><a href="#"><span class="test-class-1"><i class="bi bi-lock"></i></span>Login</a></li>
             </div>
             HTML,
             Dropdown::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
                 ->items([
                     ['label' => 'Home', 'link' => '/active', 'iconClass' => 'bi bi-house'],
                     ['label' => 'Contact', 'link' => '#', 'iconClass' => 'bi bi-envelope'],
@@ -301,6 +302,32 @@ final class DropdownTest extends TestCase
                         'link' => '#',
                         'iconClass' => 'bi bi-lock',
                         'iconContainerAttributes' => ['class' => 'test-class-1'],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testItemsIconContainerAttributesAppliedToSubItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button type="button">Parent</button>
+            <ul>
+            <li><a href="#"><span class="me-2"><i class="bi bi-house"></i></span>Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Child', 'link' => '#', 'iconClass' => 'bi bi-house'],
+                        ],
                     ],
                 ])
                 ->render(),

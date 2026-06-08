@@ -35,6 +35,7 @@ final class Dropdown extends Widget
     private string $dividerTag = 'hr';
     private string $headerClass = '';
     private string $headerTag = 'span';
+    private array $iconContainerAttributes = [];
     private string $id = '';
     private string $itemClass = '';
     private string $itemTag = 'a';
@@ -187,6 +188,19 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         $new->headerTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified icon container HTML attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function iconContainerAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->iconContainerAttributes = $valuesMap;
 
         return $new;
     }
@@ -435,7 +449,7 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
-        return $this->renderToContainer(Helper\Normalizer::dropdown($this->items));
+        return $this->renderToContainer(Helper\Normalizer::dropdown($this->items, $this->iconContainerAttributes));
     }
 
     /**
