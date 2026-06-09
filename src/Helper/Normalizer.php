@@ -90,7 +90,7 @@ final class Normalizer
                 } else {
                     $items[$i]['link'] = self::link($child);
                     $items[$i]['linkAttributes'] = self::linkAttributes($child);
-                    $items[$i]['active'] = self::active(
+                    $items[$i]['active'] = self::menuActive(
                         $child,
                         $items[$i]['link'],
                         $currentPath,
@@ -149,10 +149,6 @@ final class Normalizer
     {
         if (!array_key_exists('active', $item)) {
             return self::isItemActive($link, $currentPath, $activateItems);
-        }
-
-        if (is_string($item['active'])) {
-            return $activateItems && fnmatch($item['active'], $currentPath);
         }
 
         return is_bool($item['active']) ? $item['active'] : false;
@@ -256,6 +252,15 @@ final class Normalizer
     {
         return array_key_exists('linkAttributes', $item) && is_array($item['linkAttributes'])
             ? $item['linkAttributes'] : [];
+    }
+
+    private static function menuActive(array $item, string $link, string $currentPath, bool $activateItems): bool
+    {
+        if (array_key_exists('active', $item) && is_string($item['active'])) {
+            return $activateItems && fnmatch($item['active'], $currentPath);
+        }
+
+        return self::active($item, $link, $currentPath, $activateItems);
     }
 
     private static function toggleAttributes(array $item): array
