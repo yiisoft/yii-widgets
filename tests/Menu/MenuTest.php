@@ -93,6 +93,40 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testActiveStringPatternList(): void
+    {
+        $items = [
+            ['label' => 'Products', 'link' => '/products', 'active' => ['/products', '/products/*']],
+        ];
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/products">Products</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->currentPath('/products')->items($items)->render(),
+        );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/products">Products</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->currentPath('/products/electronics')->items($items)->render(),
+        );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/products">Products</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->currentPath('/blog')->items($items)->render(),
+        );
+    }
+
     public function testActiveItemsWithFalse(): void
     {
         Assert::equalsWithoutLE(

@@ -256,11 +256,19 @@ final class Normalizer
 
     private static function menuActive(array $item, string $link, string $currentPath, bool $activateItems): bool
     {
-        if (array_key_exists('active', $item) && is_string($item['active'])) {
-            return $activateItems && fnmatch($item['active'], $currentPath);
+        if (!array_key_exists('active', $item) || is_bool($item['active'])) {
+            return self::active($item, $link, $currentPath, $activateItems);
         }
 
-        return self::active($item, $link, $currentPath, $activateItems);
+        if ($activateItems) {
+            foreach ((array) $item['active'] as $pattern) {
+                if (is_string($pattern) && fnmatch($pattern, $currentPath)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private static function toggleAttributes(array $item): array
