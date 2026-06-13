@@ -410,13 +410,14 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <button type="button"><span><i class="bi bi-star">star</i></span>Parent</button>
-            <ul>
+            <button id="test" type="button"><span><i class="bi bi-star">star</i></span>Parent</button>
+            <ul aria-labelledby="test">
             <li><a href="#"><span><i class="bi bi-house">house</i></span>Child</a></li>
             </ul>
             </div>
             HTML,
             Dropdown::widget()
+                ->id('test')
                 ->items([
                     [
                         'label' => 'Parent',
@@ -437,13 +438,14 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <a href="#"><span><i class="bi bi-star">star</i></span>Parent</a>
-            <ul>
+            <a id="test" href="#"><span><i class="bi bi-star">star</i></span>Parent</a>
+            <ul aria-labelledby="test">
             <li><a href="#">Child</a></li>
             </ul>
             </div>
             HTML,
             Dropdown::widget()
+                ->id('test')
                 ->toggleType('link')
                 ->items([
                     [
@@ -464,13 +466,14 @@ final class DropdownTest extends TestCase
             <<<HTML
             <div>
             <button type="button"><span><i class="bi bi-star">star</i></span>Parent</button>
-            <button type="button"><span><span><i class="bi bi-star">star</i></span>Parent</span></button>
-            <ul>
+            <button id="test" type="button"><span><span><i class="bi bi-star">star</i></span>Parent</span></button>
+            <ul aria-labelledby="test">
             <li><a href="#">Child</a></li>
             </ul>
             </div>
             HTML,
             Dropdown::widget()
+                ->id('test')
                 ->toggleType('split')
                 ->items([
                     [
