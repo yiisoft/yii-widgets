@@ -67,7 +67,7 @@ final class Breadcrumbs extends Widget
     private string $containerClass = '';
     /** @psalm-var non-empty-string */
     private string $containerTag = 'nav';
-    private string $ellipsis = "\xe2\x80\xa6";
+    private string $ellipsis = '…';
     private string $ellipsisTemplate = "<li>{ellipsis}</li>\n";
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
