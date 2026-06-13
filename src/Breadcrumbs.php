@@ -73,7 +73,10 @@ final class Breadcrumbs extends Widget
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
     private bool $jsonLd = false;
-    private int $maxItems = 0;
+    /**
+     * @psalm-var positive-int|null
+     */
+    private ?int $maxItems = null;
     private string $tag = 'ul';
 
     /**
