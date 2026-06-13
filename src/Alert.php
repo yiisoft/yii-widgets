@@ -28,7 +28,7 @@ final class Alert extends Widget
 {
     private array $attributes = [];
     private array $buttonAttributes = [];
-    private bool $buttonEnabled = true;
+    private bool $buttonHidden = false;
     private string $buttonLabel = '&times;';
     private string $body = '';
     private array $bodyAttributes = [];
@@ -165,7 +165,7 @@ final class Alert extends Widget
      *
      * The button is displayed in the alert. Clicking on the button will dismiss the alert.
      *
-     * If {@see buttonEnabled} is `false`, no button will be rendered.
+     * If the button is hidden, no button will be rendered.
      *
      * The rest of the options will be rendered as the HTML attributes of the button tag.
      *
@@ -190,19 +190,6 @@ final class Alert extends Widget
     {
         $new = clone $this;
         Html::addCssClass($new->buttonAttributes, $value);
-
-        return $new;
-    }
-
-    /**
-     * Returns a new instance with the button enabled or disabled.
-     *
-     * @param bool $value Whether the close button is enabled.
-     */
-    public function buttonEnabled(bool $value): self
-    {
-        $new = clone $this;
-        $new->buttonEnabled = $value;
 
         return $new;
     }
@@ -283,6 +270,19 @@ final class Alert extends Widget
     {
         $new = clone $this;
         Html::addCssClass($new->headerAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the close button hidden or visible.
+     *
+     * @param bool $value Whether to hide the close button.
+     */
+    public function hideButton(bool $value = true): self
+    {
+        $new = clone $this;
+        $new->buttonHidden = $value;
 
         return $new;
     }
@@ -490,7 +490,7 @@ final class Alert extends Widget
      */
     private function renderButton(): string
     {
-        if (!$this->buttonEnabled) {
+        if ($this->buttonHidden) {
             return '';
         }
 
