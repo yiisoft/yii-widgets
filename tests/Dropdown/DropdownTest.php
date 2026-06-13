@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Html\IdGenerator;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
 final class DropdownTest extends TestCase
 {
-    use TestTrait;
+    use TestTrait {
+        TestTrait::setUp as setUpTestTrait;
+    }
 
     private array $items = [
         ['label' => 'Action', 'link' => '#', 'active' => true],
@@ -20,6 +23,19 @@ final class DropdownTest extends TestCase
         '-',
         ['label' => 'Separated link', 'link' => '#', 'disabled' => true],
     ];
+
+    protected function setUp(): void
+    {
+        $this->setUpTestTrait();
+
+        IdGenerator\disableSeed();
+        IdGenerator\reset();
+    }
+
+    protected function tearDown(): void
+    {
+        IdGenerator\enableSeed();
+    }
 
     public function testActiveClass(): void
     {
@@ -131,9 +147,8 @@ final class DropdownTest extends TestCase
             ])
             ->render();
 
-        $this->assertMatchesRegularExpression('/id="(dropdown-\d+)"/', $result);
-        preg_match('/id="(dropdown-\d+)"/', $result, $matches);
-        $this->assertStringContainsString('aria-labelledby="' . $matches[1] . '"', $result);
+        $this->assertStringContainsString('id="dropdown-1"', $result);
+        $this->assertStringContainsString('aria-labelledby="dropdown-1"', $result);
     }
 
     public function testCustomToggleIdIsRespected(): void
@@ -171,9 +186,8 @@ final class DropdownTest extends TestCase
             ])
             ->render();
 
-        $this->assertMatchesRegularExpression('/id="(dropdown-\d+)"/', $result);
-        preg_match('/id="(dropdown-\d+)"/', $result, $matches);
-        $this->assertStringContainsString('aria-labelledby="' . $matches[1] . '"', $result);
+        $this->assertStringContainsString('id="dropdown-1"', $result);
+        $this->assertStringContainsString('aria-labelledby="dropdown-1"', $result);
     }
 
     public function testPreserveExplicitAriaLabelledByOnSubmenuContainer(): void
