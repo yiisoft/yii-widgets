@@ -203,6 +203,28 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
+    public function testMaxItemsZero(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/a">A</a></li>
+            <li><a href="/b">B</a></li>
+            <li class="active">Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->maxItems(0)
+                ->items([
+                    ['label' => 'A', 'url' => '/a'],
+                    ['label' => 'B', 'url' => '/b'],
+                    'Page',
+                ])
+                ->render(),
+        );
+    }
+
     public function testMaxItemsWithoutHomeItem(): void
     {
         Assert::equalsWithoutLE(

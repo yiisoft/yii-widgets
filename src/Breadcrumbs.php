@@ -171,6 +171,7 @@ final class Breadcrumbs extends Widget
      * Returns a new instance with the specified ellipsis text.
      *
      * @param string $value The ellipsis text used when items are truncated by {@see maxItems()}.
+     * The value is inserted into the ellipsis template without encoding.
      */
     public function ellipsis(string $value): self
     {
@@ -323,12 +324,14 @@ final class Breadcrumbs extends Widget
     /**
      * Returns a new instance with the specified maximum number of items to display.
      *
+     * This affects only the rendered HTML list. JSON-LD structured data still contains all breadcrumb items.
+     *
      * @param int $value The maximum number of displayed items including the ellipsis. 0 means unlimited.
      */
     public function maxItems(int $value): self
     {
         $new = clone $this;
-        $new->maxItems = $value;
+        $new->maxItems = $value > 0 ? $value : null;
 
         return $new;
     }
@@ -379,7 +382,7 @@ final class Breadcrumbs extends Widget
             }
         }
 
-        if ($this->maxItems > 0 && count($items) > $this->maxItems) {
+        if ($this->maxItems !== null && count($items) > $this->maxItems) {
             $remaining = $this->maxItems - 1;
             $headCount = intdiv($remaining, 2);
             $tailCount = $remaining - $headCount;
