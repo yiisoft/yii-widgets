@@ -158,7 +158,7 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    public function testMaxItemsTruncatesMiddleItems(): void
+    public function testMaxItemsTruncates(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
@@ -203,7 +203,7 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    public function testMaxItemsDoesNotTruncateWhenRenderedItemCountEqualsLimit(): void
+    public function testMaxItemsAtLimit(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
