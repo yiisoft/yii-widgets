@@ -329,12 +329,13 @@ final class Breadcrumbs extends Widget
      * @param int|null $value The maximum number of rendered breadcrumb items, including the home item and ellipsis,
      * or null for no limit. Must be a positive integer.
      *
-     * @psalm-param int|null $value
+     * @psalm-param positive-int|null $value
      *
      * @throws InvalidArgumentException If the value is not a positive integer or null.
      */
     public function maxItems(?int $value): self
     {
+        /** @psalm-suppress DocblockTypeContradiction */
         if ($value !== null && $value <= 0) {
             throw new InvalidArgumentException('The "maxItems" value must be a positive integer or null.');
         }

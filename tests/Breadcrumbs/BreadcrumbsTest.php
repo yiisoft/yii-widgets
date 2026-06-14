@@ -246,6 +246,26 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
+    public function testMaxItemsWithoutHomeItemAtLimit(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/catalog">Catalog</a></li>
+            <li class="active">iPhone 15 Pro</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->maxItems(2)
+                ->items([
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    'iPhone 15 Pro',
+                ])
+                ->render(),
+        );
+    }
+
     public function testRenderItemLabelOnlyEncodeLabelFalse(): void
     {
         $this->assertSame(
