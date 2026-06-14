@@ -20,6 +20,7 @@
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
 - New #136: Add active trail support to `Menu` widget (@WarLikeLaux)
+- Bug #159: Fix double-encoding of toggle and nested item labels in `Dropdown` (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
