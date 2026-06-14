@@ -747,10 +747,6 @@ final class Menu extends Widget
             Html::addCssClass($linkAttributes, $this->activeClass);
         }
 
-        if ($item['activeTrail'] ?? false) {
-            Html::addCssClass($linkAttributes, $this->activeTrailClass);
-        }
-
         if ($item['disabled']) {
             $linkAttributes['aria-disabled'] = 'true';
             Html::addCssClass($linkAttributes, $this->disabledClass);

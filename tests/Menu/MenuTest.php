@@ -166,6 +166,12 @@ final class MenuTest extends TestCase
             <ul>
             <li><a href="/prod">Prod</a></li>
             <li><a aria-current="page" class="active" href="/products">Products</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="/catalog">Catalog</a>
+            <ul>
+            <li><a href="/phone">Phone</a></li>
+            </ul>
+            </li>
             </ul>
             HTML,
             Menu::widget()
@@ -174,6 +180,13 @@ final class MenuTest extends TestCase
                 ->items([
                     ['label' => 'Prod', 'link' => '/prod'],
                     ['label' => 'Products', 'link' => '/products'],
+                    [
+                        'label' => 'Catalog',
+                        'link' => '/catalog',
+                        'items' => [
+                            ['label' => 'Phone', 'link' => '/phone'],
+                        ],
+                    ],
                 ])
                 ->render(),
         );
