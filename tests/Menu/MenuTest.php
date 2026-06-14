@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Widgets\Tests\Menu;
 
 use PHPUnit\Framework\TestCase;
 use Stringable;
+use Yiisoft\Html\IdGenerator;
 use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
@@ -13,7 +14,9 @@ use InvalidArgumentException;
 
 final class MenuTest extends TestCase
 {
-    use TestTrait;
+    use TestTrait {
+        TestTrait::setUp as setUpTestTrait;
+    }
 
     private array $items = [
         ['label' => 'item', 'link' => '/path'],
@@ -24,6 +27,19 @@ final class MenuTest extends TestCase
         ['label' => 'Link', 'link' => '#'],
         ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
     ];
+
+    protected function setUp(): void
+    {
+        $this->setUpTestTrait();
+
+        IdGenerator\disableSeed();
+        IdGenerator\reset();
+    }
+
+    protected function tearDown(): void
+    {
+        IdGenerator\enableSeed();
+    }
 
     public function testAttributes(): void
     {
@@ -188,9 +204,24 @@ final class MenuTest extends TestCase
 
     public function testDropdown(): void
     {
-        $html = (string) preg_replace(
-            '/dropdown-\d+/',
-            'dropdown-ID',
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a href="#">Separated link</a></li>
+            </ul>
+            </li>
+            <li><a href="#">Link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
+            </ul>
+            HTML,
             Menu::widget()
                 ->currentPath('/active')
                 ->items(
@@ -213,34 +244,22 @@ final class MenuTest extends TestCase
                 )
                 ->render(),
         );
-
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <ul>
-            <li><a aria-current="page" class="active" href="/active">Active</a></li>
-            <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-ID" href="#">Dropdown</a>
-            <ul aria-labelledby="dropdown-ID">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a href="#">Separated link</a></li>
-            </ul>
-            </li>
-            <li><a href="#">Link</a></li>
-            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
-            </ul>
-            HTML,
-            $html,
-        );
     }
 
     public function testDropdownContainerAttributes(): void
     {
-        $html = (string) preg_replace(
-            '/dropdown-\d+/',
-            'dropdown-ID',
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
+            <li data-test="value">
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">Action</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
             Menu::widget()
                 ->currentPath('/active')
                 ->dropdownContainerAttributes(['data-test' => 'value'])
@@ -258,28 +277,28 @@ final class MenuTest extends TestCase
                 )
                 ->render(),
         );
-
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <ul>
-            <li><a aria-current="page" class="active" href="/active">Active</a></li>
-            <li data-test="value">
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-ID" href="#">Dropdown</a>
-            <ul aria-labelledby="dropdown-ID">
-            <li><a href="#">Action</a></li>
-            </ul>
-            </li>
-            </ul>
-            HTML,
-            $html,
-        );
     }
 
     public function testDropdownContainerClass(): void
     {
-        $html = (string) preg_replace(
-            '/dropdown-\d+/',
-            'dropdown-ID',
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a aria-current="page" class="active" href="/active">Active</a></li>
+            <li class="nav-item dropdown">
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a href="#">Separated link</a></li>
+            </ul>
+            </li>
+            <li><a href="#">Link</a></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
+            </ul>
+            HTML,
             Menu::widget()
                 ->currentPath('/active')
                 ->dropdownContainerClass('nav-item dropdown')
@@ -303,34 +322,28 @@ final class MenuTest extends TestCase
                 )
                 ->render(),
         );
+    }
 
+    public function testDropdownDefinitions(): void
+    {
         Assert::equalsWithoutLE(
             <<<HTML
             <ul>
             <li><a aria-current="page" class="active" href="/active">Active</a></li>
-            <li class="nav-item dropdown">
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-ID" href="#">Dropdown</a>
-            <ul aria-labelledby="dropdown-ID">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle" id="dropdown-1" href="#">Dropdown</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown-1">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a href="#">Separated link</a></li>
+            <li><a class="dropdown-item" href="#">Separated link</a></li>
             </ul>
             </li>
             <li><a href="#">Link</a></li>
             <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
             </ul>
             HTML,
-            $html,
-        );
-    }
-
-    public function testDropdownDefinitions(): void
-    {
-        $html = (string) preg_replace(
-            '/dropdown-\d+/',
-            'dropdown-ID',
             Menu::widget()
                 ->currentPath('/active')
                 ->dropdownDefinitions(
@@ -370,27 +383,6 @@ final class MenuTest extends TestCase
                     ],
                 )
                 ->render(),
-        );
-
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <ul>
-            <li><a aria-current="page" class="active" href="/active">Active</a></li>
-            <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle" id="dropdown-ID" href="#">Dropdown</a>
-            <ul class="dropdown-menu" aria-labelledby="dropdown-ID">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Separated link</a></li>
-            </ul>
-            </li>
-            <li><a href="#">Link</a></li>
-            <li><a aria-disabled="true" class="disabled" href="#">Disabled</a></li>
-            </ul>
-            HTML,
-            $html,
         );
     }
 
