@@ -326,8 +326,10 @@ final class Breadcrumbs extends Widget
      *
      * This affects only the rendered HTML list. JSON-LD structured data still contains all breadcrumb items.
      *
-     * @param int|null $value The maximum number of displayed items including the ellipsis, or null for no limit.
-     * Must be a positive integer.
+     * @param int|null $value The maximum number of rendered breadcrumb items, including the home item and ellipsis,
+     * or null for no limit. Must be a positive integer.
+     *
+     * @psalm-param int|null $value
      *
      * @throws InvalidArgumentException If the value is not a positive integer or null.
      */

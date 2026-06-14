@@ -158,26 +158,26 @@ final class BreadcrumbsTest extends TestCase
         );
     }
 
-    public function testMaxItems(): void
+    public function testMaxItemsTruncatesMiddleItems(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
             <ul class="breadcrumb">
             <li><a href="/">Home</a></li>
-            <li><a href="/a">A</a></li>
+            <li><a href="/catalog">Catalog</a></li>
             <li>…</li>
-            <li><a href="/d">D</a></li>
-            <li class="active">Page</li>
+            <li><a href="/catalog/phones/apple/iphone">iPhone</a></li>
+            <li class="active">iPhone 15 Pro</li>
             </ul>
             HTML,
             Breadcrumbs::widget()
                 ->maxItems(5)
                 ->items([
-                    ['label' => 'A', 'url' => '/a'],
-                    ['label' => 'B', 'url' => '/b'],
-                    ['label' => 'C', 'url' => '/c'],
-                    ['label' => 'D', 'url' => '/d'],
-                    'Page',
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    ['label' => 'Phones', 'url' => '/catalog/phones'],
+                    ['label' => 'Apple', 'url' => '/catalog/phones/apple'],
+                    ['label' => 'iPhone', 'url' => '/catalog/phones/apple/iphone'],
+                    'iPhone 15 Pro',
                 ])
                 ->render(),
         );
@@ -189,15 +189,35 @@ final class BreadcrumbsTest extends TestCase
             <<<HTML
             <ul class="breadcrumb">
             <li><a href="/">Home</a></li>
-            <li><a href="/a">A</a></li>
-            <li class="active">Page</li>
+            <li><a href="/catalog">Catalog</a></li>
+            <li class="active">iPhone 15 Pro</li>
             </ul>
             HTML,
             Breadcrumbs::widget()
                 ->maxItems(5)
                 ->items([
-                    ['label' => 'A', 'url' => '/a'],
-                    'Page',
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    'iPhone 15 Pro',
+                ])
+                ->render(),
+        );
+    }
+
+    public function testMaxItemsDoesNotTruncateWhenRenderedItemCountEqualsLimit(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/catalog">Catalog</a></li>
+            <li class="active">iPhone 15 Pro</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->maxItems(3)
+                ->items([
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    'iPhone 15 Pro',
                 ])
                 ->render(),
         );
@@ -208,19 +228,19 @@ final class BreadcrumbsTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <ul class="breadcrumb">
-            <li><a href="/a">A</a></li>
+            <li><a href="/catalog">Catalog</a></li>
             <li>…</li>
-            <li class="active">Page</li>
+            <li class="active">iPhone 15 Pro</li>
             </ul>
             HTML,
             Breadcrumbs::widget()
                 ->homeItem(null)
                 ->maxItems(3)
                 ->items([
-                    ['label' => 'A', 'url' => '/a'],
-                    ['label' => 'B', 'url' => '/b'],
-                    ['label' => 'C', 'url' => '/c'],
-                    'Page',
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    ['label' => 'Phones', 'url' => '/catalog/phones'],
+                    ['label' => 'Apple', 'url' => '/catalog/phones/apple'],
+                    'iPhone 15 Pro',
                 ])
                 ->render(),
         );
