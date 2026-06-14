@@ -13,7 +13,6 @@ use function array_key_exists;
 use function is_array;
 use function is_bool;
 use function is_string;
-use function str_starts_with;
 
 final class Normalizer
 {
@@ -87,7 +86,18 @@ final class Normalizer
                         $currentPath,
                         $activateItems,
                         $iconContainerAttributes,
+                        $activeTrail,
                     );
+                    $link = self::link($child);
+                    $items[$i]['active'] = self::active(
+                        $child,
+                        $link,
+                        $currentPath,
+                        $activateItems,
+                    );
+                    $items[$i]['activeTrail'] = $activeTrail
+                        && !$items[$i]['active']
+                        && self::hasActiveDescendant($items[$i]['items']);
                 } else {
                     $items[$i]['link'] = self::link($child);
                     $items[$i]['linkAttributes'] = self::linkAttributes($child);
@@ -97,8 +107,7 @@ final class Normalizer
                         $currentPath,
                         $activateItems,
                     );
-                    $items[$i]['activeTrail'] = !$items[$i]['active']
-                        && self::isItemInActiveTrail($items[$i]['link'], $currentPath, $activeTrail);
+                    $items[$i]['activeTrail'] = false;
                     $items[$i]['disabled'] = self::disabled($child);
                     $items[$i]['visible'] = self::visible($child);
                     $items[$i]['label'] = self::renderLabel(
@@ -196,9 +205,22 @@ final class Normalizer
             ? $item['iconContainerAttributes'] : $iconContainerAttributes;
     }
 
-    private static function isItemInActiveTrail(string $link, string $currentPath, bool $activeTrail): bool
+    private static function hasActiveDescendant(array $items): bool
     {
-        return $activeTrail && $link !== '' && str_starts_with($currentPath, $link . '/');
+        foreach ($items as $item) {
+            if (
+                is_array($item)
+                && (
+                    ($item['active'] ?? false)
+                    || ($item['activeTrail'] ?? false)
+                    || (isset($item['items']) && is_array($item['items']) && self::hasActiveDescendant($item['items']))
+                )
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

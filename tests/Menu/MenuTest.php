@@ -55,20 +55,27 @@ final class MenuTest extends TestCase
             <<<HTML
             <ul>
             <li><a href="/">Home</a></li>
-            <li><a class="active-trail" href="/products">Products</a></li>
-            <li><a class="active-trail" href="/products/electronics">Electronics</a></li>
-            <li><a aria-current="page" class="active" href="/products/electronics/phones">Phones</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="active-trail" href="/catalog">Products</a>
+            <ul>
+            <li><a aria-current="page" class="active" href="/phones">Phones</a></li>
+            </ul>
+            </li>
             <li><a href="/about">About</a></li>
             </ul>
             HTML,
             Menu::widget()
                 ->activeTrail(true)
-                ->currentPath('/products/electronics/phones')
+                ->currentPath('/phones')
                 ->items([
                     ['label' => 'Home', 'link' => '/'],
-                    ['label' => 'Products', 'link' => '/products'],
-                    ['label' => 'Electronics', 'link' => '/products/electronics'],
-                    ['label' => 'Phones', 'link' => '/products/electronics/phones'],
+                    [
+                        'label' => 'Products',
+                        'link' => '/catalog',
+                        'items' => [
+                            ['label' => 'Phones', 'link' => '/phones'],
+                        ],
+                    ],
                     ['label' => 'About', 'link' => '/about'],
                 ])
                 ->render(),
@@ -80,17 +87,73 @@ final class MenuTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <ul>
-            <li><a class="trail" href="/products">Products</a></li>
-            <li><a aria-current="page" class="active" href="/products/phones">Phones</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="trail" href="/catalog">Products</a>
+            <ul>
+            <li><a aria-current="page" class="active" href="/phones">Phones</a></li>
+            </ul>
+            </li>
             </ul>
             HTML,
             Menu::widget()
                 ->activeTrail(true)
                 ->activeTrailClass('trail')
-                ->currentPath('/products/phones')
+                ->currentPath('/phones')
                 ->items([
-                    ['label' => 'Products', 'link' => '/products'],
-                    ['label' => 'Phones', 'link' => '/products/phones'],
+                    [
+                        'label' => 'Products',
+                        'link' => '/catalog',
+                        'items' => [
+                            ['label' => 'Phones', 'link' => '/phones'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testActiveTrailWithDropdownDefinitions(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle active-trail" href="/catalog">Products</a>
+            <ul class="dropdown-menu">
+            <li><a class="dropdown-item active" aria-current="page" href="/phones">Phones</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeTrail(true)
+                ->currentPath('/phones')
+                ->dropdownDefinitions(
+                    [
+                        'container()' => [false],
+                        'dividerClass()' => ['dropdown-divider'],
+                        'headerClass()' => ['dropdown-header'],
+                        'itemClass()' => ['dropdown-item'],
+                        'itemsContainerClass()' => ['dropdown-menu'],
+                        'toggleAttributes()' => [
+                            [
+                                'aria-expanded' => 'false',
+                                'data-bs-toggle' => 'dropdown',
+                                'role' => 'button',
+                            ],
+                        ],
+                        'toggleClass()' => ['dropdown-toggle'],
+                        'toggleType()' => ['link'],
+                    ],
+                )
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/catalog',
+                        'items' => [
+                            ['label' => 'Phones', 'link' => '/phones'],
+                        ],
+                    ],
                 ])
                 ->render(),
         );

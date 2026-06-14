@@ -16,6 +16,8 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
+use function is_array;
+use function is_string;
 use function strtr;
 use function trim;
 
@@ -577,6 +579,7 @@ final class Menu extends Widget
          *     link: string,
          *     linkAttributes: array,
          *     active: bool,
+         *     activeTrail?: bool,
          *     disabled: bool,
          *     visible: bool,
          *     items?: array
@@ -592,6 +595,57 @@ final class Menu extends Widget
         );
 
         return $this->renderMenu($items);
+    }
+
+    private function addActiveTrailClassToDropdownToggles(
+        array $item,
+        array $toggleAttributes,
+        string $toggleClass,
+    ): array {
+        if (($item['activeTrail'] ?? false) && $this->activeTrailClass !== '') {
+            $itemToggleAttributes = $item['toggleAttributes'] ?? [];
+            $itemToggleAttributes = is_array($itemToggleAttributes) ? $itemToggleAttributes : [];
+            $itemToggleAttributes = array_merge($toggleAttributes, $itemToggleAttributes);
+
+            if ($toggleClass !== '') {
+                Html::addCssClass($itemToggleAttributes, $toggleClass);
+            }
+
+            Html::addCssClass($itemToggleAttributes, $this->activeTrailClass);
+            $item['toggleAttributes'] = $itemToggleAttributes;
+        }
+
+        $items = $item['items'] ?? [];
+
+        if (is_array($items)) {
+            foreach ($items as $i => $child) {
+                if (is_array($child)) {
+                    $items[$i] = $this->addActiveTrailClassToDropdownToggles(
+                        $child,
+                        $toggleAttributes,
+                        $toggleClass,
+                    );
+                }
+            }
+
+            $item['items'] = $items;
+        }
+
+        return $item;
+    }
+
+    private function dropdownToggleAttributes(array $dropdownDefinitions): array
+    {
+        $toggleAttributes = $dropdownDefinitions['toggleAttributes()'][0] ?? [];
+
+        return is_array($toggleAttributes) ? $toggleAttributes : [];
+    }
+
+    private function dropdownToggleClass(array $dropdownDefinitions): string
+    {
+        $toggleClass = $dropdownDefinitions['toggleClass()'][0] ?? '';
+
+        return is_string($toggleClass) ? $toggleClass : '';
     }
 
     private function renderAfterContent(): string
@@ -633,6 +687,15 @@ final class Menu extends Widget
                 ],
                 'toggleType()' => ['link'],
             ];
+        }
+
+        $toggleAttributes = $this->dropdownToggleAttributes($dropdownDefinitions);
+        $toggleClass = $this->dropdownToggleClass($dropdownDefinitions);
+
+        foreach ($items as $i => $item) {
+            if (is_array($item)) {
+                $items[$i] = $this->addActiveTrailClassToDropdownToggles($item, $toggleAttributes, $toggleClass);
+            }
         }
 
         $dropdown = Dropdown::widget([], $dropdownDefinitions)->items($items)->render();
@@ -721,6 +784,7 @@ final class Menu extends Widget
      *     link: string,
      *     linkAttributes: array,
      *     active: bool,
+     *     activeTrail?: bool,
      *     disabled: bool,
      *     visible: bool,
      *     items?: array,
@@ -783,6 +847,7 @@ final class Menu extends Widget
      *     link: string,
      *     linkAttributes: array,
      *     active: bool,
+     *     activeTrail?: bool,
      *     disabled: bool,
      *     visible: bool,
      *     items?: array
