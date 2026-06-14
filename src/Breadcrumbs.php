@@ -328,7 +328,7 @@ final class Breadcrumbs extends Widget
      *
      * @param int $value The maximum number of displayed items including the ellipsis. 0 means unlimited.
      */
-    public function maxItems(int $value): self
+    public function maxItems(?int $value): self
     {
         $new = clone $this;
         $new->maxItems = $value > 0 ? $value : null;
