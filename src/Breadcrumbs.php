@@ -326,12 +326,19 @@ final class Breadcrumbs extends Widget
      *
      * This affects only the rendered HTML list. JSON-LD structured data still contains all breadcrumb items.
      *
-     * @param int $value The maximum number of displayed items including the ellipsis. 0 means unlimited.
+     * @param int|null $value The maximum number of displayed items including the ellipsis, or null for no limit.
+     * Must be a positive integer.
+     *
+     * @throws InvalidArgumentException If the value is not a positive integer or null.
      */
     public function maxItems(?int $value): self
     {
+        if ($value !== null && $value <= 0) {
+            throw new InvalidArgumentException('The "maxItems" value must be a positive integer or null.');
+        }
+
         $new = clone $this;
-        $new->maxItems = $value > 0 ? $value : null;
+        $new->maxItems = $value;
 
         return $new;
     }
