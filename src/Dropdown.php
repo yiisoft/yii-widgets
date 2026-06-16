@@ -596,7 +596,7 @@ final class Dropdown extends Widget
                 : $this->toggleAttributes;
 
             $id = match (true) {
-                array_key_exists('id', $toggleAttributes) => (string) $toggleAttributes['id'],
+                array_key_exists('id', $toggleAttributes) => $toggleAttributes['id'],
                 $this->id !== '' => $this->id,
                 default => Html::generateId('dropdown-'),
             };
