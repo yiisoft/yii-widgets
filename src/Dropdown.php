@@ -448,6 +448,19 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
+        return $this->renderToContainer(Helper\Normalizer::dropdown($this->items));
+    }
+
+    /**
+     * Renders already normalized items into the container. Sub-dropdowns reuse this directly so the items are
+     * normalized once, by the top-level {@see render()}, and not again per nesting level.
+     *
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    private function renderToContainer(array $normalizedItems): string
+    {
+        $containerAttributes = $this->containerAttributes;
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -466,10 +479,6 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        $normalizedItems = Helper\Normalizer::dropdown($this->items);
-
-        $containerAttributes = $this->containerAttributes;
-
         $items = $this->renderItems($normalizedItems) . PHP_EOL;
 
         if (trim($items) === '') {
@@ -525,7 +534,6 @@ final class Dropdown extends Widget
             ->itemContainer($this->itemContainer)
             ->itemContainerAttributes($this->itemContainerAttributes)
             ->itemContainerTag($this->itemContainerTag)
-            ->items($items)
             ->itemsContainerAttributes($this->itemsContainerAttributes)
             ->itemsContainerTag($this->itemsContainerTag)
             ->itemTag($this->itemTag)
@@ -533,7 +541,7 @@ final class Dropdown extends Widget
             ->splitButtonSpanAttributes($this->splitButtonSpanAttributes)
             ->toggleAttributes($this->toggleAttributes)
             ->toggleType($this->toggleType)
-            ->render();
+            ->renderToContainer($items);
     }
 
     private function renderHeader(string $label, array $headerAttributes = []): string
@@ -745,25 +753,30 @@ final class Dropdown extends Widget
 
     private function renderToggleButton(string $label, array $toggleAttributes = []): string
     {
-        return (new Button())->attributes($toggleAttributes)->content($label)->type('button')->render();
+        return (new Button())->attributes($toggleAttributes)->content($label)->encode(false)->type('button')->render();
     }
 
     private function renderToggleLink(string $label, string $link, array $toggleAttributes = []): string
     {
-        return (new A())->attributes($toggleAttributes)->content($label)->href($link)->render();
+        return (new A())->attributes($toggleAttributes)->content($label)->encode(false)->href($link)->render();
     }
 
     private function renderToggleSplit(string $label, array $toggleAttributes = []): string
     {
         return (new Button())
             ->attributes($toggleAttributes)
-            ->content((new Span())->attributes($this->splitButtonSpanAttributes)->content($label))
+            ->content((new Span())->attributes($this->splitButtonSpanAttributes)->content($label)->encode(false))
             ->type('button')
             ->render();
     }
 
     private function renderToggleSplitButton(string $label): string
     {
-        return (new Button())->attributes($this->splitButtonAttributes)->content($label)->type('button')->render();
+        return (new Button())
+            ->attributes($this->splitButtonAttributes)
+            ->content($label)
+            ->encode(false)
+            ->type('button')
+            ->render();
     }
 }

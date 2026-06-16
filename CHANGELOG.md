@@ -21,6 +21,7 @@
 - Enh #157: Improve psalm type annotations (@Tigrov)
 - Bug #128: Fix `Dropdown` sub-dropdowns not inheriting widget-level settings (@WarLikeLaux)
 - New #128: Add `Dropdown::splitButtonSpanAttributes()` method (@WarLikeLaux)
+- Bug #159: Fix double-encoding of toggle and nested item labels in `Dropdown` (@WarLikeLaux)
 
 ## 2.1.1 September 23, 2025
 
