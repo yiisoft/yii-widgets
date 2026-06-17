@@ -10,7 +10,10 @@ use Yiisoft\Widget\Widget;
 use Yiisoft\View\ViewInterface;
 
 use function array_key_exists;
+use function array_slice;
+use function count;
 use function implode;
+use function intdiv;
 use function is_array;
 use function is_string;
 use function json_encode;
@@ -64,10 +67,16 @@ final class Breadcrumbs extends Widget
     private string $containerClass = '';
     /** @psalm-var non-empty-string */
     private string $containerTag = 'nav';
+    private string $ellipsis = '…';
+    private string $ellipsisTemplate = "<li>{ellipsis}</li>\n";
     private ?array $homeItem = ['label' => 'Home', 'url' => '/'];
     private array $items = [];
     private string $itemTemplate = "<li>{link}</li>\n";
     private bool $jsonLd = false;
+    /**
+     * @psalm-var positive-int|null
+     */
+    private ?int $maxItems = null;
     private string $tag = 'ul';
 
     /**
@@ -155,6 +164,34 @@ final class Breadcrumbs extends Widget
 
         $new = clone $this;
         $new->containerTag = $value;
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified ellipsis text.
+     *
+     * @param string $value The ellipsis text used when items are truncated by {@see maxItems()}.
+     * The value is inserted into the ellipsis template without encoding.
+     */
+    public function ellipsis(string $value): self
+    {
+        $new = clone $this;
+        $new->ellipsis = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified ellipsis template.
+     *
+     * @param string $value The template used to render the ellipsis item.
+     * The token `{ellipsis}` will be replaced with the ellipsis text.
+     */
+    public function ellipsisTemplate(string $value): self
+    {
+        $new = clone $this;
+        $new->ellipsisTemplate = $value;
+
         return $new;
     }
 
@@ -285,6 +322,31 @@ final class Breadcrumbs extends Widget
     }
 
     /**
+     * Returns a new instance with the specified maximum number of items to display.
+     *
+     * This affects only the rendered HTML list. JSON-LD structured data still contains all breadcrumb items.
+     *
+     * @param int|null $value The maximum number of rendered breadcrumb items, including the home item and ellipsis,
+     * or null for no limit. Must be a positive integer.
+     *
+     * @psalm-param positive-int|null $value
+     *
+     * @throws InvalidArgumentException If the value is not a positive integer or null.
+     */
+    public function maxItems(?int $value): self
+    {
+        /** @psalm-suppress DocblockTypeContradiction */
+        if ($value !== null && $value <= 0) {
+            throw new InvalidArgumentException('The "maxItems" value must be a positive integer or null.');
+        }
+
+        $new = clone $this;
+        $new->maxItems = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag.
      *
      * @param string $value The container tag name. If an empty string is provided, the widget will not render
@@ -328,6 +390,17 @@ final class Breadcrumbs extends Widget
                     isset($item['url']) ? $this->itemTemplate : $this->activeItemTemplate,
                 );
             }
+        }
+
+        if ($this->maxItems !== null && count($items) > $this->maxItems) {
+            $remaining = $this->maxItems - 1;
+            $headCount = intdiv($remaining, 2);
+            $tailCount = $remaining - $headCount;
+            $ellipsisItem = strtr($this->ellipsisTemplate, ['{ellipsis}' => $this->ellipsis]);
+
+            $head = array_slice($items, 0, $headCount);
+            $tail = $tailCount > 0 ? array_slice($items, -$tailCount) : [];
+            $items = [...$head, $ellipsisItem, ...$tail];
         }
 
         $body = implode('', $items);
