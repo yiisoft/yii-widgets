@@ -10,10 +10,12 @@ use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Span;
 
 use function array_key_exists;
-use function fnmatch;
 use function is_array;
 use function is_bool;
 use function is_string;
+use function preg_match;
+use function preg_quote;
+use function str_replace;
 
 final class Normalizer
 {
@@ -262,13 +264,20 @@ final class Normalizer
 
         if ($activateItems) {
             foreach ((array) $item['active'] as $pattern) {
-                if (is_string($pattern) && fnmatch($pattern, $currentPath)) {
+                if (is_string($pattern) && self::matchesWildcard($pattern, $currentPath)) {
                     return true;
                 }
             }
         }
 
         return false;
+    }
+
+    private static function matchesWildcard(string $pattern, string $currentPath): bool
+    {
+        $regex = str_replace('\\*', '.*', preg_quote($pattern, '#'));
+
+        return preg_match('#^' . $regex . '\z#u', $currentPath) === 1;
     }
 
     private static function toggleAttributes(array $item): array

@@ -127,6 +127,37 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testActiveStringPatternTreatsOnlyAsteriskAsWildcard(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/docs/file1">Docs</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/docs/file1')
+                ->items([
+                    ['label' => 'Docs', 'link' => '/docs/file1', 'active' => '/docs/file?'],
+                ])
+                ->render(),
+        );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/docs/chaptera">Chapter</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/docs/chaptera')
+                ->items([
+                    ['label' => 'Chapter', 'link' => '/docs/chaptera', 'active' => '/docs/chapter[abc]'],
+                ])
+                ->render(),
+        );
+    }
+
     public function testActiveItemsWithFalse(): void
     {
         Assert::equalsWithoutLE(
