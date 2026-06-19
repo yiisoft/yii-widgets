@@ -257,7 +257,7 @@ final class Menu extends Widget
      * @param array $valuesMap The dropdown definition widget for the collapse dropdown.
      * When empty, falls back to {@see dropdownDefinitions()}.
      */
-    public function collapseDropdownDefinitions(array $valuesMap): self
+    public function collapseDropdownDefinitions(?array $valuesMap): self
     {
         $new = clone $this;
         $new->collapseDropdownDefinitions = $valuesMap;
