@@ -58,6 +58,40 @@ final class NormalizerTest extends TestCase
         $this->assertArrayNotHasKey('iconContainerAttributes', $items[0]);
     }
 
+    public function testMenuSetsActiveTrailToggleAttributes(): void
+    {
+        $items = Normalizer::menu(
+            [
+                [
+                    'label' => 'Products',
+                    'link' => '/catalog',
+                    'toggleAttributes' => ['class' => 'custom-toggle', 'data-id' => 'products'],
+                    'items' => [
+                        ['label' => 'Phones', 'link' => '/phones'],
+                    ],
+                ],
+            ],
+            '/phones',
+            true,
+            [],
+            true,
+            'active-trail',
+            ['aria-expanded' => 'false', 'role' => 'button'],
+            'dropdown-toggle',
+        );
+
+        $this->assertTrue($items[0]['activeTrail']);
+        $this->assertSame(
+            [
+                'aria-expanded' => 'false',
+                'role' => 'button',
+                'class' => 'custom-toggle dropdown-toggle active-trail',
+                'data-id' => 'products',
+            ],
+            $items[0]['toggleAttributes'],
+        );
+    }
+
     public function testRenderLabel(): void
     {
         $this->assertSame('test', Normalizer::renderLabel('test', '', [], '', []));

@@ -571,6 +571,8 @@ final class Menu extends Widget
             return '';
         }
 
+        $dropdownDefinitions = $this->dropdownDefinitionsWithDefaults();
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -592,46 +594,12 @@ final class Menu extends Widget
             $this->activateItems,
             $this->iconContainerAttributes,
             $this->activeTrail,
+            $this->activeTrailClass,
+            $this->dropdownToggleAttributes($dropdownDefinitions),
+            $this->dropdownToggleClass($dropdownDefinitions),
         );
 
         return $this->renderMenu($items);
-    }
-
-    private function addActiveTrailClassToDropdownToggles(
-        array $item,
-        array $toggleAttributes,
-        string $toggleClass,
-    ): array {
-        if (($item['activeTrail'] ?? false) && $this->activeTrailClass !== '') {
-            $itemToggleAttributes = $item['toggleAttributes'] ?? [];
-            $itemToggleAttributes = is_array($itemToggleAttributes) ? $itemToggleAttributes : [];
-            $itemToggleAttributes = array_merge($toggleAttributes, $itemToggleAttributes);
-
-            if ($toggleClass !== '') {
-                Html::addCssClass($itemToggleAttributes, $toggleClass);
-            }
-
-            Html::addCssClass($itemToggleAttributes, $this->activeTrailClass);
-            $item['toggleAttributes'] = $itemToggleAttributes;
-        }
-
-        $items = $item['items'] ?? [];
-
-        if (is_array($items)) {
-            foreach ($items as $i => $child) {
-                if (is_array($child)) {
-                    $items[$i] = $this->addActiveTrailClassToDropdownToggles(
-                        $child,
-                        $toggleAttributes,
-                        $toggleClass,
-                    );
-                }
-            }
-
-            $item['items'] = $items;
-        }
-
-        return $item;
     }
 
     private function dropdownToggleAttributes(array $dropdownDefinitions): array
@@ -646,6 +614,22 @@ final class Menu extends Widget
         $toggleClass = $dropdownDefinitions['toggleClass()'][0] ?? '';
 
         return is_string($toggleClass) ? $toggleClass : '';
+    }
+
+    private function dropdownDefinitionsWithDefaults(): array
+    {
+        if ($this->dropdownDefinitions !== []) {
+            return $this->dropdownDefinitions;
+        }
+
+        return [
+            'container()' => [false],
+            'dividerClass()' => ['dropdown-divider'],
+            'toggleAttributes()' => [
+                ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
+            ],
+            'toggleType()' => ['link'],
+        ];
     }
 
     private function renderAfterContent(): string
@@ -676,29 +660,7 @@ final class Menu extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        $dropdownDefinitions = $this->dropdownDefinitions;
-
-        if ($dropdownDefinitions === []) {
-            $dropdownDefinitions = [
-                'container()' => [false],
-                'dividerClass()' => ['dropdown-divider'],
-                'toggleAttributes()' => [
-                    ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
-                ],
-                'toggleType()' => ['link'],
-            ];
-        }
-
-        $toggleAttributes = $this->dropdownToggleAttributes($dropdownDefinitions);
-        $toggleClass = $this->dropdownToggleClass($dropdownDefinitions);
-
-        foreach ($items as $i => $item) {
-            if (is_array($item)) {
-                $items[$i] = $this->addActiveTrailClassToDropdownToggles($item, $toggleAttributes, $toggleClass);
-            }
-        }
-
-        $dropdown = Dropdown::widget([], $dropdownDefinitions)->items($items)->render();
+        $dropdown = Dropdown::widget([], $this->dropdownDefinitionsWithDefaults())->items($items)->render();
 
         if ($this->dropdownContainerTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');

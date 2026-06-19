@@ -73,6 +73,9 @@ final class Normalizer
         bool $activateItems,
         array $iconContainerAttributes = [],
         bool $activeTrail = false,
+        string $activeTrailClass = '',
+        array $dropdownToggleAttributes = [],
+        string $dropdownToggleClass = '',
     ): array {
         /**
          * @psalm-var array[] $items
@@ -87,6 +90,9 @@ final class Normalizer
                         $activateItems,
                         $iconContainerAttributes,
                         $activeTrail,
+                        $activeTrailClass,
+                        $dropdownToggleAttributes,
+                        $dropdownToggleClass,
                     );
                     $link = self::link($child);
                     $items[$i]['active'] = self::active(
@@ -98,6 +104,15 @@ final class Normalizer
                     $items[$i]['activeTrail'] = $activeTrail
                         && !$items[$i]['active']
                         && self::hasActiveDescendant($items[$i]['items']);
+
+                    if ($items[$i]['activeTrail'] && $activeTrailClass !== '') {
+                        $items[$i]['toggleAttributes'] = self::activeTrailToggleAttributes(
+                            $child,
+                            $activeTrailClass,
+                            $dropdownToggleAttributes,
+                            $dropdownToggleClass,
+                        );
+                    }
                 } else {
                     $items[$i]['link'] = self::link($child);
                     $items[$i]['linkAttributes'] = self::linkAttributes($child);
@@ -164,6 +179,23 @@ final class Normalizer
         }
 
         return is_bool($item['active']) ? $item['active'] : false;
+    }
+
+    private static function activeTrailToggleAttributes(
+        array $item,
+        string $activeTrailClass,
+        array $dropdownToggleAttributes,
+        string $dropdownToggleClass,
+    ): array {
+        $toggleAttributes = array_merge($dropdownToggleAttributes, self::toggleAttributes($item));
+
+        if ($dropdownToggleClass !== '') {
+            Html::addCssClass($toggleAttributes, $dropdownToggleClass);
+        }
+
+        Html::addCssClass($toggleAttributes, $activeTrailClass);
+
+        return $toggleAttributes;
     }
 
     private static function disabled(array $item): bool

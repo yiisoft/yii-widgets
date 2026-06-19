@@ -72,8 +72,8 @@ final class MenuTest extends TestCase
             <ul>
             <li><a href="/">Home</a></li>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="active-trail" href="/catalog">Products</a>
-            <ul>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="active-trail" id="dropdown-1" href="/catalog">Products</a>
+            <ul aria-labelledby="dropdown-1">
             <li><a aria-current="page" class="active" href="/phones">Phones</a></li>
             </ul>
             </li>
@@ -104,8 +104,8 @@ final class MenuTest extends TestCase
             <<<HTML
             <ul>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="trail" href="/catalog">Products</a>
-            <ul>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="trail" id="dropdown-1" href="/catalog">Products</a>
+            <ul aria-labelledby="dropdown-1">
             <li><a aria-current="page" class="active" href="/phones">Phones</a></li>
             </ul>
             </li>
@@ -134,8 +134,8 @@ final class MenuTest extends TestCase
             <<<HTML
             <ul>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle active-trail" href="/catalog">Products</a>
-            <ul class="dropdown-menu">
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle active-trail" id="dropdown-1" href="/catalog">Products</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown-1">
             <li><a class="dropdown-item active" aria-current="page" href="/phones">Phones</a></li>
             </ul>
             </li>
@@ -183,8 +183,8 @@ final class MenuTest extends TestCase
             <li><a href="/prod">Prod</a></li>
             <li><a aria-current="page" class="active" href="/products">Products</a></li>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="/catalog">Catalog</a>
-            <ul>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="/catalog">Catalog</a>
+            <ul aria-labelledby="dropdown-1">
             <li><a href="/phone">Phone</a></li>
             </ul>
             </li>
