@@ -243,7 +243,7 @@ final class Menu extends Widget
      *
      * @psalm-param positive-int $value
      */
-    public function collapseAfter(int $value): self
+    public function collapseAfter(?int $value): self
     {
         $new = clone $this;
         $new->collapseAfter = $value;
