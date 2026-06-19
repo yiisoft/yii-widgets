@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Html\IdGenerator;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
@@ -12,7 +13,9 @@ use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
 final class DropdownTest extends TestCase
 {
-    use TestTrait;
+    use TestTrait {
+        TestTrait::setUp as setUpTestTrait;
+    }
 
     private array $items = [
         ['label' => 'Action', 'link' => '#', 'active' => true],
@@ -21,6 +24,19 @@ final class DropdownTest extends TestCase
         '-',
         ['label' => 'Separated link', 'link' => '#', 'disabled' => true],
     ];
+
+    protected function setUp(): void
+    {
+        $this->setUpTestTrait();
+
+        IdGenerator\disableSeed();
+        IdGenerator\reset();
+    }
+
+    protected function tearDown(): void
+    {
+        IdGenerator\enableSeed();
+    }
 
     public function testActiveClass(): void
     {
@@ -116,6 +132,82 @@ final class DropdownTest extends TestCase
             HTML,
             Dropdown::widget()->dividerTag('span')->items($this->items)->render(),
         );
+    }
+
+    public function testGenerateId(): void
+    {
+        $result = Dropdown::widget()
+            ->items([
+                [
+                    'label' => 'Toggle',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('id="dropdown-1"', $result);
+        $this->assertStringContainsString('aria-labelledby="dropdown-1"', $result);
+    }
+
+    public function testCustomToggleIdIsRespected(): void
+    {
+        $result = Dropdown::widget()
+            ->items([
+                [
+                    'label' => 'Toggle',
+                    'link' => '#',
+                    'toggleAttributes' => ['id' => 'custom-toggle'],
+                    'items' => [
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('id="custom-toggle"', $result);
+        $this->assertStringContainsString('aria-labelledby="custom-toggle"', $result);
+        $this->assertStringNotContainsString('id="dropdown-', $result);
+    }
+
+    public function testContainerFalseStillGeneratesIdForToggleMenuPair(): void
+    {
+        $result = Dropdown::widget()
+            ->container(false)
+            ->items([
+                [
+                    'label' => 'Toggle',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('id="dropdown-1"', $result);
+        $this->assertStringContainsString('aria-labelledby="dropdown-1"', $result);
+    }
+
+    public function testPreserveExplicitAriaLabelledByOnSubmenuContainer(): void
+    {
+        $result = Dropdown::widget()
+            ->itemsContainerAttributes(['aria-labelledby' => 'explicit-submenu'])
+            ->items([
+                [
+                    'label' => 'Toggle',
+                    'link' => '#',
+                    'items' => [
+                        ['label' => 'Action', 'link' => '#'],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertStringContainsString('aria-labelledby="explicit-submenu"', $result);
+        $this->assertStringNotContainsString('aria-labelledby="dropdown-', $result);
     }
 
     public function testItemContainerWithFalse(): void
@@ -328,6 +420,89 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testSubDropdownIconsAreNotDoubleEncoded(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button id="test" type="button"><span><i class="bi bi-star">star</i></span>Parent</button>
+            <ul aria-labelledby="test">
+            <li><a href="#"><span><i class="bi bi-house">house</i></span>Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->id('test')
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'icon' => 'star',
+                        'iconClass' => 'bi bi-star',
+                        'items' => [
+                            ['label' => 'Child', 'link' => '#', 'icon' => 'house', 'iconClass' => 'bi bi-house'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testToggleLinkIconIsNotDoubleEncoded(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <a id="test" href="#"><span><i class="bi bi-star">star</i></span>Parent</a>
+            <ul aria-labelledby="test">
+            <li><a href="#">Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->id('test')
+                ->toggleType('link')
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'icon' => 'star',
+                        'iconClass' => 'bi bi-star',
+                        'items' => [['label' => 'Child', 'link' => '#']],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testToggleSplitIconIsNotDoubleEncoded(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button type="button"><span><i class="bi bi-star">star</i></span>Parent</button>
+            <button id="test" type="button"><span><span><i class="bi bi-star">star</i></span>Parent</span></button>
+            <ul aria-labelledby="test">
+            <li><a href="#">Child</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->id('test')
+                ->toggleType('split')
+                ->items([
+                    [
+                        'label' => 'Parent',
+                        'link' => '#',
+                        'icon' => 'star',
+                        'iconClass' => 'bi bi-star',
+                        'items' => [['label' => 'Child', 'link' => '#']],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testItemsLinkAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -514,8 +689,8 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <button type="button">Custom toggle</button>
-            <ul>
+            <button id="dropdown-1" type="button">Custom toggle</button>
+            <ul aria-labelledby="dropdown-1">
             <li><a href="#">Action</a></li>
             </ul>
             </div>
@@ -540,8 +715,8 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <button type="button"><span>🔔</span></button>
-            <ul>
+            <button id="dropdown-1" type="button"><span>🔔</span></button>
+            <ul aria-labelledby="dropdown-1">
             <li><a href="#">Action</a></li>
             </ul>
             </div>
