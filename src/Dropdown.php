@@ -15,6 +15,7 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
+use function array_key_exists;
 use function gettype;
 use function implode;
 use function str_contains;
@@ -611,8 +612,28 @@ final class Dropdown extends Widget
                 $item['itemContainerAttributes'],
             );
         } else {
-            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']));
-            $toggle = $this->renderToggle($item['label'], $item['link'], $item['toggleAttributes']);
+            $toggleAttributes = $item['toggleAttributes'] !== []
+                ? $item['toggleAttributes']
+                : $this->toggleAttributes;
+
+            $id = match (true) {
+                array_key_exists('id', $toggleAttributes) => $toggleAttributes['id'],
+                $this->id !== '' => $this->id,
+                default => Html::generateId('dropdown-'),
+            };
+
+            if ($id !== '' && !array_key_exists('id', $toggleAttributes)) {
+                $toggleAttributes['id'] = $id;
+            }
+
+            $itemsContainerAttributes = $this->itemsContainerAttributes;
+
+            if ($id !== '' && !array_key_exists('aria-labelledby', $itemsContainerAttributes)) {
+                $itemsContainerAttributes['aria-labelledby'] = $id;
+            }
+
+            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']), $itemsContainerAttributes);
+            $toggle = $this->renderToggle($item['label'], $item['link'], $toggleAttributes);
             $toggleSplitButton = $this->renderToggleSplitButton($item['label']);
 
             if ($this->toggleType === 'split' && !str_contains($this->containerClass, 'dropstart')) {
@@ -643,14 +664,8 @@ final class Dropdown extends Widget
             ->render();
     }
 
-    private function renderItemsContainer(string $content): string
+    private function renderItemsContainer(string $content, array $itemsContainerAttributes): string
     {
-        $itemsContainerAttributes = $this->itemsContainerAttributes;
-
-        if ($this->id !== '') {
-            $itemsContainerAttributes['aria-labelledby'] = $this->id;
-        }
-
         if ($this->itemsContainerTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
@@ -696,7 +711,7 @@ final class Dropdown extends Widget
      *   }|string
      * > $items
      */
-    private function renderItems(array $items = []): string
+    private function renderItems(array $items): string
     {
         $lines = [];
 
@@ -734,16 +749,8 @@ final class Dropdown extends Widget
         };
     }
 
-    private function renderToggle(string $label, string $link, array $toggleAttributes = []): string
+    private function renderToggle(string $label, string $link, array $toggleAttributes): string
     {
-        if ($toggleAttributes === []) {
-            $toggleAttributes = $this->toggleAttributes;
-        }
-
-        if ($this->id !== '') {
-            $toggleAttributes['id'] = $this->id;
-        }
-
         return match ($this->toggleType) {
             'link' => $this->renderToggleLink($label, $link, $toggleAttributes),
             'split' => $this->renderToggleSplit($label, $toggleAttributes),
