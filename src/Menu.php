@@ -592,7 +592,7 @@ final class Menu extends Widget
         $rawItems = $this->items;
         $hasCollapse = false;
 
-        if ($this->collapseAfter > 0) {
+        if ($this->collapseAfter !== null) {
             [$rawItems, $hasCollapse] = $this->collapseItems($rawItems);
         }
 
