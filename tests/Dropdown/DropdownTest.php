@@ -190,6 +190,33 @@ final class DropdownTest extends TestCase
         $this->assertStringContainsString('aria-labelledby="dropdown-1"', $result);
     }
 
+    public function testExplicitIdIsNotInheritedBySubDropdowns(): void
+    {
+        $result = Dropdown::widget()
+            ->id('root-toggle')
+            ->items([
+                [
+                    'label' => 'Level 1',
+                    'link' => '#',
+                    'items' => [
+                        [
+                            'label' => 'Level 2',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Level 3', 'link' => '#'],
+                            ],
+                        ],
+                    ],
+                ],
+            ])
+            ->render();
+
+        $this->assertSame(1, substr_count($result, 'id="root-toggle"'));
+        $this->assertStringContainsString('aria-labelledby="root-toggle"', $result);
+        $this->assertStringContainsString('id="dropdown-1"', $result);
+        $this->assertStringContainsString('aria-labelledby="dropdown-1"', $result);
+    }
+
     public function testPreserveExplicitAriaLabelledByOnSubmenuContainer(): void
     {
         $result = Dropdown::widget()
@@ -787,7 +814,7 @@ final class DropdownTest extends TestCase
             ])
             ->render();
 
-        $this->assertSame(2, substr_count($html, '<ol>'));
+        $this->assertSame(2, substr_count($html, '<ol'));
     }
 
     public function testSubDropdownInheritsSplitButtonAttributes(): void

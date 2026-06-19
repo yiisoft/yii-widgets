@@ -522,26 +522,9 @@ final class Dropdown extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        return self::widget()
-            ->activeClass($this->activeClass)
+        return $this
             ->container(false)
-            ->disabledClass($this->disabledClass)
-            ->dividerAttributes($this->dividerAttributes)
-            ->dividerClass($this->dividerClass)
-            ->dividerTag($this->dividerTag)
-            ->headerClass($this->headerClass)
-            ->headerTag($this->headerTag)
-            ->itemClass($this->itemClass)
-            ->itemContainer($this->itemContainer)
-            ->itemContainerAttributes($this->itemContainerAttributes)
-            ->itemContainerTag($this->itemContainerTag)
-            ->itemsContainerAttributes($this->itemsContainerAttributes)
-            ->itemsContainerTag($this->itemsContainerTag)
-            ->itemTag($this->itemTag)
-            ->splitButtonAttributes($this->splitButtonAttributes)
-            ->splitButtonSpanAttributes($this->splitButtonSpanAttributes)
-            ->toggleAttributes($this->toggleAttributes)
-            ->toggleType($this->toggleType)
+            ->id('')
             ->renderToContainer($items);
     }
 
