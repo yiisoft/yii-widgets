@@ -798,10 +798,11 @@ final class Menu extends Widget
     {
         $lines = [];
         $n = count($items);
+        $lastIndex = $n - 1;
 
         foreach ($items as $i => $item) {
             if (isset($item['items'])) {
-                $isCollapse = $hasCollapse && $i === $n - 1;
+                $isCollapse = $hasCollapse && $i === $lastIndex;
                 $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item], $isCollapse)]);
             } elseif ($item['visible']) {
                 $itemsContainerAttributes = array_merge(
@@ -813,7 +814,7 @@ final class Menu extends Widget
                     Html::addCssClass($itemsContainerAttributes, $this->firstItemClass);
                 }
 
-                if ($i === $n - 1 && $this->lastItemClass !== '') {
+                if ($i === $lastIndex && $this->lastItemClass !== '') {
                     Html::addCssClass($itemsContainerAttributes, $this->lastItemClass);
                 }
 

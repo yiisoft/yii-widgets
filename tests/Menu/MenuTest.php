@@ -182,8 +182,8 @@ final class MenuTest extends TestCase
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">More</a>
-            <ul>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+            <ul aria-labelledby="dropdown-1">
             <li><a href="/contact">Contact</a></li>
             <li><a href="/blog">Blog</a></li>
             </ul>
@@ -228,14 +228,14 @@ final class MenuTest extends TestCase
             <ul>
             <li><a href="/">Home</a></li>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Dropdown</a>
-            <ul>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
             <li><a href="#">Sub1</a></li>
             </ul>
             </li>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">More</a>
-            <ul>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-2" href="#">More</a>
+            <ul aria-labelledby="dropdown-2">
             <li><a href="/about">About</a></li>
             </ul>
             </li>
@@ -262,8 +262,8 @@ final class MenuTest extends TestCase
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">More</a>
-            <ul>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+            <ul aria-labelledby="dropdown-1">
             <li><a href="/blog">Blog</a></li>
             </ul>
             </li>
@@ -288,8 +288,8 @@ final class MenuTest extends TestCase
             <ul>
             <li><a href="/">Home</a></li>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle" href="#">More</a>
-            <ul class="dropdown-menu">
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle" id="dropdown-1" href="#">More</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown-1">
             <li><a class="dropdown-item" href="/about">About</a></li>
             </ul>
             </li>
@@ -323,8 +323,8 @@ final class MenuTest extends TestCase
             <ul>
             <li><a href="/">Home</a></li>
             <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" href="#">Show more</a>
-            <ul>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Show more</a>
+            <ul aria-labelledby="dropdown-1">
             <li><a href="/about">About</a></li>
             </ul>
             </li>
