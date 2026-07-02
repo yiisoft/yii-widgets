@@ -736,6 +736,39 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testToggleContentDoesNotReplaceNestedDropdownLabels(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button id="dropdown-1" type="button"><span class="avatar">SL</span></button>
+            <ul aria-labelledby="dropdown-1">
+            <button id="dropdown-2" type="button">Settings</button>
+            <ul aria-labelledby="dropdown-2">
+            <li><a href="/profile">Profile</a></li>
+            </ul>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->toggleContent((new Span())->attributes(['class' => 'avatar'])->content('SL'))
+                ->items([
+                    [
+                        'label' => 'Account',
+                        'items' => [
+                            [
+                                'label' => 'Settings',
+                                'items' => [
+                                    ['label' => 'Profile', 'link' => '/profile'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testUrlAsLinkAlias(): void
     {
         Assert::equalsWithoutLE(
