@@ -844,6 +844,46 @@ final class DropdownTest extends TestCase
         $this->assertSame(2, substr_count($html, 'split-span'));
     }
 
+    public function testSubDropdownDoesNotUseRootDropstartSplitOrderingWithoutContainer(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div class="btn-group dropstart">
+            <button class="toggle" id="dropdown-1" type="button"><span>Root</span></button>
+            <ul aria-labelledby="dropdown-1">
+            <button class="split" type="button">Nested</button>
+            <button class="toggle" id="dropdown-2" type="button"><span>Nested</span></button>
+            <ul aria-labelledby="dropdown-2">
+            <li><a href="/leaf">Leaf</a></li>
+            </ul>
+            </ul>
+            <button class="split" type="button">Root</button>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->containerClass('btn-group dropstart')
+                ->toggleType('split')
+                ->splitButtonClass('split')
+                ->toggleClass('toggle')
+                ->items([
+                    [
+                        'label' => 'Root',
+                        'link' => '/root',
+                        'items' => [
+                            [
+                                'label' => 'Nested',
+                                'link' => '/nested',
+                                'items' => [
+                                    ['label' => 'Leaf', 'link' => '/leaf'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testUrlAsLinkAlias(): void
     {
         Assert::equalsWithoutLE(
