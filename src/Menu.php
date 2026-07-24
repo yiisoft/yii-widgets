@@ -372,7 +372,9 @@ final class Menu extends Widget
      * an array with the following structure:
      *
      * - label: string, required, the nav item label.
-     * - active: bool, whether the item should be on active state or not.
+     * - active: bool|string|string[], whether the item should be on active state or not. A string (or any string
+     *   in the list) is matched against the current path using `*` as a wildcard, active if any matches - for example,
+     *   `['/products', '/products/*']` activates the item for `/products` and anything under it.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
      * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
      * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.

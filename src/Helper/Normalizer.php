@@ -13,6 +13,9 @@ use function array_key_exists;
 use function is_array;
 use function is_bool;
 use function is_string;
+use function preg_match;
+use function preg_quote;
+use function str_replace;
 
 final class Normalizer
 {
@@ -89,7 +92,7 @@ final class Normalizer
                 } else {
                     $items[$i]['link'] = self::link($child);
                     $items[$i]['linkAttributes'] = self::linkAttributes($child);
-                    $items[$i]['active'] = self::active(
+                    $items[$i]['active'] = self::menuActive(
                         $child,
                         $items[$i]['link'],
                         $currentPath,
@@ -251,6 +254,30 @@ final class Normalizer
     {
         return array_key_exists('linkAttributes', $item) && is_array($item['linkAttributes'])
             ? $item['linkAttributes'] : [];
+    }
+
+    private static function menuActive(array $item, string $link, string $currentPath, bool $activateItems): bool
+    {
+        if (!array_key_exists('active', $item) || is_bool($item['active'])) {
+            return self::active($item, $link, $currentPath, $activateItems);
+        }
+
+        if ($activateItems) {
+            foreach ((array) $item['active'] as $pattern) {
+                if (is_string($pattern) && self::matchesWildcard($pattern, $currentPath)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static function matchesWildcard(string $pattern, string $currentPath): bool
+    {
+        $regex = str_replace('\\*', '.*', preg_quote($pattern, '#'));
+
+        return preg_match('#^' . $regex . '\z#u', $currentPath) === 1;
     }
 
     private static function toggleAttributes(array $item): array
