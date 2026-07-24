@@ -65,6 +65,149 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testActiveTrail(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="active-trail" id="dropdown-1" href="/catalog">Products</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a aria-current="page" class="active" href="/phones">Phones</a></li>
+            </ul>
+            </li>
+            <li><a href="/about">About</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeTrail(true)
+                ->currentPath('/phones')
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    [
+                        'label' => 'Products',
+                        'link' => '/catalog',
+                        'items' => [
+                            ['label' => 'Phones', 'link' => '/phones'],
+                        ],
+                    ],
+                    ['label' => 'About', 'link' => '/about'],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testActiveTrailClass(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="trail" id="dropdown-1" href="/catalog">Products</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a aria-current="page" class="active" href="/phones">Phones</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeTrail(true)
+                ->activeTrailClass('trail')
+                ->currentPath('/phones')
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/catalog',
+                        'items' => [
+                            ['label' => 'Phones', 'link' => '/phones'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testActiveTrailWithDropdownDefinitions(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" class="dropdown-toggle active-trail" id="dropdown-1" href="/catalog">Products</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdown-1">
+            <li><a class="dropdown-item active" aria-current="page" href="/phones">Phones</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeTrail(true)
+                ->currentPath('/phones')
+                ->dropdownDefinitions(
+                    [
+                        'container()' => [false],
+                        'dividerClass()' => ['dropdown-divider'],
+                        'headerClass()' => ['dropdown-header'],
+                        'itemClass()' => ['dropdown-item'],
+                        'itemsContainerClass()' => ['dropdown-menu'],
+                        'toggleAttributes()' => [
+                            [
+                                'aria-expanded' => 'false',
+                                'data-bs-toggle' => 'dropdown',
+                                'role' => 'button',
+                            ],
+                        ],
+                        'toggleClass()' => ['dropdown-toggle'],
+                        'toggleType()' => ['link'],
+                    ],
+                )
+                ->items([
+                    [
+                        'label' => 'Products',
+                        'link' => '/catalog',
+                        'items' => [
+                            ['label' => 'Phones', 'link' => '/phones'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testActiveTrailDoesNotMatchSubstring(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/prod">Prod</a></li>
+            <li><a aria-current="page" class="active" href="/products">Products</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="/catalog">Catalog</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/phone">Phone</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->activeTrail(true)
+                ->currentPath('/products')
+                ->items([
+                    ['label' => 'Prod', 'link' => '/prod'],
+                    ['label' => 'Products', 'link' => '/products'],
+                    [
+                        'label' => 'Catalog',
+                        'link' => '/catalog',
+                        'items' => [
+                            ['label' => 'Phone', 'link' => '/phone'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testAfter(): void
     {
         Assert::equalsWithoutLE(

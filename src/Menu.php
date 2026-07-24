@@ -16,6 +16,8 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
+use function is_array;
+use function is_string;
 use function strtr;
 use function trim;
 
@@ -49,6 +51,8 @@ final class Menu extends Widget
     private string $afterTag = 'span';
     private string $activeClass = 'active';
     private bool $activateItems = true;
+    private bool $activeTrail = false;
+    private string $activeTrailClass = 'active-trail';
     private array $attributes = [];
     private array $beforeAttributes = [];
     private string $beforeContent = '';
@@ -96,6 +100,32 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->activeClass = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with active trail enabled or disabled.
+     *
+     * @param bool $value Whether to highlight ancestor items of the active item.
+     */
+    public function activeTrail(bool $value): self
+    {
+        $new = clone $this;
+        $new->activeTrail = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified active trail CSS class.
+     *
+     * @param string $value The CSS class to be appended to ancestor items of the active item.
+     */
+    public function activeTrailClass(string $value): self
+    {
+        $new = clone $this;
+        $new->activeTrailClass = $value;
 
         return $new;
     }
@@ -541,6 +571,8 @@ final class Menu extends Widget
             return '';
         }
 
+        $dropdownDefinitions = $this->dropdownDefinitionsWithDefaults();
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -549,6 +581,7 @@ final class Menu extends Widget
          *     link: string,
          *     linkAttributes: array,
          *     active: bool,
+         *     activeTrail?: bool,
          *     disabled: bool,
          *     visible: bool,
          *     items?: array
@@ -560,9 +593,43 @@ final class Menu extends Widget
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
+            $this->activeTrail,
+            $this->activeTrailClass,
+            $this->dropdownToggleAttributes($dropdownDefinitions),
+            $this->dropdownToggleClass($dropdownDefinitions),
         );
 
         return $this->renderMenu($items);
+    }
+
+    private function dropdownToggleAttributes(array $dropdownDefinitions): array
+    {
+        $toggleAttributes = $dropdownDefinitions['toggleAttributes()'][0] ?? [];
+
+        return is_array($toggleAttributes) ? $toggleAttributes : [];
+    }
+
+    private function dropdownToggleClass(array $dropdownDefinitions): string
+    {
+        $toggleClass = $dropdownDefinitions['toggleClass()'][0] ?? '';
+
+        return is_string($toggleClass) ? $toggleClass : '';
+    }
+
+    private function dropdownDefinitionsWithDefaults(): array
+    {
+        if ($this->dropdownDefinitions !== []) {
+            return $this->dropdownDefinitions;
+        }
+
+        return [
+            'container()' => [false],
+            'dividerClass()' => ['dropdown-divider'],
+            'toggleAttributes()' => [
+                ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
+            ],
+            'toggleType()' => ['link'],
+        ];
     }
 
     private function renderAfterContent(): string
@@ -593,20 +660,7 @@ final class Menu extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        $dropdownDefinitions = $this->dropdownDefinitions;
-
-        if ($dropdownDefinitions === []) {
-            $dropdownDefinitions = [
-                'container()' => [false],
-                'dividerClass()' => ['dropdown-divider'],
-                'toggleAttributes()' => [
-                    ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
-                ],
-                'toggleType()' => ['link'],
-            ];
-        }
-
-        $dropdown = Dropdown::widget([], $dropdownDefinitions)->items($items)->render();
+        $dropdown = Dropdown::widget([], $this->dropdownDefinitionsWithDefaults())->items($items)->render();
 
         if ($this->dropdownContainerTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
@@ -635,6 +689,7 @@ final class Menu extends Widget
      *   link: string,
      *   linkAttributes: array,
      *   active: bool,
+     *   activeTrail?: bool,
      *   disabled: bool,
      *   visible: bool,
      *   items?: array,
@@ -687,6 +742,7 @@ final class Menu extends Widget
      *     link: string,
      *     linkAttributes: array,
      *     active: bool,
+     *     activeTrail?: bool,
      *     disabled: bool,
      *     visible: bool,
      *     items?: array,
@@ -749,6 +805,7 @@ final class Menu extends Widget
      *     link: string,
      *     linkAttributes: array,
      *     active: bool,
+     *     activeTrail?: bool,
      *     disabled: bool,
      *     visible: bool,
      *     items?: array
