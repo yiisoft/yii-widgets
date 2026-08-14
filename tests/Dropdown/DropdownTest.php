@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Html\IdGenerator;
+use Yiisoft\Html\Tag\Span;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
@@ -671,18 +672,6 @@ final class DropdownTest extends TestCase
         $this->assertStringContainsString('data-custom="value"', $html);
     }
 
-    public function testUrlAsLinkAlias(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <li><a href="#">Action</a></li>
-            </div>
-            HTML,
-            Dropdown::widget()->items([['label' => 'Action', 'url' => '#']])->render(),
-        );
-    }
-
     public function testLinkTakesPriorityOverUrl(): void
     {
         Assert::equalsWithoutLE(
@@ -692,6 +681,103 @@ final class DropdownTest extends TestCase
             </div>
             HTML,
             Dropdown::widget()->items([['label' => 'Action', 'link' => '/link', 'url' => '/url']])->render(),
+        );
+    }
+
+    public function testToggleContent(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button id="dropdown-1" type="button">Custom toggle</button>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">Action</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->toggleContent('Custom toggle')
+                ->items([
+                    [
+                        'label' => 'Dropdown',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Action', 'link' => '#'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testToggleContentWithStringable(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button id="dropdown-1" type="button"><span>🔔</span></button>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">Action</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->toggleContent((new Span())->content('🔔'))
+                ->items([
+                    [
+                        'label' => 'Dropdown',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Action', 'link' => '#'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testToggleContentDoesNotReplaceNestedDropdownLabels(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button id="dropdown-1" type="button"><span class="avatar">SL</span></button>
+            <ul aria-labelledby="dropdown-1">
+            <button id="dropdown-2" type="button">Settings</button>
+            <ul aria-labelledby="dropdown-2">
+            <li><a href="/profile">Profile</a></li>
+            </ul>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->toggleContent((new Span())->attributes(['class' => 'avatar'])->content('SL'))
+                ->items([
+                    [
+                        'label' => 'Account',
+                        'items' => [
+                            [
+                                'label' => 'Settings',
+                                'items' => [
+                                    ['label' => 'Profile', 'link' => '/profile'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testUrlAsLinkAlias(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Action', 'url' => '#']])->render(),
         );
     }
 }
