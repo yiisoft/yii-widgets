@@ -72,6 +72,10 @@ final class Normalizer
         string $currentPath,
         bool $activateItems,
         array $iconContainerAttributes = [],
+        bool $activeTrail = false,
+        string $activeTrailClass = '',
+        array $dropdownToggleAttributes = [],
+        string $dropdownToggleClass = '',
     ): array {
         /**
          * @psalm-var array[] $items
@@ -85,7 +89,30 @@ final class Normalizer
                         $currentPath,
                         $activateItems,
                         $iconContainerAttributes,
+                        $activeTrail,
+                        $activeTrailClass,
+                        $dropdownToggleAttributes,
+                        $dropdownToggleClass,
                     );
+                    $link = self::link($child);
+                    $items[$i]['active'] = self::active(
+                        $child,
+                        $link,
+                        $currentPath,
+                        $activateItems,
+                    );
+                    $items[$i]['activeTrail'] = $activeTrail
+                        && !$items[$i]['active']
+                        && self::hasActiveDescendant($items[$i]['items']);
+
+                    if ($items[$i]['activeTrail'] && $activeTrailClass !== '') {
+                        $items[$i]['toggleAttributes'] = self::activeTrailToggleAttributes(
+                            $child,
+                            $activeTrailClass,
+                            $dropdownToggleAttributes,
+                            $dropdownToggleClass,
+                        );
+                    }
                 } else {
                     $items[$i]['link'] = self::link($child);
                     $items[$i]['linkAttributes'] = self::linkAttributes($child);
@@ -95,6 +122,7 @@ final class Normalizer
                         $currentPath,
                         $activateItems,
                     );
+                    $items[$i]['activeTrail'] = false;
                     $items[$i]['disabled'] = self::disabled($child);
                     $items[$i]['visible'] = self::visible($child);
                     $items[$i]['label'] = self::renderLabel(
@@ -153,6 +181,23 @@ final class Normalizer
         return is_bool($item['active']) ? $item['active'] : false;
     }
 
+    private static function activeTrailToggleAttributes(
+        array $item,
+        string $activeTrailClass,
+        array $dropdownToggleAttributes,
+        string $dropdownToggleClass,
+    ): array {
+        $toggleAttributes = array_merge($dropdownToggleAttributes, self::toggleAttributes($item));
+
+        if ($dropdownToggleClass !== '') {
+            Html::addCssClass($toggleAttributes, $dropdownToggleClass);
+        }
+
+        Html::addCssClass($toggleAttributes, $activeTrailClass);
+
+        return $toggleAttributes;
+    }
+
     private static function disabled(array $item): bool
     {
         return array_key_exists('disabled', $item) && is_bool($item['disabled']) ? $item['disabled'] : false;
@@ -190,6 +235,24 @@ final class Normalizer
     {
         return array_key_exists('iconContainerAttributes', $item) && is_array($item['iconContainerAttributes'])
             ? $item['iconContainerAttributes'] : $iconContainerAttributes;
+    }
+
+    private static function hasActiveDescendant(array $items): bool
+    {
+        foreach ($items as $item) {
+            if (
+                is_array($item)
+                && (
+                    ($item['active'] ?? false)
+                    || ($item['activeTrail'] ?? false)
+                    || (isset($item['items']) && is_array($item['items']) && self::hasActiveDescendant($item['items']))
+                )
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
