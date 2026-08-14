@@ -379,6 +379,19 @@ final class Dropdown extends Widget
     }
 
     /**
+     * Returns a new instance with the specified split button span attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function splitButtonSpanAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->splitButtonSpanAttributes = $valuesMap;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified split button span class.
      *
      * @param string $value The split button span class.
@@ -509,18 +522,9 @@ final class Dropdown extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        return self::widget()
+        return $this
             ->container(false)
-            ->dividerAttributes($this->dividerAttributes)
-            ->headerClass($this->headerClass)
-            ->headerTag($this->headerTag)
-            ->itemClass($this->itemClass)
-            ->itemContainerAttributes($this->itemContainerAttributes)
-            ->itemContainerTag($this->itemContainerTag)
-            ->itemsContainerAttributes($this->itemsContainerAttributes)
-            ->itemTag($this->itemTag)
-            ->toggleAttributes($this->toggleAttributes)
-            ->toggleType($this->toggleType)
+            ->id('')
             ->renderToContainer($items);
     }
 
