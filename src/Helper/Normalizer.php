@@ -80,39 +80,37 @@ final class Normalizer
         foreach ($items as $i => $child) {
             if (is_array($child)) {
                 if (isset($child['items']) && is_array($child['items'])) {
-                    $items[$i]['items'] = self::menu(
-                        $child['items'],
-                        $currentPath,
-                        $activateItems,
-                        $iconContainerAttributes,
-                    );
-                } else {
-                    $items[$i]['link'] = self::link($child);
-                    $items[$i]['linkAttributes'] = self::linkAttributes($child);
-                    $items[$i]['active'] = self::active(
-                        $child,
-                        $items[$i]['link'],
-                        $currentPath,
-                        $activateItems,
-                    );
-                    $items[$i]['disabled'] = self::disabled($child);
-                    $items[$i]['visible'] = self::visible($child);
-                    $items[$i]['label'] = self::renderLabel(
-                        self::label($child),
-                        self::icon($child),
-                        self::iconAttributes($child),
-                        self::iconClass($child),
-                        self::iconContainerAttributes($child, $iconContainerAttributes),
-                    );
-
-                    unset(
-                        $items[$i]['encode'],
-                        $items[$i]['icon'],
-                        $items[$i]['iconAttributes'],
-                        $items[$i]['iconClass'],
-                        $items[$i]['iconContainerAttributes'],
-                    );
+                    // Left as-is: `Menu::renderDropdown()` hands the whole subtree to `Dropdown::render()`, which
+                    // normalizes it (and all nested levels) itself. Normalizing it here too would double-encode
+                    // labels, ignore `encode => false`, and escape rendered icon markup.
+                    continue;
                 }
+
+                $items[$i]['link'] = self::link($child);
+                $items[$i]['linkAttributes'] = self::linkAttributes($child);
+                $items[$i]['active'] = self::active(
+                    $child,
+                    $items[$i]['link'],
+                    $currentPath,
+                    $activateItems,
+                );
+                $items[$i]['disabled'] = self::disabled($child);
+                $items[$i]['visible'] = self::visible($child);
+                $items[$i]['label'] = self::renderLabel(
+                    self::label($child),
+                    self::icon($child),
+                    self::iconAttributes($child),
+                    self::iconClass($child),
+                    self::iconContainerAttributes($child, $iconContainerAttributes),
+                );
+
+                unset(
+                    $items[$i]['encode'],
+                    $items[$i]['icon'],
+                    $items[$i]['iconAttributes'],
+                    $items[$i]['iconClass'],
+                    $items[$i]['iconContainerAttributes'],
+                );
             }
         }
 

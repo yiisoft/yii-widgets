@@ -22,6 +22,8 @@
 - Enh #157: Improve psalm type annotations (@Tigrov)
 - New #135: Add `maxItems()` truncation with ellipsis to `Breadcrumbs` widget (@WarLikeLaux)
 - Bug #159: Fix double-encoding of toggle and nested item labels in `Dropdown` (@WarLikeLaux)
+- Bug #168: Fix `Menu` dropdown items being normalized twice, which double-encoded labels, ignored
+  `encode => false`, and escaped rendered icon markup (@vjik)
 
 ## 2.1.1 September 23, 2025
 

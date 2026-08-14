@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests\Menu;
 
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Stringable;
 use Yiisoft\Html\IdGenerator;
@@ -380,6 +381,42 @@ final class MenuTest extends TestCase
                         ],
                         ['label' => 'Link', 'link' => '#'],
                         ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    #[TestWith(['Black & White', [], 'Black &amp; White'])]
+    #[TestWith(['<b>Bold</b>', ['encode' => false], '<b>Bold</b>'])]
+    #[TestWith([
+        'Home',
+        ['icon' => '🏠', 'iconContainerAttributes' => ['class' => 'me-2']],
+        '<span class="me-2"><i>🏠</i></span>Home',
+    ])]
+    public function testDropdownItemsAreNormalizedOnce(string $label, array $itemOptions, string $expectedLabel): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">{$expectedLabel}</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => $label, 'link' => '#', ...$itemOptions],
+                            ],
+                        ],
                     ],
                 )
                 ->render(),
