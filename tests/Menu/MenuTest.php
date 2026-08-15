@@ -483,6 +483,37 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testDropdownLeafItemWithoutLinkRendersAsHeaderAndIsNotActive(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><span>Section header</span></li>
+            <li><a href="/x">Real link</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Section header'],
+                                ['label' => 'Real link', 'link' => '/x'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
     public function testFirstItemCssClass(): void
     {
         Assert::equalsWithoutLE(
