@@ -80,9 +80,12 @@ final class Normalizer
         foreach ($items as $i => $child) {
             if (is_array($child)) {
                 if (isset($child['items']) && is_array($child['items'])) {
-                    // Left as-is: `Menu::renderDropdown()` hands the whole subtree to `Dropdown::render()`, which
-                    // normalizes it (and all nested levels) itself. Normalizing it here too would double-encode
-                    // labels, ignore `encode => false`, and escape rendered icon markup.
+                    $items[$i] = self::injectMenuContext(
+                        $child,
+                        $currentPath,
+                        $activateItems,
+                        $iconContainerAttributes,
+                    );
                     continue;
                 }
 
@@ -149,6 +152,38 @@ final class Normalizer
         }
 
         return is_bool($item['active']) ? $item['active'] : false;
+    }
+
+    /**
+     * Carries `Menu`-level context into an unnormalized submenu subtree, so `Dropdown::render()` — which does not
+     * know about `currentPath`/`activateItems` or a default `iconContainerAttributes` — still honors them for
+     * nested items that don't override these keys themselves.
+     */
+    private static function injectMenuContext(
+        array $item,
+        string $currentPath,
+        bool $activateItems,
+        array $iconContainerAttributes,
+    ): array {
+        $item['active'] = self::active($item, self::link($item), $currentPath, $activateItems);
+        $item['iconContainerAttributes'] = self::iconContainerAttributes($item, $iconContainerAttributes);
+
+        if (isset($item['items']) && is_array($item['items'])) {
+            $nestedItems = $item['items'];
+            foreach ($nestedItems as $i => $child) {
+                if (is_array($child)) {
+                    $nestedItems[$i] = self::injectMenuContext(
+                        $child,
+                        $currentPath,
+                        $activateItems,
+                        $iconContainerAttributes,
+                    );
+                }
+            }
+            $item['items'] = $nestedItems;
+        }
+
+        return $item;
     }
 
     private static function disabled(array $item): bool

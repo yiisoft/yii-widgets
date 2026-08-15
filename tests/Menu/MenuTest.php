@@ -423,6 +423,66 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testDropdownItemsInheritIconContainerAttributesFromMenu(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#"><span class="me-2"><i>🏠</i></span>Home</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Home', 'link' => '#', 'icon' => '🏠'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testDropdownItemsInheritCurrentPathAndActivateItemsFromMenu(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a aria-current="page" class="active" href="/sub">Sub</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/sub')
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Sub', 'link' => '/sub'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
     public function testFirstItemCssClass(): void
     {
         Assert::equalsWithoutLE(
