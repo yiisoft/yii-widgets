@@ -522,12 +522,10 @@ final class MenuTest extends TestCase
             <li>
             <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
             <ul aria-labelledby="dropdown-1">
-            <li>
-            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-2" href="#">Sub Dropdown</a>
+            <li><a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-2" href="#">Sub Dropdown</a>
             <ul aria-labelledby="dropdown-2">
             <li><a aria-current="page" class="active" href="/deep"><span class="me-2"><i>🏠</i></span>Deep</a></li>
-            </ul>
-            </li>
+            </ul></li>
             </ul>
             </li>
             </ul>
