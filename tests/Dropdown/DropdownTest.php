@@ -447,6 +447,40 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testNestedSubDropdownIsWrappedInListItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button id="dropdown-1" type="button">Outer</button>
+            <ul aria-labelledby="dropdown-1">
+            <li><button id="dropdown-2" type="button">Sub Dropdown</button>
+            <ul aria-labelledby="dropdown-2">
+            <li><a href="/deep">Deep</a></li>
+            </ul></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items([
+                    [
+                        'label' => 'Outer',
+                        'link' => '#',
+                        'items' => [
+                            [
+                                'label' => 'Sub Dropdown',
+                                'link' => '#',
+                                'items' => [
+                                    ['label' => 'Deep', 'link' => '/deep'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testToggleLinkIconIsNotDoubleEncoded(): void
     {
         Assert::equalsWithoutLE(

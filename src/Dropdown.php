@@ -43,6 +43,12 @@ final class Dropdown extends Widget
     private array $itemContainerAttributes = [];
     private string $itemContainerTag = 'li';
     private array $items = [];
+    /**
+     * Whether this instance renders a nested submenu (always inside an actual `<ul>`, via {@see renderDropdown()}),
+     * as opposed to the top-level {@see items()}, which are rendered directly into {@see $containerTag} and may
+     * not be a list at all.
+     */
+    private bool $isNested = false;
     private array $itemsContainerAttributes = [];
     private string $itemsContainerTag = 'ul';
     private array $splitButtonAttributes = [];
@@ -509,7 +515,7 @@ final class Dropdown extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        return self::widget()
+        $dropdown = self::widget()
             ->container(false)
             ->dividerAttributes($this->dividerAttributes)
             ->headerClass($this->headerClass)
@@ -520,8 +526,10 @@ final class Dropdown extends Widget
             ->itemsContainerAttributes($this->itemsContainerAttributes)
             ->itemTag($this->itemTag)
             ->toggleAttributes($this->toggleAttributes)
-            ->toggleType($this->toggleType)
-            ->renderToContainer($items);
+            ->toggleType($this->toggleType);
+        $dropdown->isNested = true;
+
+        return $dropdown->renderToContainer($items);
     }
 
     private function renderHeader(string $label, array $headerAttributes = []): string
@@ -616,12 +624,16 @@ final class Dropdown extends Widget
             $toggleSplitButton = $this->renderToggleSplitButton($item['label']);
 
             if ($this->toggleType === 'split' && !str_contains($this->containerClass, 'dropstart')) {
-                $lines[] = $toggleSplitButton . PHP_EOL . $toggle . PHP_EOL . $itemContainer;
+                $content = $toggleSplitButton . PHP_EOL . $toggle . PHP_EOL . $itemContainer;
             } elseif ($this->toggleType === 'split' && str_contains($this->containerClass, 'dropstart')) {
-                $lines[] = $toggle . PHP_EOL . $itemContainer . PHP_EOL . $toggleSplitButton;
+                $content = $toggle . PHP_EOL . $itemContainer . PHP_EOL . $toggleSplitButton;
             } else {
-                $lines[] = $toggle . PHP_EOL . $itemContainer;
+                $content = $toggle . PHP_EOL . $itemContainer;
             }
+
+            $lines[] = $this->isNested
+                ? $this->renderItemContainer($content, $item['itemContainerAttributes'])
+                : $content;
         }
 
         /** @psalm-var string[] $lines */
