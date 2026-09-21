@@ -145,6 +145,11 @@ final class Normalizer
         return $html;
     }
 
+    public static function visible(array $item): bool
+    {
+        return array_key_exists('visible', $item) && is_bool($item['visible']) ? $item['visible'] : true;
+    }
+
     private static function active(array $item, string $link, string $currentPath, bool $activateItems): bool
     {
         if (!array_key_exists('active', $item)) {
@@ -294,10 +299,5 @@ final class Normalizer
     {
         return array_key_exists('toggleAttributes', $item) && is_array($item['toggleAttributes'])
             ? $item['toggleAttributes'] : [];
-    }
-
-    private static function visible(array $item): bool
-    {
-        return array_key_exists('visible', $item) && is_bool($item['visible']) ? $item['visible'] : true;
     }
 }
