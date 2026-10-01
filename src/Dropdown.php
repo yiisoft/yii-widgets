@@ -671,15 +671,6 @@ final class Dropdown extends Widget
 
     private function renderItemsContainer(string $content, array $itemsContainerAttributes): string
     {
-        if ($this->itemsContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-      
-        $itemsContainerAttributes = $this->itemsContainerAttributes;
-        if ($this->id !== '') {
-            $itemsContainerAttributes['aria-labelledby'] = $this->id;
-        }
-
         return Html::normalTag($this->itemsContainerTag, $content, $itemsContainerAttributes)
             ->encode(false)
             ->render();
