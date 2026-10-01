@@ -528,10 +528,13 @@ final class Dropdown extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        return $this
+        $dropdown = $this
             ->container(false)
-            ->id('')
-            ->renderToContainer($items);
+            ->containerClass('')
+            ->id('');
+        $dropdown->isNested = true;
+
+        return $dropdown->renderToContainer($items);
     }
 
     private function renderHeader(string $label, array $headerAttributes = []): string

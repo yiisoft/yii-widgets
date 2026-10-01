@@ -885,11 +885,11 @@ final class DropdownTest extends TestCase
             <div class="btn-group dropstart">
             <button class="toggle" id="dropdown-1" type="button"><span>Root</span></button>
             <ul aria-labelledby="dropdown-1">
-            <button class="split" type="button">Nested</button>
+            <li><button class="split" type="button">Nested</button>
             <button class="toggle" id="dropdown-2" type="button"><span>Nested</span></button>
             <ul aria-labelledby="dropdown-2">
             <li><a href="/leaf">Leaf</a></li>
-            </ul>
+            </ul></li>
             </ul>
             <button class="split" type="button">Root</button>
             </div>
