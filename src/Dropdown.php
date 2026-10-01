@@ -494,7 +494,6 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-
         if ($this->filter !== null) {
             $filtered = [];
             foreach ($normalizedItems as $item) {
@@ -504,8 +503,6 @@ final class Dropdown extends Widget
             }
             $normalizedItems = $filtered;
         }
-
-        $containerAttributes = $this->containerAttributes;
 
         $items = $this->renderItems($normalizedItems) . PHP_EOL;
 
