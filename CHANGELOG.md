@@ -20,8 +20,9 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
-- New #153: Add `toggleContent()` method to `Dropdown` to allow custom HTML content in the toggle button (@WarLikeLaux)
 - New #135: Add `maxItems()` truncation with ellipsis to `Breadcrumbs` widget (@WarLikeLaux)
+- Enh #153: Allow `Stringable` objects as item `label` in `Dropdown` and `Menu`; `NoEncodeStringableInterface` objects
+  are not HTML-encoded (@WarLikeLaux, @vjik)
 - Bug #159: Fix double-encoding of toggle and nested item labels in `Dropdown` (@WarLikeLaux)
 - Bug #168: Fix `Menu` dropdown items being normalized twice, which double-encoded labels, ignored
   `encode => false`, and escaped rendered icon markup (@vjik)

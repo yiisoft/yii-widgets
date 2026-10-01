@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Html\Html;
 use Yiisoft\Html\IdGenerator;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Yii\Widgets\Dropdown;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
+use Yiisoft\Yii\Widgets\Tests\Support\StringableObject;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
 final class DropdownTest extends TestCase
@@ -706,6 +708,18 @@ final class DropdownTest extends TestCase
         $this->assertStringContainsString('data-custom="value"', $html);
     }
 
+    public function testUrlAsLinkAlias(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Action', 'url' => '#']])->render(),
+        );
+    }
+
     public function testLinkTakesPriorityOverUrl(): void
     {
         Assert::equalsWithoutLE(
@@ -718,77 +732,88 @@ final class DropdownTest extends TestCase
         );
     }
 
-    public function testToggleContent(): void
+    public function testItemsLabelNoEncodeStringable(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <button id="dropdown-1" type="button">Custom toggle</button>
-            <ul aria-labelledby="dropdown-1">
-            <li><a href="#">Action</a></li>
-            </ul>
+            <li><a href="#"><span>🔔</span></a></li>
             </div>
             HTML,
             Dropdown::widget()
-                ->toggleContent('Custom toggle')
-                ->items([
-                    [
-                        'label' => 'Dropdown',
-                        'link' => '#',
-                        'items' => [
-                            ['label' => 'Action', 'link' => '#'],
-                        ],
-                    ],
-                ])
+                ->items([['label' => (new Span())->content('🔔'), 'link' => '#']])
                 ->render(),
         );
     }
 
-    public function testToggleContentWithStringable(): void
+    public function testItemsLabelNoEncodeStringableIgnoresEncode(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <button id="dropdown-1" type="button"><span>🔔</span></button>
-            <ul aria-labelledby="dropdown-1">
-            <li><a href="#">Action</a></li>
-            </ul>
+            <li><a href="#"><span>🔔</span></a></li>
             </div>
             HTML,
             Dropdown::widget()
-                ->toggleContent((new Span())->content('🔔'))
-                ->items([
-                    [
-                        'label' => 'Dropdown',
-                        'link' => '#',
-                        'items' => [
-                            ['label' => 'Action', 'link' => '#'],
-                        ],
-                    ],
-                ])
+                ->items([['label' => (new Span())->content('🔔'), 'link' => '#', 'encode' => true]])
                 ->render(),
         );
     }
 
-    public function testToggleContentDoesNotReplaceNestedDropdownLabels(): void
+    public function testItemsLabelStringableIsEncoded(): void
+    {
+        $label = new StringableObject('<b>Bold</b>');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">&lt;b&gt;Bold&lt;/b&gt;</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => $label, 'link' => '#']])->render(),
+        );
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#"><b>Bold</b></a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => $label, 'link' => '#', 'encode' => false]])->render(),
+        );
+    }
+
+    public function testItemsLabelNoEncodeStringableWithIcon(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#"><span><i>🏠</i></span><b>Home</b></a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items([['label' => Html::b('Home'), 'link' => '#', 'icon' => '🏠']])
+                ->render(),
+        );
+    }
+
+    public function testToggleLabelNoEncodeStringable(): void
     {
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
             <button id="dropdown-1" type="button"><span class="avatar">SL</span></button>
             <ul aria-labelledby="dropdown-1">
-            <button id="dropdown-2" type="button">Settings</button>
+            <li><button id="dropdown-2" type="button">Settings</button>
             <ul aria-labelledby="dropdown-2">
             <li><a href="/profile">Profile</a></li>
-            </ul>
+            </ul></li>
             </ul>
             </div>
             HTML,
             Dropdown::widget()
-                ->toggleContent((new Span())->attributes(['class' => 'avatar'])->content('SL'))
                 ->items([
                     [
-                        'label' => 'Account',
+                        'label' => (new Span())->attributes(['class' => 'avatar'])->content('SL'),
                         'items' => [
                             [
                                 'label' => 'Settings',
@@ -800,18 +825,6 @@ final class DropdownTest extends TestCase
                     ],
                 ])
                 ->render(),
-        );
-    }
-
-    public function testUrlAsLinkAlias(): void
-    {
-        Assert::equalsWithoutLE(
-            <<<HTML
-            <div>
-            <li><a href="#">Action</a></li>
-            </div>
-            HTML,
-            Dropdown::widget()->items([['label' => 'Action', 'url' => '#']])->render(),
         );
     }
 }

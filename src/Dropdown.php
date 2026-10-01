@@ -11,6 +11,7 @@ use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
 use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
+use Yiisoft\Html\NoEncodeStringableInterface;
 use Yiisoft\Html\Tag\A;
 use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
@@ -55,7 +56,6 @@ final class Dropdown extends Widget
     private array $splitButtonAttributes = [];
     private array $splitButtonSpanAttributes = [];
     private array $toggleAttributes = [];
-    private string|Stringable $toggleContent = '';
     private string $toggleType = 'button';
 
     /**
@@ -295,11 +295,13 @@ final class Dropdown extends Widget
      * List of menu items in the dropdown. Each array element can be either an HTML string, or an array representing a
      * single menu with the following structure:
      *
-     * - label: string, required, the nav item label.
+     * - label: string|Stringable, required, the nav item label. A {@see NoEncodeStringableInterface} object (e.g. an
+     *   HTML tag) is rendered as is.
      * - active: bool, whether the item should be on active state or not.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
      * - enclose: bool, whether the item should be enclosed by a `<li>` tag or not. For default `enclose` is true.
-     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
+     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true. Ignored for
+     *   a {@see NoEncodeStringableInterface} label.
      * - headerAttributes: array, HTML attributes to be rendered in the item header.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
      *   alias when `link` is not set.
@@ -426,22 +428,6 @@ final class Dropdown extends Widget
     }
 
     /**
-     * Returns a new instance with the specified toggle content.
-     *
-     * If set, the toggle button will render this content instead of the item label.
-     * This is useful when the toggle should display an icon, avatar, or any other custom HTML.
-     *
-     * @param string|Stringable $value The toggle content.
-     */
-    public function toggleContent(string|Stringable $value): self
-    {
-        $new = clone $this;
-        $new->toggleContent = $value;
-
-        return $new;
-    }
-
-    /**
      * Returns a new instance with the specified toggle type, if `button` the toggle will be a button, otherwise a
      * `a` tag will be used.
      *
@@ -544,9 +530,7 @@ final class Dropdown extends Widget
             ->itemsContainerAttributes($this->itemsContainerAttributes)
             ->itemTag($this->itemTag)
             ->toggleAttributes($this->toggleAttributes)
-            ->toggleContent($this->toggleContent)
-            ->toggleType($this->toggleType)
-            ->renderToContainer($items);
+            ->toggleType($this->toggleType);
         $dropdown->isNested = true;
 
         return $dropdown->renderToContainer($items);
@@ -762,26 +746,24 @@ final class Dropdown extends Widget
 
     private function renderToggle(string $label, string $link, array $toggleAttributes): string
     {
-        $content = (string) $this->toggleContent !== '' ? $this->toggleContent : $label;
-
         return match ($this->toggleType) {
-            'link' => $this->renderToggleLink($content, $link, $toggleAttributes),
-            'split' => $this->renderToggleSplit($content, $toggleAttributes),
-            default => $this->renderToggleButton($content, $toggleAttributes),
+            'link' => $this->renderToggleLink($label, $link, $toggleAttributes),
+            'split' => $this->renderToggleSplit($label, $toggleAttributes),
+            default => $this->renderToggleButton($label, $toggleAttributes),
         };
     }
 
-    private function renderToggleButton(string|Stringable $label, array $toggleAttributes = []): string
+    private function renderToggleButton(string $label, array $toggleAttributes = []): string
     {
         return (new Button())->attributes($toggleAttributes)->content($label)->encode(false)->type('button')->render();
     }
 
-    private function renderToggleLink(string|Stringable $label, string $link, array $toggleAttributes = []): string
+    private function renderToggleLink(string $label, string $link, array $toggleAttributes = []): string
     {
         return (new A())->attributes($toggleAttributes)->content($label)->encode(false)->href($link)->render();
     }
 
-    private function renderToggleSplit(string|Stringable $label, array $toggleAttributes = []): string
+    private function renderToggleSplit(string $label, array $toggleAttributes = []): string
     {
         return (new Button())
             ->attributes($toggleAttributes)
