@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests\Menu;
 
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Stringable;
 use Yiisoft\Html\IdGenerator;
@@ -380,6 +381,173 @@ final class MenuTest extends TestCase
                         ],
                         ['label' => 'Link', 'link' => '#'],
                         ['label' => 'Disabled', 'link' => '#', 'disabled' => true],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    #[TestWith(['Black & White', [], 'Black &amp; White'])]
+    #[TestWith(['<b>Bold</b>', ['encode' => false], '<b>Bold</b>'])]
+    #[TestWith([
+        'Home',
+        ['icon' => '🏠', 'iconContainerAttributes' => ['class' => 'me-2']],
+        '<span class="me-2"><i>🏠</i></span>Home',
+    ])]
+    public function testDropdownItemsAreNormalizedOnce(string $label, array $itemOptions, string $expectedLabel): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">{$expectedLabel}</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => $label, 'link' => '#', ...$itemOptions],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testDropdownItemsInheritIconContainerAttributesFromMenu(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#"><span class="me-2"><i>🏠</i></span>Home</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Home', 'link' => '#', 'icon' => '🏠'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testDropdownItemsInheritCurrentPathAndActivateItemsFromMenu(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a aria-current="page" class="active" href="/sub">Sub</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/sub')
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Sub', 'link' => '/sub'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testDropdownLeafItemWithoutLinkRendersAsHeaderAndIsNotActive(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><span>Section header</span></li>
+            <li><a href="/x">Real link</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Section header'],
+                                ['label' => 'Real link', 'link' => '/x'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testDropdownItemsInheritMenuContextThroughNestedSubmenus(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-2" href="#">Sub Dropdown</a>
+            <ul aria-labelledby="dropdown-2">
+            <li><a aria-current="page" class="active" href="/deep"><span class="me-2"><i>🏠</i></span>Deep</a></li>
+            </ul></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/deep')
+                ->iconContainerAttributes(['class' => 'me-2'])
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                [
+                                    'label' => 'Sub Dropdown',
+                                    'link' => '#',
+                                    'items' => [
+                                        ['label' => 'Deep', 'link' => '/deep', 'icon' => '🏠'],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 )
                 ->render(),
