@@ -36,6 +36,51 @@ final class BreadcrumbsTest extends TestCase
         $this->assertEmpty(Breadcrumbs::widget()->render());
     }
 
+    public function testEllipsis(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li>...</li>
+            <li class="active">Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->ellipsis('...')
+                ->maxItems(3)
+                ->items([
+                    ['label' => 'A', 'url' => '/a'],
+                    ['label' => 'B', 'url' => '/b'],
+                    'Page',
+                ])
+                ->render(),
+        );
+    }
+
+    public function testEllipsisTemplate(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="ellipsis">&hellip;</li>
+            <li class="active">Page</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->ellipsis('&hellip;')
+                ->ellipsisTemplate("<li class=\"ellipsis\">{ellipsis}</li>\n")
+                ->maxItems(3)
+                ->items([
+                    ['label' => 'A', 'url' => '/a'],
+                    ['label' => 'B', 'url' => '/b'],
+                    'Page',
+                ])
+                ->render(),
+        );
+    }
+
     public function testHomeItem(): void
     {
         Assert::equalsWithoutLE(
@@ -109,6 +154,114 @@ final class BreadcrumbsTest extends TestCase
                         ['label' => 'Text', 'template' => "<span>{link}</span>\n"],
                     ],
                 )
+                ->render(),
+        );
+    }
+
+    public function testMaxItemsTruncates(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/catalog">Catalog</a></li>
+            <li>…</li>
+            <li><a href="/catalog/phones/apple/iphone">iPhone</a></li>
+            <li class="active">iPhone 15 Pro</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->maxItems(5)
+                ->items([
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    ['label' => 'Phones', 'url' => '/catalog/phones'],
+                    ['label' => 'Apple', 'url' => '/catalog/phones/apple'],
+                    ['label' => 'iPhone', 'url' => '/catalog/phones/apple/iphone'],
+                    'iPhone 15 Pro',
+                ])
+                ->render(),
+        );
+    }
+
+    public function testMaxItemsWithinLimit(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/catalog">Catalog</a></li>
+            <li class="active">iPhone 15 Pro</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->maxItems(5)
+                ->items([
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    'iPhone 15 Pro',
+                ])
+                ->render(),
+        );
+    }
+
+    public function testMaxItemsAtLimit(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/catalog">Catalog</a></li>
+            <li class="active">iPhone 15 Pro</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->maxItems(3)
+                ->items([
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    'iPhone 15 Pro',
+                ])
+                ->render(),
+        );
+    }
+
+    public function testMaxItemsWithoutHomeItem(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/catalog">Catalog</a></li>
+            <li>…</li>
+            <li class="active">iPhone 15 Pro</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->maxItems(3)
+                ->items([
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    ['label' => 'Phones', 'url' => '/catalog/phones'],
+                    ['label' => 'Apple', 'url' => '/catalog/phones/apple'],
+                    'iPhone 15 Pro',
+                ])
+                ->render(),
+        );
+    }
+
+    public function testMaxItemsWithoutHomeItemAtLimit(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul class="breadcrumb">
+            <li><a href="/catalog">Catalog</a></li>
+            <li class="active">iPhone 15 Pro</li>
+            </ul>
+            HTML,
+            Breadcrumbs::widget()
+                ->homeItem(null)
+                ->maxItems(2)
+                ->items([
+                    ['label' => 'Catalog', 'url' => '/catalog'],
+                    'iPhone 15 Pro',
+                ])
                 ->render(),
         );
     }

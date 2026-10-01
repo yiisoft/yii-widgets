@@ -33,8 +33,8 @@ final class Bootstrap5Test extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div class="btn-group">
-            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-secondary dropdown-toggle" type="button">Dropdown</button>
-            <ul class="dropdown-menu">
+            <button aria-expanded="false" data-bs-toggle="dropdown" class="btn btn-secondary dropdown-toggle" id="w0-dropdown" type="button">Dropdown</button>
+            <ul class="dropdown-menu" aria-labelledby="w0-dropdown">
             <li><h6 class="dropdown-header">Dropdown header</h6></li>
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -42,6 +42,7 @@ final class Bootstrap5Test extends TestCase
             </div>
             HTML,
             Dropdown::widget([], $definitions)
+                ->id('w0-dropdown')
                 ->items(
                     [
                         [

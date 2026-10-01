@@ -1,12 +1,13 @@
-name: static analysis
+name: composer dependency analyser
 
 on:
   pull_request:
     paths: &paths
       - 'src/**'
-      - 'psalm.xml'
+      - 'tests/**'
+      - '.github/workflows/composer-dependency-analyser.yml'
       - 'composer.json'
-      - '.github/workflows/static.yml'
+      - 'composer-dependency-analyser.php'
   push:
     branches: ['master']
     paths: *paths
@@ -19,10 +20,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  psalm:
-    uses: yiisoft/actions/.github/workflows/psalm.yml@master
+  composer-dependency-analyser:
+    uses: yiisoft/actions/.github/workflows/composer-dependency-analyser.yml@master
     with:
-      os: >-
-        ['ubuntu-latest']
       php: >-
         ['8.1', '8.2', '8.3', '8.4', '8.5']
