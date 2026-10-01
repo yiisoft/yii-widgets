@@ -15,11 +15,18 @@
 - New #126: Add `Menu::dropdownContainerAttributes()` method (@WarLikeLaux)
 - Bug #127: Fix `encode` key leaking into HTML attributes in `Breadcrumbs::renderItem()` (@WarLikeLaux)
 - New #129: Add `id()` method to `Menu` and `Breadcrumbs` widgets (@WarLikeLaux)
+- Enh #146: Add auto-generated ID to `Dropdown` for ARIA toggle-menu linkage (@WarLikeLaux)
 - New #115: Add container wrapper and JSON-LD structured data to `Breadcrumbs` widget (@WarLikeLaux, @vjik)
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
 - New #151: Add `filter()` method to `Menu` and `Dropdown` widgets (@WarLikeLaux)
+- New #135: Add `maxItems()` truncation with ellipsis to `Breadcrumbs` widget (@WarLikeLaux)
+- Bug #159: Fix double-encoding of toggle and nested item labels in `Dropdown` (@WarLikeLaux)
+- Bug #168: Fix `Menu` dropdown items being normalized twice, which double-encoded labels, ignored
+  `encode => false`, and escaped rendered icon markup (@vjik)
+- Bug #168: Fix `Dropdown` not wrapping a nested submenu toggle in `<li>`, producing invalid markup when a
+  dropdown item with `items` is itself nested inside another dropdown's `items` (@vjik)
 
 ## 2.1.1 September 23, 2025
 

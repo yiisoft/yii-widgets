@@ -16,6 +16,7 @@ use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
 use Yiisoft\Widget\Widget;
 
+use function array_key_exists;
 use function gettype;
 use function implode;
 use function str_contains;
@@ -45,6 +46,12 @@ final class Dropdown extends Widget
     private array $itemContainerAttributes = [];
     private string $itemContainerTag = 'li';
     private array $items = [];
+    /**
+     * Whether this instance renders a nested submenu (always inside an actual `<ul>`, via {@see renderDropdown()}),
+     * as opposed to the top-level {@see items()}, which are rendered directly into {@see $containerTag} and may
+     * not be a list at all.
+     */
+    private bool $isNested = false;
     private array $itemsContainerAttributes = [];
     private string $itemsContainerTag = 'ul';
     private array $splitButtonAttributes = [];
@@ -456,6 +463,19 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
+        return $this->renderToContainer(Helper\Normalizer::dropdown($this->items));
+    }
+
+    /**
+     * Renders already normalized items into the container. Sub-dropdowns reuse this directly so the items are
+     * normalized once, by the top-level {@see render()}, and not again per nesting level.
+     *
+     * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
+     */
+    private function renderToContainer(array $normalizedItems): string
+    {
+        $containerAttributes = $this->containerAttributes;
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -474,17 +494,14 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        $normalizedItems = Helper\Normalizer::dropdown($this->items);
 
         if ($this->filter !== null) {
             $filtered = [];
-
             foreach ($normalizedItems as $item) {
                 if (($this->filter)($item)) {
                     $filtered[] = $item;
                 }
             }
-
             $normalizedItems = $filtered;
         }
 
@@ -532,7 +549,7 @@ final class Dropdown extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        return self::widget()
+        $dropdown = self::widget()
             ->container(false)
             ->dividerAttributes($this->dividerAttributes)
             ->headerClass($this->headerClass)
@@ -540,12 +557,13 @@ final class Dropdown extends Widget
             ->itemClass($this->itemClass)
             ->itemContainerAttributes($this->itemContainerAttributes)
             ->itemContainerTag($this->itemContainerTag)
-            ->items($items)
             ->itemsContainerAttributes($this->itemsContainerAttributes)
             ->itemTag($this->itemTag)
             ->toggleAttributes($this->toggleAttributes)
-            ->toggleType($this->toggleType)
-            ->render();
+            ->toggleType($this->toggleType);
+        $dropdown->isNested = true;
+
+        return $dropdown->renderToContainer($items);
     }
 
     private function renderHeader(string $label, array $headerAttributes = []): string
@@ -615,17 +633,41 @@ final class Dropdown extends Widget
                 $item['itemContainerAttributes'],
             );
         } else {
-            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']));
-            $toggle = $this->renderToggle($item['label'], $item['link'], $item['toggleAttributes']);
+            $toggleAttributes = $item['toggleAttributes'] !== []
+                ? $item['toggleAttributes']
+                : $this->toggleAttributes;
+
+            $id = match (true) {
+                array_key_exists('id', $toggleAttributes) => $toggleAttributes['id'],
+                $this->id !== '' => $this->id,
+                default => Html::generateId('dropdown-'),
+            };
+
+            if ($id !== '' && !array_key_exists('id', $toggleAttributes)) {
+                $toggleAttributes['id'] = $id;
+            }
+
+            $itemsContainerAttributes = $this->itemsContainerAttributes;
+
+            if ($id !== '' && !array_key_exists('aria-labelledby', $itemsContainerAttributes)) {
+                $itemsContainerAttributes['aria-labelledby'] = $id;
+            }
+
+            $itemContainer = $this->renderItemsContainer($this->renderDropdown($item['items']), $itemsContainerAttributes);
+            $toggle = $this->renderToggle($item['label'], $item['link'], $toggleAttributes);
             $toggleSplitButton = $this->renderToggleSplitButton($item['label']);
 
             if ($this->toggleType === 'split' && !str_contains($this->containerClass, 'dropstart')) {
-                $lines[] = $toggleSplitButton . PHP_EOL . $toggle . PHP_EOL . $itemContainer;
+                $content = $toggleSplitButton . PHP_EOL . $toggle . PHP_EOL . $itemContainer;
             } elseif ($this->toggleType === 'split' && str_contains($this->containerClass, 'dropstart')) {
-                $lines[] = $toggle . PHP_EOL . $itemContainer . PHP_EOL . $toggleSplitButton;
+                $content = $toggle . PHP_EOL . $itemContainer . PHP_EOL . $toggleSplitButton;
             } else {
-                $lines[] = $toggle . PHP_EOL . $itemContainer;
+                $content = $toggle . PHP_EOL . $itemContainer;
             }
+
+            $lines[] = $this->isNested
+                ? $this->renderItemContainer($content, $item['itemContainerAttributes'])
+                : $content;
         }
 
         /** @psalm-var string[] $lines */
@@ -647,14 +689,8 @@ final class Dropdown extends Widget
             ->render();
     }
 
-    private function renderItemsContainer(string $content): string
+    private function renderItemsContainer(string $content, array $itemsContainerAttributes): string
     {
-        $itemsContainerAttributes = $this->itemsContainerAttributes;
-
-        if ($this->id !== '') {
-            $itemsContainerAttributes['aria-labelledby'] = $this->id;
-        }
-
         if ($this->itemsContainerTag === '') {
             throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
@@ -700,7 +736,7 @@ final class Dropdown extends Widget
      *   }|string
      * > $items
      */
-    private function renderItems(array $items = []): string
+    private function renderItems(array $items): string
     {
         $lines = [];
 
@@ -738,16 +774,8 @@ final class Dropdown extends Widget
         };
     }
 
-    private function renderToggle(string $label, string $link, array $toggleAttributes = []): string
+    private function renderToggle(string $label, string $link, array $toggleAttributes): string
     {
-        if ($toggleAttributes === []) {
-            $toggleAttributes = $this->toggleAttributes;
-        }
-
-        if ($this->id !== '') {
-            $toggleAttributes['id'] = $this->id;
-        }
-
         return match ($this->toggleType) {
             'link' => $this->renderToggleLink($label, $link, $toggleAttributes),
             'split' => $this->renderToggleSplit($label, $toggleAttributes),
@@ -757,25 +785,30 @@ final class Dropdown extends Widget
 
     private function renderToggleButton(string $label, array $toggleAttributes = []): string
     {
-        return (new Button())->attributes($toggleAttributes)->content($label)->type('button')->render();
+        return (new Button())->attributes($toggleAttributes)->content($label)->encode(false)->type('button')->render();
     }
 
     private function renderToggleLink(string $label, string $link, array $toggleAttributes = []): string
     {
-        return (new A())->attributes($toggleAttributes)->content($label)->href($link)->render();
+        return (new A())->attributes($toggleAttributes)->content($label)->encode(false)->href($link)->render();
     }
 
     private function renderToggleSplit(string $label, array $toggleAttributes = []): string
     {
         return (new Button())
             ->attributes($toggleAttributes)
-            ->content((new Span())->attributes($this->splitButtonSpanAttributes)->content($label))
+            ->content((new Span())->attributes($this->splitButtonSpanAttributes)->content($label)->encode(false))
             ->type('button')
             ->render();
     }
 
     private function renderToggleSplitButton(string $label): string
     {
-        return (new Button())->attributes($this->splitButtonAttributes)->content($label)->type('button')->render();
+        return (new Button())
+            ->attributes($this->splitButtonAttributes)
+            ->content($label)
+            ->encode(false)
+            ->type('button')
+            ->render();
     }
 }
