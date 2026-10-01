@@ -80,39 +80,40 @@ final class Normalizer
         foreach ($items as $i => $child) {
             if (is_array($child)) {
                 if (isset($child['items']) && is_array($child['items'])) {
-                    $items[$i]['items'] = self::menu(
+                    $items[$i]['items'] = self::injectMenuContext(
                         $child['items'],
                         $currentPath,
                         $activateItems,
                         $iconContainerAttributes,
                     );
-                } else {
-                    $items[$i]['link'] = self::link($child);
-                    $items[$i]['linkAttributes'] = self::linkAttributes($child);
-                    $items[$i]['active'] = self::active(
-                        $child,
-                        $items[$i]['link'],
-                        $currentPath,
-                        $activateItems,
-                    );
-                    $items[$i]['disabled'] = self::disabled($child);
-                    $items[$i]['visible'] = self::visible($child);
-                    $items[$i]['label'] = self::renderLabel(
-                        self::label($child),
-                        self::icon($child),
-                        self::iconAttributes($child),
-                        self::iconClass($child),
-                        self::iconContainerAttributes($child, $iconContainerAttributes),
-                    );
-
-                    unset(
-                        $items[$i]['encode'],
-                        $items[$i]['icon'],
-                        $items[$i]['iconAttributes'],
-                        $items[$i]['iconClass'],
-                        $items[$i]['iconContainerAttributes'],
-                    );
+                    continue;
                 }
+
+                $items[$i]['link'] = self::link($child);
+                $items[$i]['linkAttributes'] = self::linkAttributes($child);
+                $items[$i]['active'] = self::active(
+                    $child,
+                    $items[$i]['link'],
+                    $currentPath,
+                    $activateItems,
+                );
+                $items[$i]['disabled'] = self::disabled($child);
+                $items[$i]['visible'] = self::visible($child);
+                $items[$i]['label'] = self::renderLabel(
+                    self::label($child),
+                    self::icon($child),
+                    self::iconAttributes($child),
+                    self::iconClass($child),
+                    self::iconContainerAttributes($child, $iconContainerAttributes),
+                );
+
+                unset(
+                    $items[$i]['encode'],
+                    $items[$i]['icon'],
+                    $items[$i]['iconAttributes'],
+                    $items[$i]['iconClass'],
+                    $items[$i]['iconContainerAttributes'],
+                );
             }
         }
 
@@ -151,6 +152,42 @@ final class Normalizer
         }
 
         return is_bool($item['active']) ? $item['active'] : false;
+    }
+
+    /**
+     * Carries `Menu`-level context into an unnormalized submenu subtree, so `Dropdown::render()` — which does not
+     * know about `currentPath`/`activateItems` or a default `iconContainerAttributes` — still honors them for leaf
+     * items that don't override these keys themselves. Submenu (toggle) nodes are left untouched and only
+     * recursed into, matching how `Dropdown` normalizes their own `active`/`label` independently.
+     *
+     * The leaf's `link` is also pre-resolved (defaulting to `''`, not `Dropdown`'s own `'/'` default) so a
+     * linkless leaf still renders as a header instead of `Dropdown` turning it into a clickable `/` link.
+     */
+    private static function injectMenuContext(
+        array $items,
+        string $currentPath,
+        bool $activateItems,
+        array $iconContainerAttributes,
+    ): array {
+        foreach ($items as $i => &$child) {
+            if (is_array($child)) {
+                if (isset($child['items']) && is_array($child['items'])) {
+                    $child['items'] = self::injectMenuContext(
+                        $child['items'],
+                        $currentPath,
+                        $activateItems,
+                        $iconContainerAttributes,
+                    );
+                    continue;
+                }
+
+                $child['link'] = self::link($child);
+                $child['active'] = self::active($child, $child['link'], $currentPath, $activateItems);
+                $child['iconContainerAttributes'] = self::iconContainerAttributes($child, $iconContainerAttributes);
+            }
+        }
+
+        return $items;
     }
 
     private static function disabled(array $item): bool
