@@ -11,6 +11,7 @@ use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
 use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
+use Yiisoft\Html\NoEncodeStringableInterface;
 use Yiisoft\Widget\Widget;
 
 use function array_merge;
@@ -389,10 +390,12 @@ final class Menu extends Widget
      * List of items in the nav widget. Each array element represents a single menu item which can be either a string or
      * an array with the following structure:
      *
-     * - label: string, required, the nav item label.
+     * - label: string|Stringable, required, the nav item label. A {@see NoEncodeStringableInterface} object (e.g. an
+     *   HTML tag) is rendered as is.
      * - active: bool, whether the item should be on active state or not.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
-     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
+     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true. Ignored for
+     *   a {@see NoEncodeStringableInterface} label.
      * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.
      * - itemsContainerAttributes: array, optional, the HTML attributes for the item's submenu container.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
