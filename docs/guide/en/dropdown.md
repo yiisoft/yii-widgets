@@ -74,6 +74,7 @@ Method | Description | Default
 `itemsContainerTag(string $value)` | The tag name for the items container tag | `ul`
 `splitButtonAttributes(array $valuesMap)` | The HTML attributes for the split button tag | `[]`
 `splitButtonClass(string $value)` | The CSS class for the split button tag | `''`
+`splitButtonSpanAttributes(array $valuesMap)` | The HTML attributes for the split button span tag | `[]`
 `splitButtonSpanClass(string $value)` | The CSS class for the split button span tag | `''`
 `toggleAttributes(array $valuesMap)` | The HTML attributes for the toggle tag | `[]`
 `toggleClass(string $value)` | The CSS class for the toggle tag | `''`
@@ -102,3 +103,6 @@ Method | Description | Default
 ```
 
 > `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority.
+
+> `label` can be a string or a `Stringable` object. A `NoEncodeStringableInterface` object (e.g. an HTML tag) is
+> rendered as is, regardless of `encode`.

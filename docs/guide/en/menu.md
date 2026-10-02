@@ -135,3 +135,6 @@ Method | Description | Default
 ```
 
 > `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority.
+
+> `label` can be a string or a `Stringable` object. A `NoEncodeStringableInterface` object (e.g. an HTML tag) is
+> rendered as is, regardless of `encode`.

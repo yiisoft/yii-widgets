@@ -6,11 +6,13 @@ namespace Yiisoft\Yii\Widgets;
 
 use Closure;
 use InvalidArgumentException;
+use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
 use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
+use Yiisoft\Html\NoEncodeStringableInterface;
 use Yiisoft\Html\Tag\A;
 use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
@@ -314,11 +316,13 @@ final class Dropdown extends Widget
      * List of menu items in the dropdown. Each array element can be either an HTML string, or an array representing a
      * single menu with the following structure:
      *
-     * - label: string, required, the nav item label.
+     * - label: string|Stringable, required, the nav item label. A {@see NoEncodeStringableInterface} object (e.g. an
+     *   HTML tag) is rendered as is.
      * - active: bool, whether the item should be on active state or not.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
      * - enclose: bool, whether the item should be enclosed by a `<li>` tag or not. For default `enclose` is true.
-     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
+     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true. Ignored for
+     *   a {@see NoEncodeStringableInterface} label.
      * - headerAttributes: array, HTML attributes to be rendered in the item header.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
      *   alias when `link` is not set.
@@ -401,6 +405,19 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         Html::addCssClass($new->splitButtonAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified split button span attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function splitButtonSpanAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->splitButtonSpanAttributes = $valuesMap;
 
         return $new;
     }
@@ -546,18 +563,10 @@ final class Dropdown extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        $dropdown = self::widget()
+        $dropdown = $this
             ->container(false)
-            ->dividerAttributes($this->dividerAttributes)
-            ->headerClass($this->headerClass)
-            ->headerTag($this->headerTag)
-            ->itemClass($this->itemClass)
-            ->itemContainerAttributes($this->itemContainerAttributes)
-            ->itemContainerTag($this->itemContainerTag)
-            ->itemsContainerAttributes($this->itemsContainerAttributes)
-            ->itemTag($this->itemTag)
-            ->toggleAttributes($this->toggleAttributes)
-            ->toggleType($this->toggleType);
+            ->containerClass('')
+            ->id('');
         $dropdown->isNested = true;
 
         return $dropdown->renderToContainer($items);

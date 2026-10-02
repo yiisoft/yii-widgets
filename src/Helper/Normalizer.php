@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Helper;
 
 use InvalidArgumentException;
+use Stringable;
 use Yiisoft\Html\Html;
+use Yiisoft\Html\NoEncodeStringableInterface;
 use Yiisoft\Html\Tag\I;
 use Yiisoft\Html\Tag\Span;
 
@@ -257,18 +259,27 @@ final class Normalizer
             throw new InvalidArgumentException('The "label" option is required.');
         }
 
-        if (!is_string($item['label'])) {
-            throw new InvalidArgumentException('The "label" option must be a string.');
+        $label = $item['label'];
+
+        if (!is_string($label) && !$label instanceof Stringable) {
+            throw new InvalidArgumentException('The "label" option must be a string or a Stringable object.');
         }
 
-        if ($item['label'] === '' && !isset($item['icon'])) {
+        $noEncode = $label instanceof NoEncodeStringableInterface;
+        $label = (string) $label;
+
+        if ($label === '' && !isset($item['icon'])) {
             throw new InvalidArgumentException('The "label" cannot be an empty string.');
+        }
+
+        if ($noEncode) {
+            return $label;
         }
 
         /** @var bool */
         $encode = $item['encode'] ?? true;
 
-        return $encode ? Html::encode($item['label']) : $item['label'];
+        return $encode ? Html::encode($label) : $label;
     }
 
     private static function link(array $item, string $defaultValue = ''): string
