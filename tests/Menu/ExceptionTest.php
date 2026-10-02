@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Menu;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Stringable;
+use Yiisoft\Html\NoEncode;
 use Yiisoft\Yii\Widgets\Menu;
+use Yiisoft\Yii\Widgets\Tests\Support\StringableObject;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 
 final class ExceptionTest extends TestCase
@@ -63,17 +67,27 @@ final class ExceptionTest extends TestCase
         Menu::widget()->items([['link' => '/home']])->render();
     }
 
-    public function testLabelExceptionEmptyString(): void
+    public static function dataLabelExceptionEmptyString(): iterable
     {
+        yield 'string' => [''];
+        yield 'stringable' => [new StringableObject('')];
+        yield 'no-encode-stringable' => [NoEncode::string('')];
+    }
+
+    #[DataProvider('dataLabelExceptionEmptyString')]
+    public function testLabelExceptionEmptyString(string|Stringable $label): void
+    {
+        $widget = Menu::widget()->items([['label' => $label]]);
+
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The "label" cannot be an empty string.');
-        Menu::widget()->items([['label' => '']])->render();
+        $widget->render();
     }
 
     public function testLabelExceptionNotString(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The "label" option must be a string.');
+        $this->expectExceptionMessage('The "label" option must be a string or a Stringable object.');
         Menu::widget()->items([['label' => 1]])->render();
     }
 

@@ -7,9 +7,12 @@ namespace Yiisoft\Yii\Widgets\Tests\Menu;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Stringable;
+use Yiisoft\Html\Html;
 use Yiisoft\Html\IdGenerator;
+use Yiisoft\Html\Tag\Span;
 use Yiisoft\Yii\Widgets\Menu;
 use Yiisoft\Yii\Widgets\Tests\Support\Assert;
+use Yiisoft\Yii\Widgets\Tests\Support\StringableObject;
 use Yiisoft\Yii\Widgets\Tests\Support\TestTrait;
 use InvalidArgumentException;
 
@@ -698,6 +701,83 @@ final class MenuTest extends TestCase
             </ul>
             HTML,
             Menu::widget()->items([['label' => 'Black & White', 'encode' => false]])->render(),
+        );
+    }
+
+    public function testItemsLabelNoEncodeStringable(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><span>🔔</span></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => (new Span())->content('🔔')]])->render(),
+        );
+    }
+
+    public function testItemsLabelNoEncodeStringableIgnoresEncode(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><span>🔔</span></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => (new Span())->content('🔔'), 'encode' => true]])->render(),
+        );
+    }
+
+    public function testItemsLabelStringableIsEncoded(): void
+    {
+        $label = new StringableObject('<b>Bold</b>');
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>&lt;b&gt;Bold&lt;/b&gt;</li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => $label]])->render(),
+        );
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><b>Bold</b></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => $label, 'encode' => false]])->render(),
+        );
+    }
+
+    public function testItemsLabelNoEncodeStringableWithIcon(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><span><i>🏠</i></span><b>Home</b></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => Html::b('Home'), 'icon' => '🏠']])->render(),
+        );
+    }
+
+    public function testItemsLabelNoEncodeStringableInDropdown(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="/"><b>Menu</b></a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/sub"><i>Sub</i></a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->items([['label' => Html::b('Menu'), 'items' => [['label' => Html::i('Sub'), 'link' => '/sub']]]])
+                ->render(),
         );
     }
 

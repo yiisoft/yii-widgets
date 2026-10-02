@@ -23,6 +23,8 @@
 - Bug #128: Fix `Dropdown` sub-dropdowns not inheriting widget-level settings (@WarLikeLaux)
 - New #128: Add `Dropdown::splitButtonSpanAttributes()` method (@WarLikeLaux)
 - New #135: Add `maxItems()` truncation with ellipsis to `Breadcrumbs` widget (@WarLikeLaux)
+- Enh #153: Allow `Stringable` objects as item `label` in `Dropdown` and `Menu`; `NoEncodeStringableInterface` objects
+  are not HTML-encoded (@WarLikeLaux, @vjik)
 - Bug #159: Fix double-encoding of toggle and nested item labels in `Dropdown` (@WarLikeLaux)
 - Bug #168: Fix `Menu` dropdown items being normalized twice, which double-encoded labels, ignored
   `encode => false`, and escaped rendered icon markup (@vjik)
