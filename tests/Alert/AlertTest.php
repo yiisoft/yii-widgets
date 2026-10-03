@@ -128,6 +128,24 @@ final class AlertTest extends TestCase
         );
     }
 
+    public function testHeaderTagZero(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <0>Header title</0>
+            <button aria-label="Close" type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->header('Header title')
+                ->headerTag('0')
+                ->id('w0-alert')
+                ->layoutHeader('{header}')
+                ->render(),
+        );
+    }
+
     public function testHeaderWithoutBody(): void
     {
         Assert::equalsWithoutLE(

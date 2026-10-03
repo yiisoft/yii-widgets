@@ -20,6 +20,7 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
+- Bug #158: Validate empty tag name in setters across `Alert`, `Dropdown`, and `Menu` (@WarLikeLaux)
 - Bug #128: Fix `Dropdown` sub-dropdowns not inheriting widget-level settings (@WarLikeLaux)
 - New #128: Add `Dropdown::splitButtonSpanAttributes()` method (@WarLikeLaux)
 - New #135: Add `maxItems()` truncation with ellipsis to `Breadcrumbs` widget (@WarLikeLaux)
