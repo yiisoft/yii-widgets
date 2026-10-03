@@ -32,20 +32,25 @@ final class Dropdown extends Widget
     private bool $container = true;
     private array $containerAttributes = [];
     private string $containerClass = '';
+    /** @psalm-var non-empty-string */
     private string $containerTag = 'div';
     private string $disabledClass = 'disabled';
     private array $dividerAttributes = [];
     private string $dividerClass = 'dropdown-divider';
+    /** @psalm-var non-empty-string */
     private string $dividerTag = 'hr';
     /** @psalm-var (Closure(array|string): bool)|null */
     private ?Closure $filter = null;
     private string $headerClass = '';
+    /** @psalm-var non-empty-string */
     private string $headerTag = 'span';
     private string $id = '';
     private string $itemClass = '';
+    /** @psalm-var non-empty-string */
     private string $itemTag = 'a';
     private bool $itemContainer = true;
     private array $itemContainerAttributes = [];
+    /** @psalm-var non-empty-string */
     private string $itemContainerTag = 'li';
     private array $items = [];
     /**
@@ -55,6 +60,7 @@ final class Dropdown extends Widget
      */
     private bool $isNested = false;
     private array $itemsContainerAttributes = [];
+    /** @psalm-var non-empty-string */
     private string $itemsContainerTag = 'ul';
     private array $splitButtonAttributes = [];
     private array $splitButtonSpanAttributes = [];
@@ -120,6 +126,10 @@ final class Dropdown extends Widget
      */
     public function containerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->containerTag = $value;
         return $new;
@@ -171,6 +181,10 @@ final class Dropdown extends Widget
      */
     public function dividerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->dividerTag = $value;
 
@@ -215,6 +229,10 @@ final class Dropdown extends Widget
      */
     public function headerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->headerTag = $value;
 
@@ -293,6 +311,10 @@ final class Dropdown extends Widget
      */
     public function itemContainerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->itemContainerTag = $value;
 
@@ -306,6 +328,10 @@ final class Dropdown extends Widget
      */
     public function itemTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->itemTag = $value;
 
@@ -377,6 +403,10 @@ final class Dropdown extends Widget
      */
     public function itemsContainerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->itemsContainerTag = $value;
 
@@ -531,10 +561,6 @@ final class Dropdown extends Widget
             Html::addCssClass($containerAttributes, $this->containerClass);
         }
 
-        if ($this->containerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         return match ($this->container) {
             true => Html::normalTag($this->containerTag, $items, $containerAttributes)->encode(false)->render(),
             false => $items,
@@ -547,10 +573,6 @@ final class Dropdown extends Widget
 
         if ($this->dividerClass !== '') {
             Html::addCssClass($dividerAttributes, $this->dividerClass);
-        }
-
-        if ($this->dividerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
         return $this->renderItemContainer(
@@ -576,10 +598,6 @@ final class Dropdown extends Widget
     {
         if ($this->headerClass !== '') {
             Html::addCssClass($headerAttributes, $this->headerClass);
-        }
-
-        if ($this->headerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
         return $this->renderItemContainer(
@@ -682,10 +700,6 @@ final class Dropdown extends Widget
 
     private function renderItemContainer(string $content, array $itemContainerAttributes = []): string
     {
-        if ($this->itemContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         if ($itemContainerAttributes === []) {
             $itemContainerAttributes = $this->itemContainerAttributes;
         }
@@ -697,10 +711,6 @@ final class Dropdown extends Widget
 
     private function renderItemsContainer(string $content, array $itemsContainerAttributes): string
     {
-        if ($this->itemsContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         return Html::normalTag($this->itemsContainerTag, $content, $itemsContainerAttributes)
             ->encode(false)
             ->render();
@@ -767,10 +777,6 @@ final class Dropdown extends Widget
         array $itemContainerAttributes = [],
     ): string {
         $linkAttributes['href'] = $link;
-
-        if ($this->itemTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
 
         $linkTag = Html::normalTag($this->itemTag, $label, $linkAttributes)->encode(false)->render();
 

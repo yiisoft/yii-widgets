@@ -48,18 +48,21 @@ final class Menu extends Widget
 {
     private array $afterAttributes = [];
     private string $afterContent = '';
+    /** @psalm-var non-empty-string */
     private string $afterTag = 'span';
     private string $activeClass = 'active';
     private bool $activateItems = true;
     private array $attributes = [];
     private array $beforeAttributes = [];
     private string $beforeContent = '';
+    /** @psalm-var non-empty-string */
     private string $beforeTag = 'span';
     private bool $container = true;
     private string $currentPath = '';
     private string $disabledClass = 'disabled';
     private bool $dropdownContainer = true;
     private array $dropdownContainerAttributes = [];
+    /** @psalm-var non-empty-string */
     private string $dropdownContainerTag = 'li';
     private array $dropdownDefinitions = [];
     /** @psalm-var (Closure(array): bool)|null */
@@ -69,11 +72,14 @@ final class Menu extends Widget
     private array $items = [];
     private bool $itemsContainer = true;
     private array $itemsContainerAttributes = [];
+    /** @psalm-var non-empty-string */
     private string $itemsTag = 'li';
     private string $lastItemClass = '';
     private array $linkAttributes = [];
     private string $linkClass = '';
+    /** @psalm-var non-empty-string */
     private string $linkTag = 'a';
+    /** @psalm-var non-empty-string */
     private string $tagName = 'ul';
     private string $template = '{items}';
 
@@ -150,6 +156,10 @@ final class Menu extends Widget
      */
     public function afterTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->afterTag = $value;
 
@@ -215,6 +225,10 @@ final class Menu extends Widget
      */
     public function beforeTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->beforeTag = $value;
 
@@ -306,6 +320,10 @@ final class Menu extends Widget
      */
     public function dropdownContainerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->dropdownContainerTag = $value;
 
@@ -467,6 +485,10 @@ final class Menu extends Widget
      */
     public function itemsTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->itemsTag = $value;
 
@@ -519,6 +541,10 @@ final class Menu extends Widget
      */
     public function linkTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->linkTag = $value;
 
@@ -532,6 +558,10 @@ final class Menu extends Widget
      */
     public function tagName(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->tagName = $value;
 
@@ -603,10 +633,6 @@ final class Menu extends Widget
 
     private function renderAfterContent(): string
     {
-        if ($this->afterTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         return PHP_EOL
             . Html::normalTag($this->afterTag, $this->afterContent, $this->afterAttributes)
                 ->encode(false)
@@ -615,10 +641,6 @@ final class Menu extends Widget
 
     private function renderBeforeContent(): string
     {
-        if ($this->beforeTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         return Html::normalTag($this->beforeTag, $this->beforeContent, $this->beforeAttributes)
             ->encode(false)
             ->render();
@@ -643,10 +665,6 @@ final class Menu extends Widget
         }
 
         $dropdown = Dropdown::widget([], $dropdownDefinitions)->items($items)->render();
-
-        if ($this->dropdownContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
 
         return match ($this->dropdownContainer) {
             true => Html::normalTag($this->dropdownContainerTag, $dropdown, $this->dropdownContainerAttributes)
@@ -697,10 +715,6 @@ final class Menu extends Widget
 
         if ($item['link'] !== '') {
             $linkAttributes['href'] = $item['link'];
-        }
-
-        if ($this->linkTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
         return match (isset($linkAttributes['href'])) {
@@ -754,10 +768,6 @@ final class Menu extends Widget
 
                 $menu = $this->renderItem($item);
 
-                if ($this->itemsTag === '') {
-                    throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-                }
-
                 $lines[] = match ($this->itemsContainer) {
                     false => $menu,
                     default => strtr(
@@ -805,10 +815,6 @@ final class Menu extends Widget
 
         if ($this->afterContent !== '') {
             $afterContent = $this->renderAfterContent();
-        }
-
-        if ($this->tagName === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
         return match ($this->container) {
