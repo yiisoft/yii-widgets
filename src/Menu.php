@@ -18,6 +18,7 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
+use function is_array;
 use function strtr;
 use function trim;
 
@@ -346,8 +347,10 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified per-item filter callback.
      *
-     * The callback receives each normalized item array and should return true to keep the item or false to
-     * remove it. It is applied after the items are normalized.
+     * The callback receives each raw item array, as passed to {@see items()}, and should return true to keep
+     * the item or false to remove it. It is applied before the items are normalized, recursively to the nested
+     * (dropdown) items of the kept ones. String items (e.g. the `'-'` divider) are not passed to the callback and
+     * are kept.
      *
      * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
      *
@@ -591,6 +594,12 @@ final class Menu extends Widget
      */
     public function render(): string
     {
+        $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
+
+        if ($items === []) {
+            return '';
+        }
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -606,29 +615,42 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $this->items,
+            $items,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
         );
 
-        if ($this->filter !== null) {
-            $filtered = [];
+        return $this->renderMenu($items);
+    }
 
-            foreach ($items as $item) {
-                if (($this->filter)($item)) {
-                    $filtered[] = $item;
-                }
+    /**
+     * Recursively removes the array items for which the filter callback returns false. String items are kept.
+     *
+     * @psalm-param Closure(array): bool $filter
+     */
+    private function filterItems(array $items, Closure $filter): array
+    {
+        $result = [];
+
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                $result[] = $item;
+                continue;
             }
 
-            $items = $filtered;
+            if (!$filter($item)) {
+                continue;
+            }
+
+            if (isset($item['items']) && is_array($item['items'])) {
+                $item['items'] = $this->filterItems($item['items'], $filter);
+            }
+
+            $result[] = $item;
         }
 
-        if ($items === []) {
-            return '';
-        }
-
-        return $this->renderMenu($items);
+        return $result;
     }
 
     private function renderAfterContent(): string

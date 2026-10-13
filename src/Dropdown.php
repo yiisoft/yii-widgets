@@ -21,6 +21,7 @@ use Yiisoft\Widget\Widget;
 use function array_key_exists;
 use function gettype;
 use function implode;
+use function is_array;
 use function str_contains;
 use function trim;
 
@@ -39,7 +40,7 @@ final class Dropdown extends Widget
     private string $dividerClass = 'dropdown-divider';
     /** @psalm-var non-empty-string */
     private string $dividerTag = 'hr';
-    /** @psalm-var (Closure(array|string): bool)|null */
+    /** @psalm-var (Closure(array): bool)|null */
     private ?Closure $filter = null;
     private string $headerClass = '';
     /** @psalm-var non-empty-string */
@@ -194,12 +195,13 @@ final class Dropdown extends Widget
     /**
      * Returns a new instance with the specified per-item filter callback.
      *
-     * The callback receives each normalized item (an array, or the string `'-'` for a divider) and should return
-     * true to keep the item or false to remove it. It is applied after the items are normalized.
+     * The callback receives each raw item array, as passed to {@see items()}, and should return true to keep
+     * the item or false to remove it. It is applied before the items are normalized, recursively to the nested
+     * items of the kept ones. String items (e.g. the `'-'` divider) are not passed to the callback and are kept.
      *
      * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
      *
-     * @psalm-param (Closure(array|string): bool)|null $callback
+     * @psalm-param (Closure(array): bool)|null $callback
      */
     public function filter(?Closure $callback): self
     {
@@ -510,7 +512,38 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
-        return $this->renderToContainer(Helper\Normalizer::dropdown($this->items));
+        $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
+
+        return $this->renderToContainer(Helper\Normalizer::dropdown($items));
+    }
+
+    /**
+     * Recursively removes the array items for which the filter callback returns false. String items are kept.
+     *
+     * @psalm-param Closure(array): bool $filter
+     */
+    private function filterItems(array $items, Closure $filter): array
+    {
+        $result = [];
+
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                $result[] = $item;
+                continue;
+            }
+
+            if (!$filter($item)) {
+                continue;
+            }
+
+            if (isset($item['items']) && is_array($item['items'])) {
+                $item['items'] = $this->filterItems($item['items'], $filter);
+            }
+
+            $result[] = $item;
+        }
+
+        return $result;
     }
 
     /**
@@ -541,16 +574,6 @@ final class Dropdown extends Widget
          *   }|string
          * > $normalizedItems
          */
-        if ($this->filter !== null) {
-            $filtered = [];
-            foreach ($normalizedItems as $item) {
-                if (($this->filter)($item)) {
-                    $filtered[] = $item;
-                }
-            }
-            $normalizedItems = $filtered;
-        }
-
         $items = $this->renderItems($normalizedItems) . PHP_EOL;
 
         if (trim($items) === '') {

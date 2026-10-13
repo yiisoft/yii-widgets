@@ -567,8 +567,50 @@ final class MenuTest extends TestCase
             </ul>
             HTML,
             Menu::widget()
-                ->filter(fn(array $item) => ($item['link'] ?? '') !== '#' || ($item['label'] ?? '') === 'Link')
+                ->filter(fn(array $item) => $item['link'] !== '#' || $item['label'] === 'Link')
                 ->items($this->itemsWithOptions)
+                ->render(),
+        );
+    }
+
+    public function testFilterNestedItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">Action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->filter(fn(array $item) => ($item['permission'] ?? 'view') === 'view')
+                ->items([
+                    ['label' => 'Home', 'link' => '/home'],
+                    ['label' => 'Admin', 'link' => '/admin', 'permission' => 'admin'],
+                    [
+                        'label' => 'Dropdown',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Action', 'link' => '#'],
+                            '-',
+                            ['label' => 'Admin action', 'link' => '#', 'permission' => 'admin'],
+                        ],
+                    ],
+                    [
+                        'label' => 'Admin dropdown',
+                        'link' => '#',
+                        'permission' => 'admin',
+                        'items' => [
+                            ['label' => 'Hidden action', 'link' => '#'],
+                        ],
+                    ],
+                ])
                 ->render(),
         );
     }
