@@ -626,6 +626,30 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testFilterRemovesItemWithAllNestedItemsRemoved(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/a">A</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->filter(fn(array $item) => empty($item['admin']))
+                ->items([
+                    ['label' => 'A', 'link' => '/a'],
+                    [
+                        'label' => 'Admin',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'X', 'link' => '/x', 'admin' => true],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testFilterWithNull(): void
     {
         Assert::equalsWithoutLE(

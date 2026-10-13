@@ -350,7 +350,7 @@ final class Menu extends Widget
      * The callback receives each raw item array, as passed to {@see items()}, and should return true to keep
      * the item or false to remove it. It is applied before the items are normalized, recursively to the nested
      * (dropdown) items of the kept ones. String items (e.g. the `'-'` divider) are not passed to the callback and
-     * are kept.
+     * are kept. An item whose nested items all have been removed by the filter is removed as well.
      *
      * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
      *
@@ -626,6 +626,7 @@ final class Menu extends Widget
 
     /**
      * Recursively removes the array items for which the filter callback returns false. String items are kept.
+     * An item whose nested items all have been removed is removed as well.
      *
      * @psalm-param Closure(array): bool $filter
      */
@@ -643,8 +644,12 @@ final class Menu extends Widget
                 continue;
             }
 
-            if (isset($item['items']) && is_array($item['items'])) {
+            if (isset($item['items']) && is_array($item['items']) && $item['items'] !== []) {
                 $item['items'] = $this->filterItems($item['items'], $filter);
+
+                if ($item['items'] === []) {
+                    continue;
+                }
             }
 
             $result[] = $item;

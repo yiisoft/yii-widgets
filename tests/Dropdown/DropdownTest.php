@@ -154,6 +154,32 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testFilterRemovesItemWithAllNestedItemsRemoved(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/a">A</a></li>
+            <li><a href="/b">B</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array $item) => empty($item['admin']))
+                ->items([
+                    ['label' => 'A', 'link' => '/a'],
+                    [
+                        'label' => 'Admin',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'X', 'link' => '/x', 'admin' => true],
+                        ],
+                    ],
+                    ['label' => 'B', 'link' => '/b', 'items' => []],
+                ])
+                ->render(),
+        );
+    }
+
     public function testFilterWithNull(): void
     {
         Assert::equalsWithoutLE(
