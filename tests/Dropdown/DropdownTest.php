@@ -136,6 +136,123 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testFilter(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array $item) => $item['label'] !== 'Another action')
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testFilterRemovesItemWithAllNestedItemsRemoved(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/a">A</a></li>
+            <li><a href="/b">B</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array $item) => empty($item['admin']))
+                ->items([
+                    ['label' => 'A', 'link' => '/a'],
+                    [
+                        'label' => 'Admin',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'X', 'link' => '/x', 'admin' => true],
+                        ],
+                    ],
+                    ['label' => 'B', 'link' => '/b', 'items' => []],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testFilterWithNull(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a aria-current="page" class="active" href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a aria-disabled="true" class="disabled" href="#">Separated link</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array $item) => false)
+                ->filter(null)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testFilterKeepsStringItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><hr class="dropdown-divider"></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array $item) => false)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testFilterNestedItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">Action</a></li>
+            <button id="dropdown-1" type="button">Submenu</button>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">Allowed sub-action</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->filter(fn(array $item) => ($item['permission'] ?? 'view') === 'view')
+                ->items([
+                    ['label' => 'Action', 'link' => '#'],
+                    ['label' => 'Admin action', 'link' => '#', 'permission' => 'admin'],
+                    [
+                        'label' => 'Submenu',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Allowed sub-action', 'link' => '#'],
+                            ['label' => 'Admin sub-action', 'link' => '#', 'permission' => 'admin'],
+                        ],
+                    ],
+                    [
+                        'label' => 'Admin submenu',
+                        'link' => '#',
+                        'permission' => 'admin',
+                        'items' => [
+                            ['label' => 'Hidden sub-action', 'link' => '#'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testGenerateId(): void
     {
         $result = Dropdown::widget()

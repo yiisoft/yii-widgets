@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
@@ -17,6 +18,7 @@ use Yiisoft\Widget\Widget;
 use function array_merge;
 use function count;
 use function implode;
+use function is_array;
 use function strtr;
 use function trim;
 
@@ -64,6 +66,8 @@ final class Menu extends Widget
     /** @psalm-var non-empty-string */
     private string $dropdownContainerTag = 'li';
     private array $dropdownDefinitions = [];
+    /** @psalm-var (Closure(array): bool)|null */
+    private ?Closure $filter = null;
     private string $firstItemClass = '';
     private array $iconContainerAttributes = [];
     private array $items = [];
@@ -341,6 +345,26 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified per-item filter callback.
+     *
+     * The callback receives each raw item array, as passed to {@see items()}, and should return true to keep
+     * the item or false to remove it. It is applied before the items are normalized, recursively to the nested
+     * (dropdown) items of the kept ones. String items (e.g. the `'-'` divider) are not passed to the callback and
+     * are kept. An item whose nested items all have been removed by the filter is removed as well.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
+     *
+     * @psalm-param (Closure(array): bool)|null $callback
+     */
+    public function filter(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->filter = $callback;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified first item CSS class.
      *
      * @param string $value The CSS class that will be assigned to the first item in the main menu or each submenu.
@@ -570,7 +594,9 @@ final class Menu extends Widget
      */
     public function render(): string
     {
-        if ($this->items === []) {
+        $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
+
+        if ($items === []) {
             return '';
         }
 
@@ -589,13 +615,47 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $this->items,
+            $items,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
         );
 
         return $this->renderMenu($items);
+    }
+
+    /**
+     * Recursively removes the array items for which the filter callback returns false. String items are kept.
+     * An item whose nested items all have been removed is removed as well.
+     *
+     * @psalm-param Closure(array): bool $filter
+     */
+    private function filterItems(array $items, Closure $filter): array
+    {
+        $result = [];
+
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                $result[] = $item;
+                continue;
+            }
+
+            if (!$filter($item)) {
+                continue;
+            }
+
+            if (isset($item['items']) && is_array($item['items']) && $item['items'] !== []) {
+                $item['items'] = $this->filterItems($item['items'], $filter);
+
+                if ($item['items'] === []) {
+                    continue;
+                }
+            }
+
+            $result[] = $item;
+        }
+
+        return $result;
     }
 
     private function renderAfterContent(): string

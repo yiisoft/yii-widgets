@@ -557,6 +557,115 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testFilter(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/active">Active</a></li>
+            <li><a href="#">Link</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->filter(fn(array $item) => $item['link'] !== '#' || $item['label'] === 'Link')
+                ->items($this->itemsWithOptions)
+                ->render(),
+        );
+    }
+
+    public function testFilterNestedItems(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">Action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->filter(fn(array $item) => ($item['permission'] ?? 'view') === 'view')
+                ->items([
+                    ['label' => 'Home', 'link' => '/home'],
+                    ['label' => 'Admin', 'link' => '/admin', 'permission' => 'admin'],
+                    [
+                        'label' => 'Dropdown',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'Action', 'link' => '#'],
+                            '-',
+                            ['label' => 'Admin action', 'link' => '#', 'permission' => 'admin'],
+                        ],
+                    ],
+                    [
+                        'label' => 'Admin dropdown',
+                        'link' => '#',
+                        'permission' => 'admin',
+                        'items' => [
+                            ['label' => 'Hidden action', 'link' => '#'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testFilterRemovesAllItems(): void
+    {
+        $this->assertSame(
+            '',
+            Menu::widget()
+                ->filter(fn(array $item) => false)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
+    public function testFilterRemovesItemWithAllNestedItemsRemoved(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/a">A</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->filter(fn(array $item) => empty($item['admin']))
+                ->items([
+                    ['label' => 'A', 'link' => '/a'],
+                    [
+                        'label' => 'Admin',
+                        'link' => '#',
+                        'items' => [
+                            ['label' => 'X', 'link' => '/x', 'admin' => true],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testFilterWithNull(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/path">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->filter(fn(array $item) => false)
+                ->filter(null)
+                ->items($this->items)
+                ->render(),
+        );
+    }
+
     public function testFirstItemCssClass(): void
     {
         Assert::equalsWithoutLE(
