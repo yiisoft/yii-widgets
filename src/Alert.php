@@ -107,7 +107,7 @@ final class Alert extends Widget
      *
      * @param bool $value Whether to add an extra wrapper for the body.
      */
-    public function bodyContainer(bool $value): self
+    public function bodyContainer(bool $value = true): self
     {
         $new = clone $this;
         $new->bodyContainer = $value;
@@ -337,7 +337,7 @@ final class Alert extends Widget
      */
     public function headerTag(string $value): self
     {
-        if (empty($value)) {
+        if ($value === '') {
             throw new InvalidArgumentException('Header tag must be a string and cannot be empty.');
         }
 
