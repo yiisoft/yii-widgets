@@ -90,7 +90,7 @@ final class Menu extends Widget
      *
      * @param bool $value The value to be assigned to the activateItems property.
      */
-    public function activateItems(bool $value): self
+    public function activateItems(bool $value = true): self
     {
         $new = clone $this;
         $new->activateItems = $value;
@@ -254,7 +254,7 @@ final class Menu extends Widget
      *
      * @param bool $value The container widget enable or disable, for default is `true`.
      */
-    public function container(bool $value): self
+    public function container(bool $value = true): self
     {
         $new = clone $this;
         $new->container = $value;
@@ -447,7 +447,7 @@ final class Menu extends Widget
      *
      * @param bool $value The items container enable or disable, for default is `true`.
      */
-    public function itemsContainer(bool $value): self
+    public function itemsContainer(bool $value = true): self
     {
         $new = clone $this;
         $new->itemsContainer = $value;

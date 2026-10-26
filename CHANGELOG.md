@@ -20,6 +20,7 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
+- Enh #125: Add default `true` to bool toggle methods in `Alert`, `Dropdown`, and `Menu` (@WarLikeLaux)
 - New #151: Add `filter()` method to `Menu` and `Dropdown` widgets (@WarLikeLaux, @vjik)
 - Bug #158: Validate empty tag name in setters across `Alert`, `Dropdown`, and `Menu` (@WarLikeLaux)
 - Bug #128: Fix `Dropdown` sub-dropdowns not inheriting widget-level settings (@WarLikeLaux)
