@@ -74,6 +74,42 @@ O código acima gera o seguinte HTML:
 </ul>
 ```
 
+## Removendo submenus vazios
+
+Depois de ocultar itens com `visible` ou `filter()`, um submenu pode ficar apenas com divisores, e o seu botão ainda
+seria renderizado. Ative `pruneItems()` para limpar isso antes da renderização:
+
+- um item cujos itens aninhados estão todos ocultos ou são divisores é removido junto com o seu botão, mesmo que tenha
+  o seu próprio link;
+- divisores no início e no fim são removidos, e divisores consecutivos são reduzidos a um.
+
+Tanto `'-'` quanto `['label' => '-']` são divisores. Um rótulo `-` com ícone é um item comum. Itens sem itens aninhados
+(incluindo `'items' => []`), cabeçalhos, itens desabilitados e de conteúdo bruto são mantidos.
+
+Em um menu, isso se aplica aos submenus. Itens de nível superior sem itens aninhados são mantidos como estão.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Yiisoft\Yii\Widgets\Menu;
+?>
+
+<?= Menu::widget()
+    ->pruneItems()
+    ->items([
+        ['label' => 'Home', 'link' => '/'],
+        [
+            'label' => 'Admin',
+            'items' => [
+                ['label' => 'Users', 'link' => '/admin/users', 'visible' => $isAdmin],
+                '-',
+            ],
+        ],
+    ]) ?>
+```
+
 ## Setters (Configuradores)
 
 Todos os setters são imutáveis e retornam uma nova instância da classe `Yiisoft\Yii\Widgets\Menu` com o valor especificado.
@@ -109,6 +145,7 @@ Método | Descrição | Padrão
 `linkAttributes(array $valuesMap)` | Os atributos HTML do link | `[]`
 `linkClass(string $value)` | A classe CSS a ser anexada ao link | `''`
 `linkTag(string $value)` | O nome da tag do link | `'a'`
+`pruneItems(bool $value = true)` | Se deve remover submenus vazios com seus botões e divisores redundantes nos submenus após a filtragem. Veja [Removendo submenus vazios](#removendo-submenus-vazios) | `false`
 `template(string $value)` | O modelo usado para renderizar o menu principal | `'{items}'`
 
 ### A estrutura de itens é um array com a seguinte estrutura

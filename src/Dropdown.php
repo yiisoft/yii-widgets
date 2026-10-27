@@ -63,6 +63,7 @@ final class Dropdown extends Widget
     private array $itemsContainerAttributes = [];
     /** @psalm-var non-empty-string */
     private string $itemsContainerTag = 'ul';
+    private bool $pruneItems = false;
     private array $splitButtonAttributes = [];
     private array $splitButtonSpanAttributes = [];
     private array $toggleAttributes = [];
@@ -417,6 +418,25 @@ final class Dropdown extends Widget
     }
 
     /**
+     * Returns a new instance that removes redundant items before rendering.
+     *
+     * When enabled, after {@see filter()} and visibility are applied, an item whose nested items are all hidden or
+     * dividers is removed together with its toggle, even if it has its own link. Leading and trailing dividers are
+     * removed, and consecutive ones are collapsed into one. Both `'-'` and `['label' => '-']` are dividers; a `-` label
+     * with an icon is not. Items without nested items (including `items => []`), headers, disabled and raw content
+     * items are kept.
+     *
+     * @param bool $value Whether to remove redundant items.
+     */
+    public function pruneItems(bool $value = true): self
+    {
+        $new = clone $this;
+        $new->pruneItems = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified split button attributes.
      *
      * @param array $valuesMap Attribute values indexed by attribute names.
@@ -514,6 +534,10 @@ final class Dropdown extends Widget
     public function render(): string
     {
         $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
+
+        if ($this->pruneItems) {
+            $items = Helper\Normalizer::pruneDropdown($items);
+        }
 
         return $this->renderToContainer(Helper\Normalizer::dropdown($items));
     }

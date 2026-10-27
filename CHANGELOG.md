@@ -34,6 +34,7 @@
   `encode => false`, and escaped rendered icon markup (@vjik)
 - Bug #168: Fix `Dropdown` not wrapping a nested submenu toggle in `<li>`, producing invalid markup when a
   dropdown item with `items` is itself nested inside another dropdown's `items` (@vjik)
+- New #169: Add `pruneItems()` to `Menu` and `Dropdown` to remove empty submenus and redundant dividers (@samdark)
 
 ## 2.1.1 September 23, 2025
 
