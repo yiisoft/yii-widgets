@@ -44,4 +44,18 @@ final class ExceptionTest extends TestCase
         $this->expectExceptionMessage('The "label" element is required for each item.');
         Breadcrumbs::widget()->homeItem(null)->items([['url' => 'http://my.example.com/yii2/link/page']])->render();
     }
+
+    public function testMaxItemsZero(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "maxItems" value must be a positive integer or null.');
+        Breadcrumbs::widget()->maxItems(0);
+    }
+
+    public function testMaxItemsNegative(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "maxItems" value must be a positive integer or null.');
+        Breadcrumbs::widget()->maxItems(-1);
+    }
 }

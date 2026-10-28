@@ -28,6 +28,7 @@ final class Alert extends Widget
 {
     private array $attributes = [];
     private array $buttonAttributes = [];
+    private bool $buttonHidden = false;
     private string $buttonLabel = '&times;';
     private string $body = '';
     private array $bodyAttributes = [];
@@ -106,7 +107,7 @@ final class Alert extends Widget
      *
      * @param bool $value Whether to add an extra wrapper for the body.
      */
-    public function bodyContainer(bool $value): self
+    public function bodyContainer(bool $value = true): self
     {
         $new = clone $this;
         $new->bodyContainer = $value;
@@ -164,7 +165,7 @@ final class Alert extends Widget
      *
      * The button is displayed in the alert. Clicking on the button will dismiss the alert.
      *
-     * If {@see buttonEnabled} is `false`, no button will be rendered.
+     * If the button is hidden, no button will be rendered.
      *
      * The rest of the options will be rendered as the HTML attributes of the button tag.
      *
@@ -274,6 +275,19 @@ final class Alert extends Widget
     }
 
     /**
+     * Returns a new instance with the close button hidden or visible.
+     *
+     * @param bool $value Whether to hide the close button.
+     */
+    public function hideButton(bool $value = true): self
+    {
+        $new = clone $this;
+        $new->buttonHidden = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance specifying when allows you to add a div tag to the header extra wrapper.
      *
      * @param bool $value The value indicating whether to add a div tag to the header extra wrapper.
@@ -323,7 +337,7 @@ final class Alert extends Widget
      */
     public function headerTag(string $value): self
     {
-        if (empty($value)) {
+        if ($value === '') {
             throw new InvalidArgumentException('Header tag must be a string and cannot be empty.');
         }
 
@@ -476,6 +490,10 @@ final class Alert extends Widget
      */
     private function renderButton(): string
     {
+        if ($this->buttonHidden) {
+            return '';
+        }
+
         $buttonAttributes = $this->buttonAttributes;
 
         if (!array_key_exists('aria-label', $buttonAttributes)) {
