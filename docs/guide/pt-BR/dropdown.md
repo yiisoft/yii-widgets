@@ -61,6 +61,7 @@ Método | Descrição | Padrão
 `filter(?Closure $callback)` | O retorno de chamada para filtrar os itens (incluindo os aninhados) antes da normalização, ou `null` para desabilitar a filtragem | `null`
 `headerClass(string $value)` | A classe CSS para a tag de cabeçalho | `''`
 `headerTag(string $value)` | O nome da tag de cabeçalho | `h6`
+`iconContainerAttributes(array $valuesMap)` | Os atributos HTML para o contêiner de ícones. O `iconContainerAttributes` do próprio item tem prioridade | `[]`
 `id(string $value)` | O ID do widget | `''`
 `itemClass(string $value)` | A classe CSS para a tag do item | `dropdown-item`
 `itemContainer(string $value)` | Recipiente de itens a ser usado. Se for falso, o contêiner do item não será renderizado | `true`
