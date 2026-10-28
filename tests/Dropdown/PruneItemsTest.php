@@ -322,6 +322,18 @@ final class PruneItemsTest extends TestCase
         $dropdown->render();
     }
 
+    public function testVisibleItemsWithoutLabelAreStillValidated(): void
+    {
+        $dropdown = Dropdown::widget()
+            ->pruneItems()
+            ->items([['label' => 'A', 'link' => '/a'], '-', ['link' => '/no-label']]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "label" option is required.');
+
+        $dropdown->render();
+    }
+
     public function testPruneItemsFalseDisablesPruning(): void
     {
         Assert::equalsWithoutLE(
