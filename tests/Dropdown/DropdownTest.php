@@ -568,8 +568,8 @@ final class DropdownTest extends TestCase
         Assert::equalsWithoutLE(
             <<<HTML
             <div>
-            <button type="button">Parent</button>
-            <ul>
+            <button id="dropdown-1" type="button">Parent</button>
+            <ul aria-labelledby="dropdown-1">
             <li><a href="#"><span class="me-2"><i class="bi bi-house"></i></span>Child</a></li>
             </ul>
             </div>
