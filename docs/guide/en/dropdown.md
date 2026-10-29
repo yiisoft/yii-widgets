@@ -96,6 +96,7 @@ Method | Description | Default
 `filter(?Closure $callback)` | The callback to filter items (including nested ones) before normalization, or `null` to disable filtering | `null`
 `headerClass(string $value)` | The CSS class for the header tag | `''`
 `headerTag(string $value)` | The tag name for the header tag | `span`
+`iconContainerAttributes(array $valuesMap)` | The HTML attributes for the icon container. An item's own `iconContainerAttributes` overrides it | `[]`
 `id(string $value)` | The ID of the widget | `''`
 `itemClass(string $value)` | The CSS class for the item tag | `''`
 `itemContainer(bool $value)` | Item container to use. If false, the item container will not be rendered | `true`
