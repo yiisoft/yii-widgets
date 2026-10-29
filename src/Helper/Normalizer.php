@@ -122,46 +122,6 @@ final class Normalizer
         return $items;
     }
 
-    /**
-     * Removes redundant items from the given unnormalized dropdown items.
-     *
-     * Dividers are the string items and the array items labeled `-` without an icon, which is how they are rendered.
-     * Leading and trailing dividers are removed, and consecutive ones are collapsed into one. An item with nested
-     * items is removed when none of its nested items remain visible apart from dividers. Hidden items are kept as is
-     * because they are not rendered anyway. Items with no nested items, headers, disabled and raw content items are
-     * content and are kept.
-     */
-    public static function pruneDropdown(array $items): array
-    {
-        return self::pruneItems($items);
-    }
-
-    /**
-     * Removes empty submenus from the given unnormalized menu items and prunes the items of the remaining submenus
-     * as {@see pruneDropdown()} does. Top-level items without nested items are kept as is.
-     */
-    public static function pruneMenu(array $items): array
-    {
-        $result = [];
-
-        foreach ($items as $item) {
-            if (is_array($item) && self::visible($item) && self::hasNestedItems($item)) {
-                /** @psalm-var array{items: array} $item */
-                $nested = self::pruneItems($item['items'], $hasContent);
-
-                if (!$hasContent) {
-                    continue;
-                }
-
-                $item['items'] = $nested;
-            }
-
-            $result[] = $item;
-        }
-
-        return $result;
-    }
-
     public static function renderLabel(
         string $label,
         string $icon,
@@ -240,77 +200,6 @@ final class Normalizer
     private static function enclose(array $item): bool
     {
         return array_key_exists('enclose', $item) && is_bool($item['enclose']) ? $item['enclose'] : true;
-    }
-
-    private static function hasNestedItems(mixed $item): bool
-    {
-        return is_array($item) && isset($item['items']) && is_array($item['items']) && $item['items'] !== [];
-    }
-
-    /**
-     * Whether the given visible item without nested items is rendered as a divider.
-     */
-    private static function isDivider(mixed $item): bool
-    {
-        if (is_string($item)) {
-            return true;
-        }
-
-        if (!is_array($item) || !isset($item['label'])) {
-            return false;
-        }
-
-        $label = $item['label'];
-
-        return (is_string($label) || $label instanceof Stringable)
-            && (string) $label === '-'
-            && self::icon($item) === ''
-            && self::iconAttributes($item) === []
-            && self::iconClass($item) === '';
-    }
-
-    /**
-     * @param bool $hasContent Set to whether any visible item other than a divider remains.
-     */
-    private static function pruneItems(array $items, ?bool &$hasContent = null): array
-    {
-        $result = [];
-        $divider = null;
-        $hasContent = false;
-
-        foreach ($items as $item) {
-            if (is_array($item) && !self::visible($item)) {
-                $result[] = $item;
-                continue;
-            }
-
-            if (self::hasNestedItems($item)) {
-                /** @psalm-var array{items: array} $item */
-                $nested = self::pruneItems($item['items'], $nestedHasContent);
-
-                if (!$nestedHasContent) {
-                    continue;
-                }
-
-                $item['items'] = $nested;
-            } elseif (self::isDivider($item)) {
-                if ($hasContent && $divider === null) {
-                    $divider = $item;
-                }
-
-                continue;
-            }
-
-            if ($divider !== null) {
-                $result[] = $divider;
-                $divider = null;
-            }
-
-            $result[] = $item;
-            $hasContent = true;
-        }
-
-        return $result;
     }
 
     private static function headerAttributes(array $item): array

@@ -536,7 +536,7 @@ final class Dropdown extends Widget
         $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
 
         if ($this->pruneItems) {
-            $items = Helper\Normalizer::pruneDropdown($items);
+            $items = Helper\Pruner::dropdown($items);
         }
 
         return $this->renderToContainer(Helper\Normalizer::dropdown($items));

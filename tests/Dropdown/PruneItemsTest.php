@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Html\IdGenerator;
 use Yiisoft\Yii\Widgets\Dropdown;
@@ -349,5 +350,39 @@ final class PruneItemsTest extends TestCase
                 ->items(['-', ['label' => 'A', 'link' => '/a']])
                 ->render(),
         );
+    }
+
+    public static function dataRemovedSubmenuIsValidated(): iterable
+    {
+        yield 'hidden nested item without label' => [
+            [['label' => 'Admin', 'items' => [['visible' => false]]]],
+            'The "label" option is required.',
+        ];
+        yield 'toggle without label' => [
+            [['items' => ['-']]],
+            'The "label" option is required.',
+        ];
+        yield 'deeper nested item with invalid label' => [
+            [['label' => 'Admin', 'items' => [['label' => 'Users', 'items' => [['label' => 1, 'visible' => false]]]]]],
+            'The "label" option must be a string or a Stringable object.',
+        ];
+    }
+
+    /**
+     * A removed submenu is validated as it would be when rendered without pruning.
+     */
+    #[DataProvider('dataRemovedSubmenuIsValidated')]
+    public function testRemovedSubmenuIsValidated(array $items, string $message): void
+    {
+        $items = [['label' => 'A', 'link' => '/a'], ...$items];
+
+        foreach ([false, true] as $prune) {
+            try {
+                Dropdown::widget()->pruneItems($prune)->items($items)->render();
+                $this->fail('An exception is expected with pruneItems(' . ($prune ? 'true' : 'false') . ').');
+            } catch (InvalidArgumentException $e) {
+                $this->assertSame($message, $e->getMessage());
+            }
+        }
     }
 }

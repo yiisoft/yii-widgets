@@ -618,7 +618,7 @@ final class Menu extends Widget
         $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
 
         if ($this->pruneItems) {
-            $items = Helper\Normalizer::pruneMenu($items);
+            $items = Helper\Pruner::menu($items);
         }
 
         if ($items === []) {
