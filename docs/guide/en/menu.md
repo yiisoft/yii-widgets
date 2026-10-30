@@ -74,6 +74,42 @@ The code above generates the following HTML:
 </ul>
 ```
 
+## Removing empty submenus
+
+After hiding items with `visible` or `filter()`, a submenu may be left with nothing to show but dividers, and its toggle
+would still be rendered. Enable `pruneItems()` to clean this up before rendering:
+
+- an item whose nested items are all hidden or dividers is removed together with its toggle, even if it has its own
+  link;
+- leading and trailing dividers are removed, and consecutive dividers are collapsed into one.
+
+Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon is a regular item. Items without nested items
+(including `'items' => []`), headers, disabled and raw content items are kept.
+
+In a menu, this applies to the submenus. Top-level items without nested items are kept as is.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Yiisoft\Yii\Widgets\Menu;
+?>
+
+<?= Menu::widget()
+    ->pruneItems()
+    ->items([
+        ['label' => 'Home', 'link' => '/'],
+        [
+            'label' => 'Admin',
+            'items' => [
+                ['label' => 'Users', 'link' => '/admin/users', 'visible' => $isAdmin],
+                '-',
+            ],
+        ],
+    ]) ?>
+```
+
 ## Setters
 
 All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\Menu` class with the specified value.
@@ -98,6 +134,7 @@ Method | Description | Default
 `dropdownContainerClass(string $value)` | The CSS class to be appended to the dropdown container | `'dropdown'`
 `dropdownContainerTag(string $value)` | The tag name for the dropdown container | `'li'`
 `dropdownDefinitions(array $valuesMap)` | The config for dropdown widget | `[]`
+`filter(?Closure $callback)` | The callback to filter items (including nested ones) before normalization, or `null` to disable filtering | `null`
 `firstItemClass(string $value)` | The CSS class for the first item in the main menu or each submenu | `''`
 `iconContainerAttributes(array $valuesMap)` | The HTML attributes for the icon container | `[]`
 `items(array $value)` | List of menu items | `[]`
@@ -109,6 +146,7 @@ Method | Description | Default
 `linkAttributes(array $valuesMap)` | The HTML attributes for the link | `[]`
 `linkClass(string $value)` | The CSS class to be appended to the link | `''`
 `linkTag(string $value)` | The tag name for the link | `'a'`
+`pruneItems(bool $value = true)` | Whether to remove empty submenus with their toggles and redundant dividers in submenus after filtering. See [Removing empty submenus](#removing-empty-submenus) | `false`
 `tagName(string $value)` | The tag name for the menu container | `'ul'`
 `template(string $value)` | The template used to render the main menu | `'{items}'`
 
@@ -134,3 +172,6 @@ Method | Description | Default
 ```
 
 > `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority.
+
+> `label` can be a string or a `Stringable` object. A `NoEncodeStringableInterface` object (e.g. an HTML tag) is
+> rendered as is, regardless of `encode`.

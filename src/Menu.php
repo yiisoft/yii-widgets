@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
@@ -11,6 +12,7 @@ use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
 use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
+use Yiisoft\Html\NoEncodeStringableInterface;
 use Yiisoft\Widget\Widget;
 
 use function array_merge;
@@ -47,12 +49,14 @@ final class Menu extends Widget
 {
     private array $afterAttributes = [];
     private string $afterContent = '';
+    /** @psalm-var non-empty-string */
     private string $afterTag = 'span';
     private string $activeClass = 'active';
     private bool $activateItems = true;
     private array $attributes = [];
     private array $beforeAttributes = [];
     private string $beforeContent = '';
+    /** @psalm-var non-empty-string */
     private string $beforeTag = 'span';
     /** @psalm-var positive-int|null */
     private ?int $collapseAfter = null;
@@ -63,18 +67,25 @@ final class Menu extends Widget
     private string $disabledClass = 'disabled';
     private bool $dropdownContainer = true;
     private array $dropdownContainerAttributes = [];
+    /** @psalm-var non-empty-string */
     private string $dropdownContainerTag = 'li';
     private array $dropdownDefinitions = [];
+    /** @psalm-var (Closure(array): bool)|null */
+    private ?Closure $filter = null;
     private string $firstItemClass = '';
     private array $iconContainerAttributes = [];
     private array $items = [];
+    private bool $pruneItems = false;
     private bool $itemsContainer = true;
     private array $itemsContainerAttributes = [];
+    /** @psalm-var non-empty-string */
     private string $itemsTag = 'li';
     private string $lastItemClass = '';
     private array $linkAttributes = [];
     private string $linkClass = '';
+    /** @psalm-var non-empty-string */
     private string $linkTag = 'a';
+    /** @psalm-var non-empty-string */
     private string $tagName = 'ul';
     private string $template = '{items}';
 
@@ -84,7 +95,7 @@ final class Menu extends Widget
      *
      * @param bool $value The value to be assigned to the activateItems property.
      */
-    public function activateItems(bool $value): self
+    public function activateItems(bool $value = true): self
     {
         $new = clone $this;
         $new->activateItems = $value;
@@ -151,6 +162,10 @@ final class Menu extends Widget
      */
     public function afterTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->afterTag = $value;
 
@@ -216,6 +231,10 @@ final class Menu extends Widget
      */
     public function beforeTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->beforeTag = $value;
 
@@ -283,7 +302,7 @@ final class Menu extends Widget
      *
      * @param bool $value The container widget enable or disable, for default is `true`.
      */
-    public function container(bool $value): self
+    public function container(bool $value = true): self
     {
         $new = clone $this;
         $new->container = $value;
@@ -350,6 +369,10 @@ final class Menu extends Widget
      */
     public function dropdownContainerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->dropdownContainerTag = $value;
 
@@ -365,6 +388,26 @@ final class Menu extends Widget
     {
         $new = clone $this;
         $new->dropdownDefinitions = $valuesMap;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified per-item filter callback.
+     *
+     * The callback receives each raw item array, as passed to {@see items()}, and should return true to keep
+     * the item or false to remove it. It is applied before the items are normalized, recursively to the nested
+     * (dropdown) items of the kept ones. String items (e.g. the `'-'` divider) are not passed to the callback and
+     * are kept. An item whose nested items all have been removed by the filter is removed as well.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
+     *
+     * @psalm-param (Closure(array): bool)|null $callback
+     */
+    public function filter(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->filter = $callback;
 
         return $new;
     }
@@ -419,10 +462,12 @@ final class Menu extends Widget
      * List of items in the nav widget. Each array element represents a single menu item which can be either a string or
      * an array with the following structure:
      *
-     * - label: string, required, the nav item label.
+     * - label: string|Stringable, required, the nav item label. A {@see NoEncodeStringableInterface} object (e.g. an
+     *   HTML tag) is rendered as is.
      * - active: bool, whether the item should be on active state or not.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
-     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
+     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true. Ignored for
+     *   a {@see NoEncodeStringableInterface} label.
      * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.
      * - itemsContainerAttributes: array, optional, the HTML attributes for the item's submenu container.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
@@ -450,7 +495,7 @@ final class Menu extends Widget
      *
      * @param bool $value The items container enable or disable, for default is `true`.
      */
-    public function itemsContainer(bool $value): self
+    public function itemsContainer(bool $value = true): self
     {
         $new = clone $this;
         $new->itemsContainer = $value;
@@ -491,6 +536,10 @@ final class Menu extends Widget
      */
     public function itemsTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->itemsTag = $value;
 
@@ -543,8 +592,32 @@ final class Menu extends Widget
      */
     public function linkTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->linkTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance that removes redundant items before rendering.
+     *
+     * When enabled, after {@see filter()} and visibility are applied, an item whose nested items are all hidden or
+     * dividers is removed together with its toggle, even if it has its own link. Leading and trailing dividers are
+     * removed, and consecutive ones are collapsed into one. Both `'-'` and `['label' => '-']` are dividers; a `-` label
+     * with an icon is not. Items without nested items (including `'items' => []`), headers, disabled and raw content
+     * items are kept.
+     * In a menu, this applies to the submenus; top-level items without nested items are kept as is.
+     *
+     * @param bool $value Whether to remove redundant items.
+     */
+    public function pruneItems(bool $value = true): self
+    {
+        $new = clone $this;
+        $new->pruneItems = $value;
 
         return $new;
     }
@@ -556,6 +629,10 @@ final class Menu extends Widget
      */
     public function tagName(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->tagName = $value;
 
@@ -585,7 +662,13 @@ final class Menu extends Widget
      */
     public function render(): string
     {
-        if ($this->items === []) {
+        $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
+
+        if ($this->pruneItems) {
+            $items = Helper\Pruner::menu($items);
+        }
+
+        if ($items === []) {
             return '';
         }
 
@@ -663,12 +746,42 @@ final class Menu extends Widget
         return [$kept, true];
     }
 
-    private function renderAfterContent(): string
+    /**
+     * Recursively removes the array items for which the filter callback returns false. String items are kept.
+     * An item whose nested items all have been removed is removed as well.
+     *
+     * @psalm-param Closure(array): bool $filter
+     */
+    private function filterItems(array $items, Closure $filter): array
     {
-        if ($this->afterTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        $result = [];
+
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                $result[] = $item;
+                continue;
+            }
+
+            if (!$filter($item)) {
+                continue;
+            }
+
+            if (isset($item['items']) && is_array($item['items']) && $item['items'] !== []) {
+                $item['items'] = $this->filterItems($item['items'], $filter);
+
+                if ($item['items'] === []) {
+                    continue;
+                }
+            }
+
+            $result[] = $item;
         }
 
+        return $result;
+    }
+
+    private function renderAfterContent(): string
+    {
         return PHP_EOL
             . Html::normalTag($this->afterTag, $this->afterContent, $this->afterAttributes)
                 ->encode(false)
@@ -677,10 +790,6 @@ final class Menu extends Widget
 
     private function renderBeforeContent(): string
     {
-        if ($this->beforeTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         return Html::normalTag($this->beforeTag, $this->beforeContent, $this->beforeAttributes)
             ->encode(false)
             ->render();
@@ -707,10 +816,6 @@ final class Menu extends Widget
         }
 
         $dropdown = Dropdown::widget([], $dropdownDefinitions)->items($items)->render();
-
-        if ($this->dropdownContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
 
         return match ($this->dropdownContainer) {
             true => Html::normalTag($this->dropdownContainerTag, $dropdown, $this->dropdownContainerAttributes)
@@ -761,10 +866,6 @@ final class Menu extends Widget
 
         if ($item['link'] !== '') {
             $linkAttributes['href'] = $item['link'];
-        }
-
-        if ($this->linkTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
         return match (isset($linkAttributes['href'])) {
@@ -820,10 +921,6 @@ final class Menu extends Widget
 
                 $menu = $this->renderItem($item);
 
-                if ($this->itemsTag === '') {
-                    throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-                }
-
                 $lines[] = match ($this->itemsContainer) {
                     false => $menu,
                     default => strtr(
@@ -871,10 +968,6 @@ final class Menu extends Widget
 
         if ($this->afterContent !== '') {
             $afterContent = $this->renderAfterContent();
-        }
-
-        if ($this->tagName === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
         return match ($this->container) {

@@ -43,6 +43,41 @@ The code above generates the following HTML:
 </div>
 ```
 
+## Removing empty submenus
+
+After hiding items with `visible` or `filter()`, a submenu may be left with nothing to show but dividers, and its toggle
+would still be rendered. Enable `pruneItems()` to clean this up before rendering:
+
+- an item whose nested items are all hidden or dividers is removed together with its toggle, even if it has its own
+  link;
+- leading and trailing dividers are removed, and consecutive dividers are collapsed into one.
+
+Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon is a regular item. Items without nested items
+(including `'items' => []`), headers, disabled and raw content items are kept.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Yiisoft\Yii\Widgets\Dropdown;
+?>
+
+<?= Dropdown::widget()
+    ->pruneItems()
+    ->items([
+        ['label' => 'Profile', 'link' => '/profile'],
+        '-',
+        [
+            'label' => 'Admin',
+            'items' => [
+                ['label' => 'Users', 'link' => '/admin/users', 'visible' => $isAdmin],
+            ],
+        ],
+        '-',
+    ]) ?>
+```
+
 ## Setters
 
 All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\Dropdown` class with the specified value.
@@ -58,8 +93,10 @@ Method | Description | Default
 `dividerAttributes(array $valuesMap)` | The HTML attributes for the divider tag | `[]`
 `dividerClass(string $value)` | The CSS class for the divider tag | `dropdown-divider`
 `dividerTag(string $value)` | The tag name for the divider tag | `hr`
+`filter(?Closure $callback)` | The callback to filter items (including nested ones) before normalization, or `null` to disable filtering | `null`
 `headerClass(string $value)` | The CSS class for the header tag | `''`
 `headerTag(string $value)` | The tag name for the header tag | `span`
+`iconContainerAttributes(array $valuesMap)` | The HTML attributes for the icon container. An item's own `iconContainerAttributes` overrides it | `[]`
 `id(string $value)` | The ID of the widget | `''`
 `itemClass(string $value)` | The CSS class for the item tag | `''`
 `itemContainer(bool $value)` | Item container to use. If false, the item container will not be rendered | `true`
@@ -71,8 +108,10 @@ Method | Description | Default
 `itemsContainerAttributes(array $valuesMap)` | The HTML attributes for the items container tag | `[]`
 `itemsContainerClass(string $value)` | The CSS class for the items container tag | `''`
 `itemsContainerTag(string $value)` | The tag name for the items container tag | `ul`
+`pruneItems(bool $value = true)` | Whether to remove empty submenus with their toggles and redundant dividers after filtering. See [Removing empty submenus](#removing-empty-submenus) | `false`
 `splitButtonAttributes(array $valuesMap)` | The HTML attributes for the split button tag | `[]`
 `splitButtonClass(string $value)` | The CSS class for the split button tag | `''`
+`splitButtonSpanAttributes(array $valuesMap)` | The HTML attributes for the split button span tag | `[]`
 `splitButtonSpanClass(string $value)` | The CSS class for the split button span tag | `''`
 `toggleAttributes(array $valuesMap)` | The HTML attributes for the toggle tag | `[]`
 `toggleClass(string $value)` | The CSS class for the toggle tag | `''`
@@ -101,3 +140,6 @@ Method | Description | Default
 ```
 
 > `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority.
+
+> `label` can be a string or a `Stringable` object. A `NoEncodeStringableInterface` object (e.g. an HTML tag) is
+> rendered as is, regardless of `encode`.

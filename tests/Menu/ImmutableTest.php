@@ -19,13 +19,13 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($menu, $menu->afterAttributes([]));
         $this->assertNotSame($menu, $menu->afterClass(''));
         $this->assertNotSame($menu, $menu->afterContent(''));
-        $this->assertNotSame($menu, $menu->afterTag(''));
+        $this->assertNotSame($menu, $menu->afterTag('div'));
         $this->assertNotSame($menu, $menu->activeClass(''));
         $this->assertNotSame($menu, $menu->attributes([]));
         $this->assertNotSame($menu, $menu->beforeAttributes([]));
         $this->assertNotSame($menu, $menu->beforeClass(''));
         $this->assertNotSame($menu, $menu->beforeContent(''));
-        $this->assertNotSame($menu, $menu->beforeTag(''));
+        $this->assertNotSame($menu, $menu->beforeTag('div'));
         $this->assertNotSame($menu, $menu->class(''));
         $this->assertNotSame($menu, $menu->collapseAfter(1));
         $this->assertNotSame($menu, $menu->collapseDropdownDefinitions([]));
@@ -37,6 +37,8 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($menu, $menu->dropdownContainerClass(''));
         $this->assertNotSame($menu, $menu->dropdownContainerTag('div'));
         $this->assertNotSame($menu, $menu->dropdownDefinitions([]));
+        $this->assertNotSame($menu, $menu->filter(fn(array $item) => true));
+        $this->assertNotSame($menu, $menu->pruneItems());
         $this->assertNotSame($menu, $menu->firstItemClass(''));
         $this->assertNotSame($menu, $menu->iconContainerAttributes([]));
         $this->assertNotSame($menu, $menu->id('test'));
@@ -44,12 +46,12 @@ final class ImmutableTest extends TestCase
         $this->assertNotSame($menu, $menu->itemsContainer(false));
         $this->assertNotSame($menu, $menu->itemsContainerAttributes([]));
         $this->assertNotSame($menu, $menu->itemsContainerClass(''));
-        $this->assertNotSame($menu, $menu->itemsTag(''));
+        $this->assertNotSame($menu, $menu->itemsTag('div'));
         $this->assertNotSame($menu, $menu->lastItemClass(''));
         $this->assertNotSame($menu, $menu->linkAttributes([]));
         $this->assertNotSame($menu, $menu->linkClass(''));
-        $this->assertNotSame($menu, $menu->linkTag(''));
-        $this->assertNotSame($menu, $menu->tagName(''));
+        $this->assertNotSame($menu, $menu->linkTag('div'));
+        $this->assertNotSame($menu, $menu->tagName('div'));
         $this->assertNotSame($menu, $menu->template(''));
     }
 }

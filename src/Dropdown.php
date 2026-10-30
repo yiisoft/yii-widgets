@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets;
 
+use Closure;
 use InvalidArgumentException;
+use Stringable;
 use Yiisoft\Definitions\Exception\CircularReferenceException;
 use Yiisoft\Definitions\Exception\InvalidConfigException;
 use Yiisoft\Definitions\Exception\NotInstantiableException;
 use Yiisoft\Factory\NotFoundException;
 use Yiisoft\Html\Html;
+use Yiisoft\Html\NoEncodeStringableInterface;
 use Yiisoft\Html\Tag\A;
 use Yiisoft\Html\Tag\Button;
 use Yiisoft\Html\Tag\Span;
@@ -18,6 +21,7 @@ use Yiisoft\Widget\Widget;
 use function array_key_exists;
 use function gettype;
 use function implode;
+use function is_array;
 use function str_contains;
 use function trim;
 
@@ -29,22 +33,38 @@ final class Dropdown extends Widget
     private bool $container = true;
     private array $containerAttributes = [];
     private string $containerClass = '';
+    /** @psalm-var non-empty-string */
     private string $containerTag = 'div';
     private string $disabledClass = 'disabled';
     private array $dividerAttributes = [];
     private string $dividerClass = 'dropdown-divider';
+    /** @psalm-var non-empty-string */
     private string $dividerTag = 'hr';
+    /** @psalm-var (Closure(array): bool)|null */
+    private ?Closure $filter = null;
     private string $headerClass = '';
+    /** @psalm-var non-empty-string */
     private string $headerTag = 'span';
+    private array $iconContainerAttributes = [];
     private string $id = '';
     private string $itemClass = '';
+    /** @psalm-var non-empty-string */
     private string $itemTag = 'a';
     private bool $itemContainer = true;
     private array $itemContainerAttributes = [];
+    /** @psalm-var non-empty-string */
     private string $itemContainerTag = 'li';
     private array $items = [];
+    /**
+     * Whether this instance renders a nested submenu (always inside an actual `<ul>`, via {@see renderDropdown()}),
+     * as opposed to the top-level {@see items()}, which are rendered directly into {@see $containerTag} and may
+     * not be a list at all.
+     */
+    private bool $isNested = false;
     private array $itemsContainerAttributes = [];
+    /** @psalm-var non-empty-string */
     private string $itemsContainerTag = 'ul';
+    private bool $pruneItems = false;
     private array $splitButtonAttributes = [];
     private array $splitButtonSpanAttributes = [];
     private array $toggleAttributes = [];
@@ -68,7 +88,7 @@ final class Dropdown extends Widget
      *
      * @param bool $value The container enabled.
      */
-    public function container(bool $value): self
+    public function container(bool $value = true): self
     {
         $new = clone $this;
         $new->container = $value;
@@ -109,6 +129,10 @@ final class Dropdown extends Widget
      */
     public function containerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->containerTag = $value;
         return $new;
@@ -160,8 +184,32 @@ final class Dropdown extends Widget
      */
     public function dividerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->dividerTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified per-item filter callback.
+     *
+     * The callback receives each raw item array, as passed to {@see items()}, and should return true to keep
+     * the item or false to remove it. It is applied before the items are normalized, recursively to the nested
+     * items of the kept ones. String items (e.g. the `'-'` divider) are not passed to the callback and are kept.
+     * An item whose nested items all have been removed by the filter is removed as well.
+     *
+     * @param Closure|null $callback The callback to apply to each item, or null to disable filtering.
+     *
+     * @psalm-param (Closure(array): bool)|null $callback
+     */
+    public function filter(?Closure $callback): self
+    {
+        $new = clone $this;
+        $new->filter = $callback;
 
         return $new;
     }
@@ -186,8 +234,25 @@ final class Dropdown extends Widget
      */
     public function headerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->headerTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified icon container HTML attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function iconContainerAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->iconContainerAttributes = $valuesMap;
 
         return $new;
     }
@@ -223,7 +288,7 @@ final class Dropdown extends Widget
      *
      * @param bool $value The item container.
      */
-    public function itemContainer(bool $value): self
+    public function itemContainer(bool $value = true): self
     {
         $new = clone $this;
         $new->itemContainer = $value;
@@ -264,6 +329,10 @@ final class Dropdown extends Widget
      */
     public function itemContainerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->itemContainerTag = $value;
 
@@ -277,6 +346,10 @@ final class Dropdown extends Widget
      */
     public function itemTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->itemTag = $value;
 
@@ -287,11 +360,13 @@ final class Dropdown extends Widget
      * List of menu items in the dropdown. Each array element can be either an HTML string, or an array representing a
      * single menu with the following structure:
      *
-     * - label: string, required, the nav item label.
+     * - label: string|Stringable, required, the nav item label. A {@see NoEncodeStringableInterface} object (e.g. an
+     *   HTML tag) is rendered as is.
      * - active: bool, whether the item should be on active state or not.
      * - disabled: bool, whether the item should be on disabled state or not. For default `disabled` is false.
      * - enclose: bool, whether the item should be enclosed by a `<li>` tag or not. For default `enclose` is true.
-     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true.
+     * - encode: bool, whether the label should be HTML encoded or not. For default `encodeLabel` is true. Ignored for
+     *   a {@see NoEncodeStringableInterface} label.
      * - headerAttributes: array, HTML attributes to be rendered in the item header.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
      *   alias when `link` is not set.
@@ -346,8 +421,31 @@ final class Dropdown extends Widget
      */
     public function itemsContainerTag(string $value): self
     {
+        if ($value === '') {
+            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
+        }
+
         $new = clone $this;
         $new->itemsContainerTag = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance that removes redundant items before rendering.
+     *
+     * When enabled, after {@see filter()} and visibility are applied, an item whose nested items are all hidden or
+     * dividers is removed together with its toggle, even if it has its own link. Leading and trailing dividers are
+     * removed, and consecutive ones are collapsed into one. Both `'-'` and `['label' => '-']` are dividers; a `-` label
+     * with an icon is not. Items without nested items (including `'items' => []`), headers, disabled and raw content
+     * items are kept.
+     *
+     * @param bool $value Whether to remove redundant items.
+     */
+    public function pruneItems(bool $value = true): self
+    {
+        $new = clone $this;
+        $new->pruneItems = $value;
 
         return $new;
     }
@@ -374,6 +472,19 @@ final class Dropdown extends Widget
     {
         $new = clone $this;
         Html::addCssClass($new->splitButtonAttributes, $value);
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified split button span attributes.
+     *
+     * @param array $valuesMap Attribute values indexed by attribute names.
+     */
+    public function splitButtonSpanAttributes(array $valuesMap): self
+    {
+        $new = clone $this;
+        $new->splitButtonSpanAttributes = $valuesMap;
 
         return $new;
     }
@@ -436,7 +547,47 @@ final class Dropdown extends Widget
      */
     public function render(): string
     {
-        return $this->renderToContainer(Helper\Normalizer::dropdown($this->items));
+        $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
+
+        if ($this->pruneItems) {
+            $items = Helper\Pruner::dropdown($items);
+        }
+
+        return $this->renderToContainer(Helper\Normalizer::dropdown($items, $this->iconContainerAttributes));
+    }
+
+    /**
+     * Recursively removes the array items for which the filter callback returns false. String items are kept.
+     * An item whose nested items all have been removed is removed as well.
+     *
+     * @psalm-param Closure(array): bool $filter
+     */
+    private function filterItems(array $items, Closure $filter): array
+    {
+        $result = [];
+
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                $result[] = $item;
+                continue;
+            }
+
+            if (!$filter($item)) {
+                continue;
+            }
+
+            if (isset($item['items']) && is_array($item['items']) && $item['items'] !== []) {
+                $item['items'] = $this->filterItems($item['items'], $filter);
+
+                if ($item['items'] === []) {
+                    continue;
+                }
+            }
+
+            $result[] = $item;
+        }
+
+        return $result;
     }
 
     /**
@@ -477,10 +628,6 @@ final class Dropdown extends Widget
             Html::addCssClass($containerAttributes, $this->containerClass);
         }
 
-        if ($this->containerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         return match ($this->container) {
             true => Html::normalTag($this->containerTag, $items, $containerAttributes)->encode(false)->render(),
             false => $items,
@@ -495,10 +642,6 @@ final class Dropdown extends Widget
             Html::addCssClass($dividerAttributes, $this->dividerClass);
         }
 
-        if ($this->dividerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         return $this->renderItemContainer(
             Html::tag($this->dividerTag, '', $dividerAttributes)->encode(false)->render(),
         );
@@ -509,29 +652,19 @@ final class Dropdown extends Widget
      */
     private function renderDropdown(array $items): string
     {
-        return self::widget()
+        $dropdown = $this
             ->container(false)
-            ->dividerAttributes($this->dividerAttributes)
-            ->headerClass($this->headerClass)
-            ->headerTag($this->headerTag)
-            ->itemClass($this->itemClass)
-            ->itemContainerAttributes($this->itemContainerAttributes)
-            ->itemContainerTag($this->itemContainerTag)
-            ->itemsContainerAttributes($this->itemsContainerAttributes)
-            ->itemTag($this->itemTag)
-            ->toggleAttributes($this->toggleAttributes)
-            ->toggleType($this->toggleType)
-            ->renderToContainer($items);
+            ->containerClass('')
+            ->id('');
+        $dropdown->isNested = true;
+
+        return $dropdown->renderToContainer($items);
     }
 
     private function renderHeader(string $label, array $headerAttributes = []): string
     {
         if ($this->headerClass !== '') {
             Html::addCssClass($headerAttributes, $this->headerClass);
-        }
-
-        if ($this->headerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
         }
 
         return $this->renderItemContainer(
@@ -616,12 +749,16 @@ final class Dropdown extends Widget
             $toggleSplitButton = $this->renderToggleSplitButton($item['label']);
 
             if ($this->toggleType === 'split' && !str_contains($this->containerClass, 'dropstart')) {
-                $lines[] = $toggleSplitButton . PHP_EOL . $toggle . PHP_EOL . $itemContainer;
+                $content = $toggleSplitButton . PHP_EOL . $toggle . PHP_EOL . $itemContainer;
             } elseif ($this->toggleType === 'split' && str_contains($this->containerClass, 'dropstart')) {
-                $lines[] = $toggle . PHP_EOL . $itemContainer . PHP_EOL . $toggleSplitButton;
+                $content = $toggle . PHP_EOL . $itemContainer . PHP_EOL . $toggleSplitButton;
             } else {
-                $lines[] = $toggle . PHP_EOL . $itemContainer;
+                $content = $toggle . PHP_EOL . $itemContainer;
             }
+
+            $lines[] = $this->isNested
+                ? $this->renderItemContainer($content, $item['itemContainerAttributes'])
+                : $content;
         }
 
         /** @psalm-var string[] $lines */
@@ -630,10 +767,6 @@ final class Dropdown extends Widget
 
     private function renderItemContainer(string $content, array $itemContainerAttributes = []): string
     {
-        if ($this->itemContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         if ($itemContainerAttributes === []) {
             $itemContainerAttributes = $this->itemContainerAttributes;
         }
@@ -645,10 +778,6 @@ final class Dropdown extends Widget
 
     private function renderItemsContainer(string $content, array $itemsContainerAttributes): string
     {
-        if ($this->itemsContainerTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
-
         return Html::normalTag($this->itemsContainerTag, $content, $itemsContainerAttributes)
             ->encode(false)
             ->render();
@@ -715,10 +844,6 @@ final class Dropdown extends Widget
         array $itemContainerAttributes = [],
     ): string {
         $linkAttributes['href'] = $link;
-
-        if ($this->itemTag === '') {
-            throw new InvalidArgumentException('Tag name must be a string and cannot be empty.');
-        }
 
         $linkTag = Html::normalTag($this->itemTag, $label, $linkAttributes)->encode(false)->render();
 

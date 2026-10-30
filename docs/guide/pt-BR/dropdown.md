@@ -43,6 +43,41 @@ O código acima gera o seguinte HTML:
 </div>
 ```
 
+## Removendo submenus vazios
+
+Depois de ocultar itens com `visible` ou `filter()`, um submenu pode ficar apenas com divisores, e o seu botão ainda
+seria renderizado. Ative `pruneItems()` para limpar isso antes da renderização:
+
+- um item cujos itens aninhados estão todos ocultos ou são divisores é removido junto com o seu botão, mesmo que tenha
+  o seu próprio link;
+- divisores no início e no fim são removidos, e divisores consecutivos são reduzidos a um.
+
+Tanto `'-'` quanto `['label' => '-']` são divisores. Um rótulo `-` com ícone é um item comum. Itens sem itens aninhados
+(incluindo `'items' => []`), cabeçalhos, itens desabilitados e de conteúdo bruto são mantidos.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Yiisoft\Yii\Widgets\Dropdown;
+?>
+
+<?= Dropdown::widget()
+    ->pruneItems()
+    ->items([
+        ['label' => 'Profile', 'link' => '/profile'],
+        '-',
+        [
+            'label' => 'Admin',
+            'items' => [
+                ['label' => 'Users', 'link' => '/admin/users', 'visible' => $isAdmin],
+            ],
+        ],
+        '-',
+    ]) ?>
+```
+
 ## Setters (Configuradores)
 
 Todos os setters são imutáveis e retornam uma nova instância da classe `Yiisoft\Yii\Widgets\Menu` com o valor especificado.
@@ -58,8 +93,10 @@ Método | Descrição | Padrão
 `dividerAttributes(array $valuesMap)` | Os atributos HTML da tag divisor | `[]`
 `dividerClass(string $value)` | A classe CSS para a tag divisor | `dropdown-divider`
 `dividerTag(string $value)` | O nome da tag do divisor | `hr`
+`filter(?Closure $callback)` | O retorno de chamada para filtrar os itens (incluindo os aninhados) antes da normalização, ou `null` para desabilitar a filtragem | `null`
 `headerClass(string $value)` | A classe CSS para a tag de cabeçalho | `''`
 `headerTag(string $value)` | O nome da tag de cabeçalho | `h6`
+`iconContainerAttributes(array $valuesMap)` | Os atributos HTML para o contêiner de ícones. O `iconContainerAttributes` do próprio item tem prioridade | `[]`
 `id(string $value)` | O ID do widget | `''`
 `itemClass(string $value)` | A classe CSS para a tag do item | `dropdown-item`
 `itemContainer(string $value)` | Recipiente de itens a ser usado. Se for falso, o contêiner do item não será renderizado | `true`
@@ -71,6 +108,7 @@ Método | Descrição | Padrão
 `itemsContainerAttributes(array $valuesMap)` | Os atributos HTML para a tag de contêiner de itens | `[]`
 `itemsContainerClass(string $value)` | A classe CSS para a tag de contêiner de itens | `''`
 `itemsContainerTag(string $value)` | O nome da tag do contêiner de itens | `li`
+`pruneItems(bool $value = true)` | Se deve remover submenus vazios com seus botões e divisores redundantes após a filtragem. Veja [Removendo submenus vazios](#removendo-submenus-vazios) | `false`
 `splitButtonAttributes(array $valuesMap)` | Os atributos HTML para a tag do botão de divisão | `[]`
 `splitButtonClass(string $value)` | A classe CSS para a tag do botão de divisão | `''`
 `toggleAttributes(array $valuesMap)` | Os atributos HTML para a tag de alternância | `[]`

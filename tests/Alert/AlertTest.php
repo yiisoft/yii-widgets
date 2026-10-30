@@ -13,6 +13,36 @@ final class AlertTest extends TestCase
 {
     use TestTrait;
 
+    public function testHideButton(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span>This is a test.</span>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body('This is a test.')
+                ->hideButton()
+                ->id('w0-alert')
+                ->render(),
+        );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <span>This is a test.</span>
+            <button aria-label="Close" type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->body('This is a test.')
+                ->hideButton(false)
+                ->id('w0-alert')
+                ->render(),
+        );
+    }
+
     public function testBodyAttributes(): void
     {
         Assert::equalsWithoutLE(
@@ -47,6 +77,14 @@ final class AlertTest extends TestCase
                 ->bodyContainerAttributes(['class' => 'test-class'])
                 ->id('w0-alert')
                 ->render(),
+        );
+    }
+
+    public function testBodyContainerDefaultValue(): void
+    {
+        $this->assertSame(
+            Alert::widget()->body('Test.')->bodyContainer(true)->id('w0-alert')->render(),
+            Alert::widget()->body('Test.')->bodyContainer()->id('w0-alert')->render(),
         );
     }
 
@@ -122,6 +160,24 @@ final class AlertTest extends TestCase
                 ->header('Header title')
                 ->headerContainer()
                 ->headerContainerAttributes(['class' => 'test-class'])
+                ->id('w0-alert')
+                ->layoutHeader('{header}')
+                ->render(),
+        );
+    }
+
+    public function testHeaderTagZero(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div role="alert" id="w0-alert">
+            <0>Header title</0>
+            <button aria-label="Close" type="button">&times;</button>
+            </div>
+            HTML,
+            Alert::widget()
+                ->header('Header title')
+                ->headerTag('0')
                 ->id('w0-alert')
                 ->layoutHeader('{header}')
                 ->render(),
