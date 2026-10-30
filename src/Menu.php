@@ -71,6 +71,7 @@ final class Menu extends Widget
     private string $firstItemClass = '';
     private array $iconContainerAttributes = [];
     private array $items = [];
+    private bool $pruneItems = false;
     private bool $itemsContainer = true;
     private array $itemsContainerAttributes = [];
     /** @psalm-var non-empty-string */
@@ -555,6 +556,26 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance that removes redundant items before rendering.
+     *
+     * When enabled, after {@see filter()} and visibility are applied, an item whose nested items are all hidden or
+     * dividers is removed together with its toggle, even if it has its own link. Leading and trailing dividers are
+     * removed, and consecutive ones are collapsed into one. Both `'-'` and `['label' => '-']` are dividers; a `-` label
+     * with an icon is not. Items without nested items (including `'items' => []`), headers, disabled and raw content
+     * items are kept.
+     * In a menu, this applies to the submenus; top-level items without nested items are kept as is.
+     *
+     * @param bool $value Whether to remove redundant items.
+     */
+    public function pruneItems(bool $value = true): self
+    {
+        $new = clone $this;
+        $new->pruneItems = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified tag for rendering the menu.
      *
      * @param string $value The tag for rendering the menu.
@@ -595,6 +616,10 @@ final class Menu extends Widget
     public function render(): string
     {
         $items = $this->filter === null ? $this->items : $this->filterItems($this->items, $this->filter);
+
+        if ($this->pruneItems) {
+            $items = Helper\Pruner::menu($items);
+        }
 
         if ($items === []) {
             return '';

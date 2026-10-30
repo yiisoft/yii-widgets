@@ -43,6 +43,41 @@ The code above generates the following HTML:
 </div>
 ```
 
+## Removing empty submenus
+
+After hiding items with `visible` or `filter()`, a submenu may be left with nothing to show but dividers, and its toggle
+would still be rendered. Enable `pruneItems()` to clean this up before rendering:
+
+- an item whose nested items are all hidden or dividers is removed together with its toggle, even if it has its own
+  link;
+- leading and trailing dividers are removed, and consecutive dividers are collapsed into one.
+
+Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon is a regular item. Items without nested items
+(including `'items' => []`), headers, disabled and raw content items are kept.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Yiisoft\Yii\Widgets\Dropdown;
+?>
+
+<?= Dropdown::widget()
+    ->pruneItems()
+    ->items([
+        ['label' => 'Profile', 'link' => '/profile'],
+        '-',
+        [
+            'label' => 'Admin',
+            'items' => [
+                ['label' => 'Users', 'link' => '/admin/users', 'visible' => $isAdmin],
+            ],
+        ],
+        '-',
+    ]) ?>
+```
+
 ## Setters
 
 All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\Dropdown` class with the specified value.
@@ -73,6 +108,7 @@ Method | Description | Default
 `itemsContainerAttributes(array $valuesMap)` | The HTML attributes for the items container tag | `[]`
 `itemsContainerClass(string $value)` | The CSS class for the items container tag | `''`
 `itemsContainerTag(string $value)` | The tag name for the items container tag | `ul`
+`pruneItems(bool $value = true)` | Whether to remove empty submenus with their toggles and redundant dividers after filtering. See [Removing empty submenus](#removing-empty-submenus) | `false`
 `splitButtonAttributes(array $valuesMap)` | The HTML attributes for the split button tag | `[]`
 `splitButtonClass(string $value)` | The CSS class for the split button tag | `''`
 `splitButtonSpanAttributes(array $valuesMap)` | The HTML attributes for the split button span tag | `[]`
