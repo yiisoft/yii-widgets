@@ -20,6 +20,7 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
+- New #141: Add `Menu::collapseAfter()`, `Menu::collapseDropdownDefinitions()`, and `Menu::collapseLabel()` to collapse overflow items into a "More" dropdown (@WarLikeLaux)
 - New #119: Add `iconContainerAttributes()` method to `Dropdown` widget (@WarLikeLaux)
 - New #121: Add `hideButton()` method to `Alert` to allow hiding the close button (@WarLikeLaux)
 - Enh #125: Add default `true` to bool toggle methods in `Alert`, `Dropdown`, and `Menu` (@WarLikeLaux)
