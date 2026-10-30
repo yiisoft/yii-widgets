@@ -61,7 +61,7 @@ final class Pruner
     }
 
     /**
-     * @param bool $hasContent Set to whether any visible item other than a divider remains.
+     * @param-out bool $hasContent Set to whether any visible item other than a divider remains.
      */
     private static function prune(array $items, ?bool &$hasContent = null): array
     {
