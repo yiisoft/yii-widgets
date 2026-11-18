@@ -672,7 +672,7 @@ final class Menu extends Widget
             return '';
         }
 
-        $rawItems = $this->items;
+        $rawItems = $items;
         $hasCollapse = false;
 
         if ($this->collapseAfter !== null) {
