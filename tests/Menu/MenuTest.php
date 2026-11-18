@@ -320,6 +320,37 @@ final class MenuTest extends TestCase
         );
     }
 
+    #[TestWith(['Black & White', [], 'Black &amp; White'])]
+    #[TestWith(['<b>Bold</b>', ['encode' => false], '<b>Bold</b>'])]
+    #[TestWith([
+        'Home',
+        ['icon' => '🏠', 'iconContainerAttributes' => ['class' => 'me-2']],
+        '<span class="me-2"><i>🏠</i></span>Home',
+    ])]
+    public function testCollapseDropdownItemsAreNormalizedOnce(string $label, array $itemOptions, string $expectedLabel): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/main">Main</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="#">{$expectedLabel}</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->collapseAfter(1)
+                ->items([
+                    ['label' => 'Main', 'link' => '/main'],
+                    ['label' => $label, 'link' => '#', ...$itemOptions],
+                ])
+                ->render(),
+        );
+    }
+
     public function testCollapseLabel(): void
     {
         Assert::equalsWithoutLE(
@@ -814,6 +845,49 @@ final class MenuTest extends TestCase
                     ],
                 ])
                 ->render(),
+        );
+    }
+
+    public function testFilterWithCollapseAfterEnabledAndDisabled(): void
+    {
+        $items = [
+            ['label' => 'Home', 'link' => '/'],
+            ['label' => 'Admin', 'link' => '/admin', 'admin' => true],
+            ['label' => 'About', 'link' => '/about'],
+            ['label' => 'Blog', 'link' => '/blog'],
+        ];
+
+        $menu = Menu::widget()
+            ->filter(fn(array $item) => empty($item['admin']))
+            ->items($items);
+
+        // Collapsing disabled: the filtered-out item is simply not rendered.
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/blog">Blog</a></li>
+            </ul>
+            HTML,
+            $menu->render(),
+        );
+
+        // Collapsing enabled: the overflow is counted among the items left after filtering.
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/blog">Blog</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            $menu->collapseAfter(2)->render(),
         );
     }
 

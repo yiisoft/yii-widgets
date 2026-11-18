@@ -152,6 +152,49 @@ final class PruneItemsTest extends TestCase
         );
     }
 
+    public function testPruneItemsWithCollapseAfterEnabledAndDisabled(): void
+    {
+        $items = [
+            ['label' => 'Home', 'link' => '/home'],
+            ['label' => 'Admin', 'items' => [self::HIDDEN, '-']],
+            ['label' => 'About', 'link' => '/about'],
+            ['label' => 'Blog', 'link' => '/blog'],
+        ];
+
+        $menu = Menu::widget()
+            ->pruneItems()
+            ->items($items);
+
+        // Collapsing disabled: the pruned submenu is simply not rendered.
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/blog">Blog</a></li>
+            </ul>
+            HTML,
+            $menu->render(),
+        );
+
+        // Collapsing enabled: the overflow is counted among the items left after pruning.
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/blog">Blog</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            $menu->collapseAfter(2)->render(),
+        );
+    }
+
     public function testFilterCallbackIsCalledForTheSameItems(): void
     {
         $items = [
