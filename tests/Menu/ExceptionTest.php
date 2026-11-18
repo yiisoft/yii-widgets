@@ -6,6 +6,7 @@ namespace Yiisoft\Yii\Widgets\Tests\Menu;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Stringable;
 use Yiisoft\Html\NoEncode;
@@ -29,6 +30,15 @@ final class ExceptionTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Tag name must be a string and cannot be empty.');
         Menu::widget()->beforeTag('');
+    }
+
+    #[TestWith([0])]
+    #[TestWith([-1])]
+    public function testCollapseAfter(int $value): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "collapseAfter" value must be a positive integer or null.');
+        Menu::widget()->collapseAfter($value);
     }
 
     public function testDropdownContainerTag(): void

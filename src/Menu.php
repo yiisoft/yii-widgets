@@ -257,13 +257,20 @@ final class Menu extends Widget
     /**
      * Returns a new instance with the specified number of visible items before collapsing the rest into a dropdown.
      *
-     * @param int $value The number of visible items to show. Items beyond this threshold are rendered inside a "More"
-     * dropdown. Default is `null` (no collapsing).
+     * @param int|null $value The number of visible items to show. Items beyond this threshold are rendered inside
+     * a "More" dropdown. Must be a positive integer or null. Default is `null` (no collapsing).
      *
-     * @psalm-param positive-int $value
+     * @psalm-param positive-int|null $value
+     *
+     * @throws InvalidArgumentException If the value is not a positive integer or null.
      */
     public function collapseAfter(?int $value): self
     {
+        /** @psalm-suppress DocblockTypeContradiction */
+        if ($value !== null && $value <= 0) {
+            throw new InvalidArgumentException('The "collapseAfter" value must be a positive integer or null.');
+        }
+
         $new = clone $this;
         $new->collapseAfter = $value;
 
