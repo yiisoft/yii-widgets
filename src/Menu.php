@@ -672,11 +672,11 @@ final class Menu extends Widget
             return '';
         }
 
-        $rawItems = $items;
-        $hasCollapse = false;
-
-        if ($this->collapseAfter !== null) {
-            [$rawItems, $hasCollapse] = $this->collapseItems($rawItems);
+        if ($this->collapseAfter === null) {
+            $rawItems = $items;
+            $hasCollapse = false;
+        } else {
+            [$rawItems, $hasCollapse] = $this->collapseItems($items);
         }
 
         /**
