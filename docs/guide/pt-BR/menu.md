@@ -110,6 +110,83 @@ use Yiisoft\Yii\Widgets\Menu;
     ]) ?>
 ```
 
+## Colapsando itens em um dropdown
+
+Quando há mais itens de nível superior do que o layout comporta, `collapseAfter()` move o excedente para um item extra
+de dropdown "More" no final do menu. O valor é o número de itens de nível superior a exibir antes de colapsar;
+`null` (padrão) desabilita o colapso:
+
+```php
+echo Yiisoft\Yii\Widgets\Menu::widget()
+    ->collapseAfter(2)
+    ->items(
+        [
+            ['label' => 'Home', 'link' => '/'],
+            ['label' => 'About', 'link' => '/about'],
+            ['label' => 'Contact', 'link' => '/contact'],
+            ['label' => 'Blog', 'link' => '/blog'],
+        ]
+    )
+    ->render();
+```
+
+O código acima gera o seguinte HTML:
+
+```html
+<ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li>
+        <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+        <ul aria-labelledby="dropdown-1">
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/blog">Blog</a></li>
+        </ul>
+    </li>
+</ul>
+```
+
+Observações:
+
+- apenas os itens de nível superior são colapsados; os submenus aninhados são renderizados como estão;
+- o número conta apenas os itens que são de fato renderizados — itens ocultados com `visible` ou removidos por
+  `filter()` e `pruneItems()` não contam, pois o colapso é aplicado depois deles;
+- os itens colapsados são renderizados como itens de dropdown comuns e mantêm seus rótulos, ícones, links e submenus
+  aninhados.
+
+`collapseLabel()` altera o rótulo do botão de colapso, que é `'More'` por padrão:
+
+```php
+echo Yiisoft\Yii\Widgets\Menu::widget()
+    ->collapseAfter(2)
+    ->collapseLabel('Mostrar mais')
+    // ...
+    ->render();
+```
+
+O dropdown "More" usa a mesma configuração dos dropdowns comuns, ou seja, a de `dropdownDefinitions()`. Para estilizá-lo
+de forma diferente, use `collapseDropdownDefinitions()`, que é aplicada apenas ao dropdown "More":
+
+```php
+echo Yiisoft\Yii\Widgets\Menu::widget()
+    ->collapseAfter(2)
+    ->collapseDropdownDefinitions(
+        [
+            'container()' => [false],
+            'dividerClass()' => ['dropdown-divider'],
+            'itemClass()' => ['dropdown-item'],
+            'itemsContainerClass()' => ['dropdown-menu'],
+            'toggleAttributes()' => [
+                ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
+            ],
+            'toggleClass()' => ['dropdown-toggle'],
+            'toggleType()' => ['link'],
+        ]
+    )
+    // ...
+    ->render();
+```
+
 ## Setters (Configuradores)
 
 Todos os setters são imutáveis e retornam uma nova instância da classe `Yiisoft\Yii\Widgets\Menu` com o valor especificado.
@@ -128,6 +205,9 @@ Método | Descrição | Padrão
 `beforeContent(string $value)` | O conteúdo a ser anexado antes do menu | `''`
 `beforeTag(string $value)` | O nome da tag para o contêiner anterior | `'span'`
 `class(string $value)` | A classe CSS a ser anexada ao contêiner do menu | `''`
+`collapseAfter(?int $value)` | O número de itens de nível superior a exibir antes de colapsar o restante em um dropdown "More", ou `null` para desabilitar o colapso. Veja [Colapsando itens em um dropdown](#colapsando-itens-em-um-dropdown) | `null`
+`collapseDropdownDefinitions(?array $valuesMap)` | A configuração do widget para o dropdown "More". Quando `null`, `dropdownDefinitions()` é usada | `null`
+`collapseLabel(string $value)` | O rótulo do botão do dropdown "More" | `'More'`
 `container(bool $value)` | Se deve renderizar a tag do contêiner do menu | `true`
 `currentPath(string $value)` | Permite atribuir o caminho atual | `''`
 `disabledClass(string $value)` | A classe CSS a ser anexada ao item de menu desabilitado | `'disabled'`
