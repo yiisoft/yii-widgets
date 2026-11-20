@@ -163,28 +163,7 @@ echo Yiisoft\Yii\Widgets\Menu::widget()
     ->render();
 ```
 
-The "More" dropdown uses the same config as regular dropdowns, i.e. the one from `dropdownDefinitions()`. To style it
-differently, use `collapseDropdownDefinitions()`, which is applied to the "More" dropdown only:
-
-```php
-echo Yiisoft\Yii\Widgets\Menu::widget()
-    ->collapseAfter(2)
-    ->collapseDropdownDefinitions(
-        [
-            'container()' => [false],
-            'dividerClass()' => ['dropdown-divider'],
-            'itemClass()' => ['dropdown-item'],
-            'itemsContainerClass()' => ['dropdown-menu'],
-            'toggleAttributes()' => [
-                ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
-            ],
-            'toggleClass()' => ['dropdown-toggle'],
-            'toggleType()' => ['link'],
-        ]
-    )
-    // ...
-    ->render();
-```
+The "More" dropdown uses the same config as regular dropdowns, i.e. the one from `dropdownDefinitions()`.
 
 ## Setters
 
@@ -205,7 +184,6 @@ Method | Description | Default
 `beforeTag(string $value)` | The tag name for the before container | `'span'`
 `class(string $value)` | The CSS class to be appended to the menu container | `''`
 `collapseAfter(?int $value)` | The number of top-level items to show before collapsing the rest into a "More" dropdown, or `null` to disable collapsing. See [Collapsing items into a dropdown](#collapsing-items-into-a-dropdown) | `null`
-`collapseDropdownDefinitions(?array $valuesMap)` | The config for the "More" dropdown widget. When `null`, `dropdownDefinitions()` is used | `null`
 `collapseLabel(string $value)` | The label for the "More" dropdown toggle | `'More'`
 `container(bool $value)` | Whether to render the menu container tag | `true`
 `currentPath(string $value)` | Allows you to assign the current path | `''`

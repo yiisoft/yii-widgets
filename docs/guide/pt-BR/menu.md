@@ -164,28 +164,7 @@ echo Yiisoft\Yii\Widgets\Menu::widget()
     ->render();
 ```
 
-O dropdown "More" usa a mesma configuração dos dropdowns comuns, ou seja, a de `dropdownDefinitions()`. Para estilizá-lo
-de forma diferente, use `collapseDropdownDefinitions()`, que é aplicada apenas ao dropdown "More":
-
-```php
-echo Yiisoft\Yii\Widgets\Menu::widget()
-    ->collapseAfter(2)
-    ->collapseDropdownDefinitions(
-        [
-            'container()' => [false],
-            'dividerClass()' => ['dropdown-divider'],
-            'itemClass()' => ['dropdown-item'],
-            'itemsContainerClass()' => ['dropdown-menu'],
-            'toggleAttributes()' => [
-                ['aria-expanded' => 'false', 'data-bs-toggle' => 'dropdown', 'role' => 'button'],
-            ],
-            'toggleClass()' => ['dropdown-toggle'],
-            'toggleType()' => ['link'],
-        ]
-    )
-    // ...
-    ->render();
-```
+O dropdown "More" usa a mesma configuração dos dropdowns comuns, ou seja, a de `dropdownDefinitions()`.
 
 ## Setters (Configuradores)
 
@@ -206,7 +185,6 @@ Método | Descrição | Padrão
 `beforeTag(string $value)` | O nome da tag para o contêiner anterior | `'span'`
 `class(string $value)` | A classe CSS a ser anexada ao contêiner do menu | `''`
 `collapseAfter(?int $value)` | O número de itens de nível superior a exibir antes de colapsar o restante em um dropdown "More", ou `null` para desabilitar o colapso. Veja [Colapsando itens em um dropdown](#colapsando-itens-em-um-dropdown) | `null`
-`collapseDropdownDefinitions(?array $valuesMap)` | A configuração do widget para o dropdown "More". Quando `null`, `dropdownDefinitions()` é usada | `null`
 `collapseLabel(string $value)` | O rótulo do botão do dropdown "More" | `'More'`
 `container(bool $value)` | Se deve renderizar a tag do contêiner do menu | `true`
 `currentPath(string $value)` | Permite atribuir o caminho atual | `''`

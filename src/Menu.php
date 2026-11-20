@@ -60,7 +60,6 @@ final class Menu extends Widget
     private string $beforeTag = 'span';
     /** @psalm-var positive-int|null */
     private ?int $collapseAfter = null;
-    private ?array $collapseDropdownDefinitions = null;
     private string $collapseLabel = 'More';
     private bool $container = true;
     private string $currentPath = '';
@@ -273,20 +272,6 @@ final class Menu extends Widget
 
         $new = clone $this;
         $new->collapseAfter = $value;
-
-        return $new;
-    }
-
-    /**
-     * Returns a new instance with the specified dropdown definitions for the collapse dropdown.
-     *
-     * @param array $valuesMap The dropdown definition widget for the collapse dropdown.
-     * When `null`, falls back to {@see dropdownDefinitions()}.
-     */
-    public function collapseDropdownDefinitions(?array $valuesMap): self
-    {
-        $new = clone $this;
-        $new->collapseDropdownDefinitions = $valuesMap;
 
         return $new;
     }
@@ -679,12 +664,7 @@ final class Menu extends Widget
             return '';
         }
 
-        if ($this->collapseAfter === null) {
-            $rawItems = $items;
-            $hasCollapse = false;
-        } else {
-            [$rawItems, $hasCollapse] = $this->collapseItems($items);
-        }
+        $rawItems = $this->collapseAfter === null ? $items : $this->collapseItems($items);
 
         /**
          * @psalm-var array<
@@ -707,12 +687,9 @@ final class Menu extends Widget
             $this->iconContainerAttributes,
         );
 
-        return $this->renderMenu($items, $hasCollapse);
+        return $this->renderMenu($items);
     }
 
-    /**
-     * @return array{0: array, 1: bool}
-     */
     private function collapseItems(array $items): array
     {
         $kept = [];
@@ -741,7 +718,7 @@ final class Menu extends Widget
         }
 
         if ($overflow === []) {
-            return [$items, false];
+            return $items;
         }
 
         $kept[] = [
@@ -750,7 +727,7 @@ final class Menu extends Widget
             'items' => $overflow,
         ];
 
-        return [$kept, true];
+        return $kept;
     }
 
     /**
@@ -805,11 +782,9 @@ final class Menu extends Widget
     /**
      * @throws CircularReferenceException|InvalidConfigException|NotFoundException|NotInstantiableException
      */
-    private function renderDropdown(array $items, bool $isCollapse): string
+    private function renderDropdown(array $items): string
     {
-        $dropdownDefinitions = $isCollapse && $this->collapseDropdownDefinitions !== null
-            ? $this->collapseDropdownDefinitions
-            : $this->dropdownDefinitions;
+        $dropdownDefinitions = $this->dropdownDefinitions;
 
         if ($dropdownDefinitions === []) {
             $dropdownDefinitions = [
@@ -902,7 +877,7 @@ final class Menu extends Widget
      *   }
      * > $items
      */
-    private function renderItems(array $items, bool $hasCollapse): string
+    private function renderItems(array $items): string
     {
         $lines = [];
         $n = count($items);
@@ -910,8 +885,7 @@ final class Menu extends Widget
 
         foreach ($items as $i => $item) {
             if (isset($item['items'])) {
-                $isCollapse = $hasCollapse && $i === $lastIndex;
-                $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item], $isCollapse)]);
+                $lines[] = strtr($this->template, ['{items}' => $this->renderDropdown([$item])]);
             } elseif ($item['visible']) {
                 $itemsContainerAttributes = array_merge(
                     $this->itemsContainerAttributes,
@@ -961,13 +935,13 @@ final class Menu extends Widget
      *   }
      * > $items
      */
-    private function renderMenu(array $items, bool $hasCollapse): string
+    private function renderMenu(array $items): string
     {
         $afterContent = '';
         $attributes = $this->attributes;
         $beforeContent = '';
 
-        $content = $this->renderItems($items, $hasCollapse) . PHP_EOL;
+        $content = $this->renderItems($items) . PHP_EOL;
 
         if ($this->beforeContent !== '') {
             $beforeContent = $this->renderBeforeContent() . PHP_EOL;
