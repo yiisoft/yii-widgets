@@ -83,7 +83,7 @@ seria renderizado. Ative `pruneItems()` para limpar isso antes da renderização
   o seu próprio link;
 - divisores no início e no fim são removidos, e divisores consecutivos são reduzidos a um.
 
-Tanto `'-'` quanto `['label' => '-']` são divisores. Um rótulo `-` com ícone é um item comum. Itens sem itens aninhados
+Tanto `'-'` quanto `['label' => '-']` são divisores. Um rótulo `-` com ícone ou link é um item comum. Itens sem itens aninhados
 (incluindo `'items' => []`), cabeçalhos, itens desabilitados e de conteúdo bruto são mantidos.
 
 Em um menu, isso se aplica aos submenus. Itens de nível superior sem itens aninhados são mantidos como estão.

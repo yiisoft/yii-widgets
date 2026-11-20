@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Yii\Widgets\Tests\Dropdown;
 
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Html\Html;
 use Yiisoft\Html\IdGenerator;
@@ -863,6 +864,28 @@ final class DropdownTest extends TestCase
                         ['label' => 'Action', 'link' => '#'],
                         ['label' => '-'],
                         ['label' => 'Other', 'link' => '#'],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    #[TestWith([['label' => '-', 'link' => '/dash']])]
+    #[TestWith([['label' => '-', 'url' => '/dash']])]
+    public function testDividerAsArrayItemWithLink(array $item): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="#">Action</a></li>
+            <li><a href="/dash">-</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->items(
+                    [
+                        ['label' => 'Action', 'link' => '#'],
+                        $item,
                     ],
                 )
                 ->render(),

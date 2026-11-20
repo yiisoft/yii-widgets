@@ -389,6 +389,39 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testDashLabelRemainsALinkInOverflow(): void
+    {
+        $menu = Menu::widget()->items([
+            ['label' => 'Home', 'link' => '/'],
+            ['label' => '-', 'link' => '/dash'],
+        ]);
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/dash">-</a></li>
+            </ul>
+            HTML,
+            $menu->render(),
+        );
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/dash">-</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            $menu->collapseAfter(1)->render(),
+        );
+    }
+
     public function testDisabledClass(): void
     {
         Assert::equalsWithoutLE(

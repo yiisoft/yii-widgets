@@ -23,7 +23,8 @@ final class Pruner
     /**
      * Removes redundant items from the given unnormalized dropdown items.
      *
-     * Dividers are the string items and the array items labeled `-` without an icon, which is how they are rendered.
+     * Dividers are the string items and the array items labeled `-` without an icon or a link, which is how they
+     * are rendered.
      * Leading and trailing dividers are removed, and consecutive ones are collapsed into one. An item with nested
      * items is removed when none of its nested items remain visible apart from dividers. Hidden items are kept as is
      * because they are not rendered anyway. Items with no nested items, headers, disabled and raw content items are
@@ -139,7 +140,9 @@ final class Pruner
             && (string) $label === '-'
             && (!isset($item['icon']) || !is_string($item['icon']) || $item['icon'] === '')
             && (!isset($item['iconAttributes']) || !is_array($item['iconAttributes']) || $item['iconAttributes'] === [])
-            && (!isset($item['iconClass']) || !is_string($item['iconClass']) || $item['iconClass'] === '');
+            && (!isset($item['iconClass']) || !is_string($item['iconClass']) || $item['iconClass'] === '')
+            && (!array_key_exists('link', $item) || !is_string($item['link']) || $item['link'] === '')
+            && (!array_key_exists('url', $item) || !is_string($item['url']) || $item['url'] === '');
     }
 
     private static function visible(array $item): bool

@@ -83,8 +83,8 @@ would still be rendered. Enable `pruneItems()` to clean this up before rendering
   link;
 - leading and trailing dividers are removed, and consecutive dividers are collapsed into one.
 
-Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon is a regular item. Items without nested items
-(including `'items' => []`), headers, disabled and raw content items are kept.
+Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon or a link is a regular item. Items without
+nested items (including `'items' => []`), headers, disabled and raw content items are kept.
 
 In a menu, this applies to the submenus. Top-level items without nested items are kept as is.
 
