@@ -8,10 +8,10 @@
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/yii-widgets/v/stable.png)](https://packagist.org/packages/yiisoft/yii-widgets)
 [![Total Downloads](https://poser.pugx.org/yiisoft/yii-widgets/downloads.png)](https://packagist.org/packages/yiisoft/yii-widgets)
-[![Build status](https://github.com/yiisoft/yii-widgets/workflows/build/badge.svg)](https://github.com/yiisoft/yii-widgets/actions?query=workflow%3Abuild)
+[![Build status](https://github.com/yiisoft/yii-widgets/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/yiisoft/yii-widgets/actions/workflows/build.yml?query=branch%3Amaster)
 [![Code Coverage](https://codecov.io/gh/yiisoft/yii-widgets/branch/master/graph/badge.svg?token=eHIV156bku)](https://codecov.io/gh/yiisoft/yii-widgets)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2Fyii-widgets%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/yii-widgets/master)
-[![static analysis](https://github.com/yiisoft/yii-widgets/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/yii-widgets/actions?query=workflow%3A%22static+analysis%22)
+[![Static analysis](https://github.com/yiisoft/yii-widgets/actions/workflows/static.yml/badge.svg?branch=master)](https://github.com/yiisoft/yii-widgets/actions/workflows/static.yml?query=branch%3Amaster)
 [![type-coverage](https://shepherd.dev/github/yiisoft/yii-widgets/coverage.svg)](https://shepherd.dev/github/yiisoft/yii-widgets)
 
 Collection of useful widgets for [Yii Framework](https://www.yiiframework.com/).
