@@ -52,7 +52,7 @@ final class Normalizer
                 $items[$i]['itemContainerAttributes'] = self::itemContainerAttributes($child);
                 $items[$i]['link'] = self::link(
                     $child,
-                    $items[$i]['label'] === '-' && !self::hasLink($child) ? '' : '/',
+                    $items[$i]['label'] === '-' ? '' : '/',
                 );
                 $items[$i]['linkAttributes'] = self::linkAttributes($child);
                 $items[$i]['toggleAttributes'] = self::toggleAttributes($child);
@@ -215,12 +215,6 @@ final class Normalizer
         return array_key_exists('headerAttributes', $item) && is_array($item['headerAttributes'])
             ? $item['headerAttributes']
             : [];
-    }
-
-    private static function hasLink(array $item): bool
-    {
-        return (array_key_exists('link', $item) && is_string($item['link']))
-            || (array_key_exists('url', $item) && is_string($item['url']));
     }
 
     private static function href(array $item): string

@@ -8,7 +8,6 @@ use Stringable;
 
 use function array_key_exists;
 use function is_array;
-use function is_bool;
 use function is_string;
 
 /**
@@ -44,7 +43,7 @@ final class Pruner
         $result = [];
 
         foreach ($items as $item) {
-            if (is_array($item) && self::visible($item) && self::hasNestedItems($item)) {
+            if (is_array($item) && Normalizer::visible($item) && self::hasNestedItems($item)) {
                 $nested = self::prune($item['items'], $hasContent);
 
                 if (!$hasContent) {
@@ -71,7 +70,7 @@ final class Pruner
         $hasContent = false;
 
         foreach ($items as $item) {
-            if (is_array($item) && !self::visible($item)) {
+            if (is_array($item) && !Normalizer::visible($item)) {
                 $result[] = $item;
                 continue;
             }
@@ -146,10 +145,5 @@ final class Pruner
             && (!isset($item['linkAttributes']['href'])
                 || !is_string($item['linkAttributes']['href'])
                 || $item['linkAttributes']['href'] === '');
-    }
-
-    private static function visible(array $item): bool
-    {
-        return !array_key_exists('visible', $item) || !is_bool($item['visible']) || $item['visible'];
     }
 }
