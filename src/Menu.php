@@ -58,6 +58,9 @@ final class Menu extends Widget
     private string $beforeContent = '';
     /** @psalm-var non-empty-string */
     private string $beforeTag = 'span';
+    /** @psalm-var positive-int|null */
+    private ?int $collapseAfter = null;
+    private string $collapseLabel = 'More';
     private bool $container = true;
     private string $currentPath = '';
     private string $disabledClass = 'disabled';
@@ -251,6 +254,42 @@ final class Menu extends Widget
     }
 
     /**
+     * Returns a new instance with the specified number of visible items before collapsing the rest into a dropdown.
+     *
+     * @param int|null $value The number of visible items to show. Items beyond this threshold are rendered inside
+     * a "More" dropdown. Must be a positive integer or null. Default is `null` (no collapsing).
+     *
+     * @psalm-param positive-int|null $value
+     *
+     * @throws InvalidArgumentException If the value is not a positive integer or null.
+     */
+    public function collapseAfter(?int $value): self
+    {
+        /** @psalm-suppress DocblockTypeContradiction */
+        if ($value !== null && $value <= 0) {
+            throw new InvalidArgumentException('The "collapseAfter" value must be a positive integer or null.');
+        }
+
+        $new = clone $this;
+        $new->collapseAfter = $value;
+
+        return $new;
+    }
+
+    /**
+     * Returns a new instance with the specified label for the collapse dropdown toggle.
+     *
+     * @param string $value The label for the "More" dropdown. Default is `'More'`.
+     */
+    public function collapseLabel(string $value): self
+    {
+        $new = clone $this;
+        $new->collapseLabel = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns a new instance with the specified enable or disable the container widget.
      *
      * @param bool $value The container widget enable or disable, for default is `true`.
@@ -424,7 +463,7 @@ final class Menu extends Widget
      * - items: array, optional, the item's submenu items. The structure is the same as for `items` option.
      * - itemsContainerAttributes: array, optional, the HTML attributes for the item's submenu container.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
-     *   alias when `link` is not set.
+     *   alias when `link` is not set. When neither `link` nor `url` is set, `linkAttributes['href']` is used.
      * - linkAttributes: array, the HTML attributes of the item's link. For default `linkAttributes` is `[]`.
      * - icon: string, the item's icon. For default is ``.
      * - iconAttributes: array, the HTML attributes of the item's icon. For default `iconAttributes` is `[]`.
@@ -561,8 +600,8 @@ final class Menu extends Widget
      * When enabled, after {@see filter()} and visibility are applied, an item whose nested items are all hidden or
      * dividers is removed together with its toggle, even if it has its own link. Leading and trailing dividers are
      * removed, and consecutive ones are collapsed into one. Both `'-'` and `['label' => '-']` are dividers; a `-` label
-     * with an icon is not. Items without nested items (including `'items' => []`), headers, disabled and raw content
-     * items are kept.
+     * with an icon or a link is not. Items without nested items (including `'items' => []`), headers, disabled and raw
+     * content items are kept.
      * In a menu, this applies to the submenus; top-level items without nested items are kept as is.
      *
      * @param bool $value Whether to remove redundant items.
@@ -625,6 +664,8 @@ final class Menu extends Widget
             return '';
         }
 
+        $rawItems = $this->collapseAfter === null ? $items : $this->collapseItems($items);
+
         /**
          * @psalm-var array<
          *   array-key,
@@ -640,13 +681,53 @@ final class Menu extends Widget
          * > $items
          */
         $items = Helper\Normalizer::menu(
-            $items,
+            $rawItems,
             $this->currentPath,
             $this->activateItems,
             $this->iconContainerAttributes,
         );
 
         return $this->renderMenu($items);
+    }
+
+    private function collapseItems(array $items): array
+    {
+        $kept = [];
+        $overflow = [];
+        $visibleCount = 0;
+        $overflowing = false;
+
+        foreach ($items as $item) {
+            if ($overflowing) {
+                $overflow[] = $item;
+                continue;
+            }
+
+            $isVisible = !is_array($item) || Helper\Normalizer::visible($item);
+
+            if ($isVisible) {
+                $visibleCount++;
+            }
+
+            if ($isVisible && $visibleCount > $this->collapseAfter) {
+                $overflowing = true;
+                $overflow[] = $item;
+            } else {
+                $kept[] = $item;
+            }
+        }
+
+        if ($overflow === []) {
+            return $items;
+        }
+
+        $kept[] = [
+            'label' => $this->collapseLabel,
+            'link' => '#',
+            'items' => $overflow,
+        ];
+
+        return $kept;
     }
 
     /**
@@ -800,6 +881,7 @@ final class Menu extends Widget
     {
         $lines = [];
         $n = count($items);
+        $lastIndex = $n - 1;
 
         foreach ($items as $i => $item) {
             if (isset($item['items'])) {
@@ -814,7 +896,7 @@ final class Menu extends Widget
                     Html::addCssClass($itemsContainerAttributes, $this->firstItemClass);
                 }
 
-                if ($i === $n - 1 && $this->lastItemClass !== '') {
+                if ($i === $lastIndex && $this->lastItemClass !== '') {
                     Html::addCssClass($itemsContainerAttributes, $this->lastItemClass);
                 }
 

@@ -69,6 +69,83 @@ final class PruneItemsTest extends TestCase
         );
     }
 
+    public function testKeepsSubmenuWithDashLabelItemWithLink(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="/">Admin</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/dash">-</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->pruneItems()
+                ->items([
+                    ['label' => 'Home', 'link' => '/home'],
+                    ['label' => 'Admin', 'items' => [['label' => '-', 'link' => '/dash']]],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testKeepsSubmenuWithDashLabelItemWithHref(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="/">Admin</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/dash">-</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->pruneItems()
+                ->items([
+                    ['label' => 'Home', 'link' => '/home'],
+                    ['label' => 'Admin', 'items' => [['label' => '-', 'linkAttributes' => ['href' => '/dash']]]],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testKeepsLeadingDashLabelItemWithHrefInSubmenu(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="/">Admin</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/dash">-</a></li>
+            <li><a href="/a">A</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->pruneItems()
+                ->items([
+                    [
+                        'label' => 'Admin',
+                        'items' => [
+                            ['label' => '-', 'linkAttributes' => ['href' => '/dash']],
+                            ['label' => 'A', 'link' => '/a'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testRendersNothingWhenAllSubmenusAreRemoved(): void
     {
         $this->assertSame(
@@ -149,6 +226,49 @@ final class PruneItemsTest extends TestCase
                     ['label' => 'Admin', 'items' => [self::HIDDEN]],
                 ])
                 ->render(),
+        );
+    }
+
+    public function testPruneItemsWithCollapseAfterEnabledAndDisabled(): void
+    {
+        $items = [
+            ['label' => 'Home', 'link' => '/home'],
+            ['label' => 'Admin', 'items' => [self::HIDDEN, '-']],
+            ['label' => 'About', 'link' => '/about'],
+            ['label' => 'Blog', 'link' => '/blog'],
+        ];
+
+        $menu = Menu::widget()
+            ->pruneItems()
+            ->items($items);
+
+        // Collapsing disabled: the pruned submenu is simply not rendered.
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/blog">Blog</a></li>
+            </ul>
+            HTML,
+            $menu->render(),
+        );
+
+        // Collapsing enabled: the overflow is counted among the items left after pruning.
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/blog">Blog</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            $menu->collapseAfter(2)->render(),
         );
     }
 

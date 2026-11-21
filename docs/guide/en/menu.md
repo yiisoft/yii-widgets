@@ -83,8 +83,8 @@ would still be rendered. Enable `pruneItems()` to clean this up before rendering
   link;
 - leading and trailing dividers are removed, and consecutive dividers are collapsed into one.
 
-Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon is a regular item. Items without nested items
-(including `'items' => []`), headers, disabled and raw content items are kept.
+Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon or a link is a regular item. Items without
+nested items (including `'items' => []`), headers, disabled and raw content items are kept.
 
 In a menu, this applies to the submenus. Top-level items without nested items are kept as is.
 
@@ -110,6 +110,61 @@ use Yiisoft\Yii\Widgets\Menu;
     ]) ?>
 ```
 
+## Collapsing items into a dropdown
+
+When there are more top-level items than the layout can fit, `collapseAfter()` moves the overflow into an extra
+"More" dropdown item at the end of the menu. The value is the number of top-level items to show before collapsing;
+`null` (default) disables collapsing:
+
+```php
+echo Yiisoft\Yii\Widgets\Menu::widget()
+    ->collapseAfter(2)
+    ->items(
+        [
+            ['label' => 'Home', 'link' => '/'],
+            ['label' => 'About', 'link' => '/about'],
+            ['label' => 'Contact', 'link' => '/contact'],
+            ['label' => 'Blog', 'link' => '/blog'],
+        ]
+    )
+    ->render();
+```
+
+The code above generates the following HTML:
+
+```html
+<ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li>
+        <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+        <ul aria-labelledby="dropdown-1">
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/blog">Blog</a></li>
+        </ul>
+    </li>
+</ul>
+```
+
+Notes:
+
+- only top-level items are collapsed; nested submenus are rendered as they are;
+- the number counts only the items that are actually rendered — items hidden with `visible` or removed by `filter()`
+  and `pruneItems()` do not count, since collapsing is applied after them;
+- collapsed items are rendered as regular dropdown items and keep their labels, icons, links, and nested submenus.
+
+`collapseLabel()` changes the label of the collapse toggle, which is `'More'` by default:
+
+```php
+echo Yiisoft\Yii\Widgets\Menu::widget()
+    ->collapseAfter(2)
+    ->collapseLabel('Show more')
+    // ...
+    ->render();
+```
+
+The "More" dropdown uses the same config as regular dropdowns, i.e. the one from `dropdownDefinitions()`.
+
 ## Setters
 
 All setters are immutable and return a new instance of the `Yiisoft\Yii\Widgets\Menu` class with the specified value.
@@ -128,6 +183,8 @@ Method | Description | Default
 `beforeContent(string|Stringable $value)` | The content to be prepended before the menu | `''`
 `beforeTag(string $value)` | The tag name for the before container | `'span'`
 `class(string $value)` | The CSS class to be appended to the menu container | `''`
+`collapseAfter(?int $value)` | The number of top-level items to show before collapsing the rest into a "More" dropdown, or `null` to disable collapsing. See [Collapsing items into a dropdown](#collapsing-items-into-a-dropdown) | `null`
+`collapseLabel(string $value)` | The label for the "More" dropdown toggle | `'More'`
 `container(bool $value)` | Whether to render the menu container tag | `true`
 `currentPath(string $value)` | Allows you to assign the current path | `''`
 `disabledClass(string $value)` | The CSS class to be appended to the disabled menu item | `'disabled'`
@@ -171,7 +228,9 @@ Method | Description | Default
 ]
 ```
 
-> `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority.
+> `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority. When neither `link`
+> nor `url` is set, `href` from `linkAttributes` is used as the item's URL, including when the active item is
+> determined by `currentPath`.
 
 > `label` can be a string or a `Stringable` object. A `NoEncodeStringableInterface` object (e.g. an HTML tag) is
 > rendered as is, regardless of `encode`.

@@ -20,6 +20,8 @@
 - Bug #118: Add missing ARIA attributes to `Dropdown`, `Menu`, and `Alert` (@WarLikeLaux)
 - Enh #155: Add `url` as alias for `link` in `Menu` and `Dropdown` items (@WarLikeLaux)
 - Enh #157: Improve psalm type annotations (@Tigrov)
+- New #141: Add `Menu::collapseAfter()` and `Menu::collapseLabel()` to collapse overflow items into a "More" dropdown
+  (@WarLikeLaux, @vjik)
 - New #119: Add `iconContainerAttributes()` method to `Dropdown` widget (@WarLikeLaux)
 - New #121: Add `hideButton()` method to `Alert` to allow hiding the close button (@WarLikeLaux)
 - Enh #125: Add default `true` to bool toggle methods in `Alert`, `Dropdown`, and `Menu` (@WarLikeLaux)
@@ -36,6 +38,13 @@
 - Bug #168: Fix `Dropdown` not wrapping a nested submenu toggle in `<li>`, producing invalid markup when a
   dropdown item with `items` is itself nested inside another dropdown's `items` (@vjik)
 - New #169: Add `pruneItems()` to `Menu` and `Dropdown` to remove empty submenus and redundant dividers (@samdark)
+- Bug #141: Fix a `['label' => '-']` item with a link or URL being rendered as a divider in `Dropdown` and in `Menu`
+  submenus; it is now rendered as a regular item with its link preserved (@vjik)
+- Bug #141: Fix `linkAttributes['href']` being ignored as the item URL when `link` and `url` are not set: in `Menu`,
+  such an item lost its link when nested into a submenu and was never marked active by `currentPath`; in `Dropdown`,
+  the `href` was overwritten with `/` (@vjik)
+- Bug #141: Fix `pruneItems()` treating a `['label' => '-']` item with `linkAttributes['href']` as a divider and
+  pruning it as such, which could remove a submenu whose only renderable item it was (@vjik)
 
 ## 2.1.1 September 23, 2025
 

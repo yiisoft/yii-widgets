@@ -52,8 +52,8 @@ would still be rendered. Enable `pruneItems()` to clean this up before rendering
   link;
 - leading and trailing dividers are removed, and consecutive dividers are collapsed into one.
 
-Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon is a regular item. Items without nested items
-(including `'items' => []`), headers, disabled and raw content items are kept.
+Both `'-'` and `['label' => '-']` are dividers. A `-` label with an icon or a link is a regular item. Items without
+nested items (including `'items' => []`), headers, disabled and raw content items are kept.
 
 ```php
 <?php
@@ -139,7 +139,8 @@ Method | Description | Default
 ]
 ```
 
-> `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority.
+> `url` can be used as a fallback alias for `link`. If both are present, `link` takes priority. When neither `link`
+> nor `url` is set, `href` from `linkAttributes` is used as the item's URL.
 
 > `label` can be a string or a `Stringable` object. A `NoEncodeStringableInterface` object (e.g. an HTML tag) is
 > rendered as is, regardless of `encode`.

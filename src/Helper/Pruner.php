@@ -8,7 +8,6 @@ use Stringable;
 
 use function array_key_exists;
 use function is_array;
-use function is_bool;
 use function is_string;
 
 /**
@@ -23,7 +22,8 @@ final class Pruner
     /**
      * Removes redundant items from the given unnormalized dropdown items.
      *
-     * Dividers are the string items and the array items labeled `-` without an icon, which is how they are rendered.
+     * Dividers are the string items and the array items labeled `-` without an icon or a link, which is how they
+     * are rendered.
      * Leading and trailing dividers are removed, and consecutive ones are collapsed into one. An item with nested
      * items is removed when none of its nested items remain visible apart from dividers. Hidden items are kept as is
      * because they are not rendered anyway. Items with no nested items, headers, disabled and raw content items are
@@ -43,7 +43,7 @@ final class Pruner
         $result = [];
 
         foreach ($items as $item) {
-            if (is_array($item) && self::visible($item) && self::hasNestedItems($item)) {
+            if (is_array($item) && Normalizer::visible($item) && self::hasNestedItems($item)) {
                 $nested = self::prune($item['items'], $hasContent);
 
                 if (!$hasContent) {
@@ -70,7 +70,7 @@ final class Pruner
         $hasContent = false;
 
         foreach ($items as $item) {
-            if (is_array($item) && !self::visible($item)) {
+            if (is_array($item) && !Normalizer::visible($item)) {
                 $result[] = $item;
                 continue;
             }
@@ -139,11 +139,11 @@ final class Pruner
             && (string) $label === '-'
             && (!isset($item['icon']) || !is_string($item['icon']) || $item['icon'] === '')
             && (!isset($item['iconAttributes']) || !is_array($item['iconAttributes']) || $item['iconAttributes'] === [])
-            && (!isset($item['iconClass']) || !is_string($item['iconClass']) || $item['iconClass'] === '');
-    }
-
-    private static function visible(array $item): bool
-    {
-        return !array_key_exists('visible', $item) || !is_bool($item['visible']) || $item['visible'];
+            && (!isset($item['iconClass']) || !is_string($item['iconClass']) || $item['iconClass'] === '')
+            && (!array_key_exists('link', $item) || !is_string($item['link']) || $item['link'] === '')
+            && (!array_key_exists('url', $item) || !is_string($item['url']) || $item['url'] === '')
+            && (!isset($item['linkAttributes']['href'])
+                || !is_string($item['linkAttributes']['href'])
+                || $item['linkAttributes']['href'] === '');
     }
 }

@@ -369,7 +369,7 @@ final class Dropdown extends Widget
      *   a {@see NoEncodeStringableInterface} label.
      * - headerAttributes: array, HTML attributes to be rendered in the item header.
      * - link: string, the item's href. Defaults to "#". For default `link` is "#". `url` can be used as a fallback
-     *   alias when `link` is not set.
+     *   alias when `link` is not set. When neither `link` nor `url` is set, `linkAttributes['href']` is used.
      * - linkAttributes: array, the HTML attributes of the item's link. For default `linkAttributes` is `[]`.
      * - icon: string, the item's icon. For default `icon` is ``.
      * - iconAttributes: array, the HTML attributes of the item's icon. For default `iconAttributes` is `[]`.
@@ -378,7 +378,7 @@ final class Dropdown extends Widget
      *   Note that Bootstrap doesn't support dropdown submenu. You have to add your own CSS styles to support it.
      * - itemsContainerAttributes: array, optional, the HTML attributes for tag `<li>`.
      *
-     * To insert dropdown divider use `-`.
+     * To insert dropdown divider use `-`. An item with a `-` label and an icon or a link is rendered as a regular item.
      */
     public function items(array $value): self
     {
@@ -437,8 +437,8 @@ final class Dropdown extends Widget
      * When enabled, after {@see filter()} and visibility are applied, an item whose nested items are all hidden or
      * dividers is removed together with its toggle, even if it has its own link. Leading and trailing dividers are
      * removed, and consecutive ones are collapsed into one. Both `'-'` and `['label' => '-']` are dividers; a `-` label
-     * with an icon is not. Items without nested items (including `'items' => []`), headers, disabled and raw content
-     * items are kept.
+     * with an icon or a link is not. Items without nested items (including `'items' => []`), headers, disabled and raw
+     * content items are kept.
      *
      * @param bool $value Whether to remove redundant items.
      */
@@ -792,7 +792,7 @@ final class Dropdown extends Widget
         array $itemContainerAttributes = [],
     ): string {
         return match (true) {
-            $label === '-' => $this->renderDivider(),
+            $label === '-' && $link === '' => $this->renderDivider(),
             $enclose === false => $label,
             $link === '' => $this->renderHeader($label, $headerAttributes),
             default => $this->renderItemLink($label, $link, $linkAttributes, $itemContainerAttributes),

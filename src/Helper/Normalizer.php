@@ -50,7 +50,10 @@ final class Normalizer
                 $items[$i]['enclose'] = self::enclose($child);
                 $items[$i]['headerAttributes'] = self::headerAttributes($child);
                 $items[$i]['itemContainerAttributes'] = self::itemContainerAttributes($child);
-                $items[$i]['link'] = self::link($child, '/');
+                $items[$i]['link'] = self::link(
+                    $child,
+                    $items[$i]['label'] === '-' ? '' : '/',
+                );
                 $items[$i]['linkAttributes'] = self::linkAttributes($child);
                 $items[$i]['toggleAttributes'] = self::toggleAttributes($child);
                 $items[$i]['visible'] = self::visible($child);
@@ -147,6 +150,11 @@ final class Normalizer
         return $html;
     }
 
+    public static function visible(array $item): bool
+    {
+        return array_key_exists('visible', $item) && is_bool($item['visible']) ? $item['visible'] : true;
+    }
+
     private static function active(array $item, string $link, string $currentPath, bool $activateItems): bool
     {
         if (!array_key_exists('active', $item)) {
@@ -207,6 +215,13 @@ final class Normalizer
         return array_key_exists('headerAttributes', $item) && is_array($item['headerAttributes'])
             ? $item['headerAttributes']
             : [];
+    }
+
+    private static function href(array $item): string
+    {
+        return isset($item['linkAttributes']['href']) && is_string($item['linkAttributes']['href'])
+            ? $item['linkAttributes']['href']
+            : '';
     }
 
     private static function icon(array $item): string
@@ -292,6 +307,11 @@ final class Normalizer
             return $item['url'];
         }
 
+        $href = self::href($item);
+        if ($href !== '') {
+            return $href;
+        }
+
         return $defaultValue;
     }
 
@@ -305,10 +325,5 @@ final class Normalizer
     {
         return array_key_exists('toggleAttributes', $item) && is_array($item['toggleAttributes'])
             ? $item['toggleAttributes'] : [];
-    }
-
-    private static function visible(array $item): bool
-    {
-        return array_key_exists('visible', $item) && is_bool($item['visible']) ? $item['visible'] : true;
     }
 }
