@@ -477,6 +477,18 @@ final class DropdownTest extends TestCase
         );
     }
 
+    public function testItemsHrefInLinkAttributes(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/help">Help</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Help', 'linkAttributes' => ['href' => '/help']]])->render(),
+        );
+    }
+
     public function testItemsIcon(): void
     {
         Assert::equalsWithoutLE(
@@ -1125,6 +1137,21 @@ final class DropdownTest extends TestCase
             </div>
             HTML,
             Dropdown::widget()->items([['label' => 'Action', 'link' => '/link', 'url' => '/url']])->render(),
+        );
+    }
+
+    #[TestWith([['link' => '/link', 'url' => '/url', 'linkAttributes' => ['href' => '/href']], '/link'])]
+    #[TestWith([['url' => '/url', 'linkAttributes' => ['href' => '/href']], '/url'])]
+    #[TestWith([['linkAttributes' => ['href' => '/href']], '/href'])]
+    public function testLinkUrlAndHrefPriority(array $item, string $expectedHref): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="{$expectedHref}">Action</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()->items([['label' => 'Action'] + $item])->render(),
         );
     }
 

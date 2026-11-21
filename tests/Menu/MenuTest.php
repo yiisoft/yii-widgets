@@ -320,6 +320,31 @@ final class MenuTest extends TestCase
         );
     }
 
+    public function testCollapseAfterWithLinkAttributesHref(): void
+    {
+        $widget = Menu::widget()
+            ->collapseAfter(1)
+            ->items([
+                ['label' => 'Home', 'link' => '/'],
+                ['label' => 'Help', 'linkAttributes' => ['href' => '/help']],
+            ]);
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">More</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/help">Help</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            $widget->render(),
+        );
+    }
+
     #[TestWith(['Black & White', [], 'Black &amp; White'])]
     #[TestWith(['<b>Bold</b>', ['encode' => false], '<b>Bold</b>'])]
     #[TestWith([
@@ -709,6 +734,84 @@ final class MenuTest extends TestCase
                             'link' => '#',
                             'items' => [
                                 ['label' => 'Sub', 'link' => '/sub'],
+                            ],
+                        ],
+                    ],
+                )
+                ->render(),
+        );
+    }
+
+    public function testItemWithLinkAttributesHrefIsActiveOnCurrentPath(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/help" aria-current="page" class="active">Help</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/help')
+                ->items([
+                    ['label' => 'Home', 'link' => '/'],
+                    ['label' => 'Help', 'linkAttributes' => ['href' => '/help']],
+                ])
+                ->render(),
+        );
+    }
+
+    #[TestWith(['/link', true])]
+    #[TestWith(['/url', false])]
+    #[TestWith(['/href', false])]
+    public function testItemActiveStateWithMultipleLinkSources(string $currentPath, bool $expectedActive): void
+    {
+        $expectedActiveAttributes = $expectedActive ? ' aria-current="page" class="active"' : '';
+
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/link"{$expectedActiveAttributes}>item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath($currentPath)
+                ->items([
+                    [
+                        'label' => 'item',
+                        'link' => '/link',
+                        'url' => '/url',
+                        'linkAttributes' => ['href' => '/href'],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testDropdownItemWithHrefInLinkAttributesRendersAsLink(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="#">Dropdown</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/help" aria-current="page" class="active">Help</a></li>
+            <li><span>Section header</span></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->currentPath('/help')
+                ->items(
+                    [
+                        [
+                            'label' => 'Dropdown',
+                            'link' => '#',
+                            'items' => [
+                                ['label' => 'Help', 'linkAttributes' => ['href' => '/help']],
+                                ['label' => 'Section header'],
                             ],
                         ],
                     ],
@@ -1451,6 +1554,21 @@ final class MenuTest extends TestCase
             </ul>
             HTML,
             Menu::widget()->items([['label' => 'item', 'link' => '/link', 'url' => '/url']])->render(),
+        );
+    }
+
+    #[TestWith([['link' => '/link', 'url' => '/url', 'linkAttributes' => ['href' => '/href']], '/link'])]
+    #[TestWith([['url' => '/url', 'linkAttributes' => ['href' => '/href']], '/url'])]
+    #[TestWith([['linkAttributes' => ['href' => '/href']], '/href'])]
+    public function testLinkUrlAndHrefPriority(array $item, string $expectedHref): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="{$expectedHref}">item</a></li>
+            </ul>
+            HTML,
+            Menu::widget()->items([['label' => 'item'] + $item])->render(),
         );
     }
 

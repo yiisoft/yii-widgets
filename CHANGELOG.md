@@ -39,7 +39,10 @@
   dropdown item with `items` is itself nested inside another dropdown's `items` (@vjik)
 - New #169: Add `pruneItems()` to `Menu` and `Dropdown` to remove empty submenus and redundant dividers (@samdark)
 - Bug #141: Fix a `['label' => '-']` item with a link or URL being rendered as a divider in `Dropdown` and in `Menu`
-  submenus and the overflow dropdown; it is now rendered as a regular item with its link preserved (@vjik)
+  submenus; it is now rendered as a regular item with its link preserved (@vjik)
+- Bug #141: Fix `linkAttributes['href']` being ignored as the item URL when `link` and `url` are not set: in `Menu`,
+  such an item lost its link when nested into a submenu and was never marked active by `currentPath`; in `Dropdown`,
+  the `href` was overwritten with `/` (@vjik)
 
 ## 2.1.1 September 23, 2025
 

@@ -227,3 +227,7 @@ Método | Descrição | Padrão
     ],
 ]
 ```
+
+> `url` pode ser usado como um alias de fallback para `link`. Se ambos estiverem presentes, `link` tem prioridade.
+> Quando nem `link` nem `url` estão definidos, o `href` de `linkAttributes` é usado como URL do item, inclusive na
+> determinação do item ativo pelo `currentPath`.

@@ -223,6 +223,13 @@ final class Normalizer
             || (array_key_exists('url', $item) && is_string($item['url']));
     }
 
+    private static function href(array $item): string
+    {
+        return isset($item['linkAttributes']['href']) && is_string($item['linkAttributes']['href'])
+            ? $item['linkAttributes']['href']
+            : '';
+    }
+
     private static function icon(array $item): string
     {
         return array_key_exists('icon', $item) && is_string($item['icon']) ? $item['icon'] : '';
@@ -304,6 +311,11 @@ final class Normalizer
 
         if (array_key_exists('url', $item) && is_string($item['url'])) {
             return $item['url'];
+        }
+
+        $href = self::href($item);
+        if ($href !== '') {
+            return $href;
         }
 
         return $defaultValue;
