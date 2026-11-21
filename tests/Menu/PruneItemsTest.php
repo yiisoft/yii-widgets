@@ -93,6 +93,59 @@ final class PruneItemsTest extends TestCase
         );
     }
 
+    public function testKeepsSubmenuWithDashLabelItemWithHref(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li><a href="/home">Home</a></li>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="/">Admin</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/dash">-</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->pruneItems()
+                ->items([
+                    ['label' => 'Home', 'link' => '/home'],
+                    ['label' => 'Admin', 'items' => [['label' => '-', 'linkAttributes' => ['href' => '/dash']]]],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testKeepsLeadingDashLabelItemWithHrefInSubmenu(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <ul>
+            <li>
+            <a aria-expanded="false" data-bs-toggle="dropdown" role="button" id="dropdown-1" href="/">Admin</a>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/dash">-</a></li>
+            <li><a href="/a">A</a></li>
+            </ul>
+            </li>
+            </ul>
+            HTML,
+            Menu::widget()
+                ->pruneItems()
+                ->items([
+                    [
+                        'label' => 'Admin',
+                        'items' => [
+                            ['label' => '-', 'linkAttributes' => ['href' => '/dash']],
+                            ['label' => 'A', 'link' => '/a'],
+                        ],
+                    ],
+                ])
+                ->render(),
+        );
+    }
+
     public function testRendersNothingWhenAllSubmenusAreRemoved(): void
     {
         $this->assertSame(

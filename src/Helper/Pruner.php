@@ -142,7 +142,10 @@ final class Pruner
             && (!isset($item['iconAttributes']) || !is_array($item['iconAttributes']) || $item['iconAttributes'] === [])
             && (!isset($item['iconClass']) || !is_string($item['iconClass']) || $item['iconClass'] === '')
             && (!array_key_exists('link', $item) || !is_string($item['link']) || $item['link'] === '')
-            && (!array_key_exists('url', $item) || !is_string($item['url']) || $item['url'] === '');
+            && (!array_key_exists('url', $item) || !is_string($item['url']) || $item['url'] === '')
+            && (!isset($item['linkAttributes']['href'])
+                || !is_string($item['linkAttributes']['href'])
+                || $item['linkAttributes']['href'] === '');
     }
 
     private static function visible(array $item): bool

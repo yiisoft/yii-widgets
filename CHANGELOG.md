@@ -43,6 +43,8 @@
 - Bug #141: Fix `linkAttributes['href']` being ignored as the item URL when `link` and `url` are not set: in `Menu`,
   such an item lost its link when nested into a submenu and was never marked active by `currentPath`; in `Dropdown`,
   the `href` was overwritten with `/` (@vjik)
+- Bug #141: Fix `pruneItems()` treating a `['label' => '-']` item with `linkAttributes['href']` as a divider and
+  pruning it as such, which could remove a submenu whose only renderable item it was (@vjik)
 
 ## 2.1.1 September 23, 2025
 

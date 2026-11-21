@@ -105,6 +105,45 @@ final class PruneItemsTest extends TestCase
         );
     }
 
+    public function testKeepsSubmenuWithDashLabelItemWithHref(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <button id="dropdown-1" type="button">Admin</button>
+            <ul aria-labelledby="dropdown-1">
+            <li><a href="/dash">-</a></li>
+            </ul>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->pruneItems()
+                ->items([
+                    ['label' => 'Admin', 'items' => [['label' => '-', 'linkAttributes' => ['href' => '/dash']]]],
+                ])
+                ->render(),
+        );
+    }
+
+    public function testKeepsLeadingDashLabelItemWithHref(): void
+    {
+        Assert::equalsWithoutLE(
+            <<<HTML
+            <div>
+            <li><a href="/dash">-</a></li>
+            <li><a href="/a">A</a></li>
+            </div>
+            HTML,
+            Dropdown::widget()
+                ->pruneItems()
+                ->items([
+                    ['label' => '-', 'linkAttributes' => ['href' => '/dash']],
+                    ['label' => 'A', 'link' => '/a'],
+                ])
+                ->render(),
+        );
+    }
+
     public function testRemovesSubmenuWithOwnLinkWhenItsItemsAreRemoved(): void
     {
         Assert::equalsWithoutLE(
